@@ -187,8 +187,9 @@ class MetricsCalculator:
         r = min(1.0, max(0.0, r_raw))
 
         # 4. Freq
-        total_docs = len(documents) if documents else 1
-        freq = doc_count / total_docs
+        total_tokens = sum(len(doc.text.split()) for doc in documents) if documents else 1
+        count = len(annotations)
+        freq = count / max(total_tokens, 1)
 
         # 5. Yield
         if entity_type in self.rules:

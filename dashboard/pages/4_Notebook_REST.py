@@ -68,7 +68,7 @@ def launch_rest_api() -> None:
     if "api_process" not in st.session_state:
         # Lancement depuis le répertoire REST_interface
         root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-        work_dir = os.path.join(root_dir, "duraxell", "REST_interface")
+        work_dir = os.path.join(root_dir, "src", "duraxell", "REST_interface")
 
         import sys
 

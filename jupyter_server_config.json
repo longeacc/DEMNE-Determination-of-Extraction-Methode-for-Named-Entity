@@ -1,0 +1,1 @@
+{"ServerApp": {"ip": "127.0.0.1", "port": 8888, "allow_origin": "*", "disable_check_xsrf": true, "tornado_settings": {"headers": {"Content-Security-Policy": "frame-ancestors * 'self' http://127.0.0.1:* http://localhost:*"}}}, "IdentityProvider": {"token": ""}}
