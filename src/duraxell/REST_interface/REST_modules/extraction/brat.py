@@ -61,7 +61,7 @@ def load_from_brat(path, merge_spaced_fragments=True, merge_all_fragments=False)
             files["ann"][0] if files["ann"] else None
         )  # Prendre le premier fichier .ann trouvé ou None s'il n'y en a pas
         ann_doc_name = os.path.basename(ann_doc_name) if ann_doc_name else None
-        ann_doc_name = os.path.splitext(ann_doc_name)[0]
+        ann_doc_name = os.path.splitext(ann_doc_name)[0] if ann_doc_name else None
 
         with open(files["txt"], encoding="utf-8") as f:
             text = f.read()
