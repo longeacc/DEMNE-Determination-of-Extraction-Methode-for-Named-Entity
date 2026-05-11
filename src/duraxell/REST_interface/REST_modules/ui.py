@@ -84,7 +84,7 @@ def on_selection_change_entity(change):
     current_entity = change.new
     list_spacing_regex = calculate_list_spacing_regex(current_entity, ent_cat)
     update_tabs()
-    current_category = getCat(current_entity, ent_cat)[0]
+    current_category = get_cat(current_entity, ent_cat)[0]
     on_visualization_categorie_change("None")
     categorization()
     display_categorization_results()
@@ -249,8 +249,8 @@ def initiate_loading(file_path):
         return
 
     # 2 - Update of the ui
-    button_selection_entity.options = getEnt(ent_cat)  # update_tabs
-    on_visualization_categorie_change({"new": getCat(current_entity, ent_cat)[0]})
+    button_selection_entity.options = get_ent(ent_cat)  # update_tabs
+    on_visualization_categorie_change({"new": get_cat(current_entity, ent_cat)[0]})
     categorization()
     display_categorization_results()
     create_t2_donut()
@@ -261,7 +261,7 @@ def initiate_loading(file_path):
         output_load.clear_output()
         print(f"Selected Path: {file_path}")
         print("Extraction and Normalisation Done")
-        print("Entities : " + str(getEnt(ent_cat)))
+        print("Entities : " + str(get_ent(ent_cat)))
 
 
 def create_t0():
@@ -462,7 +462,7 @@ def remove_ent_cat(i):
     i (int) : number corresponding of the deleted category.
     """
     global list_isnotfp, list_isnotfn, ent_cat
-    cat = getCat(current_entity, ent_cat)[i]
+    cat = get_cat(current_entity, ent_cat)[i]
     list_isnotfp = [values_notFP for values_notFP in list_isnotfp if values_notFP[0] != cat]
     list_isnotfn = [values_notFN for values_notFN in list_isnotfn if values_notFN[0] != cat]
     ent_cat[current_entity].remove(ent_cat[current_entity][i])
@@ -1047,7 +1047,7 @@ def launch_rest():
         [space, space, selection_results_save, output_results, tabs],
         layout={"border": "2px solid lightblue", "width": "100%"},
     )
-    on_visualization_categorie_change({"new": getCat(current_entity, ent_cat)[0]})
+    on_visualization_categorie_change({"new": get_cat(current_entity, ent_cat)[0]})
     display(interface)
 
 
@@ -1059,5 +1059,5 @@ def update_tabs():
     global tabs, button_selection_category
     tabs.children = (t0, t1, create_t2(), create_t3())
     button_selection_category.options = [
-        element.strip("[]") for element in getCat(current_entity, ent_cat)
+        element.strip("[]") for element in get_cat(current_entity, ent_cat)
     ]

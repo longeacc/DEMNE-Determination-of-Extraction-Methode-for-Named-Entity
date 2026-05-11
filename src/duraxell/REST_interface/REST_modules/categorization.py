@@ -1,5 +1,5 @@
 from .calculs import *
-from .extraction.normalisation import getEnt
+from .extraction.normalisation import get_ent
 
 
 def calculate_categorization(df, ent_cat, current_entity, other_categories, list_spacing_regex):
@@ -60,7 +60,7 @@ def calculate_categorization(df, ent_cat, current_entity, other_categories, list
 
 def create_ban_words_tfidf(ent_cat):
     ban_words_tfidf = {}
-    for ent in getEnt(ent_cat):
+    for ent in get_ent(ent_cat):
         ban_words_tfidf[ent] = []
     return ban_words_tfidf
 

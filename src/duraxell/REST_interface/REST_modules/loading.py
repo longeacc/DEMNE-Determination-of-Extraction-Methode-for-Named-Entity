@@ -13,15 +13,15 @@ def load_data_annotations(file_path):
 
     # 2 - Initialization of major variables
     path = file_path
-    data, ent_cat, ban_words_entities = createData(annotations2)
+    data, ent_cat, ban_words_entities = create_data(annotations2)
     df = pd.DataFrame(
         data, columns=["entity", "category", "text", "occurrences", "stems", "places"]
     )
     df_tf_results = calculate_tfidf(ent_cat, df)
     homogeneity_score = calculate_homogeneity_score(df, ent_cat, 10)
     ban_words_tfidf = create_ban_words_tfidf(ent_cat)
-    if getEnt(ent_cat):
-        current_entity = getEnt(ent_cat)[0]
+    if get_ent(ent_cat):
+        current_entity = get_ent(ent_cat)[0]
     else:
         current_entity = None
 

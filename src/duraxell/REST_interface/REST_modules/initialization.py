@@ -1,7 +1,7 @@
 import ipywidgets as widgets
 import pandas as pd
 
-from .extraction.normalisation import getCat, getEnt
+from .extraction.normalisation import get_cat, get_ent
 
 
 def initialize_globals():
@@ -79,7 +79,7 @@ def initialize_widgets_globals(ent_cat):
     value_button_results = False
     current_category = "category?"
     current_entity = "entity1"
-    options = [element.strip("[]") for element in getCat(current_entity, ent_cat)]
+    options = [element.strip("[]") for element in get_cat(current_entity, ent_cat)]
     list_spacing_regex = []
     other_categories = []
 
@@ -119,7 +119,7 @@ def initialize_widgets(ent_cat, current_entity, ban_words_entities, options):
         icon="save",
         layout=widgets.Layout(width="70px"),
     )
-    button_selection_entity = widgets.Dropdown(options=getEnt(ent_cat), value=current_entity)
+    button_selection_entity = widgets.Dropdown(options=get_ent(ent_cat), value=current_entity)
     button_selection_category = widgets.Dropdown(
         options=options,
         value=options[0],

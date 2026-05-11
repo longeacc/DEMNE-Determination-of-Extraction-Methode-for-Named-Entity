@@ -24,7 +24,7 @@ stemmer = SnowballStemmer("french")
 sp = spacy.load("fr_core_news_sm")
 
 
-def getEnt(ent_cat):
+def get_ent(ent_cat):
     """
     Return the list of the entities in ent_cat.
 
@@ -40,7 +40,7 @@ def getEnt(ent_cat):
     return x
 
 
-def getCat(entity, ent_cat):
+def get_cat(entity, ent_cat):
     """
     Return the categories of the entered entity.
 
@@ -220,7 +220,7 @@ def levenshtein(annotations1, dist):
     return tempo_annotations, levenshtein_results
 
 
-def createData(annotations2):
+def create_data(annotations2):
     """
     Transform the 'annotations' dictionnary into a list, and create de ent_cat dictionnary.
 
