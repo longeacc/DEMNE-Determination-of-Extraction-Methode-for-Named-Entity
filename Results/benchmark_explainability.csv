@@ -1,5 +1,4 @@
 Méthode,Score_Explicabilité
-Règles,1.0
-ML_CRF,0.7
-Transformer,0.3
+RÈGLES,1.0
+TBM,0.3
 LLM,0.1

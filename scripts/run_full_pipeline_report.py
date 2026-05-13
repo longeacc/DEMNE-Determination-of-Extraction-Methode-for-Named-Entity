@@ -67,11 +67,10 @@ def bloc2_explainability():
     print_section("BLOC 2 : EXPLICABILITÉ")
     # Utilisation des scores d'explicabilité définis dans E_composite_scorer.py
     data = {
-        "Méthode": ["Règles", "ML_CRF", "Transformer", "LLM"],
+        "Méthode": ["RÈGLES", "TBM", "LLM"],
         "Score_Explicabilité": [
-            CompositeScorer.EXPLAINABILITY_SCORES["REGLES"],
-            CompositeScorer.EXPLAINABILITY_SCORES["ML_CRF"],
-            CompositeScorer.EXPLAINABILITY_SCORES["Transformer"],
+            CompositeScorer.EXPLAINABILITY_SCORES["RÈGLES"],
+            CompositeScorer.EXPLAINABILITY_SCORES["TBM"],
             CompositeScorer.EXPLAINABILITY_SCORES["LLM"],
         ],
     }

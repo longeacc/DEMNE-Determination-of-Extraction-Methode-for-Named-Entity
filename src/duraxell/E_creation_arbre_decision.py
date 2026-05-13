@@ -55,10 +55,10 @@ class DecisionTreeBuilder:
 
         # --- CALIBRATED THRESHOLDS (To heavily favor RULES) ---
         self.THRESHOLDS = {
-            "TE_HIGH": 60.0,
-            "HE_HIGH": 60.0,
-            "R_MAX": 0.5,
-            "FEAS_TBM": 0.6,
+            "TE_HIGH": 0.15,
+            "HE_HIGH": 0.45,
+            "R_MAX": 0.25,
+            "FEAS_TBM": 0.30,
         }
 
     # Nombre minimum d'occurrences pour que Te soit fiable (Aligné avec THRESHOLDS_JUSTIFICATION.md)
@@ -140,6 +140,12 @@ class DecisionTreeBuilder:
         he: float = metrics.get("He", 0.0)
         r_score: float = metrics.get("R", 0.0)
         feas: float = metrics.get("Feas", 0.0)
+
+        # Convert Te and He to 0-1 scale to match new thresholds correctly
+        if te > 1.0:
+            te /= 100.0
+        if he > 1.0:
+            he /= 100.0
 
         # Garde-fou existant : Te non fiable si trop peu d'échantillons
         if te_count < self.MIN_TE_SAMPLES:
