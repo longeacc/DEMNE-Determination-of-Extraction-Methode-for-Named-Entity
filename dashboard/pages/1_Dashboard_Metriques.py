@@ -6,7 +6,7 @@ from core import BratCorpusParser, MetricsCalculator, compute_routing
 
 st.set_page_config(page_title="Dashboard Métriques", page_icon="📊", layout="wide")
 
-PRESET_FRUGAL = {"Te": 0.15, "He": 0.45, "R": 0.25, "Feas": 0.30}
+PRESET_FRUGAL = {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.50}
 PRESET_QUALITY = {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70}
 
 if "thresholds" not in st.session_state:

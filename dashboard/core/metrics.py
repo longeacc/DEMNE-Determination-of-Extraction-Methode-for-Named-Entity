@@ -201,7 +201,7 @@ class MetricsCalculator:
         # 6. Feas
         count = len(annotations)
         freq_factor = min(1.0, count / 100.0)
-        feas = min(1.0, max(0.0, 0.4 * freq_factor + 0.3 * he + 0.3 * y))
+        feas = min(1.0, max(0.0, 0.6 * freq_factor + 0.4 * he))
 
         # 7. Domain Shift
         base_shift = 0.15

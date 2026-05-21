@@ -168,11 +168,11 @@ def compute_feasibility():
         count = max(1, int(freq * 207000))  # Approx corpus size ~207k tokens
 
         # -- Feas: NER Feasibility --
-        # Based on: frequency (enough training data?), yield (rules already work?),
+        # Based on: frequency (enough training data?)
         # and He (homogeneous patterns easier for NER)
         freq_factor = min(1.0, count / 100.0)  # Need ~100 examples for decent NER
         he_factor = he / 100.0  # Normalized homogeneity
-        feas = round(0.4 * freq_factor + 0.3 * he_factor + 0.3 * yld, 3)
+        feas = round(0.6 * freq_factor + 0.4 * he_factor, 3)
 
         # -- DomainShift: gap between pretrained model and clinical domain --
         # MMD approach: Ideally compare general embeddings vs clinical embeddings.

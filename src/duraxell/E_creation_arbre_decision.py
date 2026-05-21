@@ -55,10 +55,10 @@ class DecisionTreeBuilder:
 
         # --- CALIBRATED THRESHOLDS (To heavily favor RULES) ---
         self.THRESHOLDS = {
-            "TE_HIGH": 0.15,
-            "HE_HIGH": 0.45,
-            "R_MAX": 0.25,
-            "FEAS_TBM": 0.30,
+            "TE_HIGH": 0.10,
+            "HE_HIGH": 0.85,
+            "R_HIGH": 0.25,
+            "FEAS_NER": 0.50,
         }
 
     # Nombre minimum d'occurrences pour que Te soit fiable (Aligné avec THRESHOLDS_JUSTIFICATION.md)
@@ -161,11 +161,11 @@ class DecisionTreeBuilder:
             if he >= self.THRESHOLDS["HE_HIGH"]:
                 path_trace.append("Oui → R− ?")
                 # NOEUD 3 : Risque contextuel acceptable ?
-                if r_score <= self.THRESHOLDS["R_MAX"]:
+                if r_score <= self.THRESHOLDS["R_HIGH"]:
                     path_trace.append("Oui → [RÈGLES]")
                     return {
                         "method": "RÈGLES",
-                        "justification": f"Te={te:.1f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.1f}≥{self.THRESHOLDS['HE_HIGH']}, R={r_score:.3f}≤{self.THRESHOLDS['R_MAX']}",
+                        "justification": f"Te={te:.1f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.1f}≥{self.THRESHOLDS['HE_HIGH']}, R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']}",
                         "trace": path_trace,
                     }
                 else:
@@ -177,16 +177,16 @@ class DecisionTreeBuilder:
         else:
             path_trace.append(f"Non (Te={te:.1f} < {self.THRESHOLDS['TE_HIGH']}) → Feas++ ?")
 
-        # NOEUD 4 : Faisabilité TBM ?
-        if feas >= self.THRESHOLDS["FEAS_TBM"]:
+        # NOEUD 4 : Faisabilité NER ?
+        if feas >= self.THRESHOLDS["FEAS_NER"]:
             path_trace.append(f"Oui (Feas={feas:.3f}) → [TBM]")
             return {
                 "method": "TBM",
-                "justification": f"Feas={feas:.3f}≥{self.THRESHOLDS['FEAS_TBM']} — Transformer (DrBERT) faisable.",
+                "justification": f"Feas={feas:.3f}≥{self.THRESHOLDS['FEAS_NER']} — Transformer (DrBERT) faisable.",
                 "trace": path_trace,
             }
         else:
-            path_trace.append(f"Non (Feas={feas:.3f} < {self.THRESHOLDS['FEAS_TBM']}) → [LLM]")
+            path_trace.append(f"Non (Feas={feas:.3f} < {self.THRESHOLDS['FEAS_NER']}) → [LLM]")
             return {
                 "method": "LLM",
                 "justification": f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_TBM']} — Escalade vers LLM nécessaire.",

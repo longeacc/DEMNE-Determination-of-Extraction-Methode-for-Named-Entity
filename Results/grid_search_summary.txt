@@ -1,0 +1,4 @@
+DEMNE Train=Cantemist / Test=Redjdal+RCP
+Date: 2026-05-20 15:02
+Thresholds: {'Te_HIGH': 0.1, 'He_HIGH': 0.85, 'R_HIGH': 0.25, 'Feas_NER': 0.5}
+Concordance totale: 54/65 (83.1%)

@@ -1,0 +1,18 @@
+{
+  "thresholds": {
+    "TE_HIGH": 0.1,
+    "HE_HIGH": 0.85,
+    "R_HIGH": 0.25,
+    "FEAS_NER": 0.5,
+    "TE_MED": 0.1,
+    "FREQ_MIN": 0.001,
+    "RARE_THRESHOLD_COUNT": 10,
+    "MIN_TE_SAMPLES": 10
+  },
+  "calibration": {
+    "method": "Train: Cantemist, Test: Redjdal+RCP",
+    "label_criterion": "F1 >= 0.80",
+    "total_entities": 65,
+    "concordance": "54/65"
+  }
+}
