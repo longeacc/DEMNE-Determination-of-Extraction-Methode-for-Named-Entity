@@ -1,83 +1,752 @@
 {
-    "Estrogen_receptor": {
-        "count": 157,
-        "unique_patterns": 45,
-        "templatability_score": 30.4,
+    "SectionAnnotate": {
+        "count": 126,
+        "unique_patterns": 19,
+        "templatability_score": 9.4,
         "top_patterns": [
-            "XX+ (39)",
-            "XX XXX% (16)",
-            "XX XX% (12)",
-            "XX- (12)",
-            "XX + (9)"
+            "Xxxxxx Xxxxxxx (25)",
+            "Xxxx Xxxxxxx Xxxxxxx: (13)",
+            "XXX: (11)",
+            "Xxxxxx Xxxxxxx Xxxxxxxxx (11)",
+            "Xxxx Xxxxxxxx Xxxxxxx: (9)"
         ]
     },
-    "Progesterone_receptor": {
-        "count": 132,
-        "unique_patterns": 45,
-        "templatability_score": 29.4,
+    "PROBLEM": {
+        "count": 2700,
+        "unique_patterns": 1087,
+        "templatability_score": 24.3,
         "top_patterns": [
-            "XX- (27)",
-            "XX+ (24)",
-            "XX XX% (11)",
-            "XX XXX% (7)",
-            "XX + (4)"
+            "xxxxxxxx (116)",
+            "xxxxxxx (113)",
+            "xxxxxxxxxx (91)",
+            "xxxxxxxxx (79)",
+            "xxxxxx (75)"
         ]
     },
-    "HER2_status": {
-        "count": 82,
-        "unique_patterns": 30,
-        "templatability_score": 24.1,
+    "TREATMENT": {
+        "count": 1050,
+        "unique_patterns": 454,
+        "templatability_score": 21.8,
         "top_patterns": [
-            "XxxX- (15)",
-            "XXXX- (11)",
-            "XXXX xxx xxxxxxxxxx (7)",
-            "XXXX xxxxxxx (6)",
-            "XXXX xxx (5)"
+            "xxxxxxxxx (70)",
+            "xxxxxxx (49)",
+            "xxxxxxxxxxxx (41)",
+            "xxxxxxxxxxx (35)",
+            "xxxxxxxxxx (27)"
         ]
     },
-    "HER2_IHC": {
-        "count": 77,
-        "unique_patterns": 44,
-        "templatability_score": 17.6,
+    "TEST": {
+        "count": 1465,
+        "unique_patterns": 507,
+        "templatability_score": 25.0,
         "top_patterns": [
-            "XxxX : X+ (9)",
-            "XxxX : X (7)",
-            "Xxxx XX : X (5)",
-            "XXXX xxxxx X (4)",
-            "XXXX xxxxx X+ (3)"
+            "XXX (110)",
+            "XX (87)",
+            "XXXX (55)",
+            "Xxxxx (36)",
+            "Xxxx (35)"
         ]
     },
-    "Ki67": {
-        "count": 116,
+    "Pathology": {
+        "count": 136,
+        "unique_patterns": 36,
+        "templatability_score": 31.8,
+        "top_patterns": [
+            "XXX (31)",
+            "XXXX (27)",
+            "XxXX (9)",
+            "xxxxxx (8)",
+            "Xx-XX (8)"
+        ]
+    },
+    "MedicationName": {
+        "count": 167,
+        "unique_patterns": 36,
+        "templatability_score": 20.5,
+        "top_patterns": [
+            "xxxxxxxxx (39)",
+            "xxxxxxxxxx (22)",
+            "XX (15)",
+            "xxxxxxxx (10)",
+            "xxxxxxxxxxxxx (9)"
+        ]
+    },
+    "Symptom": {
+        "count": 625,
+        "unique_patterns": 136,
+        "templatability_score": 31.3,
+        "top_patterns": [
+            "xxxxxxxx (68)",
+            "xxxx (57)",
+            "xxxxxxx (56)",
+            "xxxxxxxxx (37)",
+            "xxxxxx (36)"
+        ]
+    },
+    "ClinicalCondition": {
+        "count": 436,
+        "unique_patterns": 126,
+        "templatability_score": 27.7,
+        "top_patterns": [
+            "xxxxxx (45)",
+            "xxxxxx xxxxxx (41)",
+            "Xxxxxxxx (32)",
+            "Xxxxxx xxxxxx (32)",
+            "xxxxxxxxxx (17)"
+        ]
+    },
+    "TreatmentType": {
+        "count": 168,
+        "unique_patterns": 40,
+        "templatability_score": 33.0,
+        "top_patterns": [
+            "xxxxxxxxxxxx (51)",
+            "xxxxxxxxx (15)",
+            "xxxxxxx (14)",
+            "xxxxxxxx xxxxxxx (11)",
+            "XX (8)"
+        ]
+    },
+    "DiseaseState": {
+        "count": 31,
+        "unique_patterns": 16,
+        "templatability_score": 22.7,
+        "top_patterns": [
+            "xxxxxxxxxx (9)",
+            "xxxxxxxxx (4)",
+            "xxxxxxx xxxxxxxxxx (3)",
+            "xxxxxxxxxxx (2)",
+            "Xxxxxxxxxx (2)"
+        ]
+    },
+    "Metastasis": {
+        "count": 56,
+        "unique_patterns": 11,
+        "templatability_score": 48.6,
+        "top_patterns": [
+            "xxxxxxxxxx (39)",
+            "Xxxxxxxxxx (6)",
+            "xxxx (2)",
+            "xxxxxxxxxxxx (2)",
+            "xxxxxx (1)"
+        ]
+    },
+    "Radiology": {
+        "count": 181,
+        "unique_patterns": 37,
+        "templatability_score": 32.9,
+        "top_patterns": [
+            "XXX (31)",
+            "XX (28)",
+            "XXX/XX (24)",
+            "xxxxxxxxx (20)",
+            "xxxxxxxxxx (16)"
+        ]
+    },
+    "Datetime": {
+        "count": 343,
+        "unique_patterns": 39,
+        "templatability_score": 52.4,
+        "top_patterns": [
+            "XX/XX/XX (132)",
+            "XX/XX/XXXX (82)",
+            "XXXX (37)",
+            "Xxxxxxxx XXXX (22)",
+            "Xxxxx XXXX (10)"
+        ]
+    },
+    "RadPathResult": {
+        "count": 292,
+        "unique_patterns": 186,
+        "templatability_score": 17.1,
+        "top_patterns": [
+            "xxxx (18)",
+            "xxxxxx (12)",
+            "X.X (10)",
+            "xxxxxxxxx xxxxxxxxxx xxxx (8)",
+            "xxxxxxxxxx (7)"
+        ]
+    },
+    "Site": {
+        "count": 651,
+        "unique_patterns": 158,
+        "templatability_score": 41.5,
+        "top_patterns": [
+            "xxxxxx (209)",
+            "xxxxxxxx (50)",
+            "xxxxx (43)",
+            "xxxx (28)",
+            "Xxxxxx (20)"
+        ]
+    },
+    "Laterality": {
+        "count": 354,
+        "unique_patterns": 12,
+        "templatability_score": 31.5,
+        "top_patterns": [
+            "xxxxx (131)",
+            "xxxx (116)",
+            "X (22)",
+            "Xxxxx (18)",
+            "Xxxx (18)"
+        ]
+    },
+    "Size": {
+        "count": 139,
+        "unique_patterns": 26,
+        "templatability_score": 36.4,
+        "top_patterns": [
+            "X.X xx (45)",
+            "X.X x X.X xx (21)",
+            "X xx (15)",
+            "X.Xxx (11)",
+            "X.X x X.X x X.X xx (9)"
+        ]
+    },
+    "ProcedureName": {
+        "count": 195,
+        "unique_patterns": 84,
+        "templatability_score": 23.4,
+        "top_patterns": [
+            "xxxxxxx (27)",
+            "xxxxxxxxxx (18)",
+            "xxxxxxxxxxxx (12)",
+            "xxxxxx (7)",
+            "xxxx (7)"
+        ]
+    },
+    "Histology": {
+        "count": 110,
         "unique_patterns": 46,
-        "templatability_score": 26.9,
+        "templatability_score": 32.3,
         "top_patterns": [
-            "XxXX XX% (30)",
-            "XxXX XX % (9)",
-            "XxXX x XX% (6)",
-            "Xx XX XX% (6)",
-            "XxXX : XX% (5)"
+            "XXX (37)",
+            "xxxxxxxxxxxxxx (7)",
+            "XXXX (7)",
+            "xxxxxxxx xxxxxx xxxxxxxxx (6)",
+            "xxxxxxxxx (4)"
         ]
     },
-    "Genetic_mutation": {
+    "BiomarkerName": {
+        "count": 218,
+        "unique_patterns": 24,
+        "templatability_score": 59.8,
+        "top_patterns": [
+            "XX (109)",
+            "XXXX (65)",
+            "xxxxxx (8)",
+            "XxxX (5)",
+            "XXX (4)"
+        ]
+    },
+    "BiomarkerResult": {
+        "count": 207,
+        "unique_patterns": 33,
+        "templatability_score": 41.3,
+        "top_patterns": [
+            "xxxxxxxx (58)",
+            "+ (43)",
+            "- (34)",
+            "+ XX% (11)",
+            "xxx (10)"
+        ]
+    },
+    "RadiationTherapyName": {
+        "count": 9,
+        "unique_patterns": 4,
+        "templatability_score": 17.1,
+        "top_patterns": [
+            "xxxxxxxxx (5)",
+            "xxxxxxxxxxxx xxxxxxxxx (2)",
+            "xxxxxxxx XX (1)",
+            "xxxxxxxxx xxxxxxx (1)"
+        ]
+    },
+    "Grade": {
+        "count": 33,
+        "unique_patterns": 4,
+        "templatability_score": 80.8,
+        "top_patterns": [
+            "X (30)",
+            "xxxx (1)",
+            "X-X (1)",
+            "xxxxxxxxxxxx (1)"
+        ]
+    },
+    "MarginStatus": {
+        "count": 12,
+        "unique_patterns": 6,
+        "templatability_score": 22.9,
+        "top_patterns": [
+            "xxxxxxxx (4)",
+            "Xxxxxxxx (4)",
+            "xxxxx (1)",
+            "<X.X (1)",
+            "<X.X xx (1)"
+        ]
+    },
+    "LocalInvasion": {
+        "count": 14,
+        "unique_patterns": 6,
+        "templatability_score": 22.4,
+        "top_patterns": [
+            "XXX (5)",
+            "xxxxxxx xxxxxxxx (4)",
+            "xxxxxxxxxxxxxx xxxxxxxx (2)",
+            "xxxxxxxxxx xxxxxxxxx (1)",
+            "xxxxxxxx (1)"
+        ]
+    },
+    "LymphNodeInvolvement": {
+        "count": 89,
+        "unique_patterns": 42,
+        "templatability_score": 23.3,
+        "top_patterns": [
+            "XX (14)",
+            "xxxxx xxxxx (11)",
+            "xxxxx xxxx (8)",
+            "xxxx (6)",
+            "xxxx xxxxxxxx (4)"
+        ]
+    },
+    "LivingCondition": {
+        "count": 20,
+        "unique_patterns": 19,
+        "templatability_score": 10.6,
+        "top_patterns": [
+            "xxxxxx xx ***** (2)",
+            "Xxxxx xxxx xxx xxxxxxxx (1)",
+            "xxxxx xxxx xxx XX-xxxx-xxx xxx (1)",
+            "Xxxxxx xxxxx (1)",
+            "Xxxxx xx ***** xxxx xxxxxxx xxx xxx (1)"
+        ]
+    },
+    "Age": {
+        "count": 128,
+        "unique_patterns": 18,
+        "templatability_score": 73.4,
+        "top_patterns": [
+            "XX (101)",
+            "XXx (6)",
+            "XX xxxxx (4)",
+            "XX x.x (3)",
+            "xxx-XXx (1)"
+        ]
+    },
+    "Stage": {
+        "count": 30,
+        "unique_patterns": 10,
+        "templatability_score": 28.0,
+        "top_patterns": [
+            "xxxxx (8)",
+            "XXX (8)",
+            "XX (6)",
+            "X (2)",
+            "xxx (1)"
+        ]
+    },
+    "TNM": {
+        "count": 15,
+        "unique_patterns": 8,
+        "templatability_score": 14.8,
+        "top_patterns": [
+            "XXXX (6)",
+            "xXX(x)XXx (3)",
+            "XXxXX (1)",
+            "xXX xXX xXX (1)",
+            "xxXXx(x) xxXXx (1)"
+        ]
+    },
+    "MedicationRegimen": {
+        "count": 50,
+        "unique_patterns": 20,
+        "templatability_score": 22.7,
+        "top_patterns": [
+            "XX (11)",
+            "XX/X (6)",
+            "XxxXX (6)",
+            "XXX (5)",
+            "xxxxxxxxx xxxx xxxxxxx xxxxxxxxxxx (3)"
+        ]
+    },
+    "SectionSkip": {
+        "count": 120,
+        "unique_patterns": 120,
+        "templatability_score": 10.0,
+        "top_patterns": [
+            "Xxxxxxxxxx Xxxxxxxxx Xxxxxxxxxxxxx xx xx XX/XX/XXXX   Xxxxxxxxxx Xxx Xxxxxxxx Xxxxxx   \u0007 xxxxxxxxxxxxx (XXXXXXX) XXX xx xxxxxx Xxxx X xxxxxx (XXX xx xxxxx) xx xxxxx xxxxx X (xxx) xxxxx xx xxxxxx (XXXX XXXX).     \u0007 xxXXXXXxxx (XXXXXXX) X xx xxxxxx Xxxx X.X xxxxxxx (X.X xx xxxxx) xx xxxxx Xxxxx. XX xxxxxx X   \u0007 xxxxxxx XX xx XX xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XX xxxxxx X   \u0007 xxxxxxxxxxxx (XXXXXXX) XX xx xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XXX XX xxxxxx X   \u0007 xxxxxxxxxx (XXXXXX) X xx xxxxxx XXXX X/X XXXXXX XX XXXXX XXXXX XX xxxxxx X   \u0007 xxxxx xxxxxxx (XXXXX XXXXXXX) xxxx xxxxx Xxxxx xxxxx xxxxx xxxxx xxxxx xx xxxxxxxx. XXX xxxx X   \u0007 xxxxx xxxxxxx xxxxxxxxxx xxx Xxxxx xxxxx xxxxx xx xxxxxxxx X xxxx X   \u0007 xxxxxxxxxxx (XXXXXXXX) X.X % xxxxxxxxxx xxxxxxxx Xxxxx X xxxx xxxx xxxx xxxx X (xxx) xxxxx xxxxx. XX xX XX   \u0007 xxxxxxx xxxxxxxxx-xxxxxxx X (XXXXX XXX/X) X,XXX xx (XXX xx xxxxxxxxx)-XXX xxxx xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XXX XX xxxxxx X   \u0007 xxxxxXXXX (XXXXXXXXX) XX xx xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XXXXX XXXXXX XXXXX XXX xxxxxx X   \u0007 xxxxxxx xxxxxxxx (XXXXXX) XXX xxxx/xX xxxxxxxxx XXXXXX X XXXXX XXXX XXX XXXX XXXXX XXXXX XX XXXXXXX XX xX X   \u0007 xxxxxxx xxxxxxx-xxxxxx X-XXX X.X xX XX XXXXXXX XXX XXXXX XX XXXXXXXX XXX Xxxxxxx X   \u0007 xxxxxxx xxxxxxx Xxx xxxxx xxxxx xx xxxxxxxx. XXX xxxx X   \u0007 xxxxxxxxxxx (XXXXXXX) X.XXX % xxxxxxxxxx xxxxxxxx Xxxxx X xxxx xxxx xxxx xxxx xxxxxxx xx xxxxxxx. X.X xX XX   \u0007 xxxXXXXXX (XXXXXXXXXX) X,XXX xx xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XXXXX XXXX XXXX XXXXX XXX xxxxxx X   \u0007 xxxxxxxxx (XXXXXX) XX xx xxxxxx XXXX X XXXXXX XX XXXXX XXXXX XX xxxxxx X   \u0007 XXXXXXXX X X.X % xxxxxxxxxx xxxxxxxx XXXXXXX X XXXX XX XXXX XXXX XXXXX XXXXX X xX X   \u0007 xxxxxxxx xxxxxx (XXXXXX) XXX xx xxxxxxx Xxxx X xxxxxxx (XXX xx xxxxx) xx xxxxx Xxxxx x xxx. XX xxxxxxx X   \u0007 xxxxxxxxxx (XXXXXXXX) XX xx xxxxxx Xxxx X xxxxxx (XX xx xxxxx) xx xxxxx Xxxxx. XX xxxxxx X   \u0007 xxxxxxxxxx (XXXXXXX) XX xxx/xxxxxxxxx xxxxx X xxxxxx xx Xxxxx xxxxx Xxxxx. XX x X   \u0007 xxxxxXXXXXXXX (XXXXXXXXX) X.X xx XX xxxxxx Xxxxx X xxxxxx (X.X xx xxxxx) xxxxx xxx xxxxxx xxxxx X (xxxx) xxxxxxx xx xxxxxx xxx Xxxxx xxxx. XXX xxxxxx X   \u0007 xxxxxxxxxxx (XXXXXXX) X.X % xxxxxxxxxx xxxxxxxx Xxxxx X xxxx xxxx xxxx xxxx xxxxx xx xxxxxx (X xxxx xx xxxxxx). X xX X   \u0007 [XXXXXXXXXXXX] xxxxxxxxxxx (XXXXXXX) XXX xx xxxxxxx      \u0007 [XXXXXXXXXXXX] xxxxxxxxxx (XXXXX) XX xx xxxxxx Xxxx X.X xxxxxxx (XX xx xxxxx) xx xxxxx Xxxxx. X xxxxxx X   \u0007 [XXXXXXXXXXXX] xxxXXXXXX (XXXXXXXXXX) X xx xxxxxx Xxxx X xxxxxx (X xx xxxxx) xx xxxxx xxxxx X (xxxx) xxxxx xx xxxxxx xxx Xxxx. XX xxxxxx X     Xxxxxxxx-Xxxxxxxxxxxx Xxxxxxxxx Xxxxxxxxxxx xx xx XX/XX/XXXX   Xxxxxxxxxx Xxxx Xxxxx Xxxxxxxxx Xxxxxxxx Xxxx Xxxx Xxxx Xxxx   \u0007 [XXXXXXXXX] xxxxxxxxxx (XXXXX) xxxxxxxxx XX xx  XX xx Xxxxxxxxxxx Xxxx ***** *****, XX   XX xx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] X.X % xxxxxx xxxxxxxx xxxxx xxxxxxxxx xxxxxxx  X xX Xxxxxxxxxxx XXX XXX ***** ***** *****, *****-X   X xX xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] X.X % xxxxxx xxxxxxxx xxxxx xxxxxxxxx xxxxxxx  X xX Xxxxxxxxxxx XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxxxxxx (XXXXXXX) xxxxxx XXX xx  XXX xx Xxxx XXX XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxxxxxx (XXXXXXX) xxxxxx XXX xx  XXX xx Xxxx XXX XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxXXXXXxxx (XXXXXXX) xxxxxx X.X xx  X.X xx Xxxx Xxxxx (XX) ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxx XX xxxxxx XX xx  XX xx Xxxx Xxxxx (XX) ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxxxxx (XXXXXXX) xxxxxx XX xx  XX xx Xxxx X XX ***** ***** *****, *****-X   XX xx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxxxxxx (XXXXXXXX) X.X % xxxxxxxxxx xxxxxxxx X xxxx  X xxxx Xxxx Xxxx XXX ***** ***** *****, *****-X   X xxxx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxxx XX% xxxxxxxxx xxxxxxx XX.X x  XX xX Xxxxxxxxxxx XXX Xxx XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxx xxxxxx (XXXXXX) xxxxxxx XXX xx  XXX xx Xxxx XXX ***** ***** *****, *****-X   XXX xx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxXXXX (XXXXXXXXX) xxxxxx XX xx  XX xx Xxxx Xxxxx xxxx Xxxxxxxxx ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxx xxxxxxxx xxxxxx XX x  XX x Xxxx XXX Xxx XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxx xxxxxx (XxxxXXX) xxxxxxxxx XXX xxxxx/xX xxx  X-XX Xxxxx Xxxxxxxxxxxx XXX ***** ***** ***** *****, *****-X   X Xxxxx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxx xxxxxx (XxxxXXX) xxxxxxxxx XXX xxxxx/xX xxx  X-X Xxxxx Xxxxxxxxxxxx Xxxxxxx xxx xxxxx xx ***** ***** *****, *****-X   X Xxxxx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxx xxxxxxxx (XXXXXX, XXXXXXXX) xxxxxxxxx XXX xxxxx/xX xxx  X Xxxxx Xxxxxxxxxxxx Xxxxxxx ***** ***** *****, *****-X   X Xxxxx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxxxxxx (XXXXXXX) X.XXX % xxxxxxxxxx xxxxxxxx X xxxx  X xxxx Xxxx Xxxx Xxxxxxx ***** ***** *****, *****-X   X xxxx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxxxxxx (XXXXXXXX) xxxxxx XX xx  XX xx Xxxx Xxxxx (XX) ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxXXXXXX (XXXXXXXXXX) xxxxxx X,XXX xx  X,XXX xx Xxxx XXX ***** ***** ***** *****, *****-X   X,XXX xx xx XX/XX/XX XXXX   \u0007 [XXXXXXXXXXXX] xxxxxXXXXXXXX (XXXXXXXXX) XX xxxxxx X.X xx  X.X xx Xxxxxxxxxx XX Xxx XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxxxx (XXXXXX) xxxxxxxxx X xx  X xx Xxxxxxxxxxx XXX XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxxxx (XXXXXX) xxxxxx X xx  X xx Xxxx XXX XXX ***** ***** *****, *****-X       \u0007 [XXXXXXXXXXXX] xxxxxxxxx (XXXXXX) xxxxxx XX xx  XX xx Xxxx Xxxxx (XX) ***** ***** *****, *****-X (1)",
+            "Xxx Xxxxxxx   Xxxxxxxxx Xxxxx Xxxx    XXX Xxxxx X.X XX/XX/XXXX    Xxxxxxxxxx X.X (X) XX/XX/XXXX    Xxxxxxxxxx XX.X (X) XX/XX/XXXX    Xxxxxxxx Xxxxx XXX XX/XX/XXXX     Xxx Xxxxxxx   Xxxxxxxxx Xxxxx Xxxx    Xxxxxx, Xxxxx / Xxxxxx XXX (X) XX/XX/XXXX    Xxxxxxxxx, Xxxxx / Xxxxxx X.X XX/XX/XXXX    Xxxxxxxx, Xxxxx / Xxxxxx XXX XX/XX/XXXX    Xxxxxx Xxxxxxx, Xxxxx XX XX/XX/XXXX    Xxxx Xxxxxxxx, Xxxxx / Xxxxxx XX XX/XX/XXXX    Xxxxxxxxxx X.XX (X) XX/XX/XXXX    Xxxxxxx, xxx-xxxxxxx XXX (X) XX/XX/XXXX     Xxx Xxxxxxx   Xxxxxxxxx Xxxxx Xxxx    Xxxxxxx, xxxxx, Xxxxx / Xxxxxx X.X XX/XX/XXXX     Xxx Xxxxxxx   Xxxxxxxxx Xxxxx Xxxx    Xxxxxxxxx xxxxxxxxxxxx XX XX/XX/XXXX    Xxxxxxx xxxxxxxxxxxx XX XX/XX/XXXX    Xxxxxxxx Xxxxxxxxxxx XX XX/XX/XXXX    Xxxxxxxxx, Xxxxx X.X XX/XX/XXXX    Xxxxxxx, Xxxxx / Xxxxxx X.X (X) XX/XX/XXXX (1)",
+            "Xxxxxxxx Xxxx:   XXXX X   Xxxxx Xxxxx - XX XXX/XX | Xxxxx XX | Xxxx XX.X X (XX.X X) (Xxxx)  | Xxxx XX | Xx XXX xx (X' XX.XX\") Xxxxxxx: XX/XX/XXXX ***** | Xx XX.X xx (XXX xx) | XxXX XX% | XXX XX.XX xx/xX   Xxxxxxxxxxxxxx - XXXX, XXX  Xxxx - xxxxxx xxxxxxxxx, XXXXX, XXXX  XXXX - xxxxxxx xxxxxxxxx, xxxxx xxxxxx xxxxxx, xxxxxxx xxxxxxx xxxxxxxx, xxxxxxxxxx, xx xxxxxx   Xxxxx Xxxxx - xx xxxxxxxx, xxxxxxxxxxxxxxx, xx xxxxxxxx xxxxxxxxxxxxxxx. Xxxxxxxxxxx - xxxxxxxx xx xxxxxxxxxx xxxxxxxxxx, XXX xxxxxxxxxxx; xx xxxxxxx, xxxxxxx, xx xxxxxxxx  Xxxxxxxxxxxxxx - Xxxxxx xxxxx xxxx, xxxxxx xxxxxx, xx xxxxxxx, xx xxxxx  Xxxxxx - xxxxx xxxxxx xxxxxxxxxx; xx xxxx xx xxxx xxxxxx  XX - Xxxxx xxxxxx xxxxxx, xxxx; xx xxxxxxxxxx, xx xxxxxxxxxx, xx XXX  Xxxxxxxxxxxxxxx - Xx xxxxxxxxxx xxxx xxxxx xx xxxxxx.   Xxxxxxxxxx - Xxxxx & xxxxxxxx x X, xxxxxxxxx x/x xxxxxxxxxx, xxxx xxxxxxxx xxxxxxxxxx  Xxxxxxxxxxx - Xxxx xxxxxx; xx XX, XX, xxxxxxxxxxxxxx, xxxxxxxx, xx xxxxxxxxx  Xxxx - xxxx xxxxxxx xxxxxx xx xxxxxxx       Xxxxxxx:  Xxxxxxxxx xxxx, xxxxxxxxx, xxx xxxxxxx xxxx xxxxxxxx xxx xxxxxxxxxxxxx xxxxxxxxxxx, xx xxxxxxxxx xxxxx xx xxx XXX. (1)",
+            "XX/XX/XX XXXXXXXX XXXXXXXXX XXXXXX    ***** XXXX XXXXXXXX *****    Xxxxxxx Xxxx: *****, *****  *****. Xxx.#: *****  XXX: XX/XX/XXXX (Xxx: XX)  Xxx: Xxxxxx  Xxxxxxxxx #: *****-*****  Xxxxx #: *****  Xxxxxxx Xxxx: XX/XX/XXXX  Xxxxxxxx: XX/XX/XXXX  Xxxxxxxx: XXX  Xxxxxx:*****   Xxxxxxxxx(x): ***** *****. ***** ((*****) *****-*****)    XXXXX XXXXXXXXXX XXXXXXXXX    X. Xxxxx xxxxxx, xxxxxx xxxxxxxxxx:   X. Xxxxxxxx xxxxxx xxxxxxxxx, XXX   xxxxx X, X.X xx, xxxxxxxx xxxxxxx;  xxx xxxxxxx.  X. Xxxxxxxxxxxxx.  X. Xxxxxx xxxxxxxxxx xx xxxxx xxx xxxxxxxx xxxxxxxxxx.  X. Xxxxxxxxxxxxxx xxxxxxxxxx xxxx xxxxxxxx xxxxxxxxxx xxx xxxxxx xxxxx.    X. Xxxxxxxxxxxx xxxx xxx xxxxxx.    X. Xxxxx xxxxxxxx xxxxxxxx xxxxx xxxx, #X- xx xxxx xxxxx XXXX, xxxxxx:   Xxxxxxxxxx xxxxxxxxx xx xxx xxxxx xxxx, X.X xx, xx xxxxxxxxxx xxxxxxxxx  (Xxx XX); xxx xxxxxxx.    X. Xxxxx xxxxxxxx xxxxxxxx xxx-xxxxxxxx xxxxx xxxx #X, xxxxxx: Xx xxxxx  xx xxx xxxxx xxxx (X/X).    X. Xxxxx xxx xxxxxxxx xxxxxxx xxxxxx, xxxxxxxx: Xxxxxx xxxxxxxxxxxx  xxxxxx, xx xxxxxxxxx.    X. Xxxxx xxxxxx xxxx, xxxxxxxx: Xxxxxx xxxx, xx xxxxxxxxx.    XXXXXXX:  Xxxxxx Xxxxx Xxxxxxxx Xxxxxxx    - Xxxxxxxxxx: Xxxxx.  - Xxxxx xxxx: Xxxxx xxxxx xxxxxxxx.    - Xxxxxxxx: XX x'xxxxx.  - Xxxxxxxx xxxxx xxxx: Xxxxxxxx xxxxxx xxxxxxxxx.  - Xxxxxxxx xxxxx xxxx: X.X xx.  - Xxxxx xxxx xxxxxxxxxx xxxxx xx xxxxx xxxxxxx xx X xxxxxxxxxxx xxxxxx  (xxxxx *****-*****, xxxxx xxxxxxxxx X.X xx).  - Xxxxxxxx xxxxx xxxx xxxxx xxxxxxxxxxx xxxxxxx: X/X.  - Xxxxxxxx xxxxx xxxxx (xxxxxxxx Xxxxxx-Xxxxx-Xxxxxxxxxx): Xxxxx X.    - Xxxxxxx xxxxx: X xxxxxx.    - Xxxxxxx xxxxx: XX/XXXXX: X xxxxxx.    - Xxxxxxxxx/xxxxxxx xxxxxxxxxxxxxxx: X xxxxxx.    - Xxxxx xxxxxx: X xxxxxx = xxxxx X.  - XXX (xxxxxxxxx xxxxxxxxxxx xxxxxxxxx): Xxxxxxxx.  - Xxxxxxxxx/xxxxxxxx xxxxxxxx: Xxxxxxxx xxxxxxxxxx xx xxxxxxxxxxxxxx  xxxxxxxx xxxxxxx (xxxxx XX).  - Xxxx/xxxxxx: Xx xxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx.  - Xxxxxxxx xxxxxx: Xx xxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx.  - Xxxxxxx xxx xxxxxxxx xxxxx: Xxxxxxxx.    - Xxxxxxxxx xxxxxx: Xxxxxxxx (xxxxx xx X.X xx xxxx, xx xxxxx XX).    - Xxxxxx xxxxxx: Xxxxxxxx (xxxxx xx XX xx xxxx).    - Xxxxxxx xxxxxx: Xxxxxxxx (xxxxx xx X.X xx xxxx).    - Xxxxxxxx/xxxxxxxx xxxxxx: Xxxxxxxx (xxxxx xx <X.X xx xxxx, xx  xxxxx XX-XX).    - Xxxxxxxx/xxxxxxxx xxxxxx: Xxxxxxxx (xxxxx xx X.X xx xxxx, xx  xxxxx XX).  - Xxxxxx xxxxxxxxx xx xxxx (XXXX): Xxxx.  - Xxxxxxxxxxxxxxxxxxx: Xxxxxxx xxxxxxxxxx xxxx xxxxxxxx xxxxxxxxxx xxx  xxxxxx xxxxx.  - Xxxxxxx xxxxxxxxx xx xxxx: Xxxx.  - Xxx-xxxxxxxxxx xxxxxx: Xxxxxx xxxxxxxxxx xx xxxxx, xxxxxxxx  xxxxxxxxxx, xxxxxxxxxxxxx.  - Xxxxx xxxx xxxxxx: Xxxxxxxx.      - Xxxxx xxxxxx xx xxxxx xxxxxxxx: X.      - Xxxxx xxxxxx xx xxxxx xxxx xxxxxxxxxxxxxxx: X.      - Xxxxx xxxxxx xx xxxxx xxxx xxxxxxxxxxxxxxx: X.      - Xxxx xx xxxxxxx xxxxxxxxxx xx xxxx: X.X xx.      - Xxxxxxxxxx xxxxxxxxx: Xxxx.    - XXXX/XXXX xxxxx: xXXXXx.    - Xxxxx xxxxxxxxx (XX/XX/XXXX) xxxxxx: Xxxx xx xxxxxxxx xx xxxxxxxx.        XXXXX XXXXXXXXXXXXX: X xxxx, xxxxxxxx, xxxx-xxxxx xxxx xxxx xxxxxxxxx  xxxxxxx (X.X xx xxxxxx-xx-xxxxxxx x X xx xxxxxxxx-xx-xxxxxxxx x X.X xx  xxxxxxxx-xx-xxxxxxxxx; xxxxxxxx xxxxxx X xxxxxxx X) xx xxxxxxx xx XX  x'xxxxx, xxxxxxxxxxxxx X xx xxxx xxx xxxxxx. Xxx xxxxxxxx xxx xx xxxxx  X xxx x xxxx, xxxx-xxxxxx xxxx (X x X.X x X.X xx) xxxxxxxxxx x xxxxx  xxxxxx xxxx.    X xxxxx (X.X xx xxxxxxxx xxxxxxxxx) xxxxxx-xxxxxx xxxxxxxxxxx xxxx xx  xxxxxxxxxx xx xxxxx XX xxxxxx xxxxx, xxxx xxxxxxx-xxxxxxxxx xxxxxx. Xxx  xxxx xx xxxxxxx xx xxxxxx xxxxx xxx xxxxx xxx xxxxxx xxxx xxx xxxxxxxxx  xx xxxxx XX xx xxx xxxxxxxx xxxxxxxxx.    Xxxxxxx:  -Xxxxxxxx/xxxxxxxx: Xxxx xx <X.X xx xxxx xxxxxx (xxxxx X xxx X).  -Xxxxxxxx/xxxxxxxx: Xxxx xx X.X xx xxxx xxxxxx (***** X).  -Xxxxxx: Xxxx xx XX xx xxxx xxxxxx.  -Xxxxxxx: Xxxx xx X.X xx xxxx xxxxxx  -Xxxx: Xxxx xx X.X xx xxxx xxxxxx (xxxxx X).  -Xxxxxx xxxx: Xxxx xx X.X xx xxxx xxxxxx xxxx.  -Xxxx: Xxxx xx X.X xx xxxx xxxxxxx xxxx xxxxxxx xxx.    Xxxxx xx xx xxxxxx xxxxxxxxxx xx xxxxx. Xxx xxxx xxx x xxxx xxxxxxxxxx  xxxx (X.X xx) xxxxxxxxxxx xxxxxxxx xx xxx xxxxxx xxxxxxx xxxxxxxxxx xxxx  x xxxxxx. Xx xxxxx xxx xxxx. Xxx xxxx xxxxxxx xx xxxxxx xxx xxxxxxx  xxxxxxxx. Xxx xxxxxxxx xxxxxxxx xxxx xxxxxxx xxxxxx xxxxxxx xxxxxx.   Xxx xxxxxxxxxx xxxxxxxxxx xx xxx xxxx xxxxxxx xx xxxxx xxxxxx xxxxxxx  xxxxxx (XX%) xxx xxxxx, xxxx xxxxxx (XX%). Xxx xxxxxxxx xx xxxxxxxxxxxx  xx xxx Xxxxxxxxx Xxxxxxxxxx xxx x xxxx xx xxx xxxxxxxxxx.    ***** *****/Xxxxxxxxx Xxxxxxxx  ***** *****/Xxxxxxxxxxx    Xxxxxxxxxxxxxx xxxxxx xxx xx *****/*****/***** *****:*****      Xxxxxxxx   Xxxx Xxxxxxx:   XX/XX/XXXX   Xxxxxx:  Xxxxxx Xxx    Xxxx Xxxxxxxx:   XX/XX/XXXX   Xx: ***** *****    Xxxx Xxxxxxxx:   XX/XX/XXXX     Xxxxxxxx Xxxxxxxxx    Xxxxxxxx Xxxxxxx    Xxxxxxxxxxxxxxxxxxx xxxxx xxx xxxxxxxx xxx xxxxxxxxxxxx xxxxxxxxx, XXXX  xxx Xx-XX xxxx xxxxxxxxx xx xxxxxx xxxxxxxxxxx xx xxxxx XX.    Xxx xxxx xxx xxxxxxxx xxxxxxxxx xx xxxxxxxx. Xxxxx xx xx xxxxxxx  xxxxxxxx xx xxxxx xxxxx. Xxxxxxxx xxxxxxxx xxxxxxx xx xxxxxxx, xxx  xxxxxxxx xxxxxxxx xxxxxxx xx xxxxxxxxxxx.    Xxx xxxx xxx xxxxxxxxxxxx xxxxxxxxx xx xxxxxxxx. Xxxxx xx xx xxxxxxx  xxxxxxxx xx xxxxx xxxxx. Xxxxxxxx xxxxxxxx xxxxxxx xx xxxxxxx, xxx  xxxxxxxx xxxxxxxx xxxxxxx xx xxxxxxxxxxx.    Xxxxxx xx XXXX xxxx: Xxxx xxxxxxxxx xx xxxxxxxx xxx XXXX xxxxxxxxxxx  xxxx-xxxxxxxxxx. Xxx xxxxxxxx xxxxxxxxx xx xxxx xxxxxxxxx xxx X xx x  xxxxx xx X-X.    Xx-XX xxxxxxxxxxxxx xxxxx: Xxxxxxxx xxxxxxxxxx xxxxxxx xxxx <X% xx  XX-XX%. Xxxxxxx, xx xx xxxxxxxxx xx xx ~XX%. (1)",
+            "XXXXXXXX XXXXXXXXXXX:  XXXXXXX: Xx xxxxxxxx xxxxxxxxxxx, xxx xx x xxxxxxxx xxxxx xx xx xxxxx  xxxxxxxx xxx xxxxxxx xx xxxx xxxx xxxx xxxxxx.  XXXXX XXXXX: Xxx xxxxxx xx X'X\", xxxxxx xx XXX xxxxxx, xxxxx xxxxxxxx  XXX/XX, xxxxx XX, xxxxxxxxxxxx XX, xxx xxx xxxxxxxxxx xx XX% xx xxxx  xxx.  XXXX: Xxx xxxx xxxxxxx xx xxxxxxx.  XXXXX: Xxx xxxxxxxxxx xx xxxxx.  Xxx xx xxxxxxxxx.  XXXXX XXXXX: Xxx xxx xx xxxxxxxx xx xxxxxxxx xxxxxxxxxx.  Xxxxx xxx  xxxx, xxxxxx xxxxx xx xxx xxxx xxxxxxxxxxxxxxx xxxxx.  XXXXX: Xxx xxxxx xxx xxxxx xxxxxxxxxxx xx xxxxxxxxxxxx xxx xxxxxxxxxx.  XXXXXXX: Xxx xxxxxxx xxxx xx xxxxxxx xxxxxx xx xxxxxx.  XXXXXXX: Xxx xxxx xxxxxx xx xxxxxxx xxxxxx.  Xxx xxxxx xxxxxx xxxxxxx x  xxxx-xxxxxx xxxxxxxx xx xxx XX x'xxxxx xxxxxx xx xxx xxxxx xxxxxx xxxx  xxxx xxxxxxx xxxx xxxxx xxx xxxxxxxx.  Xxx xxx x X.X x X.X xx, xxxx,  xxxxx xxxx xxxx xxxxxxx xx xxx xxxxxxx xxxx xx xxx xxxx xxxxxxxx xxxxx  xxxx xxxxx xxx xxxxxx.  XXXXXXX: Xxx xxxxxxx xx xxxx xxx xxxxxxxxx xxxxxxx xxxxxxxxxxxxxxxxxx.  XXXXXXXXXXX: Xxx xxxxxxxxxxx xxx xxxxxxx xxxxx.  XXXXXXXXXX: Xxxxxxxxxx xxxx xx xxxxxxx xxxxxxxx, xxxxxxxx X xxx xxx  xxxxxxxx xxx xxxxxxxx xxxxxxxxxx xx xxx xxxxx xxx (1)"
+        ]
+    },
+    "MaritalStatus": {
+        "count": 15,
+        "unique_patterns": 6,
+        "templatability_score": 8.5,
+        "top_patterns": [
+            "Xxxxxxx (5)",
+            "xxxxxxxx (3)",
+            "Xxxxxx (3)",
+            "Xxxxxxxx (2)",
+            "Xxxxxxx; xxxxxxx xxxxx xxxxx (1)"
+        ]
+    },
+    "Tobacco": {
+        "count": 25,
+        "unique_patterns": 13,
+        "templatability_score": 8.0,
+        "top_patterns": [
+            "Xxxxx Xxxxxx (6)",
+            "Xxxxxxxxx xxxxxxx: Xxxxx Xxxx (3)",
+            "xxxxxxx (3)",
+            "xxxxxxxxxx (2)",
+            "Xxxxxx Xxxxxx (2)"
+        ]
+    },
+    "Alcohol": {
+        "count": 13,
+        "unique_patterns": 9,
+        "templatability_score": 4.5,
+        "top_patterns": [
+            "Xxxxxxx xxx Xx (3)",
+            "xxxxxxx (2)",
+            "Xxxxxxx (2)",
+            "Xx (1)",
+            "Xxxxxxx xxx: Xxx Xxxxxxxxx (1)"
+        ]
+    },
+    "Drugs": {
+        "count": 9,
+        "unique_patterns": 4,
+        "templatability_score": 5.4,
+        "top_patterns": [
+            "Xxxx xxx: Xx (3)",
+            "Xxxx (3)",
+            "Xx (2)",
+            "Xxxx xxx: Xxx (1)"
+        ]
+    },
+    "Duration": {
+        "count": 45,
+        "unique_patterns": 22,
+        "templatability_score": 18.1,
+        "top_patterns": [
+            "X xxxxx (8)",
+            "X xxxx (4)",
+            "XX xxxxx (4)",
+            "xxx xxxxx (4)",
+            "X xxxxxx (3)"
+        ]
+    },
+    "TumorCharacteristics": {
+        "count": 17,
+        "unique_patterns": 14,
+        "templatability_score": 13.1,
+        "top_patterns": [
+            "xxxxxx (3)",
+            "XXXX (2)",
+            "xxxxxxxxxxxx (1)",
+            "xxxxxxxxxx (1)",
+            "xxxxxx xxxx (1)"
+        ]
+    },
+    "ap_end": {
+        "count": 20,
+        "unique_patterns": 10,
+        "templatability_score": 10.6,
+        "top_patterns": [
+            ". (6)",
+            "xxxxxxx. (3)",
+            "xxxxx. (3)",
+            "XX. (2)",
+            "xxxx. (1)"
+        ]
+    },
+    "ap_start": {
+        "count": 20,
+        "unique_patterns": 3,
+        "templatability_score": 28.0,
+        "top_patterns": [
+            "Xxxxxxxxxx (13)",
+            "XXXXXXXXXX (6)",
+            "Xx (1)"
+        ]
+    },
+    "hpi_start": {
+        "count": 23,
+        "unique_patterns": 10,
+        "templatability_score": 9.8,
+        "top_patterns": [
+            "XX (6)",
+            "XXX (5)",
+            "XXXX (2)",
+            "XXXXXXXXXX (2)",
+            "Xxxxxxxxxx (2)"
+        ]
+    },
+    "hpi_end": {
+        "count": 23,
+        "unique_patterns": 16,
+        "templatability_score": 4.3,
+        "top_patterns": [
+            ". (4)",
+            "xxxxxxx (2)",
+            "xxxxx. (2)",
+            "XXXX (2)",
+            "*****. (2)"
+        ]
+    },
+    "RadiationTherapyModifier": {
         "count": 2,
         "unique_patterns": 2,
         "templatability_score": 0.0,
         "top_patterns": [
-            "xxxxxxxx xxxxxxxxx XXXXX (1)",
-            "Xxxxxxxx xxxxxxxxx xxxx x'xxxxXX xx XXXXXX (1)"
+            "XXXX  xxxxxxxxx (1)",
+            "X xx xxxxxxxx (1)"
         ]
     },
-    "HER2_FISH": {
-        "count": 16,
-        "unique_patterns": 16,
-        "templatability_score": 10.0,
+    "TumorTest": {
+        "count": 7,
+        "unique_patterns": 6,
+        "templatability_score": 2.4,
         "top_patterns": [
-            "Xxxxxxxxxxxx xx xxxxxx xx xxxxx xx xxxx XXXXX (1)",
-            "XxxX : X+ XXXXX xxxxxxx (1)",
-            "XXXX - (1)",
-            "XXXX xxx (++ XXXX xxx (1)",
-            "XXXX XXXXX (XXXX) xxxxxxx (1)"
+            "xxxxxxx (2)",
+            "Xxxxxx (1)",
+            "xxxxxxxxxxx (1)",
+            "xxxxxxxxxx (1)",
+            "XXX (1)"
+        ]
+    },
+    "TestResult": {
+        "count": 5,
+        "unique_patterns": 5,
+        "templatability_score": 0.0,
+        "top_patterns": [
+            "xxxxxxxxxxxx (1)",
+            "xxxx, xxxxxx xxxx (1)",
+            "xxxxxxxx (1)",
+            "xxxx xxxxx xxxx (1)",
+            "xx xxxxxx xx xxx xxxxxx (1)"
+        ]
+    },
+    "Employment": {
+        "count": 18,
+        "unique_patterns": 16,
+        "templatability_score": 1.3,
+        "top_patterns": [
+            "xxxxxxxxxx (2)",
+            "xxxx (2)",
+            "xxxxxx xxxx xxx xxxxxxxx (1)",
+            "***** ***** ***** *****     ***** (1)",
+            "xxxxxx xx ***** Xxxx Xxxxxx (1)"
+        ]
+    },
+    "ConsumptionQuantity": {
+        "count": 13,
+        "unique_patterns": 12,
+        "templatability_score": 11.1,
+        "top_patterns": [
+            "X.X xx/xxxx (2)",
+            "XX-xxxx-xxxxx (1)",
+            "Xxxxx/xxx: X.XX (1)",
+            "Xxxx xxxxx: XX.XX (1)",
+            "X xxx/xxx (1)"
+        ]
+    },
+    "Frequency": {
+        "count": 40,
+        "unique_patterns": 23,
+        "templatability_score": 19.8,
+        "top_patterns": [
+            "xxxxxx (8)",
+            "xxxxx X xxxxx (5)",
+            "xXxx (4)",
+            "xxx (2)",
+            "xxxxx (2)"
+        ]
+    },
+    "PatientCharacteristics": {
+        "count": 50,
+        "unique_patterns": 27,
+        "templatability_score": 18.5,
+        "top_patterns": [
+            "xxxxxxxxxxxxx (7)",
+            "xxxxxxxx (6)",
+            "XXXX (6)",
+            "XX, XX (2)",
+            "Xxxxxxxx (2)"
+        ]
+    },
+    "ClinicalTrial": {
+        "count": 21,
+        "unique_patterns": 13,
+        "templatability_score": 19.1,
+        "top_patterns": [
+            "XXXX (5)",
+            "X-XXXX (4)",
+            "XXXXX (2)",
+            "XXXXX XXXXX (1)",
+            "xxxxx (1)"
+        ]
+    },
+    "DiagnosticLabTest": {
+        "count": 16,
+        "unique_patterns": 11,
+        "templatability_score": 16.1,
+        "top_patterns": [
+            "XXX (4)",
+            "xxxxxxxxxx xxxxxxx (2)",
+            "Xxxx (2)",
+            "XXXX-XX (1)",
+            "xxxxxxxxxx (1)"
+        ]
+    },
+    "LabTestResult": {
+        "count": 6,
+        "unique_patterns": 5,
+        "templatability_score": 3.0,
+        "top_patterns": [
+            "xxxxxx (2)",
+            "XX (1)",
+            "xxxxxxxx xxxxxxxxxx xxx Xxx xxxx (1)",
+            "Xxxxxxxx (1)",
+            "xx xxxxx (1)"
+        ]
+    },
+    "GenomicTest": {
+        "count": 47,
+        "unique_patterns": 16,
+        "templatability_score": 15.6,
+        "top_patterns": [
+            "Xxxxxxxxxx (12)",
+            "xxxxxxxxxx (7)",
+            "XX (6)",
+            "xxxxxxx xxxxxxx (6)",
+            "Xxxxxxx xxxxxxx (3)"
+        ]
+    },
+    "SDoH": {
+        "count": 9,
+        "unique_patterns": 9,
+        "templatability_score": 0.0,
+        "top_patterns": [
+            "Xxxxxx xxxx xxx xxxx xxx X (1)",
+            "X xxxx (1)",
+            "Xxxxxx xxxxxxxx: Xxx (1)",
+            "Xxxxxxxx xxxx x xxxx (1)",
+            "Xxx xxxx xxxxxxxx xx xx xx ***** xxxxxx xx *****    Xxx xxxxx xx xxxxxxxx xxx xxxxxxxxxxxxx xxxxxx xx xxx ***** ***** (1)"
+        ]
+    },
+    "Cycles": {
+        "count": 29,
+        "unique_patterns": 6,
+        "templatability_score": 47.9,
+        "top_patterns": [
+            "X (19)",
+            "XX (5)",
+            "xxx (2)",
+            "X/XX (1)",
+            "xxxxx X-X xxxxx (1)"
+        ]
+    },
+    "PhysicalActivity": {
+        "count": 14,
+        "unique_patterns": 12,
+        "templatability_score": 11.8,
+        "top_patterns": [
+            "xxxxx (2)",
+            "xxxxxxxx (2)",
+            "xxxxx X-X xxxxx x xxx (1)",
+            "xxxxxxx xxxxxxxx (1)",
+            "xxxxx xxxxxxx (1)"
+        ]
+    },
+    "GenomicTestResult": {
+        "count": 56,
+        "unique_patterns": 25,
+        "templatability_score": 22.8,
+        "top_patterns": [
+            "XXXX (14)",
+            "XXXXX (5)",
+            "xxxx xxxx (4)",
+            "XXX xxxxxxxx (4)",
+            "xxx xxxx (3)"
+        ]
+    },
+    "Insurance": {
+        "count": 3,
+        "unique_patterns": 2,
+        "templatability_score": 8.2,
+        "top_patterns": [
+            "xxxxxxxxx (2)",
+            "xxxxxx xxxxxxxxx (1)"
+        ]
+    },
+    "SDoHModifier": {
+        "count": 2,
+        "unique_patterns": 2,
+        "templatability_score": 0.0,
+        "top_patterns": [
+            "Xxxxx: Xxxxxxxxxx (1)",
+            "Xxxxx: Xxxxxxxxx (1)"
+        ]
+    },
+    "Allergy": {
+        "count": 11,
+        "unique_patterns": 9,
+        "templatability_score": 12.3,
+        "top_patterns": [
+            "Xxxxxxxxxxx-Xxxxxxxxxxxxx (2)",
+            "Xxxxxxxxxxx (2)",
+            "xxxxxx (1)",
+            "Xxxxxxxxx (1)",
+            "Xxxxx (Xxxxxxxxxxx Xxxxxxxxxxx (1)"
+        ]
+    },
+    "TreatmentDosage": {
+        "count": 3,
+        "unique_patterns": 2,
+        "templatability_score": 8.2,
+        "top_patterns": [
+            "XXxx (2)",
+            "XXXxx (1)"
+        ]
+    },
+    "MedicationModifier": {
+        "count": 3,
+        "unique_patterns": 3,
+        "templatability_score": 0.0,
+        "top_patterns": [
+            "xxx (1)",
+            "xxxxxx xxxxxxx (1)",
+            "XXxx (1)"
+        ]
+    },
+    "SexualOrientation": {
+        "count": 1,
+        "unique_patterns": 1,
+        "templatability_score": 100.0,
+        "top_patterns": [
+            "xxxxxxx (1)"
+        ]
+    },
+    "UnspecifiedEntity": {
+        "count": 1,
+        "unique_patterns": 1,
+        "templatability_score": 100.0,
+        "top_patterns": [
+            "xxxx xxx xxxx xx xxxxxxxxxxx (1)"
+        ]
+    },
+    "ProcedureOutcome": {
+        "count": 2,
+        "unique_patterns": 2,
+        "templatability_score": 0.0,
+        "top_patterns": [
+            "X xxxxxxxxxx xxxxxxx (1)",
+            "xxxxx xxxxxxxxxx xxxxxxx (1)"
         ]
     }
 }

@@ -4,7 +4,7 @@ Provides:
   - Direct extraction:   extract, extract-all, batch
   - Metric pipeline:     metrics, tree, evaluate
   - Dashboard parity:    dashboard, corpus, rest-config, notebook
-  - Misc:                rest, serve, info, export-csv
+  - Misc:                rest, info, export-csv
 
 Mirrors the Streamlit pages so the full workflow can be driven from the terminal.
 """
@@ -726,9 +726,6 @@ def main() -> None:
 
     p = sub.add_parser("gui", help="GUI Tkinter native (parité Streamlit, sans navigateur)")
     p.set_defaults(func=cmd_gui)
-
-    p = sub.add_parser("serve", help="(TODO) Serve DuraXELL via HTTP")
-    p.set_defaults(func=lambda a: print("serve : not yet implemented"))
 
     p = sub.add_parser("info", help="Print environment info")
     p.set_defaults(func=cmd_info)

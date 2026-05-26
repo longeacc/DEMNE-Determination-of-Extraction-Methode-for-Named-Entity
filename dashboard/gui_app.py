@@ -217,7 +217,6 @@ class DuraXellGUI:
             ("📓 notebook",       self._cli_notebook,    "Notebook REST (Voila)"),
             ("🌐 rest",           self._cli_rest,        "demo_rest.py (legacy)"),
             ("💾 export-csv",     self._export_csv,      "Régénère decision_summary"),
-            ("⚙️  serve",         self._cli_serve,       "TODO HTTP server"),
         ]
         cols = 4
         for i, (label, cb, tip) in enumerate(cli_buttons):
@@ -818,9 +817,6 @@ class DuraXellGUI:
 
     def _cli_rest(self) -> None:
         self._run_cli(["rest"])
-
-    def _cli_serve(self) -> None:
-        self._run_cli(["serve"])
 
     # ============================== Subprocess plumbing =======================
     def _spawn(self, name: str, cmd: list[str], cwd: str | None = None,
