@@ -243,18 +243,27 @@ class AnnotationYieldScorer:
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
     script_dir = Path(__file__).parent
 
     # Paths to comparison sets
-    # NOTE: Assuming standard DuraXELL/duraxell folder structure relative to this script
-    # Adjust as needed or use arguments
-    gs_dir = script_dir / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
-    pred_dir = script_dir / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
+    if args.gs_dir and args.pred_dir:
+        gs_dir = Path(args.gs_dir)
+        pred_dir = Path(args.pred_dir)
+    else:
+        base_esmo = Path(r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et méthode NLP en cancélorlogie\ESMO2025")
+        gs_dir = base_esmo / "Breast/RCP/evaluation_set_breast_cancer_GS"
+        pred_dir = base_esmo / "Breast/RCP/evaluation_set_breast_cancer_pred_rules"
 
     # If using from root
     if not gs_dir.exists():
-        gs_dir = script_dir / "../Rules/src/Breast/RCP/evaluation_set_breast_cancer_GS"
-        pred_dir = script_dir / "../Rules/src/Breast/RCP/evaluation_set_breast_cancer_pred_rules"
+        gs_dir = base_esmo / "Breast/RCP/evaluation_set_breast_cancer_GS"
+        pred_dir = base_esmo / "Breast/RCP/evaluation_set_breast_cancer_pred_rules"
 
     if not gs_dir.exists():
         print("Datasets for Yield calculation not found.")

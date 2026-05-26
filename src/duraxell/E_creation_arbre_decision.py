@@ -170,7 +170,7 @@ class DecisionTreeBuilder:
                     }
                 else:
                     path_trace.append(
-                        f"Non (R={r_score:.3f} > {self.THRESHOLDS['R_MAX']}) → Feas++ ?"
+                        f"Non (R={r_score:.3f} > {self.THRESHOLDS['R_HIGH']}) → Feas++ ?"
                     )
             else:
                 path_trace.append(f"Non (He={he:.1f} < {self.THRESHOLDS['HE_HIGH']}) → Feas++ ?")
@@ -189,7 +189,7 @@ class DecisionTreeBuilder:
             path_trace.append(f"Non (Feas={feas:.3f} < {self.THRESHOLDS['FEAS_NER']}) → [LLM]")
             return {
                 "method": "LLM",
-                "justification": f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_TBM']} — Escalade vers LLM nécessaire.",
+                "justification": f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — Escalade vers LLM nécessaire.",
                 "trace": path_trace,
             }
 
@@ -309,22 +309,37 @@ def load_metrics_from_csv(results_dir: Path):
     return aggregated
 
 
+import argparse
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
     script_dir = Path(__file__).parent
     # Standard DuraXELL directory structure
-    results_dir = script_dir / "Rules/Results"
-    root_dir = script_dir.parent
+    results_dir = script_dir.parent.parent / "Results"
+    root_dir = script_dir.parent.parent
     config_file = root_dir / "data" / "decision_config.json"
     report_file = root_dir / "logs" / "output_decision.txt"
+
+    # Make dirs
+    config_file.parent.mkdir(parents=True, exist_ok=True)
+    report_file.parent.mkdir(parents=True, exist_ok=True)
 
     # 1. Load existing metrics
     print("Loading metrics from Results folder...")
     metrics_db = load_metrics_from_csv(results_dir)
 
     # 2. Compute Yield on the fly (Hybrid approach)
-    # We define paths to GS and Pred
-    gs_dir = script_dir / "Breast/RCP/evaluation_set_breast_cancer_GS"
-    pred_dir = script_dir / "Breast/RCP/evaluation_set_breast_cancer_pred_rules"
+    if args.gs_dir and args.pred_dir:
+        gs_dir = Path(args.gs_dir)
+        pred_dir = Path(args.pred_dir)
+    else:
+        base_esmo = Path(r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et méthode NLP en cancélorlogie\ESMO2025")
+        gs_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
+        pred_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
 
     # If using CHIR as well? For now stick to RCP as primary benchmark
 

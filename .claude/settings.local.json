@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"D:\\\\1_CLEM\\\\ESIEE SCHOOL\\\\PARCOURS RECHERCHE\\\\Le juste usage des LLM et méthode NLP en cancélorlogie\\\\ESMO2025\\\\Breast\\\\RCP\" 2>&1 | head -20)",
+      "Read(//d/1_CLEM/ESIEE SCHOOL/PARCOURS RECHERCHE/Le juste usage des LLM et méthode NLP en cancélorlogie/ESMO2025/Breast/RCP/**)",
+      "Bash(python main.py --help)",
+      "Bash(python main.py info)",
+      "Bash(python main.py tree --no-visualize)",
+      "Bash(python main.py dashboard --preset FRUGAL)",
+      "Bash(python main.py dashboard --preset QUALITY)",
+      "Bash(python main.py corpus)",
+      "Bash(python main.py notebook --help)",
+      "Bash(python -m pip install pandas voila)",
+      "Bash(python -c \"import sys; print\\(sys.version\\)\")",
+      "Bash(where python *)",
+      "Bash(python -m ensurepip --upgrade)",
+      "Bash('d:/1_CLEM/ESIEE SCHOOL/PARCOURS RECHERCHE/Le juste usage des LLM et méthode NLP en cancélorlogie/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/.venv/Scripts/python.exe' --version)",
+      "Bash('d:/1_CLEM/ESIEE SCHOOL/PARCOURS RECHERCHE/Le juste usage des LLM et méthode NLP en cancélorlogie/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/.venv/Scripts/python.exe' -c 'import pandas, torch; print\\('\\\\''pandas'\\\\'', pandas.__version__, '\\\\''torch'\\\\'', torch.__version__\\)')",
+      "Bash('d:/1_CLEM/ESIEE SCHOOL/PARCOURS RECHERCHE/Le juste usage des LLM et méthode NLP en cancélorlogie/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/.venv/Scripts/python.exe' -c 'import voila; print\\('\\\\''voila ok'\\\\''\\)')"
+    ]
+  }
+}

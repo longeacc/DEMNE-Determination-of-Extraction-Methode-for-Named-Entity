@@ -1,0 +1,8 @@
+Entity,Feas_Score,Domain_Shift,LLM_Necessity
+Estrogen_receptor,0.991,0.433,0.366
+Progesterone_receptor,0.986,0.444,0.449
+Ki67,0.988,0.449,0.372
+HER2_status,0.88,0.459,0.412
+HER2_IHC,0.839,0.487,0.509
+HER2_FISH,0.296,0.75,0.85
+Genetic_mutation,0.018,1.0,0.743

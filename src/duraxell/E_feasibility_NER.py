@@ -93,14 +93,15 @@ def get_real_embeddings_mmd(script_dir: Path, n_samples: int = 50) -> float:
         return _compute_mmd(src_emb, tgt_emb)
 
 
-def compute_feasibility():
+def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     print("Computing NER Feasibility per entity...")
     script_dir = Path(__file__).parent
-    results_dir = script_dir / "Rules/Results"
+    results_dir = script_dir.parent.parent / "Results"
 
-    # 1. Load Frequencies
+    # 1. Load Frequencies + counts
     freq_file = results_dir / "frequency_analysis.csv"
     frequencies = {}
+    counts = {}
 
     if freq_file.exists():
         with open(freq_file, encoding="utf-8") as f:
@@ -109,6 +110,8 @@ def compute_feasibility():
                 ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entité")
                 if ent:
                     frequencies[ent] = float(row.get("Frequency", 0.0))
+                    if row.get("Count"):
+                        counts[ent] = int(row["Count"])
 
     # 2. Load Homogeneity (He) for domain shift estimation
     he_file = results_dir / "homogeneity_analysis.csv"
@@ -146,8 +149,13 @@ def compute_feasibility():
     try:
         from E_annotation_yield import AnnotationYieldScorer
 
-        gs_dir = script_dir / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
-        pred_dir = script_dir / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
+        if gs_dir_str and pred_dir_str:
+            gs_dir = Path(gs_dir_str)
+            pred_dir = Path(pred_dir_str)
+        else:
+            base_esmo = Path(r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et méthode NLP en cancélorlogie\ESMO2025")
+            gs_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
+            pred_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
         if gs_dir.exists() and pred_dir.exists():
             scorer = AnnotationYieldScorer(gs_dir, pred_dir)
             raw_scores = scorer.compute_all()
@@ -165,7 +173,8 @@ def compute_feasibility():
         r = risk_scores.get(ent, 0.0)
         te = templatability.get(ent, 50.0)
         yld = yield_scores.get(ent, 0.0)
-        count = max(1, int(freq * 207000))  # Approx corpus size ~207k tokens
+        # Use real BRAT occurrence count (from frequency_analysis.csv)
+        count = counts.get(ent, max(1, int(freq * 207000)))
 
         # -- Feas: NER Feasibility --
         # Based on: frequency (enough training data?)
@@ -231,7 +240,13 @@ def compute_feasibility():
 
 
 if __name__ == "__main__":
-    compute_feasibility()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
+    compute_feasibility(args.gs_dir, args.pred_dir)
 
     try:
         if HAS_ECO2AI:

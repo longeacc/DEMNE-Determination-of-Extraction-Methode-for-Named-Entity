@@ -51,17 +51,16 @@ class RiskContextScorer:
         self.WINDOW_SIZE = 50
 
         # 1. Patterns de Négation (Augmente R un peu)
+        # Patterns volontairement restrictifs : on évite "pas", "ni", "non" seuls qui
+        # sur-détectent (ex. "non surexprimé" est déjà un état clinique attendu).
+        # "négatif" / "negatif" volontairement exclus : c'est un état clinique
+        # attendu (PR-, HER2-), pas un signal de risque contextuel.
         self.NEGATION_PATTERNS = [
-            r"\bnon\b",
             r"\bne\s+pas\b",
             r"\babsent\b",
-            r"\bnégatif\b",
-            r"\bnegatif\b",
+            r"\babsence\b",
             r"\baucun\b",
             r"\bsans\b",
-            r"\bni\b",
-            r"\bpas\b",
-            r"\babsence\b",
         ]
 
         # 2. Patterns d'Incertitude (Augmente R beaucoup)
@@ -329,19 +328,29 @@ class RiskContextScorer:
 # MAIN EXECUTION
 # ==================================================================================
 def main(learn_weights=False):
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    parser.add_argument("--learn_weights", action="store_true")
+    args, unknown = parser.parse_known_args()
+
+    learn_weights = args.learn_weights or learn_weights
+
     # RELATIVE PATHS
     script_dir = Path(__file__).parent
-    root_dir = script_dir.parent
+    root_dir = script_dir.parent.parent
 
-    data_dirs = [
-        root_dir / "NER/data/Breast/train",
-        root_dir / "NER/data/Breast/val",
-        root_dir / "NER/data/Breast/test",
-        # Fallback old paths if needed
-        root_dir / "src/duraxell/Rules/src/Breast/RCP/training_set_breast_cancer",
-    ]
+    if args.gs_dir:
+        data_dirs = [Path(args.gs_dir)]
+    else:
+        data_dirs = [
+            root_dir / "src/duraxell/NER/data/Breast/train",
+            root_dir / "src/duraxell/NER/data/Breast/val",
+            root_dir / "src/duraxell/NER/data/Breast/test",
+        ]
 
-    output_file = script_dir.parent / "Results/risk_context_analysis.csv"
+    output_file = root_dir / "Results/risk_context_analysis.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     print("=== Démarrage de l'analyse Risk Context (R) ===")

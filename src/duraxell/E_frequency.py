@@ -173,17 +173,26 @@ class FrequencyScorer:
 # MAIN EXECUTION
 # ==================================================================================
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
     script_dir = Path(__file__).parent
-    root_dir = script_dir.parent
+    root_dir = script_dir.parent.parent
 
-    # Même sources de données pour cohérence
-    data_dirs = [
-        root_dir / "NER/data/Breast/train",
-        root_dir / "NER/data/Breast/val",
-        root_dir / "NER/data/Breast/test",
-    ]
+    if args.gs_dir:
+        data_dirs = [Path(args.gs_dir)]
+    else:
+        # MÃªme sources de donnÃ©es pour cohÃ©rence
+        data_dirs = [
+            root_dir / "src/duraxell/NER/data/Breast/train",
+            root_dir / "src/duraxell/NER/data/Breast/val",
+            root_dir / "src/duraxell/NER/data/Breast/test",
+        ]
 
-    output_file = script_dir / "Rules/Results/frequency_analysis.csv"
+    output_file = root_dir / "Results" / "frequency_analysis.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     scorer = FrequencyScorer(data_dirs)

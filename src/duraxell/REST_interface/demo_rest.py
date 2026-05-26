@@ -68,7 +68,7 @@ def main():
     config_path = "data/decision_config.json"
     if os.path.exists(config_path):
         with open(config_path, encoding="utf-8") as f:
-            json.load(f)
+            tree_config = json.load(f)
     else:
         print("   (Fichier data/decision_config.json absent, utilisation mock)")
         tree_config = {

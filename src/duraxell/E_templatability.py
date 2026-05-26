@@ -304,22 +304,28 @@ def load_brat_corpus(data_dirs: list[str]) -> list[dict[str, Any]]:
 
 
 def main():
-    # Configuration
-    # Paths relative to workspace root (where script is executed)
-    # But for robustness, we use path relative to this script
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
     script_dir = Path(__file__).parent
-    root_dir = script_dir.parent
+    root_dir = script_dir.parent.parent
 
-    data_dirs_rel = [
-        "NER/data/Breast/train",
-        "NER/data/Breast/val",
-        "NER/data/Breast/test",
-    ]
+    # If the user passed gs_dir, use that instead of the hardcoded paths
+    if args.gs_dir:
+        data_dirs = [Path(args.gs_dir)]
+    else:
+        # Configuration
+        data_dirs_rel = [
+            "src/duraxell/NER/data/Breast/train",
+            "src/duraxell/NER/data/Breast/val",
+            "src/duraxell/NER/data/Breast/test",
+        ]
+        data_dirs = [root_dir / d for d in data_dirs_rel]
 
-    # Construct absolute paths
-    data_dirs = [root_dir / d for d in data_dirs_rel]
-
-    output_file = script_dir / "Rules/Results/templatability_analysis.json"
+    output_file = root_dir / "Results" / "templatability_analysis.json"
 
     # Ensure output directory exists
     output_file.parent.mkdir(parents=True, exist_ok=True)

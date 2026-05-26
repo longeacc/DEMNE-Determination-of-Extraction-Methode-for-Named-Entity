@@ -204,14 +204,23 @@ def load_brat_corpus_simple(data_dirs):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gs_dir", type=str, default=None)
+    parser.add_argument("--pred_dir", type=str, default=None)
+    args = parser.parse_args()
+
     # RELATIVE PATHS
     script_dir = Path(__file__).parent
-    data_dirs = ["NER/data/Breast/train", "NER/data/Breast/val", "NER/data/Breast/test"]
-    # Paths relative to workspace root
-    root_dir = script_dir.parent
-    abs_data_dirs = [root_dir / d for d in data_dirs]
+    root_dir = script_dir.parent.parent
+    
+    if args.gs_dir:
+        abs_data_dirs = [Path(args.gs_dir)]
+    else:
+        data_dirs = ["src/duraxell/NER/data/Breast/train", "src/duraxell/NER/data/Breast/val", "src/duraxell/NER/data/Breast/test"]
+        abs_data_dirs = [root_dir / d for d in data_dirs]
 
-    output_file = script_dir / "Rules/Results/homogeneity_analysis.csv"
+    output_file = root_dir / "Results" / "homogeneity_analysis.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     # 1. Load context

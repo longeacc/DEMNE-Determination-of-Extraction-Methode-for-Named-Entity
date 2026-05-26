@@ -1,0 +1,26 @@
+{
+  "selected_entities": [
+    "Estrogen_receptor",
+    "Progesterone_receptor",
+    "HER2_status",
+    "HER2_IHC",
+    "Ki67",
+    "Genetic_mutation",
+    "HER2_FISH"
+  ],
+  "thresholds": {
+    "TE_HIGH": 0.1,
+    "HE_HIGH": 0.85,
+    "R_HIGH": 0.25,
+    "FEAS_NER": 0.5
+  },
+  "routings": {
+    "Estrogen_receptor": "RÈGLES",
+    "Progesterone_receptor": "RÈGLES",
+    "HER2_status": "RÈGLES",
+    "HER2_IHC": "RÈGLES",
+    "Ki67": "RÈGLES",
+    "Genetic_mutation": "LLM",
+    "HER2_FISH": "LLM"
+  }
+}
