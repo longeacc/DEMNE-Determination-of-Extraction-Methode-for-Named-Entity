@@ -18,6 +18,7 @@ import io
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -298,14 +299,35 @@ _NOISE_KEYS = (
 )
 
 
-def _filter_noise(line: str) -> bool:
+_DROP_PATTERNS = (
+    "Comparing GS",
+    "[DrBERT MMD] Simulation",
+    "Yield computed for",
+    "Annotation Yield computed",
+    "Computing Annotation Yield",
+    "Début de la validation croisée",
+    "Stabilité moyenne des décisions",
+    "Score C",
+    " C =",
+    " C: ",
+)
+_STRIP_RE = re.compile(r",\s*(DS|LLM_N|Yield|Domain[_ ]?Shift|Concordance)\s*=\s*[\d.]+", re.IGNORECASE)
+
+
+def _filter_noise(line: str) -> str | None:
+    """Retourne la ligne nettoyée (ou None pour la supprimer)."""
     line = line.rstrip()
     if not line.strip():
-        return False
+        return None
     for k in _NOISE_KEYS:
         if k in line:
-            return False
-    return True
+            return None
+    for k in _DROP_PATTERNS:
+        if k in line:
+            return None
+    # Retire les morceaux ", DS=…, LLM_N=…, Yield=…, DomainShift=…" en place
+    cleaned = _STRIP_RE.sub("", line)
+    return cleaned
 
 
 def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
@@ -327,8 +349,9 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     )
     assert proc.stdout is not None
     for line in proc.stdout:
-        if _filter_noise(line):
-            print(line.rstrip())
+        cleaned = _filter_noise(line)
+        if cleaned is not None:
+            print(cleaned)
     proc.wait()
     return proc.returncode
 
