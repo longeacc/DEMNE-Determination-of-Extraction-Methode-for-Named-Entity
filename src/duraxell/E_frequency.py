@@ -203,7 +203,7 @@ def main():
     scorer.draw_histogram(stats)
     scorer.to_csv(output_file)
 
-    if HAS_ECO2AI:
+    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()
 
 

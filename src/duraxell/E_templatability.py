@@ -349,7 +349,7 @@ def main():
         # score is tuple? No, compute returns float. compute_all returns dict[str, float]
         print(f"{entity}: {score:.3f}")
 
-    if HAS_ECO2AI:
+    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()
 
 

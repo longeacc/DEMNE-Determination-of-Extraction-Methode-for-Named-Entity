@@ -253,7 +253,7 @@ def main():
     score_canon = test_scorer.compute("TEST_CANONIQUE")
     print(f"Test 'ER positif 80%' x 100 -> Score: {score_canon:.2f}% (Attendu: proche de 100%)")
 
-    if HAS_ECO2AI:
+    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()
 
 

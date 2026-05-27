@@ -420,7 +420,7 @@ def main(learn_weights=False):
             f"Entité Test: {r['Entity']:<15} | Score R: {r['R_Score']:.2f} | (Neg={r['Negation_Rate']}, Unc={r['Uncertainty_Rate']}, Contra={r['Contradiction_Rate']})"
         )
 
-    if HAS_ECO2AI:
+    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()
 
 
