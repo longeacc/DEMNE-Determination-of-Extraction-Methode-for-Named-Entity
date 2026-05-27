@@ -14,6 +14,7 @@ Outputs:
 
 import csv
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -25,7 +26,7 @@ try:
 except ImportError:
     HAS_ECO2AI = False
 
-if __name__ == "__main__" and HAS_ECO2AI:
+if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
         project_name="Consumtion_of_E_creation_arbre_decision.py",
         experiment_description="Building Decision Tree Config",

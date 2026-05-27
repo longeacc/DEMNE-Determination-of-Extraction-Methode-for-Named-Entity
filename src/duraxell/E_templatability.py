@@ -9,6 +9,7 @@ Example: TNM staging always follows the pattern T[0-4]N[0-3]M[0-1].
 
 import json
 import math
+import os
 import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -23,7 +24,7 @@ try:
 except ImportError:
     HAS_ECO2AI = False
 
-if __name__ == "__main__" and HAS_ECO2AI:
+if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
         project_name="Consumtion_of_E_templatability.py",
         experiment_description="We Calculate...",

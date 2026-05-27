@@ -342,8 +342,10 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUTF8"] = "1"
     env["PYTHONUNBUFFERED"] = "1"
+    env["DISABLE_ECO2AI"] = "1"
     proc = subprocess.Popen(
         cmd, cwd=str(ROOT), env=env,
+        stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         bufsize=1, text=True, encoding="utf-8", errors="replace",
     )

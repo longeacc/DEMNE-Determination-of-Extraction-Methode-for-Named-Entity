@@ -16,6 +16,7 @@ Outputs:
 
 import csv
 import math
+import os
 from collections import defaultdict
 from pathlib import Path
 
@@ -27,7 +28,7 @@ try:
 except ImportError:
     HAS_ECO2AI = False
 
-if __name__ == "__main__" and HAS_ECO2AI:
+if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
         project_name="Consumtion_of_E_frequency.py",
         experiment_description="Calculating Entity Frequency",

@@ -11,6 +11,7 @@ Normalization: Sigmoid transform to spread values between 0 and 1 (returned as %
 
 import csv
 import math
+import os
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -24,7 +25,7 @@ try:
 except ImportError:
     HAS_ECO2AI = False
 
-if __name__ == "__main__" and HAS_ECO2AI:
+if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
         project_name="Consumtion_of_E_homogeneity.py",
         experiment_description="Calculating Linguistic Homogeneity",
