@@ -46,12 +46,18 @@ NER/models/
 **/Breast/*
 src/duraxell/Breast/*
 data/*
-!data/README.md
+!data/.README.md
 # Fichiers générés
 decision_config.json
 output_decision.txt
 Consumtion_of_Duraxell.csv
-Results/figures/*.png
+# Results : tout ignorer sauf quelques figures de référence
+Results/*
+!Results/figures/
+Results/figures/*
+!Results\figures\OverallF1.png
+!Results\figures\Graph_decision_bisss.png
+!Results\figures\front_pareto_exemple.png
 # Pytest / Coverage
 .pytest_cache/
 htmlcov/
@@ -70,28 +76,28 @@ logs/*
 config/jupyter_server_config.json
 # Typos à ne jamais re-tracker
 src/duraxell/Consumtion_of_Duraxell.csv
-breast_cancer_biomarker_eval_summary.csv
-
-# Artefacts runtime
-logs/*
-!logs/.gitkeep
-config/jupyter_server_config.json
-# Typos à ne jamais re-tracker
-src/duraxell/Consumtion_of_Duraxell.csv
+breast_cancer_biomarker_eval_summary.csv
+
+# Artefacts runtime
+logs/*
+!logs/.gitkeep
+config/jupyter_server_config.json
+# Typos à ne jamais re-tracker
+src/duraxell/Consumtion_of_Duraxell.csv
 breast_cancer_biomarker_eval_summary.csv# Fichiers purgs manuellement
 src/duraxell/REST_interface/Results/
 src/duraxell/REST_interface/logo.png
-NER/sweep_results (copie).csv
-
-# Fichiers ignores
-src/duraxell/REST_interface/Results/
-src/duraxell/REST_interface/logo.png
-NER/sweep_results (copie).csv
+NER/sweep_results (copie).csv
+
+# Fichiers ignores
+src/duraxell/REST_interface/Results/
+src/duraxell/REST_interface/logo.png
+NER/sweep_results (copie).csv
 # Migrated paths from src layout
 src/duraxell/REST_interface/Results/
 src/duraxell/REST_interface/logo.png
-src/duraxell/Consumtion_of_Duraxell.csv
-
-src/duraxell/REST_interface/Results/
-src/duraxell/REST_interface/logo.png
-src/duraxell/Consumtion_of_Duraxell.csv
+src/duraxell/Consumtion_of_Duraxell.csv
+
+src/duraxell/REST_interface/Results/
+src/duraxell/REST_interface/logo.png
+src/duraxell/Consumtion_of_Duraxell.csv
