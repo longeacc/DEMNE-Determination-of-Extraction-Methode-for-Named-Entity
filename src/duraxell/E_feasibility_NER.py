@@ -166,6 +166,19 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     except Exception as e:
         print(f"  Warning: Yield computation failed: {e}")
 
+    # Feas(E) = (α_Feas · min(1, Freq) + β_Feas · He) / Number of Doc in the corpus
+    ALPHA_FEAS = 0.4
+    BETA_FEAS = 0.3
+
+    # Number of documents in the corpus (count of .txt files in Breast data dirs)
+    n_doc_corpus = 0
+    for sub in ("train", "val", "test"):
+        d = script_dir / "NER" / "data" / "Breast" / sub
+        if d.exists():
+            n_doc_corpus += len(list(d.glob("*.txt")))
+    if n_doc_corpus == 0:
+        n_doc_corpus = 1  # avoid division by zero
+
     # 6. Build results with proper formulas
     results = []
 
@@ -177,12 +190,11 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         # Use real BRAT occurrence count (from frequency_analysis.csv)
         count = counts.get(ent, max(1, int(freq * 207000)))
 
-        # -- Feas: NER Feasibility --
-        # Based on: frequency (enough training data?)
-        # and He (homogeneous patterns easier for NER)
-        freq_factor = min(1.0, count / 100.0)  # Need ~100 examples for decent NER
-        he_factor = he / 100.0  # Normalized homogeneity
-        feas = round(0.6 * freq_factor + 0.4 * he_factor, 3)
+        # Feas(E) = (α_Feas · min(1, Freq) + β_Feas · He) / Number of Doc in the corpus
+        feas = round(
+            (ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he) / n_doc_corpus,
+            3,
+        )
 
         # -- DomainShift: gap between pretrained model and clinical domain --
         # MMD approach: Ideally compare general embeddings vs clinical embeddings.

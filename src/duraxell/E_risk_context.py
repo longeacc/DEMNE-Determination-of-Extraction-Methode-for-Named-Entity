@@ -93,8 +93,15 @@ class RiskContextScorer:
             r"non exprimé",
         }
 
-        # Poids appris ou heuristiques (peuvent être calibrés via _learn_weights)
-        self.weights = {"negation": 0.2, "uncertainty": 0.5, "contradiction": 1.0}
+        # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
+        self.ALPHA_R = 0.2
+        self.BETA_R = 0.5
+        self.GAMMA_R = 1.0
+        self.weights = {
+            "negation": self.ALPHA_R,
+            "uncertainty": self.BETA_R,
+            "contradiction": self.GAMMA_R,
+        }
 
     def _learn_weights(self, annotated_data: list[tuple[int, int, int, int]]):
         """
@@ -149,10 +156,11 @@ class RiskContextScorer:
         f_neg = negated_count / total_count
         f_unc = uncertain_count / total_count
 
+        # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
         raw_risk = (
-            (self.weights["negation"] * f_neg)
-            + (self.weights["uncertainty"] * f_unc)
-            + (self.weights["contradiction"] * contradicted_rate)
+            (self.ALPHA_R * f_neg)
+            + (self.BETA_R * f_unc)
+            + (self.GAMMA_R * contradicted_rate)
         )
         return min(1.0, raw_risk)
 
