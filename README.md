@@ -1,6 +1,6 @@
 # DuraXELL : Sustainable Information Extraction for LLM en Cancérologie
 
-[![CI](https://github.com/longeacc/DuraXell/actions/workflows/ci.yml/badge.svg)](https://github.com/longeacc/DuraXell/actions/workflows/ci.yml)
+[![CI](https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/actions/workflows/ci.yml/badge.svg)](https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 
@@ -20,7 +20,7 @@ DuraXELL est un pipeline d'extraction d'informations médicales (biomarqueurs) c
 1. **Cloner le dépôt** :
 
    ```bash
-   git clone https://github.com/longeacc/DuraXell.git
+   git clone https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity.git
    cd DuraXELL
    ```
 

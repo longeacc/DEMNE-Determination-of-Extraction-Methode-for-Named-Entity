@@ -58,6 +58,8 @@ jupyter_server_config.json
 Consumtion_of_Duraxell.csv
 decision_config.json
 output_decision.txt
+modifications.ps1
+src/duraxell/REST_interface/Results/
 
 # === Tests / Coverage ===
 .pytest_cache/
