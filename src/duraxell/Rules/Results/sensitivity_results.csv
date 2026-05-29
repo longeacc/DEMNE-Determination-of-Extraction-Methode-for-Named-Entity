@@ -1,9 +1,0 @@
-threshold,perturbation,original_value,new_value,n_changes,changed_entities,robustness
-TE_HIGH,-20%,0.15,0.12,0,,1.0
-TE_HIGH,-10%,0.15,0.135,0,,1.0
-TE_HIGH,+10%,0.15,0.165,0,,1.0
-TE_HIGH,+20%,0.15,0.18,0,,1.0
-HE_HIGH,-20%,0.45,0.36000000000000004,0,,1.0
-HE_HIGH,-10%,0.45,0.405,0,,1.0
-HE_HIGH,+10%,0.45,0.49500000000000005,0,,1.0
-HE_HIGH,+20%,0.45,0.54,0,,1.0

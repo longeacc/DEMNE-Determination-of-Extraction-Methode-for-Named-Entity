@@ -8,7 +8,7 @@ DuraXELL est un pipeline d'extraction d'informations médicales (biomarqueurs) c
 
 ## Architecture arbre de décision
 
-![Pipeline de Décision](Results/figures/Graph_decision_biss.png)
+![Pipeline de Décision](Results/figures/Graph_decision.png)
 *Arbre de Décision pour la Sélection Optimale de Méthodes d'Extraction d'Entités*
 
 ## Résultats Principaux (Front de Pareto)

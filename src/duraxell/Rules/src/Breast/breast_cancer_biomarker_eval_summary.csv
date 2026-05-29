@@ -1,9 +1,0 @@
-Dataset,Method,Precision,Recall,F1,TP,FP,FN
-BCPS,LLM,0.0,0.0,0.0,0,0,0
-BCPS,LLM_Finetunned,0.0,0.0,0.0,0,0,0
-BCPS,NER,0.0,0.0,0.0,0,0,0
-BCPS,RULES,0.0,0.0,0.0,0,0,0
-SurgicalNote,LLM,0.0,0.0,0.0,0,0,0
-SurgicalNote,LLM_Finetunned,0.0,0.0,0.0,0,0,0
-SurgicalNote,NER,0.0,0.0,0.0,0,0,0
-SurgicalNote,RULES,0.0,0.0,0.0,0,0,0

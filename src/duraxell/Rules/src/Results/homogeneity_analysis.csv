@@ -1,8 +1,0 @@
-Entity_Type,Homogeneity_Score,Homogeneity_Raw_He,Structural_Templeability,Total_Words_Te,Unique_Words_Ue,Prevalence
-Ki67,0.9877,0.9388,0.6939,1241,76,153/223
-Progesterone_receptor,0.9877,0.9382,0.3776,1684,104,178/223
-Estrogen_receptor,0.9873,0.9353,0.2135,1701,110,191/223
-HER2_status,0.9846,0.9161,0.3493,858,72,99/223
-HER2_IHC,0.9812,0.8954,0.4149,1377,144,138/223
-HER2_FISH,0.9091,0.7302,0.14,215,58,31/223
-Genetic_mutation,0.0143,0.0769,0.85,13,12,2/223

@@ -41,14 +41,9 @@ except Exception:
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-DEFAULT_GS = Path(
-    r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et"
-    r" méthode NLP en cancélorlogie\ESMO2025\Breast\RCP\evaluation_set_breast_cancer_GS"
-)
-DEFAULT_PRED = Path(
-    r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et"
-    r" méthode NLP en cancélorlogie\ESMO2025\Breast\RCP\evaluation_set_breast_cancer_pred_rules"
-)
+_ESMO_DIR = Path(os.environ.get("DEMNE_ESMO_DIR", "data/ESMO2025"))
+DEFAULT_GS = _ESMO_DIR / "Breast/RCP/evaluation_set_breast_cancer_GS"
+DEFAULT_PRED = _ESMO_DIR / "Breast/RCP/evaluation_set_breast_cancer_pred_rules"
 
 
 def discover_entities(corpus_path: str | Path | None) -> list[str]:
@@ -398,13 +393,12 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
 
 
 def _open_decision_tree_image() -> None:
-    """Ouvre Results/figures/Graph_decision_bisss.png dans le visionneuse par défaut.
+    """Ouvre Results/figures/Graph_decision.png dans le visionneuse par défaut.
 
-    Fallback : Graph_decision_biss.png, decision_tree.png, decision_tree_visualization.png.
+    Fallback : decision_tree.png, decision_tree_visualization.png.
     """
     candidates = [
-        ROOT / "Results" / "figures" / "Graph_decision_bisss.png",
-        ROOT / "Results" / "figures" / "Graph_decision_biss.png",
+        ROOT / "Results" / "figures" / "Graph_decision.png",
         ROOT / "Results" / "figures" / "decision_tree.png",
         ROOT / "Results" / "figures" / "decision_tree_visualization.png",
     ]

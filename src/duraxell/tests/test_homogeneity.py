@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../duraxell"))
 
-from E_homogeneity import HomogeneityScorer
+from duraxell.E_homogeneity import HomogeneityScorer
 
 
 def test_homogeneity_limits():

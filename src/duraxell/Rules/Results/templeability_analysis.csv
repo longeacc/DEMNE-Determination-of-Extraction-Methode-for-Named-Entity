@@ -1,8 +1,0 @@
-Entity_Type,Total_Occurrences,Unique_Values,Diversity_Ratio,Pattern_Count,Patterns,Prefixes,Suffixes,Has_Percentage,Has_Plus_Minus,Templeability_Score,Sample_Values
-Ki67,306,153,0.5,3,percentage_format|consistent_suffix|numeric_pattern,KI|KI67|Ki|Ki67|Ki6750,%|+|-,True,False,0.54,Ki67 70%|Ki 67 : 60%|Ki 67 15|Ki67 < 5 %|Ki67 30%
-Progesterone_receptor,364,123,0.338,1,numeric_pattern,100|PGR|R|RE|RH,%|+|+++|+/+|+/-,False,True,0.477,RP++|triple négatif|RH 100%|RP  -|RP- (0 %)
-Estrogen_receptor,390,135,0.346,1,numeric_pattern,100RO|ER|LumB|R|R0,%|+|++|+++|-,False,True,0.472,triple négatif|RH 100%|RO+80%|RO+100%|RO +
-HER2_IHC,186,114,0.613,2,score_pattern|numeric_pattern,Cerb|Cerb2|HER|HER2|HEr,+|++|+++|croix|quivoque,False,True,0.392," Cerb2 score 0,|HER 2 : 0|HER2 2|Her2 : 0|HER2 équivoque"
-HER2_status,177,99,0.559,1,numeric_pattern,Cerb|HER|HER2|HeR2|Her,+|++|-|Un|g,False,False,0.344,HER2 nég|absence d’une surexpression significative de HER2|triple négatif|Her2 neg| HER2 négatif
-Genetic_mutation,2,2,1.0,2,consistent_suffix|numeric_pattern,,CA,False,False,0.16,Mutation pathogène dans l'exon10 de PIK3CA|mutation génétique BRCA1
-HER2_FISH,34,29,0.853,0,,DDISH|FISH|Fish|HER2|Her2,+|-|AMPLIFIE|Neg|cours,False,False,0.088,SISH non contributif|fish Her2 non amplifié|Fish +|FISH amplifié|HER2- (++ mais non amplifié

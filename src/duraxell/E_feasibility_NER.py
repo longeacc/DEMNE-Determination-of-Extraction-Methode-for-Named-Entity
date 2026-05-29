@@ -154,7 +154,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
             gs_dir = Path(gs_dir_str)
             pred_dir = Path(pred_dir_str)
         else:
-            base_esmo = Path(r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et méthode NLP en cancélorlogie\ESMO2025")
+            base_esmo = Path(os.environ.get("DEMNE_ESMO_DIR", "data/ESMO2025"))
             gs_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
             pred_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
         if gs_dir.exists() and pred_dir.exists():

@@ -1,8 +1,0 @@
-Entity,Risk_Score,Risk_Class,Total_Mentions,Ambiguity_Rate,Polysemy_Rate,Numeric_Ambiguity_Rate,Self_Described_Rate
-HER2_IHC,0.0051,Low (Faible),195,0.5%,0.5%,0.0%,87.7%
-Estrogen_receptor,0.0,Low (Faible),318,0.0%,0.0%,0.0%,83.0%
-Progesterone_receptor,0.0,Low (Faible),283,0.0%,0.0%,0.0%,86.6%
-HER2_status,0.0,Low (Faible),144,0.0%,0.0%,0.0%,86.8%
-Ki67,0.0,Low (Faible),231,0.0%,0.0%,0.0%,100.0%
-HER2_FISH,0.0,Low (Faible),40,0.0%,0.0%,0.0%,97.5%
-Genetic_mutation,0.0,Low (Faible),2,0.0%,0.0%,0.0%,100.0%

@@ -3,6 +3,7 @@ Générer un rapport HTML pour l'analyse de templeabilité.
 """
 
 import json
+import os
 from pathlib import Path
 
 
@@ -518,14 +519,11 @@ if __name__ == "__main__":
     # Détection automatique de l'environnement
     base_dir = Path(__file__).parent / "Rules/src/Results"
 
-    # Fallback si le dossier n'existe pas par rapport au script
+    # Fallback via variable d'environnement
     if not base_dir.exists():
-        # Essai d'un chemin alternatif basé sur la structure connue du workspace
-        potential_path = Path(
-            "d:/CLEM/ESIEE SCHOOL/PARCOURS RECHERCHE/Le juste usage des LLM et méthode NLP en cancélorlogie/duraxell_Clement/src/duraxell/Rules/src/Results"
-        )
-        if potential_path.exists():
-            base_dir = potential_path
+        env_dir = os.environ.get("DEMNE_RESULTS_DIR")
+        if env_dir and Path(env_dir).exists():
+            base_dir = Path(env_dir)
 
     # Chemins des fichiers
     json_path = base_dir / "templatability_analysis.json"

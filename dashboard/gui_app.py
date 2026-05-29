@@ -682,7 +682,7 @@ class DuraXellGUI:
                    command=lambda p=path: os.startfile(str(p))).pack(side="right")
 
     def _cli_tree(self) -> None:
-        """Lance `main.py tree` puis affiche Results/figures/Graph_decision_bisss.png."""
+        """Lance `main.py tree` puis affiche Results/figures/Graph_decision.png."""
         d = filedialog.askdirectory(
             title="tree — dossier corpus (BRAT) — Annuler = utiliser le précédent",
             initialdir=self.corpus_path.get() or str(ROOT))
@@ -700,10 +700,10 @@ class DuraXellGUI:
         self._show_decision_summary_table()
 
     def _show_decision_tree_image(self) -> None:
-        img_path = ROOT / "Results" / "figures" / "Graph_decision_bisss.png"
+        img_path = ROOT / "Results" / "figures" / "Graph_decision.png"
         if not img_path.exists():
             # fallback : essayer les autres noms connus
-            for fname in ("Graph_decision_biss.png", "decision_tree.png",
+            for fname in ("decision_tree.png",
                            "decision_tree_visualization.png"):
                 p = ROOT / "Results" / "figures" / fname
                 if p.exists():

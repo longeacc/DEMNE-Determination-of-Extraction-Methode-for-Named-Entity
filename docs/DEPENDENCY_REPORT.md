@@ -1,4 +1,4 @@
-﻿# DuraXELL â€” Import Dependency Report
+# DuraXELL â€” Import Dependency Report
 
 ## ANALYSIS SUMMARY
 

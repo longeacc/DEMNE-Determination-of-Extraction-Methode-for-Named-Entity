@@ -38,6 +38,29 @@ ner = [
     "transformers>=4.36",
     "datasets>=2.16",
     "seqeval>=1.2",
+    "pycrfsuite>=0.9",
+]
+rest = [
+    "spacy>=3.7",
+    "python-Levenshtein>=0.25",
+    "nltk>=3.8",
+    "inflect>=7.0",
+    "bqplot>=0.12",
+    "ipydatagrid>=1.2",
+    "ipywidgets>=8.0",
+    "ipyfilechooser>=0.6",
+]
+viz = [
+    "networkx>=3.2",
+]
+notebook = [
+    "nbformat>=5.9",
+]
+reports = [
+    "reportlab>=4.0",
+]
+gui = [
+    "pywebview>=5.0",
 ]
 dashboard = [
     "streamlit>=1.30",

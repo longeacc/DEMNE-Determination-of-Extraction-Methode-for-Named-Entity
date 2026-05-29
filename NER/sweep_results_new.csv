@@ -1,2 +1,0 @@
-model_id,seed,learning_rate,train_bs,epochs,weight_decay,warmup_ratio,freeze_layers,dev_f1,dev_p,dev_r,test_f1,test_p,test_r,output_dir
-microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext,42,2e-05,4,3,0.01,0.1,0,0.128,0.3333333333333333,0.07920792079207921,0.10838445807770962,0.13316582914572864,0.09137931034482759,models/sweeps/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext_lr2e-05_bs4_ep3_wd0.01_wr0.1_frz0_sd42

@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from E_creation_arbre_decision import DecisionTreeBuilder
+from duraxell.E_creation_arbre_decision import DecisionTreeBuilder
 
 
 def load_real_metrics(results_dir: Path) -> dict:

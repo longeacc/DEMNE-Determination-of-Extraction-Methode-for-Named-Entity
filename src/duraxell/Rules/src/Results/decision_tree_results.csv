@@ -1,8 +1,0 @@
-Entité,Méthode Recommandée,Te,He,R,Freq,Total,Justification
-Estrogen_receptor,🔵 ML LÉGER NER (CRF),0.2135,0.0,1.0,0.004805279725065,632,Te <= High -> Te Medium -> Freq > Suff -> Yield OK
-Genetic_mutation,🟩 RÈGLES PAR DÉFAUT,0.85,0.0,1.0,3.041316281686714e-05,4,Te > High -> He <= High -> Te Low -> NER Not Feasible -> Fallback Règles
-HER2_FISH,🩷 NER LLM,0.14,0.0,1.0,0.0006082632563373,80,Te <= High -> Te Low -> NER Not Feasible -> LLM Needed
-HER2_IHC,🔵 ML LÉGER NER (CRF),0.4149,0.0,1.0,0.0029500767932361,388,Te <= High -> Te Medium -> Freq > Suff -> Yield OK
-HER2_status,🔵 ML LÉGER NER (CRF),0.3493,0.0,1.0,0.0021897477228144,288,Te <= High -> Te Medium -> Freq > Suff -> Yield OK
-Ki67,🟣 NER TRANSFORMER,0.6939,0.0,1.0,0.0034975137239397,460,Te > High -> He <= High -> Te Low -> NER Feasibe -> Domain OK
-Progesterone_receptor,🔵 ML LÉGER NER (CRF),0.3776,0.0,1.0,0.0042730493757698,562,Te <= High -> Te Medium -> Freq > Suff -> Yield OK

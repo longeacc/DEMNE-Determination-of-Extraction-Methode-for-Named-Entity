@@ -338,7 +338,7 @@ def main():
         gs_dir = Path(args.gs_dir)
         pred_dir = Path(args.pred_dir)
     else:
-        base_esmo = Path(r"D:\1_CLEM\ESIEE SCHOOL\PARCOURS RECHERCHE\Le juste usage des LLM et méthode NLP en cancélorlogie\ESMO2025")
+        base_esmo = Path(os.environ.get("DEMNE_ESMO_DIR", "data/ESMO2025"))
         gs_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
         pred_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
 

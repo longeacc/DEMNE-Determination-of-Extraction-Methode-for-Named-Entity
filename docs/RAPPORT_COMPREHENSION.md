@@ -1,4 +1,4 @@
-﻿# RAPPORT DE COMPRÃ‰HENSION INTÃ‰GRALE â€” Projet DuraXELL
+# RAPPORT DE COMPRÃ‰HENSION INTÃ‰GRALE â€” Projet DuraXELL
 
 > **Auteur :** Profil Chercheur HDR (HabilitÃ© Ã  Diriger des Recherches)
 > **Date de rÃ©daction :** 28 fÃ©vrier 2026
