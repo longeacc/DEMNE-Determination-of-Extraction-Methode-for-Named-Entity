@@ -8,6 +8,6 @@ authors:
     given-names: Clément
     affiliation: ESIEE Paris
     email: clement.longeac@edu.esiee.fr
-repository-code: "https://github.com/longeacc/DuraXell"
+repository-code: "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity"
 license: MIT
 keywords: [NLP, NER, oncology, frugal-AI, biomarkers]
