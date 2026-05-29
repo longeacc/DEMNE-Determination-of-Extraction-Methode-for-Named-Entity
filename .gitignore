@@ -51,13 +51,36 @@ data/*
 decision_config.json
 output_decision.txt
 Consumtion_of_Duraxell.csv
-# Results : tout ignorer sauf quelques figures de référence
-Results/*
-!Results/figures/
+# Results : artefacts générés à ignorer (figures de référence conservées)
+Results/_test_export.json
+Results/batch_extraction_results.csv
+Results/benchmark_energy.csv
+Results/benchmark_explainability.csv
+Results/benchmark_pareto.csv
+Results/benchmark_performance.csv
+Results/breast_cancer_biomarker_eval_summary.csv
+Results/cantemist_config.json
+Results/concordance_detail.csv
+Results/Coral_config.json
+Results/decision_summary.csv
+Results/energy_summary.json
+Results/explainability_summary.json
+Results/exported_config.json
+Results/frequency_analysis.csv
+Results/grid_search_summary.txt
+Results/homogeneity_analysis.csv
+Results/ner_feasibility_analysis.csv
+Results/RCP_config.json
+Results/risk_context_analysis_report.html
+Results/risk_context_analysis.csv
+Results/risk_context_full.json
+Results/risk_context_summary.csv
+Results/templatability_analysis.json
+
+# Results/figures : ne garder que 2 figures de référence
 Results/figures/*
-!Results\figures\OverallF1.png
-!Results\figures\Graph_decision_bisss.png
-!Results\figures\front_pareto_exemple.png
+!Results/figures/front_pareto_exemple.png
+!Results/figures/Graph_decision_bisss.png
 # Pytest / Coverage
 .pytest_cache/
 htmlcov/
