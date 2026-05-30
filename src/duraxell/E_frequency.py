@@ -22,7 +22,10 @@ from pathlib import Path
 
 # Eco2AI for energy tracking
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:
@@ -167,7 +170,11 @@ class FrequencyScorer:
             )
             writer.writeheader()
             writer.writerows(data)
-        print(f"Saved to {output_path}")
+        try:
+            rel = os.path.relpath(str(output_path))
+        except ValueError:
+            rel = str(output_path)
+        print(f"Saved to {rel}")
 
 
 # ==================================================================================
@@ -193,7 +200,8 @@ def main():
             root_dir / "src/duraxell/NER/data/Breast/test",
         ]
 
-    output_file = root_dir / "Results" / "frequency_analysis.csv"
+    corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
+    output_file = root_dir / "Results" / f"frequency_analysis_{corpus_name}.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     scorer = FrequencyScorer(data_dirs)

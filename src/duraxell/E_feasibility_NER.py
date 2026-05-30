@@ -4,7 +4,10 @@ import os
 from pathlib import Path
 
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:
@@ -99,8 +102,16 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     script_dir = Path(__file__).parent
     results_dir = script_dir.parent.parent / "Results"
 
+    corpus_name = Path(gs_dir_str).parent.name if gs_dir_str else "Breast"
+
+    def _resolve(stem: str, ext: str) -> Path:
+        suffixed = results_dir / f"{stem}_{corpus_name}.{ext}"
+        if suffixed.exists():
+            return suffixed
+        return results_dir / f"{stem}.{ext}"  # legacy fallback
+
     # 1. Load Frequencies + counts
-    freq_file = results_dir / "frequency_analysis.csv"
+    freq_file = _resolve("frequency_analysis", "csv")
     frequencies = {}
     counts = {}
 
@@ -115,7 +126,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
                         counts[ent] = int(row["Count"])
 
     # 2. Load Homogeneity (He) for domain shift estimation
-    he_file = results_dir / "homogeneity_analysis.csv"
+    he_file = _resolve("homogeneity_analysis", "csv")
     homogeneity = {}
     if he_file.exists():
         with open(he_file, encoding="utf-8") as f:
@@ -123,10 +134,14 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
             for row in reader:
                 ent = row.get("Entity")
                 if ent:
-                    homogeneity[ent] = float(row.get("He_Score_Percent", 0.0))
+                    # New schema: 'He' ∈ [0,1]; legacy: 'He_Score_Percent' ∈ [0,100]
+                    if "He" in row:
+                        homogeneity[ent] = float(row.get("He", 0.0))
+                    else:
+                        homogeneity[ent] = float(row.get("He_Score_Percent", 0.0)) / 100.0
 
     # 3. Load Risk scores (R) for LLM necessity estimation
-    risk_file = results_dir / "risk_context_analysis.csv"
+    risk_file = _resolve("risk_context_analysis", "csv")
     risk_scores = {}
     if risk_file.exists():
         with open(risk_file, encoding="utf-8") as f:
@@ -137,7 +152,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
                     risk_scores[ent] = float(row.get("R_Score", 0.0))
 
     # 4. Load Templatability (Te)
-    te_file = results_dir / "templatability_analysis.json"
+    te_file = _resolve("templatability_analysis", "json")
     templatability = {}
     if te_file.exists():
         with open(te_file, encoding="utf-8") as f:
@@ -183,16 +198,17 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     results = []
 
     for ent, freq in frequencies.items():
-        he = homogeneity.get(ent, 50.0)
+        he = homogeneity.get(ent, 0.5)  # He ∈ [0, 1]
         r = risk_scores.get(ent, 0.0)
         te = templatability.get(ent, 50.0)
         yld = yield_scores.get(ent, 0.0)
         # Use real BRAT occurrence count (from frequency_analysis.csv)
         count = counts.get(ent, max(1, int(freq * 207000)))
 
-        # Feas(E) = (α_Feas · min(1, Freq) + β_Feas · He) / Number of Doc in the corpus
+        # Feas(E) = α_Feas · min(1, Freq) + β_Feas · He
+        # He ∈ [0, 1] (sortie sigmoïde de E_homogeneity)
         feas = round(
-            (ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he) / n_doc_corpus,
+            (ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he),
             3,
         )
 
@@ -205,7 +221,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         # Simulate MMD measure
         try:
             # Shift magnitude modulated by heterogeneity (he)
-            shift_magnitude = (100.0 - he) / 100.0 * 2.0
+            shift_magnitude = (1.0 - he) * 2.0
 
             # Utilisation des embeddings DrBERT réels
             base_mmd = get_real_embeddings_mmd(script_dir, n_samples=5)
@@ -213,7 +229,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         except Exception:
             mmd_val = 0.0
 
-        he_penalty = max(0, (100.0 - he) / 200.0)  # 0 when He=100, 0.5 when He=0
+        he_penalty = max(0, (1.0 - he) / 2.0)  # 0 when He=1, 0.5 when He=0
         te_penalty = max(0, (100.0 - te) / 300.0)  # 0 when Te=100, 0.33 when Te=0
 
         # Combiner MMD calculé et heuristiques
@@ -225,7 +241,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
             0.30 * (1.0 - yld)  # Rules don't catch it
             + 0.25 * r * 4.0  # Risk context is high (R normalized ~0-0.25)
             + 0.25 * (1.0 - feas)  # NER won't work well
-            + 0.20 * (1.0 - he / 100.0),  # Heterogeneous vocabulary
+            + 0.20 * (1.0 - he),  # Heterogeneous vocabulary
             3,
         )
         llm_necessity = min(1.0, max(0.0, llm_necessity))
@@ -240,7 +256,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         )
         print(f"  {ent}: Feas={feas}, DS={domain_shift}, LLM_N={llm_necessity}, Yield={yld:.3f}")
 
-    out_file = results_dir / "ner_feasibility_analysis.csv"
+    out_file = results_dir / f"ner_feasibility_analysis_{corpus_name}.csv"
     out_file.parent.mkdir(parents=True, exist_ok=True)
     with open(out_file, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
@@ -249,7 +265,11 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         writer.writeheader()
         writer.writerows(results)
 
-    print(f"Feasibility scores written to {out_file}")
+    try:
+        rel = os.path.relpath(str(out_file))
+    except ValueError:
+        rel = str(out_file)
+    print(f"Feasibility scores written to {rel}")
 
 
 if __name__ == "__main__":

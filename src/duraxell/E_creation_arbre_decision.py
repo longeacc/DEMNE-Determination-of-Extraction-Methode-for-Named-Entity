@@ -20,7 +20,10 @@ from typing import Any
 
 # Eco2AI tracking
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:
@@ -254,28 +257,47 @@ class DecisionTreeBuilder:
         print(f"Report saved to {output_txt}")
 
 
-def load_metrics_from_csv(results_dir: Path):
+def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
     """Aggregate CSV results from previous steps into a single dict."""
     aggregated = {}  # {Entity: {Te: x, He: y...}}
 
+    def _resolve(filename: str) -> Path:
+        stem, _, ext = filename.rpartition(".")
+        if corpus_name:
+            cand = results_dir / f"{stem}_{corpus_name}.{ext}"
+            if cand.exists():
+                return cand
+        return results_dir / filename
+
     def _read_csv(filename, col_name, metric_key, multiplier=1.0):
-        p = results_dir / filename
+        """Read `col_name` from CSV. col_name may be a string OR a list of
+        (col, mult) tuples — first present column wins, its multiplier applies.
+        """
+        p = _resolve(filename)
         if not p.exists():
             return
+        # Normalize to list of (col, mult)
+        if isinstance(col_name, str):
+            candidates = [(col_name, multiplier)]
+        else:
+            candidates = list(col_name)
         try:
             with open(p, encoding="utf-8") as f:
                 reader = csv.DictReader(f)
+                fieldnames = reader.fieldnames or []
+                chosen = next(((c, m) for c, m in candidates if c in fieldnames), None)
+                if chosen is None:
+                    return
+                col, mult = chosen
                 for row in reader:
-                    # Try different column headers for Entity name
                     ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entité")
                     if not ent:
                         continue
-
                     try:
-                        val = float(row.get(col_name, 0))
+                        val = float(row.get(col, 0))
                         if ent not in aggregated:
                             aggregated[ent] = {}
-                        aggregated[ent][metric_key] = val * multiplier
+                        aggregated[ent][metric_key] = val * mult
                     except ValueError:
                         pass
         except Exception as e:
@@ -283,9 +305,10 @@ def load_metrics_from_csv(results_dir: Path):
 
     # 1. Te (Templatability)
     # Often in JSON, but let's check CSVs too
-    if (results_dir / "templatability_analysis.json").exists():
+    te_json = _resolve("templatability_analysis.json")
+    if te_json.exists():
         try:
-            with open(results_dir / "templatability_analysis.json") as f:
+            with open(te_json) as f:
                 data = json.load(f)
                 for ent, vals in data.items():
                     if ent not in aggregated:
@@ -295,8 +318,8 @@ def load_metrics_from_csv(results_dir: Path):
         except Exception:
             pass
 
-    # 2. He (Homogeneity)
-    _read_csv("homogeneity_analysis.csv", "He_Score_Percent", "He")
+    # 2. He (Homogeneity) — new schema 'He' ∈ [0,1]; legacy 'He_Score_Percent' ∈ [0,100]
+    _read_csv("homogeneity_analysis.csv", [("He", 1.0), ("He_Score_Percent", 0.01)], "He")
 
     # 3. R (Risk)
     _read_csv("risk_context_analysis.csv", "R_Score", "R")
@@ -331,7 +354,8 @@ def main():
 
     # 1. Load existing metrics
     print("Loading metrics from Results folder...")
-    metrics_db = load_metrics_from_csv(results_dir)
+    corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
+    metrics_db = load_metrics_from_csv(results_dir, corpus_name)
 
     # 2. Compute Yield on the fly (Hybrid approach)
     if args.gs_dir and args.pred_dir:

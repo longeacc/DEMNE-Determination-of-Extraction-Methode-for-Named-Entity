@@ -23,7 +23,10 @@ from pathlib import Path
 
 # Eco2AI for energy tracking
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:

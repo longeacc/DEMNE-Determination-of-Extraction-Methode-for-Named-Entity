@@ -18,7 +18,10 @@ from typing import Any
 
 # eco2ai dependencies
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:
@@ -226,7 +229,11 @@ class TemplatabilityScorer:
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(output, f, indent=4, ensure_ascii=False)
-        print(f"Results saved to {output_path}")
+        try:
+            rel = os.path.relpath(str(output_path))
+        except ValueError:
+            rel = str(output_path)
+        print(f"Results saved to {rel}")
 
 
 # ==================================================================================
@@ -326,7 +333,8 @@ def main():
         ]
         data_dirs = [root_dir / d for d in data_dirs_rel]
 
-    output_file = root_dir / "Results" / "templatability_analysis.json"
+    corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
+    output_file = root_dir / "Results" / f"templatability_analysis_{corpus_name}.json"
 
     # Ensure output directory exists
     output_file.parent.mkdir(parents=True, exist_ok=True)
