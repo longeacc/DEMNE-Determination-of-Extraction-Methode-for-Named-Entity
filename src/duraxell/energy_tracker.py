@@ -7,12 +7,14 @@ import pandas as pd
 
 # Tentative d'import d'eco2ai, sinon mock
 try:
-    from eco2ai import Tracker
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker
 
     HAS_ECO2AI = True
 except ImportError:
     HAS_ECO2AI = False
-    print("Warning: eco2ai library not found. Using simulated values.")
 
 
 class EnergyTracker:

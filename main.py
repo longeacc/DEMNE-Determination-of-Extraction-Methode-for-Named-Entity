@@ -457,11 +457,17 @@ def _export_decision_csv() -> None:
             d.get("justification", ""),
         ])
 
+    header = ["Entity", "Te", "He", "R", "Freq", "Feas", "Method", "Justification"]
     with open(DECISION_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter="\t")
+        w.writerow(header)
         for r in rows:
             w.writerow(r)
-    print(f"\n=== CSV synthèse écrit : {DECISION_CSV} ===")
+    try:
+        rel_csv = os.path.relpath(str(DECISION_CSV))
+    except ValueError:
+        rel_csv = str(DECISION_CSV)
+    print(f"\n=== CSV synthèse écrit : {rel_csv} ===")
     for r in rows:
         print("\t".join(r))
 
@@ -623,10 +629,15 @@ def cmd_rest(args: argparse.Namespace) -> None:
 
 
 def cmd_info(args: argparse.Namespace) -> None:
+    def _rel(p: Path) -> str:
+        try:
+            return str(Path(p).relative_to(ROOT))
+        except ValueError:
+            return str(p)
+
     print("DuraXELL version: 2.0")
-    print(f"Root      : {ROOT}")
-    print(f"GS path   : {DEFAULT_GS}")
-    print(f"Pred path : {DEFAULT_PRED}")
+    print(f"GS path   : {_rel(DEFAULT_GS)}")
+    print(f"Pred path : {_rel(DEFAULT_PRED)}")
     discovered = discover_entities(DEFAULT_GS) or discover_entities_from_config()
     if discovered:
         src = "annotation.conf/.ann" if discover_entities(DEFAULT_GS) else "decision_config.json"
@@ -635,7 +646,7 @@ def cmd_info(args: argparse.Namespace) -> None:
             print(f"            - {e}")
     else:
         print("Entities  : aucune (lance d'abord `evaluate --gs_dir <corpus>`)")
-    print(f"Config    : {CONFIG_PATH} ({'OK' if CONFIG_PATH.exists() else 'absent'})")
+    print(f"Config    : {_rel(CONFIG_PATH)} ({'OK' if CONFIG_PATH.exists() else 'absent'})")
 
 
 def cmd_export_csv(args: argparse.Namespace) -> None:

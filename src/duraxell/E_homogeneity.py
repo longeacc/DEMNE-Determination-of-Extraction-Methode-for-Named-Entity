@@ -19,7 +19,10 @@ from typing import Any
 
 # Eco2AI for energy tracking
 try:
-    from eco2ai import Tracker, set_params
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from eco2ai import Tracker, set_params
 
     HAS_ECO2AI = True
 except ImportError:
@@ -122,7 +125,7 @@ class HomogeneityScorer:
         # Apply Sigmoid polarization
         he_final = self._sigmoid(he_raw)
 
-        return he_final * 100.0
+        return he_final  # ∈ [0, 1]
 
     def compute_all(self) -> dict[str, float]:
         """Compute He for all entities."""
@@ -144,21 +147,21 @@ class HomogeneityScorer:
             rows.append(
                 {
                     "Entity": entity,
-                    "He_Score_Percent": round(score, 2),
+                    "He": round(score, 4),
                     "Total_Occurrences": len(values),
                     "Total_Words": len(all_tokens),
                     "Unique_Words": len(set(all_tokens)),
                 }
             )
 
-        rows.sort(key=lambda x: x["He_Score_Percent"], reverse=True)
+        rows.sort(key=lambda x: x["He"], reverse=True)
 
         with open(output_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
                 f,
                 fieldnames=[
                     "Entity",
-                    "He_Score_Percent",
+                    "He",
                     "Total_Occurrences",
                     "Total_Words",
                     "Unique_Words",
@@ -167,7 +170,11 @@ class HomogeneityScorer:
             writer.writeheader()
             writer.writerows(rows)
 
-        print(f"Results saved to {output_path}")
+        try:
+            rel = os.path.relpath(str(output_path))
+        except ValueError:
+            rel = str(output_path)
+        print(f"Results saved to {rel}")
 
 
 # ==================================================================================
@@ -221,7 +228,8 @@ def main():
         data_dirs = ["src/duraxell/NER/data/Breast/train", "src/duraxell/NER/data/Breast/val", "src/duraxell/NER/data/Breast/test"]
         abs_data_dirs = [root_dir / d for d in data_dirs]
 
-    output_file = root_dir / "Results" / "homogeneity_analysis.csv"
+    corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
+    output_file = root_dir / "Results" / f"homogeneity_analysis_{corpus_name}.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     # 1. Load context
@@ -235,7 +243,7 @@ def main():
     # 3. Print Top 5
     print("\nTop 5 Homogeneity Scores (He):")
     for entity, score in sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]:
-        print(f"{entity}: {score:.1f}%")
+        print(f"{entity}: {score:.3f}")
 
     # 4. Save
     scorer.to_csv(output_file)
@@ -251,7 +259,7 @@ def main():
     ]
     test_scorer = HomogeneityScorer(test_corpus)
     score_canon = test_scorer.compute("TEST_CANONIQUE")
-    print(f"Test 'ER positif 80%' x 100 -> Score: {score_canon:.2f}% (Attendu: proche de 100%)")
+    print(f"Test 'ER positif 80%' x 100 -> Score: {score_canon:.4f} (Attendu: proche de 1.0)")
 
     if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()

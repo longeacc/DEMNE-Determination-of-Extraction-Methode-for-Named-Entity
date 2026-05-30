@@ -481,15 +481,29 @@ class DuraXellGUI:
             padding=4)
         viewer_frame.pack(fill="both", expand=True, padx=4, pady=4)
 
-        import importlib.util as _il
-        spec = _il.spec_from_file_location(
-            "_nb_view", ROOT / "dashboard" / "notebook_view.py"
-        )
-        mod = _il.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        nb_path = ROOT / "src" / "duraxell" / "REST_interface" / "REST.ipynb"
-        self.notebook_viewer = mod.NotebookViewer(viewer_frame, nb_path,
-                                                   log_fn=self._log)
+        try:
+            import importlib.util as _il
+            spec = _il.spec_from_file_location(
+                "_nb_view", ROOT / "dashboard" / "notebook_view.py"
+            )
+            mod = _il.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            nb_path = ROOT / "src" / "duraxell" / "REST_interface" / "REST.ipynb"
+            self.notebook_viewer = mod.NotebookViewer(viewer_frame, nb_path,
+                                                       log_fn=self._log)
+        except ModuleNotFoundError as e:
+            ttk.Label(
+                viewer_frame,
+                text=(
+                    f"Viewer notebook indisponible : module manquant « {e.name} ».\n"
+                    "Installe-le pour activer la lecture/exécution intégrée :\n"
+                    "    pip install nbformat nbclient jupyter_client ipykernel"
+                ),
+                foreground="#a00",
+                justify="left",
+                padding=(8, 8),
+            ).pack(fill="x")
+            self.notebook_viewer = None
 
     def _launch_webview_notebook(self) -> None:
         script = ROOT / "dashboard" / "notebook_webview.py"
