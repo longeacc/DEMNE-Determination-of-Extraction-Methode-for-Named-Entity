@@ -4,13 +4,18 @@ from collections import Counter
 from typing import Any
 
 ENTITIES = [
-    "ER",
-    "PR",
-    "HER2_status",
-    "HER2_IHC",
-    "Ki67",
-    "HER2_FISH",
-    "Genetic_mutation",
+    "Histologie_tumorale",
+    "Traitement_specifique_du_cancer",
+    "Signes_physiques",
+    "Evolutivite_en_lien_avec_le_cancer",
+    "Reponse_a_la_chimiotherapie",
+    "Stade_metastatique_avec_localisations",
+    "Statut_tabagique",
+    "ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge",
+    "Stade_OMS_ECOG_Karnofsky",
+    "Biomarqueurs_therapeutiques",
+    "Topographie_du_primitif",
+    "Symptomes",
 ]
 
 
@@ -177,10 +182,13 @@ class MetricsCalculator:
         uncertain = sum(1 for t in text_to_search if self.has_uncertainty(t))
         contradictory = sum(1 for t in text_to_search if self.has_contradiction(t))
 
+        # Poids ALIGNÉS sur la ligne de commande (E_risk_context.py) :
+        # R(E) = min(1, α_R·f_neg + β_R·f_unc + γ_R·f_contradiction)
+        ALPHA_R, BETA_R, GAMMA_R = 0.1, 0.3, 0.6
         r_raw = (
-            (negated / total_texts) * 0.2
-            + (uncertain / total_texts) * 0.5
-            + (contradictory / total_texts) * 1.0
+            (negated / total_texts) * ALPHA_R
+            + (uncertain / total_texts) * BETA_R
+            + (contradictory / total_texts) * GAMMA_R
             if total_texts > 0
             else 0.0
         )
@@ -198,10 +206,12 @@ class MetricsCalculator:
         else:
             y = min(1.0, max(0.0, te * 0.6 + he * 0.3))
 
-        # 6. Feas
-        count = len(annotations)
-        freq_factor = min(1.0, count / 100.0)
-        feas = min(1.0, max(0.0, 0.6 * freq_factor + 0.4 * he))
+        # 6. Feas — formule ALIGNÉE sur la ligne de commande (E_feasibility_NER.py)
+        # Feas(E) = α_Feas · min(1, Freq) + β_Feas · He, avec α_Feas = β_Feas = 0.2
+        # He ∈ [0, 1] (sortie sigmoïde) et Freq = occurrences / total_tokens du corpus.
+        ALPHA_FEAS = 0.2
+        BETA_FEAS = 0.2
+        feas = min(1.0, max(0.0, ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he))
 
         # 7. Domain Shift
         base_shift = 0.15
@@ -222,42 +232,70 @@ class MetricsCalculator:
         }
 
 
+# Valeurs de référence issues du pipeline DEMNE réel (Results/decision_summary.csv,
+# Train=Cantemist-35 / Test=Redjdal+RCP). Mises à jour pour rester cohérentes avec
+# la ligne de commande (formules Feas α=β=0.2 et R α=0.1/β=0.3/γ=0.6).
 DEMO_METRICS = {
-    "ER": {"Te": 0.92, "He": 0.88, "R": 0.06, "Freq": 0.85, "Feas": 0.95, "C": 0.02},
-    "PR": {"Te": 0.90, "He": 0.86, "R": 0.08, "Freq": 0.83, "Feas": 0.93, "C": 0.02},
-    "HER2_status": {
-        "Te": 0.72,
-        "He": 0.68,
-        "R": 0.12,
-        "Freq": 0.75,
-        "Feas": 0.85,
-        "C": 0.12,
+    "Histologie_tumorale": {"Te": 0.132, "He": 0.8537, "R": 0.0242, "Freq": 0.0034, "Feas": 0.171},
+    "Traitement_specifique_du_cancer": {
+        "Te": 0.174,
+        "He": 0.8411,
+        "R": 0.1892,
+        "Freq": 0.0071,
+        "Feas": 0.170,
     },
-    "HER2_IHC": {
-        "Te": 0.68,
-        "He": 0.65,
-        "R": 0.15,
-        "Freq": 0.70,
-        "Feas": 0.82,
-        "C": 0.15,
+    "Signes_physiques": {"Te": 0.101, "He": 0.6976, "R": 0.0499, "Freq": 0.0025, "Feas": 0.140},
+    "Evolutivite_en_lien_avec_le_cancer": {
+        "Te": 0.000,
+        "He": 0.0067,
+        "R": 0.0000,
+        "Freq": 0.0001,
+        "Feas": 0.001,
     },
-    "Ki67": {"Te": 0.55, "He": 0.52, "R": 0.10, "Freq": 0.72, "Feas": 0.78, "C": 0.25},
-    "HER2_FISH": {
-        "Te": 0.42,
-        "He": 0.45,
-        "R": 0.25,
-        "Freq": 0.25,
-        "Feas": 0.40,
-        "C": 0.45,
+    "Reponse_a_la_chimiotherapie": {
+        "Te": 0.105,
+        "He": 0.9221,
+        "R": 0.1035,
+        "Freq": 0.0043,
+        "Feas": 0.185,
     },
-    "Genetic_mutation": {
-        "Te": 0.35,
-        "He": 0.38,
-        "R": 0.00,
-        "Freq": 0.15,
-        "Feas": 0.08,
-        "C": 0.65,
+    "Stade_metastatique_avec_localisations": {
+        "Te": 0.111,
+        "He": 0.8196,
+        "R": 0.0525,
+        "Freq": 0.0029,
+        "Feas": 0.164,
     },
+    "Statut_tabagique": {"Te": 0.100, "He": 0.5883, "R": 0.0500, "Freq": 0.0005, "Feas": 0.118},
+    "ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge": {
+        "Te": 0.100,
+        "He": 0.3241,
+        "R": 0.0241,
+        "Freq": 0.0010,
+        "Feas": 0.065,
+    },
+    "Stade_OMS_ECOG_Karnofsky": {
+        "Te": 0.389,
+        "He": 0.9190,
+        "R": 0.0100,
+        "Freq": 0.0010,
+        "Feas": 0.184,
+    },
+    "Biomarqueurs_therapeutiques": {
+        "Te": 0.104,
+        "He": 0.7193,
+        "R": 0.3645,
+        "Freq": 0.0010,
+        "Feas": 0.144,
+    },
+    "Topographie_du_primitif": {
+        "Te": 0.105,
+        "He": 0.7859,
+        "R": 0.0236,
+        "Freq": 0.0019,
+        "Feas": 0.158,
+    },
+    "Symptomes": {"Te": 0.133, "He": 0.7440, "R": 0.0349, "Freq": 0.0036, "Feas": 0.150},
 }
 
 ROUTING_COLORS = {

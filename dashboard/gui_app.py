@@ -33,7 +33,7 @@ RESULTS_DIR = ROOT / "Results"
 DEFAULT_PORT = 8888
 
 PRESETS = {
-    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.50},
+    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20},
     "QUALITY": {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70},
 }
 

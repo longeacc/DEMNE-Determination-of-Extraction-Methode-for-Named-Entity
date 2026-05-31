@@ -10,15 +10,9 @@ def main() -> None:
     )
 
     if "selected_entities" not in st.session_state:
-        st.session_state.selected_entities = [
-            "ER",
-            "PR",
-            "HER2_status",
-            "HER2_IHC",
-            "Ki67",
-            "HER2_FISH",
-            "Genetic_mutation",
-        ]
+        from core.metrics import ENTITIES
+
+        st.session_state.selected_entities = list(ENTITIES)
 
     # Initialize DEMO_METRICS in session setup
     if "custom_metrics" not in st.session_state:
@@ -27,13 +21,14 @@ def main() -> None:
         st.session_state.custom_metrics = {k: v.copy() for k, v in DEMO_METRICS.items()}
 
     if "thresholds" not in st.session_state:
+        # Seuils par défaut = optimum du grid search DEMNE (Train=Cantemist-35 / Test=Redjdal+RCP)
         st.session_state.thresholds = {
-            "Te": 0.70,
-            "He": 0.65,
-            "R": 0.75,
+            "Te": 0.10,
+            "He": 0.85,
+            "R": 0.25,
             "Freq": 0.30,
             "Yield": 0.60,
-            "Feas": 0.50,
+            "Feas": 0.20,
             "DomainShift": 0.60,
             "LLM_Necessity": 0.70,
         }

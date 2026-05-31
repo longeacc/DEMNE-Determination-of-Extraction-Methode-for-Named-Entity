@@ -6,7 +6,7 @@ from core import BratCorpusParser, MetricsCalculator, compute_routing
 
 st.set_page_config(page_title="Dashboard Métriques", page_icon="📊", layout="wide")
 
-PRESET_FRUGAL = {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.50}
+PRESET_FRUGAL = {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20}
 PRESET_QUALITY = {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70}
 
 if "thresholds" not in st.session_state:
@@ -89,20 +89,11 @@ else:
         metrics = calculator.compute_all_metrics(st.session_state["corpus"], entity_type)
         routing, justification = compute_routing(metrics, st.session_state["thresholds"])
 
-        # Composant Composite Mathématique "Pur" (score C de la page 20 appliqué en data-driven)
-        f1_proxy = metrics.get("Feas", 0.0)
-        expl_score = metrics.get("Te", 0.0)
-        energy_norm = metrics.get("He", 0.0)
-        risk_score = metrics.get("R", 0.0)
-
-        c_score = ((0.4 * f1_proxy) + (0.3 * expl_score) + (0.3 * energy_norm)) * (1.0 - risk_score)
-
         entity_metrics[entity_type] = {
             **metrics,
             "Routing": routing,
             "Justification": justification,
         }
-        entity_metrics[entity_type]["C"] = round(c_score, 4)
 
     st.session_state["entity_metrics"] = entity_metrics
 
@@ -112,7 +103,7 @@ else:
         df.rename(columns={"index": "Entity"}, inplace=True)
     else:
         df = pd.DataFrame(
-            columns=["Entity", "Te", "He", "R", "Feas", "C", "Routing", "Justification"]
+            columns=["Entity", "Te", "He", "R", "Feas", "Routing", "Justification"]
         )
 
     col1, col2 = st.columns(2)
@@ -122,7 +113,7 @@ else:
             selected_entity = st.selectbox("Sélectionner une entité", df["Entity"].tolist())
             if selected_entity:
                 entity_data = df[df["Entity"] == selected_entity].iloc[0]
-                metrics_radar = ["Te", "He", "R", "Feas", "C"]
+                metrics_radar = ["Te", "He", "R", "Feas"]
                 r_vals = entity_data[metrics_radar].tolist()
                 # Fermer le polygone du radar chart
                 r_vals.append(r_vals[0])
@@ -155,7 +146,7 @@ else:
 
     st.subheader("Heatmap Métriques")
     if not df.empty:
-        heatmap_df = df.set_index("Entity")[["Te", "He", "R", "Feas", "C"]]
+        heatmap_df = df.set_index("Entity")[["Te", "He", "R", "Feas"]]
         fig_heat = px.imshow(heatmap_df.T, color_continuous_scale="RdYlGn", aspect="auto")
         st.plotly_chart(fig_heat, use_container_width=True)
     else:
