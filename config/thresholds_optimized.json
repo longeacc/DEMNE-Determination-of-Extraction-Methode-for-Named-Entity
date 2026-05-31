@@ -3,16 +3,64 @@
     "TE_HIGH": 0.1,
     "HE_HIGH": 0.85,
     "R_HIGH": 0.25,
-    "FEAS_NER": 0.5,
+    "FEAS_NER": 0.2,
     "TE_MED": 0.1,
     "FREQ_MIN": 0.001,
     "RARE_THRESHOLD_COUNT": 10,
     "MIN_TE_SAMPLES": 10
   },
+  "weights_R": {
+    "alpha": 0.1,
+    "beta": 0.3,
+    "gamma": 0.6
+  },
+  "weights_Feas": {
+    "alpha": 0.2,
+    "beta": 0.2
+  },
   "calibration": {
-    "method": "Train: Cantemist, Test: Redjdal+RCP",
-    "label_criterion": "F1 >= 0.80",
+    "method": "Train: Cantemist-35, Test: Redjdal+RCP",
+    "label_criterion": "REST senior labels (Cantemist+RCP), F1≥0.80 (Redjdal)",
     "total_entities": 65,
-    "concordance": "54/65"
+    "concordance": "53/65",
+    "accuracy": 0.8154,
+    "ranges_of_tied_optimal_configs": {
+      "Te_HIGH": [
+        0.05,
+        0.1
+      ],
+      "He_HIGH": [
+        0.85,
+        0.85
+      ],
+      "R_HIGH": [
+        0.15,
+        0.35
+      ],
+      "Feas_NER": [
+        0.2,
+        0.35
+      ],
+      "alpha_R": [
+        0.1,
+        0.5
+      ],
+      "beta_R": [
+        0.3,
+        0.7
+      ],
+      "gamma_R": [
+        0.6,
+        1.2
+      ],
+      "alpha_F": [
+        0.2,
+        0.6
+      ],
+      "beta_F": [
+        0.2,
+        0.4
+      ]
+    }
   }
 }

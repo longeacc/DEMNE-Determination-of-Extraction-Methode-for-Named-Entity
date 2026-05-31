@@ -182,8 +182,8 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         print(f"  Warning: Yield computation failed: {e}")
 
     # Feas(E) = (α_Feas · min(1, Freq) + β_Feas · He) / Number of Doc in the corpus
-    ALPHA_FEAS = 0.4
-    BETA_FEAS = 0.3
+    ALPHA_FEAS = 0.2
+    BETA_FEAS = 0.2
 
     # Number of documents in the corpus (count of .txt files in Breast data dirs)
     n_doc_corpus = 0
