@@ -116,7 +116,7 @@ def discover_entities_from_config() -> list[str]:
         return []
 
 PRESETS = {
-    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.50},
+    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20},
     "QUALITY": {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70},
 }
 

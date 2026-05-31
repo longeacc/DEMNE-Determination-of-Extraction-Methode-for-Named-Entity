@@ -268,11 +268,11 @@ metric_rows = [
     ["R (Risk Context)",
      "Présence de négations, incertitudes, contradictions autour de l'entité",
      "E_risk_context.py",
-     "0.2·f_neg + 0.5·f_unc + 1.0·f_cont"],
+     "0.1·f_neg + 0.3·f_unc + 0.6·f_cont"],
     ["Feas (NER Feasibility)",
      "Faisabilité d'un modèle NER (volume + homogénéité)",
      "E_feasibility_NER.py",
-     "0.6·min(1,count/100) + 0.4·(He/100)"],
+     "0.2·min(1,Freq) + 0.2·He"],
 ]
 story += [make_table(metric_rows, col_widths=[3.5*cm, 6.5*cm, 4*cm, 4*cm])]
 story += [Spacer(1, 6),
@@ -282,9 +282,9 @@ story += [code(
     "  ├─ oui →  He ≥ 0.85  ?\n"
     "  │           ├─ oui →  R ≤ 0.25  ?\n"
     "  │           │           ├─ oui → RÈGLES\n"
-    "  │           │           └─ non → Feas ≥ 0.50  ?\n"
-    "  │           └─ non →  Feas ≥ 0.50  ?\n"
-    "  └─ non →  Feas ≥ 0.50  ?\n"
+    "  │           │           └─ non → Feas ≥ 0.20  ?\n"
+    "  │           └─ non →  Feas ≥ 0.20  ?\n"
+    "  └─ non →  Feas ≥ 0.20  ?\n"
     "                            ├─ oui → TBM (DrBERT)\n"
     "                            └─ non → LLM\n")]
 
@@ -292,7 +292,7 @@ story += [code(
 story += [Paragraph("6. Presets de seuils (commande dashboard)", H2)]
 preset_rows = [
     ["Preset", "Te", "He", "R", "Feas", "Objectif"],
-    ["FRUGAL", "0.10", "0.85", "0.25", "0.50",
+    ["FRUGAL", "0.10", "0.85", "0.25", "0.20",
      "Maximiser RÈGLES → énergie minimale, explicabilité maximale"],
     ["QUALITY", "0.25", "0.55", "0.15", "0.70",
      "Resserrer RÈGLES → recours plus fréquent à TBM/LLM"],

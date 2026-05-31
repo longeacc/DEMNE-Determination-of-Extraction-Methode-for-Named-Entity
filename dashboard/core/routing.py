@@ -16,11 +16,12 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     r: float = metrics.get("R", metrics.get("r", 0.0))
     feas: float = metrics.get("Feas", metrics.get("feas", 0.0))
 
-    # Seuils par défaut (échelle 0-1, cohérent avec metrics.py)
-    t_te: float = thresholds.get("Te", 0.70)
-    t_he: float = thresholds.get("He", 0.70)
-    t_r: float = thresholds.get("R", 0.30)
-    t_feas: float = thresholds.get("Feas", 0.60)
+    # Seuils par défaut = optimum du grid search DEMNE (échelle 0-1)
+    # {Te_HIGH: 0.1, He_HIGH: 0.85, R_HIGH: 0.25, Feas_NER: 0.2}
+    t_te: float = thresholds.get("Te", 0.10)
+    t_he: float = thresholds.get("He", 0.85)
+    t_r: float = thresholds.get("R", 0.25)
+    t_feas: float = thresholds.get("Feas", 0.20)
 
     # Branche RÈGLES : Te élevée + He élevée + R faible
     if te >= t_te and he >= t_he and r <= t_r:
