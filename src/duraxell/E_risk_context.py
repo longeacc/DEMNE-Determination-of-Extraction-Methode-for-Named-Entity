@@ -97,9 +97,9 @@ class RiskContextScorer:
         }
 
         # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
-        self.ALPHA_R = 0.2
-        self.BETA_R = 0.5
-        self.GAMMA_R = 1.0
+        self.ALPHA_R = 0.1
+        self.BETA_R = 0.3
+        self.GAMMA_R = 0.6
         self.weights = {
             "negation": self.ALPHA_R,
             "uncertainty": self.BETA_R,

@@ -62,7 +62,7 @@ class DecisionTreeBuilder:
             "TE_HIGH": 0.10,
             "HE_HIGH": 0.85,
             "R_HIGH": 0.25,
-            "FEAS_NER": 0.50,
+            "FEAS_NER": 0.20,
         }
 
     # Nombre minimum d'occurrences pour que Te soit fiable (Aligné avec THRESHOLDS_JUSTIFICATION.md)
