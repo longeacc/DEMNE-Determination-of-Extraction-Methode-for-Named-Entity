@@ -19,9 +19,6 @@ from transformers import (
 )
 
 
-# -------------------------
-# Data loading (CoNLL BIO)
-# -------------------------
 def read_conll(path: str) -> tuple[list[list[str]], list[list[str]]]:
     toks, tags, cur_t, cur_y = [], [], [], []
     with open(path, encoding="utf-8") as f:

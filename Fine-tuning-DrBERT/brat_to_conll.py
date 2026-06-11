@@ -1,4 +1,4 @@
-"""BRAT standoff annotation → CoNLL BIO converter.
+r"""BRAT standoff annotation → CoNLL BIO converter.
 
 Reads paired .ann/.txt BRAT files and produces CoNLL-2003 formatted
 output suitable for token-classification fine-tuning.
@@ -11,7 +11,8 @@ Handles:
 
 Typical usage::
 
-    python brat_to_conll.py --input_dir corpus/cantemist --output_dir data/conll/cantemist
+    python Fine-tuning-DrBERT/brat_to_conll.py --input_dir ..\Datasets\Emmanuelle_35_cantemist\Emmanuelle_35_cantemist
+    --output_dir Fine-tuning-DrBERT/data/conll/Emmanuelle_35_cantemist
 """
 
 from __future__ import annotations

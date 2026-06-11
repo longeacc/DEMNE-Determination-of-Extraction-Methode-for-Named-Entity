@@ -1,0 +1,1292 @@
+# doc_id = 5893060697273029527
+1	O
+Mme	O
+zofiamalgorzata	O
+SAULZET	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+0769742902	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+leonieliliane	O
+FAVINO	O
+
+Responsable	O
+
+0752419632	O
+
+Signataire	O
+:	O
+Dr	O
+MARTINSHEN	O
+ductu	O
+
+Paris	O
+le	O
+12/08/2022	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+SAULZET	O
+zofiamalgorzata	O
+
+Né(e)	O
+le	O
+20/04/1940	O
+-	O
+NIP	O
+:	O
+8005858463	O
+
+Correspondants	O
+:	O
+
+Dr	O
+EDMONDPAUL	O
+rubiceleste,	O
+Dr	O
+COTTEAUDESIMENCOUR	O
+selasikofi,	O
+Pr	O
+MARTINSHEN	O
+ductu	O
+
+Compte	O
+rendu	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+18/05/1997:	O
+tumorectomie	O
++	O
+curage	O
+pour	O
+CCI	O
+du	O
+sein	O
+Droit	O
+QII	O
+droit	O
++	O
+CIC	O
+,	O
+pas	O
+de	O
+notion	O
+de	O
+taille,	O
+RO+,	B-Estrogen_receptor
+RP+,	B-Progesterone_receptor
+
+HER2	B-HER2_FISH
+notée	I-HER2_FISH
+2+,	I-HER2_FISH
+non	I-HER2_FISH
+amplifié	I-HER2_FISH
+(sur	O
+relecture	O
+par	O
+la	O
+suite),	O
+KI67	B-Ki67
+5%,	I-Ki67
+
+Marges?	O
+
+Curage	O
+0/20.	O
+
+Pas	O
+de	O
+chimiothérapie	O
+adjuvante.	O
+
+RTE	O
+sein	O
+droit	O
++	O
+aires	O
+ganglionnaires.	O
+
+Pas	O
+d'hormonothérapie	O
+adjuvante.	O
+
+Perdue	O
+de	O
+vue	O
+en	O
+2006.	O
+
+Fracture	O
+pathologique	O
+du	O
+col	O
+fémoral	O
+gauche	O
+le	O
+28/06/2012,	O
+prise	O
+en	O
+charge	O
+à	O
+Saint	O
+Antoine	O
+en	O
+orthopédie,	O
+pas	O
+
+de	O
+prélèvement	O
+osseux.	O
+
+Pas	O
+de	O
+RTE	O
+sur	O
+le	O
+col	O
+fémoral.	O
+
+Découverte	O
+en	O
+post-opératoire	O
+d'un	O
+épanchement	O
+pleural	O
+droit	O
+et	O
+d'adénopathies	O
+axillaires	O
+gauches,	O
+présence	O
+
+de	O
+lésions	O
+cutanées	O
+para	O
+sternales	O
+droites	O
+(extension	O
+de	O
+l'atteinte	O
+de	O
+la	O
+chaine	O
+mammaire	O
+interne).	O
+
+Biopsie	O
+cutanée:	O
+CCI,	O
+RO+	B-Estrogen_receptor
+70%,	O
+RP-,	B-Progesterone_receptor
+HER2	B-HER2_status
+nég	I-HER2_status
+
+Marqueurs	O
+tumoraux	O
+initiaux:	O
+ACE:	O
+5.9,	O
+CA15-3:	O
+220.	O
+
+Récidive	O
+métastatique	O
+osseuse,	O
+ganglionnaire,	O
+pleurale.	O
+
+Je	O
+l'avais	O
+prise	O
+en	O
+charge	O
+durant	O
+mon	O
+clinicat	O
+à	O
+l'hôpital	O
+St	O
+Antoine.	O
+
+Létrozole	O
+depuis	O
+08/2012.	O
+
+Sous	O
+Dénosumab	O
+depuis	O
+2013.	O
+
+Ostéodensitométrie	O
+09/2014	O
+:	O
+T	O
+score	O
+-1.6	O
+au	O
+fémur.	O
+
+Réascension	O
+lente	O
+du	O
+CA15-3	O
+
+Arrêt	O
+de	O
+l'activité	O
+de	O
+sénologie	O
+à	O
+l'hôpital	O
+Saint	O
+Antoine,	O
+adressée	O
+pour	O
+prise	O
+en	O
+charge	O
+à	O
+Saint	O
+Louis.	O
+
+A	O
+la	O
+prise	O
+en	O
+charge	O
+fin	O
+2016	O
+:	O
+
+Lésion	O
+cutanée	O
+pré-sternale	O
+en	O
+augmentation	O
+de	O
+taille.	O
+
+IRM	O
+Mammaire	O
+23/01/2017	O
+:	O
+
+Sein	O
+gauche	O
+:	O
+
+2	O
+Mme	O
+zofiamalgorzata	O
+SAULZET	O
+
+-	O
+Remaniements	O
+cutanés	O
+en	O
+regard	O
+du	O
+tiers	O
+inférieur	O
+du	O
+sternum.	O
+
+-	O
+Adénopathie	O
+axillaire	O
+gauche	O
+de	O
+13	O
+mm.	O
+
+-	O
+Masse	O
+bilobée	O
+ovalaire,	O
+bien	O
+limitée	O
+du	O
+QSE	O
+gauche,	O
+de	O
+5	O
+mm	O
+évocatrice	O
+de	O
+ganglion	O
+intra-mammaire.	O
+
+Sein	O
+droit	O
+:	O
+
+-	O
+Remaniements	O
+post	O
+-opératoires	O
+rétro-aréolaires	O
+droits.	O
+
+-	O
+Masse	O
+rétro-aréolaire	O
+inférieure	O
+ne	O
+prenant	O
+pas	O
+le	O
+contraste	O
+d'allure	O
+bénigne.	O
+
+-	O
+Pas	O
+d'anomalie	O
+ganglionnaire	O
+droite.	O
+
+Classée	O
+ACR2	O
+à	O
+droite,	O
+ACR0	O
+à	O
+gauche.	O
+
+Marqueurs	O
+tumoraux	O
+:	O
+CA	O
+15-3	O
+en	O
+ascension	O
+à	O
+57	O
+(ndr	O
+à	O
+10).	O
+
+Scanner	O
+TAP	O
+du	O
+26/12/2016	O
+:	O
+
+-	O
+Absence	O
+d'anomalie	O
+osseuse	O
+ou	O
+pulmonaire	O
+suspecte.	O
+
+Scintigraphie	O
+osseuse	O
+27/12/2016	O
+:	O
+
+-	O
+Fixation	O
+modérée	O
+de	O
+K7	O
+dite	O
+d'allure	O
+séquellaire,	O
+fixation	O
+limitée	O
+du	O
+Manubrium	O
+sternal.	O
+
+-	O
+Aspect	O
+dégénératif	O
+coxo-fémorale	O
+droite.	O
+
+-	O
+Réaction	O
+péri-prothétique	O
+gauche.	O
+
+TEP-TDM	O
+11/04/2017	O
+:	O
+
+1/	O
+Foyers	O
+hypermétaboliques	O
+pariétaux	O
+thoraciques	O
+intéressant	O
+le	O
+sillon	O
+interne	O
+mammaire,	O
+puis	O
+la	O
+paroi	O
+thoracique	O
+
+antérieure	O
+sous-mammaire	O
+droite	O
+en	O
+avant	O
+des	O
+cartilages	O
+costaux,	O
+ainsi	O
+que	O
+le	O
+compartiment	O
+inféro-interne	O
+du	O
+sein	O
+
+à	O
+gauche.	O
+
+2/	O
+Foyer	O
+hypermétabolique	O
+osseux	O
+répondant	O
+à	O
+une	O
+lésion	O
+ostéocondensante	O
+sternale,	O
+suspecte.	O
+
+3/	O
+Foyers	O
+pleuraux	O
+droits,	O
+non	O
+spécifiques	O
+à	O
+rapprocher	O
+des	O
+antécédents	O
+de	O
+talcage.	O
+
+Exemestane-Everolimus	O
+5	O
+mg	O
+depuis	O
+mai	O
+2017.	O
+
+08/2017:	O
+Apparition	O
+sous	O
+Exemestane-Evérolimus	O
+de	O
+lésions	O
+inflammatoires	O
+du	O
+sein	O
+gauche	O
+à	O
+type	O
+de	O
+peau	O
+
+d'orange,	O
+masse	O
+palpable	O
+dans	O
+le	O
+Qinf	O
+int	O
+du	O
+sein	O
+gauche	O
+(mais	O
+épaississement	O
+cutané)	O
+et	O
+dans	O
+le	O
+
+prolongement	O
+axillaire	O
+gauche	O
+(2	O
+cm).	O
+
+Adénopathie	O
+axillaire	O
+gauche	O
+centimétrique.	O
+
+cT4bN1M1Pev3.	O
+
+TEP-TDM	O
+28/08/2017	O
+:	O
+
+-	O
+Apparition	O
+d'un	O
+épaississement	O
+cutané	O
+du	O
+sein	O
+gauche.	O
+
+-	O
+Progression	O
+de	O
+l'épaississement	O
+cutané	O
+hypermétabolique	O
+su	O
+sillon	O
+inter-mammaire	O
+latéralisé	O
+à	O
+droite.	O
+
+-	O
+Régression	O
+des	O
+lésions	O
+du	O
+manubrium	O
+sternal.	O
+
+-	O
+Apparition	O
+de	O
+foyers	O
+pulmonaires	O
+d'allure	O
+infectieux.	O
+
+Biopsie	O
+cutanée	O
+sein	O
+gauche	O
+du	O
+04/09/2017	O
+(SH1714219)	O
+:	O
+remaniement	O
+inflammatoire	O
+dermique	O
+discret	O
+et	O
+
+peu	O
+spécifique.	O
+
+Absence	O
+de	O
+prolifération	O
+tumorale	O
+dans	O
+la	O
+limite	O
+des	O
+prélèvements	O
+examinés.	O
+
+IRM	O
+Mammaire	O
+13/09/2017:	O
+
+-	O
+Apparition	O
+d'un	O
+épaississement	O
+du	O
+revêtement	O
+cutané	O
+diffus	O
+du	O
+sein	O
+gauche	O
+sans	O
+lésion	O
+suspecte	O
+intra	O
+mammaire.	O
+
+-	O
+En	O
+revanche,	O
+majoration	O
+en	O
+taille	O
+d'une	O
+masse	O
+spiculée	O
+axillaire	O
+gauche	O
+classée	O
+ACR	O
+5.	O
+
+-	O
+Stabilité	O
+en	O
+taille	O
+des	O
+masses	O
+cutanées	O
+para	O
+sternales	O
+gauche	O
+et	O
+droite	O
+et	O
+des	O
+lésions	O
+osseuses	O
+suspectes	O
+
+sternales	O
+connues	O
+
+Biopsie	O
+cutanée	O
+du	O
+QII	O
+du	O
+sein	O
+gauche	O
+21/09/2017	O
+(SH1715244):	O
+Discret	O
+remaniement	O
+inflammatoire	O
+
+dermique	O
+non	O
+spécifique.	O
+
+Absence	O
+de	O
+prolifération	O
+maligne.	O
+
+Partie	O
+en	O
+congés.	O
+
+Microbiopsie	O
+du	O
+03/10/2017	O
+d'une	O
+masse	O
+hypoéchogène	O
+à	O
+la	O
+base	O
+du	O
+prolongement	O
+axillaire	O
+gauche	O
+de	O
+15	O
+x	O
+
+6	O
+mm	O
+(SH1716002):	O
+CCI,	O
+gde	O
+I,	O
+RE3+(90%),	B-Estrogen_receptor
+RP-,	B-Progesterone_receptor
+HER2-.	B-HER2_status
+
+Scintigraphie	O
+myocardique	O
+du	O
+21/11/2017	O
+:	O
+FEVG	O
+71%.	O
+
+Marqueurs	O
+tumoraux	O
+23/11/2017	O
+:	O
+ACE	O
+à	O
+7,6	O
+kUi/l.	O
+
+CA15-3	O
+à	O
+50	O
+Kui/l.	O
+
+Arrêt	O
+Exemestane	O
+-	O
+Evérolimus	O
+
+Chimiothérapie	O
+par	O
+EC	O
+sous	O
+couvert	O
+de	O
+GCSF	O
+depuis	O
+23/11/2017,	O
+6	O
+cycles	O
+délivrés,	O
+dernier	O
+en	O
+date	O
+du	O
+
+08/03/2018.	O
+
+Sous	O
+Dénosumab.	O
+
+Diminution	O
+des	O
+doses	O
+(-20%)	O
+à	O
+partir	O
+de	O
+C3,	O
+pour	O
+neutropénie	O
+gde	O
+4	O
+malgré	O
+GCSF	O
+en	O
+prophylaxie	O
+primaire.	O
+
+Diminution	O
+des	O
+lésions	O
+inflammatoires	O
+cutanées	O
+du	O
+sein	O
+gauche,	O
+masse	O
+2	O
+cm	O
+UQE	O
+gauche.	O
+
+Régression	O
+de	O
+
+l'adénopathie	O
+axillaire	O
+gauche.	O
+
+Diminution	O
+des	O
+lésions	O
+pré-sternales.	O
+
+TEP-TDM	O
+22/01/2018(post	O
+C3):	O
+
+-	O
+Globale	O
+stabilité	O
+des	O
+foyers	O
+hypermétaboliques	O
+cutanés	O
+du	O
+sillon	O
+inter	O
+mammaire	O
+et	O
+du	O
+versant	O
+interne	O
+du	O
+sein	O
+
+gauche.	O
+
+3	O
+Mme	O
+zofiamalgorzata	O
+SAULZET	O
+
+-	O
+Globale	O
+stabilité	O
+du	O
+foyer	O
+osseux	O
+sternal	O
+qui	O
+reste	O
+isolé.	O
+
+-	O
+Persistance	O
+de	O
+foyers	O
+pleuraux	O
+droits	O
+à	O
+rapprocher	O
+du	O
+talcage.	O
+
+-	O
+Absence	O
+d'émergence	O
+de	O
+nouvelle	O
+anomalie	O
+suspecte	O
+ganglionnaire,	O
+viscérale	O
+ou	O
+osseuse.	O
+
+Marqueurs	O
+tumoraux:	O
+ACE	O
+à	O
+5,1.	O
+
+CA	O
+15-3	O
+à	O
+46.	O
+
+Pas	O
+de	O
+mutation	O
+somatique	O
+dans	O
+BRCA1/2	O
+
+Asthénie	O
+importante	O
+après	O
+chimiothérapie	O
+
+Mastectomie	O
+gauche	O
+avec	O
+prolongement	O
+pré-sternal	O
+le	O
+02.05.18	O
+(SH1807514)	O
+:	O
+3	O
+localisations	O
+sous	O
+cutanées	O
+
+d'un	O
+adénocarcinome	O
+canalaire	O
+infiltrant	O
+mesurant	O
+30,	O
+17	O
+et	O
+10	O
+mm,	O
+situées	O
+à	O
+plus	O
+de	O
+10	O
+mm	O
+des	O
+limites	O
+de	O
+
+résections	O
+latérales.	O
+
+-	O
+Le	O
+nodule	O
+de	O
+30	O
+mm	O
+arrive	O
+au	O
+contact	O
+focalement	O
+de	O
+la	O
+limite	O
+de	O
+résection	O
+profonde	O
+intéressant	O
+
+l'hypoderme.	O
+
+-	O
+Les	O
+nodules	O
+de	O
+17	O
+et	O
+10	O
+mm	O
+sont	O
+situés	O
+à	O
+10	O
+mm	O
+de	O
+la	O
+limite	O
+de	O
+résection	O
+profonde.	O
+
+RO	B-Estrogen_receptor
++++	I-Estrogen_receptor
+90%,	O
+RP	B-Progesterone_receptor
+
+négatif,	I-Progesterone_receptor
+HER	B-HER2_IHC
+2	I-HER2_IHC
+:	I-HER2_IHC
+0,	I-HER2_IHC
+KI67	B-Ki67
+:	I-Ki67
+20%.	I-Ki67
+
+Le	O
+reste	O
+des	O
+prélèvements	O
+étagés	O
+réalisés	O
+à	O
+l'union	O
+des	O
+quadrants	O
+externes	O
+
+et	O
+dans	O
+le	O
+QII	O
+ne	O
+montre	O
+pas	O
+de	O
+lésion	O
+carcinomateuse	O
+infiltrante.	O
+
+ypT2ypNx.	O
+
+Tamoxifène	O
+depuis	O
+fin	O
+juin	O
+2018	O
+(notion	O
+de	O
+phlébite	O
+post-opératoire	O
+et	O
+sous	O
+plâtre	O
+connue	O
+par	O
+la	O
+suite)	O
+
+Cicatrisation	O
+de	O
+la	O
+lésion	O
+pré-sternale	O
+difficile	O
+en	O
+cours,	O
+retardant	O
+la	O
+radiothérapie,	O
+surinfection	O
+de	O
+la	O
+lésion	O
+
+chirurgicale	O
+n'a	O
+pas	O
+pu	O
+avoir	O
+de	O
+RTE	O
+pariétale	O
+gauche.	O
+
+TEP-TDM	O
+15/11/2018	O
+:	O
+progression	O
+morpho-métabolique	O
+de	O
+l'infiltrat	O
+sous	O
+cutané	O
+pariétal	O
+antérieur	O
+en	O
+regard	O
+de	O
+
+l'appendice	O
+xyphoïdien,	O
+faisant	O
+suspecter	O
+une	O
+progression	O
+de	O
+la	O
+maladie	O
+(mais	O
+qui	O
+est	O
+en	O
+lien	O
+avec	O
+la	O
+lésion	O
+
+cutanée	O
+post-opératoire	O
+surinfectée).	O
+
+Diminution	O
+de	O
+l'intensité	O
+du	O
+foyer	O
+osseux	O
+sternal	O
+du	O
+versant	O
+gauche	O
+du	O
+manubrium.	O
+
+Persistance	O
+de	O
+foyers	O
+pleuraux	O
+droits	O
+à	O
+rapprocher	O
+des	O
+antécédents	O
+de	O
+talcage.	O
+
+Absence	O
+d'apparition	O
+de	O
+foyer	O
+hypermétabolique	O
+suspect	O
+viscéral	O
+ou	O
+ganglionnaire.	O
+
+Marqueurs	O
+tumoraux	O
+:	O
+ACE	O
+5	O
+ng/ml,	O
+CA15-3:	O
+62	O
+U/ml.	O
+
+Amélioration	O
+après	O
+traitement	O
+par	O
+Tavanic	O
+avec	O
+cicatrisation	O
+complète	O
+de	O
+l'ulcération.	O
+
+RTE	O
+de	O
+paroi	O
+et	O
+des	O
+aires	O
+ganglionnaires	O
+dont	O
+CMI	O
+41.6gy	O
+fin	O
+le	O
+15/11/2019	O
+
+Réouverture	O
+de	O
+l'ulcération	O
+pré-sternale	O
+en	O
+cours	O
+de	O
+radiothérapie	O
+(hypermétabolique	O
+au	O
+TEP-TDM).	O
+
+Surinfection	O
+de	O
+la	O
+lésion	O
+pré-sternale	O
+traitée	O
+par	O
+Pyostacine.	O
+
+Réponse	O
+partielle	O
+confirmée	O
+à	O
+plusieurs	O
+reprises.	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+12/08/2022.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+rehioua,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+mahetamizan	O
+
+Parmacologie	O
+:	O
+Dr	O
+deborahmaureen	O
+
+Arc	O
+:	O
+Mme	O
+vecherio.	O
+
+IDE	O
+:	O
+Mme	O
+thuanbao,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+Progression	O
+osseuse	O
+sternale	O
+
+Conclusion	O
+
+Fulvestrant+	O
+abémaciclib	O
+100mgx2/j	O
+

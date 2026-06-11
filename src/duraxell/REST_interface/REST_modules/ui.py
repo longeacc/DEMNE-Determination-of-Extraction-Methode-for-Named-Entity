@@ -483,7 +483,7 @@ def on_tag_change(change, i):
     i (int) : number corresponding to the modified TagsInput widget.
     """
     global list_isnotfp, ent_cat
-    list_isnotfp = modify_list_isNotFP(list_isnotfp, eval(repr(change["new"])))
+    list_isnotfp = modify_list_isnotfp(list_isnotfp, eval(repr(change["new"])))
     ent_cat[current_entity][i] = repr(change["new"])
     button_categorization.button_style = "warning"
 

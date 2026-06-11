@@ -1,0 +1,789 @@
+# doc_id = -5767988780070397064
+"Numéro	O
+de	O
+RCP	O
+:	O
+2/2	O
+
+NDA	O
+:	O
+NIP	O
+:	O
+8008782237	O
+
+Age	O
+:	O
+67	O
+ansDate	O
+de	O
+naissance	O
+:	O
+18/05/1956	O
+
+Prénom	O
+:	O
+mirashruti	O
+RCP	O
+du	O
+:	O
+20/06/2023Nom	O
+:	O
+SUPPLICENAJIBI	O
+
+Intervenants	O
+du	O
+dossier	O
+
+Participants	O
+à	O
+la	O
+RCP	O
+:	O
+
+Dr	O
+CAPMAS-GOUSSAULT	O
+TAMAZI	O
+(Chirurgie	O
+Gynécologie),	O
+Dr	O
+DUPONTBLACKSHAW	O
+FLEURYVAUQUELIN,	O
+Dr	O
+PEREIRABEIRAO	O
+rishvin	O
+(Chirurgie	O
+
+Gynécologie),	O
+Dr	O
+DASILVAFERREIRARIBEIRO	O
+egaelle	O
+(Oncologue	O
+Radiothérapeute),	O
+Dr	O
+LAURENT-DONAGHY	O
+musuambadiane	O
+(Anatomopathologie),	O
+Rabourdin,	O
+,	O
+Dr	O
+
+TIGHARGHAR	O
+aynmond	O
+(Oncologie	O
+médicale),	O
+Moussa	O
+(radiologue)	O
+
+Responsable	O
+:	O
+POURCELOT	O
+Anne-Gaelle	O
+
+NOM	O
+SPECIALITE	O
+
+Médecin	O
+référent	O
+PEREIRABEIRAO	O
+abdelmonaji	O
+
+COUET	O
+Déborah	O
+Gynécologie	O
+-	O
+Obstétrique	O
+
+Médecin	O
+traitant	O
+
+Autre	O
+professionnel	O
+
+Copie	O
+donnée	O
+au	O
+patient	O
+:	O
+
+Patient	O
+présent	O
+:	O
+oui	O
+/	O
+non	O
+
+oui	O
+/	O
+non	O
+
+Données	O
+médicales	O
+–	O
+RCP	O
+2	O
+du	O
+20/06/2023	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+
+Poids	O
+Taille	O
+IMC	O
+
+Clinique	O
+ou	O
+localisation	O
+tumorale	O
+:	O
+
+MR	O
+SUPPLICENAJIBI	O
+mirashruti,	O
+8008782237,	O
+67ans	O
+
+Antécédents	O
+:	O
+Adenocarcinome	O
+prostatique	O
+Gleason	O
+6,	O
+surveillance	O
+active	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+:	O
+Homme	O
+
+Cancer	O
+du	O
+sein	O
+droit	O
+initialement	O
+T4bN+	O
+avec	O
+adénopathies	O
+axillaires	O
+homolatérales	O
+et	O
+rétro	O
+pectorales	O
+
+découvert	O
+en	O
+11/2022	O
+
+Anapath:	O
+Adénocarcinome	O
+infiltrant	O
+de	O
+type	O
+NST	O
+de	O
+grade	O
+3,	O
+avec	O
+bourgeons	O
+tumoraux	O
+endo-lymphatiques,	O
+et	O
+
+atteinte	O
+ganglionnaire	O
+axillaire	O
+droite.	O
+
+RO+,	B-Estrogen_receptor
+HER	B-HER2_IHC
+2	I-HER2_IHC
++++	I-HER2_IHC
+et	O
+Ki	B-Ki67
+67	I-Ki67
+:	I-Ki67
+60%	I-Ki67
+
+Examen	O
+clinique	O
+initial	O
+:	O
+Volumineuse	O
+masse	O
+ulcérée	O
+du	O
+sein	O
+droit.	O
+
+Gynécomastie	O
+controlatérale	O
+sans	O
+masse	O
+
+suspecte.	O
+
+Adénomégalie	O
+axillaire	O
+droite	O
+
+TEP	O
+TDM	O
+initial	O
+:	O
+Masse	O
+mammaire	O
+droite	O
+intensément	O
+hypermétabolique	O
+associée	O
+à	O
+des	O
+
+adénopathies	O
+axillaires	O
+et	O
+rétro-pectorale	O
+droites	O
+d'allure	O
+secondaire.	O
+
+Pas	O
+de	O
+lésion	O
+à	O
+distance.	O
+
+Analyse	O
+génétique	O
+des	O
+tumeurs	O
+par	O
+NGS	O
+(Dr	O
+wille,	O
+22/03/2023)	O
+:	O
+
+-	O
+Mutation	B-Genetic_mutation
+pathogène	I-Genetic_mutation
+dans	I-Genetic_mutation
+l'exon10	I-Genetic_mutation
+de	I-Genetic_mutation
+PIK3CA.	I-Genetic_mutation
+
+-	O
+Augmentation	B-HER2_FISH
+du	I-HER2_FISH
+nombre	I-HER2_FISH
+de	I-HER2_FISH
+copie	I-HER2_FISH
+du	I-HER2_FISH
+gène	I-HER2_FISH
+ERBB2.	I-HER2_FISH
+
+-	O
+Pas	O
+d'autre	O
+anomalie	O
+d'intérêt	O
+clinique	O
+ou	O
+théranostique	O
+sur	O
+l'ensemble	O
+des	O
+autres	O
+gènes	O
+testés	O
+(Panel	O
+sein	O
+
+n°5).	O
+
+Chimiothérapie	O
+néo	O
+adjuvante	O
+par	O
+Taxol,	O
+herceptin,	O
+perjeta	O
+débuté	O
+en	O
+12/2022	O
+
+Réévaluation	O
+le	O
+09/06/2023	O
+:	O
+bonne	O
+régression	O
+clinique,	O
+persistance	O
+d'une	O
+rétraction	O
+cutanée	O
+avec	O
+nodule	O
+de	O
+
+moins	O
+de	O
+2cm	O
+en	O
+péri	O
+aréolaire	O
+droit,	O
+pas	O
+d'adénopathie	O
+palpable	O
+
+Surface	O
+corporelle	O
+
+Date	O
+de	O
+diagnostic	O
+
+Page	O
+1	O
+/	O
+3	O
+
+NIP	O
+:	O
+8008782237Patient	O
+:	O
+SUPPLICENAJIBI	O
+mirashruti	O
+RCP	O
+du	O
+20/06/2023	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+Fiche	O
+RCP	O
+validée	O
+le	O
+20/06/2023	O
+
+Mastectomie	O
+droite	O
+totale	O
++	O
+curage	O
+axillaire	O
+droit	O
+
+Anatomo	O
+pathologie	O
+:	O
+
+Localisation	O
+:	O
+
+IRM	O
+mammaire	O
+de	O
+contrôle	O
+prévue	O
+le	O
+13/07/2023	O
+
+Conduite	O
+à	O
+tenir	O
+proposée	O
+:	O
+Mastectomie	O
+totale	O
+avec	O
+curage	O
+axillaire	O
+(programmée	O
+mi-juillet),	O
+patient	O
+réticent	O
+à	O
+la	O
+
+mastectomie	O
+totale	O
+
+Nom	O
+du	O
+protocole	O
+proposé	O
+:	O
+
+Classification	O
+TNM	O
+si	O
+chirurgie	O
+
+T	O
+N	O
+M	O
+
+Nombre	O
+de	O
+ganglions	O
+positifs	O
+
+Nombre	O
+de	O
+ganglions	O
+analysés	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Prescription	O
+hors	O
+AMM	O
+:	O
+
+Page	O
+2	O
+/	O
+3	O
+
+NIP	O
+:	O
+8008782237Patient	O
+:	O
+SUPPLICENAJIBI	O
+mirashruti	O
+RCP	O
+du	O
+20/06/2023	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+Fiche	O
+RCP	O
+validée	O
+le	O
+15/11/2022	O
+
+TEP	O
+TDM	O
+pour	O
+caractériser	O
+nodule	O
+sous	O
+pleural	O
+
+chimiothérapie	O
+néo-adjuvante	O
+
+Microbiopsies:	O
+
+Adenocarcinome	O
+infiltrant	O
+de	O
+type	O
+NST	O
+de	O
+grade	O
+3	O
+avec	O
+bourgeons	O
+tumoraux	O
+endo-lymphatiques	O
+
+Localisation	O
+métatstatique	O
+ganglionnaire	O
+lymphatique	O
+droite	O
+
+Type	O
+luminal	O
+B,	O
+HER2+	B-HER2_status
+
+R0+	B-Estrogen_receptor
+
+localisation	O
+métastatique	O
+axillaires	O
+
+Anatomo	O
+pathologie	O
+:	O
+
+sein	O
+droit,	O
+quadrant	O
+supero-externe.	O
+75*44mm	O
+à	O
+la	O
+mammographie	O
+
+Localisation	O
+:	O
+
+Données	O
+médicales	O
+–	O
+RCP	O
+1	O
+du	O
+15/11/2022	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+
+Poids	O
+Taille	O
+IMC	O
+
+Clinique	O
+ou	O
+localisation	O
+tumorale	O
+:	O
+
+Volumineuse	O
+masse	O
+ulcérée	O
+du	O
+sein	O
+droit	O
+chez	O
+un	O
+homme	O
+de	O
+66	O
+ans.	O
+
+Gynecomastie	O
+controlatérale	O
+sans	O
+masse	O
+
+suspecte.	O
+
+Adénomégalie	O
+axillaire	O
+droite	O
+
+A	O
+la	O
+mammographie	O
+on	O
+retrouve	O
+une	O
+masse	O
+suspecte	O
+de	O
+77	O
+*45mm,	O
+associée	O
+à	O
+des	O
+adénomégalies	O
+axillaires	O
+et	O
+
+sous	O
+pectorales.	O
+
+TDM	O
+TAP:	O
+nodule	O
+sous	O
+pleural	O
+postero	O
+latéral	O
+droit	O
+de	O
+7mm	O
+a	O
+confronter	O
+au	O
+PET	O
+TDM	O
+
+Biopsie	O
+du	O
+sein	O
+droit	O
+réalisé	O
+
+Bilan	O
+d'extension,	O
+scan	O
+TAP:	O
+Volumineuse	O
+masse	O
+tissulaire	O
+du	O
+sein	O
+droit	O
+avec	O
+des	O
+adénomégalies	O
+axillaires	O
+et	O
+
+sous-pectorale	O
+
+homolatérales.	O
+
+Nodule	O
+sous-pleural	O
+postéro-basal	O
+droit	O
+de	O
+7	O
+mm,	O
+à	O
+confronter	O
+avec	O
+les	O
+données	O
+d'un	O
+PET-scanner.	O
+
+Aspect	O
+un	O
+peu	O
+lisse	O
+corporéo-céphalique	O
+pancréatique,	O
+sans	O
+dilatation	O
+canalaire,	O
+à	O
+mieux	O
+explorer	O
+par	O
+IRM	O
+dans	O
+
+un	O
+second	O
+temps.	O
+
+Pour	O
+rappel:	O
+pas	O
+d'antécédents	O
+familiaux	O
+
+Nom	O
+du	O
+protocole	O
+proposé	O
+:	O
+
+Classification	O
+TNM	O
+si	O
+chirurgie	O
+
+T	O
+N	O
+M	O
+
+Nombre	O
+de	O
+ganglions	O
+positifs	O
+
+Nombre	O
+de	O
+ganglions	O
+analysés	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Surface	O
+corporelle	O
+
+Date	O
+de	O
+diagnostic	O
+07/11/2022	O
+
+Prescription	O
+hors	O
+AMM	O
+:	O
+
+Page	O
+3	O
+/	O
+3	O
+
+NIP	O
+:	O
+8008782237Patient	O
+:	O
+SUPPLICENAJIBI	O
+mirashruti	O
+RCP	O
+du	O
+20/06/2023	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+"	O
+

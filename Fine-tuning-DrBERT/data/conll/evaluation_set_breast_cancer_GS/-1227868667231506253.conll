@@ -1,0 +1,1063 @@
+# doc_id = -1227868667231506253
+Numéro	O
+de	O
+RCP	O
+:	O
+3/3	O
+
+NDA	O
+:	O
+NIP	O
+:	O
+8011513550	O
+
+Age	O
+:	O
+57	O
+ansDate	O
+de	O
+naissance	O
+:	O
+27/09/1965	O
+
+Prénom	O
+:	O
+meritxell	O
+RCP	O
+du	O
+:	O
+15/02/2022Nom	O
+:	O
+delsousse	O
+
+Intervenants	O
+du	O
+dossier	O
+
+Participants	O
+à	O
+la	O
+RCP	O
+:	O
+
+Dr	O
+CAPMAS-GOUSSAULT	O
+ELWEICELLAMIRI	O
+(Chirurgie	O
+Gynécologie),	O
+Dr	O
+DEBRAS	O
+BERESFORDWOOD	O
+(Gynécologie	O
+-	O
+Obstétrique	O
+),	O
+Pr	O
+GONTHEY	O
+
+Hervé	O
+(Chirurgie	O
+Gynécologie),	O
+Dr	O
+ELROOMI	O
+djuolde	O
+(Oncologie	O
+médicale),	O
+Pr	O
+PREVOT	O
+PAPIC	O
+(Anatomopathologie),	O
+Dr	O
+ADJAOUAD	O
+
+Mathilde	O
+(Radiologie)	O
+
+Responsable	O
+:	O
+DEBRAS	O
+ELODIE	O
+
+NOM	O
+SPECIALITE	O
+
+Médecin	O
+référent	O
+DEBRAS	O
+BERESFORDWOOD	O
+narfate	O
+-	O
+Obstétrique	O
+
+Médecin	O
+traitant	O
+
+Autre	O
+professionnel	O
+
+Copie	O
+donnée	O
+au	O
+patient	O
+:	O
+
+Patient	O
+présent	O
+:	O
+oui	O
+/	O
+non	O
+
+oui	O
+/	O
+non	O
+
+Page	O
+1	O
+/	O
+4	O
+
+NIP	O
+:	O
+8011513550Patient	O
+:	O
+delsousse	O
+meritxell	O
+RCP	O
+du	O
+15/02/2022	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+Fiche	O
+RCP	O
+validée	O
+le	O
+15/02/2022	O
+
+Chimiothérapie	O
+
+Radiothérapie	O
+du	O
+creux	O
+axillaire	O
+
+Anatomo	O
+pathologie	O
+:	O
+
+Localisation	O
+:	O
+
+Données	O
+médicales	O
+–	O
+RCP	O
+3	O
+du	O
+15/02/2022	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+
+Poids	O
+Taille	O
+IMC	O
+
+Clinique	O
+ou	O
+localisation	O
+tumorale	O
+:	O
+
+Antécédents	O
+:	O
+Allergie	O
+Péniciline	O
+,	O
+Embolie	O
+pulmonaire,	O
+Valvulopathie	O
+compliquée	O
+d'hypertrophie	O
+ventriculaire	O
+
+gauche	O
+et	O
+d'HTA	O
+sous	O
+trithérapie,	O
+d'insuffisance	O
+rénale	O
+chronique,	O
+de	O
+maladie	O
+de	O
+Basedow,	O
+D'hypercalcémie,	O
+
+d'ethylisme	O
+chronique	O
+
+Hospitalisation	O
+en	O
+psychiatrie	O
+pour	O
+acte	O
+hétéroagressif	O
+puis	O
+en	O
+réanimation	O
+pour	O
+hypercalcémie.	O
+
+Examen	O
+clinique:	O
+95	O
+C	O
+
+Hématome	O
+du	O
+sein	O
+droit,	O
+Déformation	O
+du	O
+sein	O
+droit	O
+avec	O
+rétraction	O
+cutanée	O
+Quadrant	O
+Inféro	O
+interne	O
+
+Evaluation	O
+masse	O
+difficile	O
+en	O
+raison	O
+de	O
+l'hématome	O
+mais	O
+probable	O
+>	O
+1.5	O
+cm	O
+
+Echo-mammographie:	O
+Lésion	O
+ACR5	O
+du	O
+sein	O
+droit	O
+
+TDM	O
+crane	O
+17/12	O
+normal	O
+
+TDM	O
+AP:	O
+Ostéocondensation	O
+millimétrique	O
+iliaque	O
+gauche	O
+non	O
+caractérisable.	O
+
+Absence	O
+de	O
+lésion	O
+d'allure	O
+
+évolutive	O
+ou	O
+secondaire	O
+par	O
+ailleurs.	O
+
+Biopsie	O
+:	O
+carcinome	O
+infiltrant	O
+de	O
+type	O
+non	O
+spécifique,	O
+de	O
+grade	O
+II	O
+RO+:	B-Estrogen_receptor
+90	O
+%	O
+,	O
+RP	B-Progesterone_receptor
+-	I-Progesterone_receptor
+:	O
+5	O
+%,	O
+Ki67	B-Ki67
+:	I-Ki67
+10	I-Ki67
+%	I-Ki67
+HER2	B-HER2_status
+:	I-HER2_status
+
+score	I-HER2_status
+2+	I-HER2_status
+FISH	O
+en	O
+cours	O
+
+IRM	O
+mammaire:	O
+Masse	O
+spiculée	O
+ACR	O
+6	O
+de	O
+19	O
+mm	O
+du	O
+quadrant	O
+inféro-interne	O
+droit	O
+avec	O
+clip	O
+en	O
+place	O
+et	O
+
+important	O
+rehaussement	O
+sur	O
+le	O
+trajet	O
+de	O
+la	O
+biopsie	O
+associée.	O
+
+Deux	O
+petites	O
+lésions	O
+infracentimétriques	O
+du	O
+sein	O
+gauche	O
+sans	O
+caractère	O
+suspect,	O
+à	O
+contrôler.	O
+
+masectomie	O
+partielle	O
+avec	O
+GS	O
+à	O
+droite	O
+le	O
+09/02	O
+
+Nom	O
+du	O
+protocole	O
+proposé	O
+:	O
+
+Classification	O
+TNM	O
+si	O
+chirurgie	O
+
+T	O
+N	O
+M	O
+
+Nombre	O
+de	O
+ganglions	O
+positifs	O
+
+Nombre	O
+de	O
+ganglions	O
+analysés	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Surface	O
+corporelle	O
+
+Date	O
+de	O
+diagnostic	O
+
+Prescription	O
+hors	O
+AMM	O
+:	O
+
+Page	O
+2	O
+/	O
+4	O
+
+NIP	O
+:	O
+8011513550Patient	O
+:	O
+delsousse	O
+meritxell	O
+RCP	O
+du	O
+15/02/2022	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+Fiche	O
+RCP	O
+validée	O
+le	O
+04/01/2022	O
+
+IRM	O
+mammaire	O
+
+TEP	O
+scanner	O
+
+Tumorectomie	O
+GS	O
+si	O
+bilan	O
+extension	O
+neg	O
+
+Anatomo	O
+pathologie	O
+:	O
+
+Localisation	O
+:	O
+
+Données	O
+médicales	O
+–	O
+RCP	O
+1	O
+du	O
+04/01/2022	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+
+Poids	O
+Taille	O
+IMC	O
+
+Clinique	O
+ou	O
+localisation	O
+tumorale	O
+:	O
+
+Patiente	O
+de	O
+56	O
+ans,	O
+prise	O
+en	O
+charge	O
+pour	O
+un	O
+cancer	O
+du	O
+sein	O
+droit.	O
+
+Antécédents	O
+
+-Valvulopathie	O
+rhumatismale	O
+sur	O
+RAA	O
+dans	O
+l'enfance	O
+
+-	O
+Cardiomyopathie	O
+hypokinétique	O
+avec	O
+dysfonction	O
+ventriculaire	O
+gauche	O
+modérée	O
+
+-Thyroïdectomie	O
+compliquée	O
+hypoparathyroïdie	O
+
+-11/2020	O
+Cochin	O
+:	O
+Embolie	O
+pulmonaire	O
+segmentaire	O
+bilatérale	O
+avec	O
+infarctus	O
+pulmonaire,	O
+traitée	O
+6	O
+mois	O
+par	O
+
+Eliquis.	O
+
+NB	O
+Pr	O
+chaillet	O
+:adénopathies	O
+hilaires	O
+et	O
+médiastinale	O
+à	O
+l'angioscanner	O
+douteuses,	O
+recontrôlées	O
+3	O
+mois	O
+
+plus	O
+tard	O
+avec	O
+diminution	O
+des	O
+lésions	O
+
+-Insuffisance	O
+rénale	O
+chronique	O
+non	O
+explorée,	O
+créatinine	O
+en	O
+12/20	O
+=	O
+100	O
+umol/L	O
+
+-Ethylisme	O
+chronique	O
+
+Hospitalisation	O
+en	O
+psychiatrie	O
+pour	O
+acte	O
+hétéroagressif	O
+puis	O
+en	O
+réanimation	O
+pour	O
+hypercalcémie.	O
+
+Echo-mammographie:	O
+Lésion	O
+ACR5	O
+du	O
+sein	O
+droit	O
+(CR	O
+à	O
+récupérer)	O
+
+TDM	O
+crane	O
+17/12	O
+normal	O
+
+TDM	O
+AP:	O
+Ostéocondensation	O
+millimétrique	O
+iliaque	O
+gauche	O
+non	O
+caractérisable.	O
+
+Absence	O
+de	O
+lésion	O
+d'allure	O
+évolutive	O
+ou	O
+secondaire	O
+par	O
+ailleurs.	O
+
+Biopsie	O
+:	O
+carcinome	O
+infiltrant	O
+de	O
+type	O
+non	O
+spécifique,	O
+de	O
+grade	O
+II	O
+
+Nom	O
+du	O
+protocole	O
+proposé	O
+:	O
+
+Classification	O
+TNM	O
+si	O
+chirurgie	O
+
+T	O
+N	O
+M	O
+
+Nombre	O
+de	O
+ganglions	O
+positifs	O
+
+Nombre	O
+de	O
+ganglions	O
+analysés	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Surface	O
+corporelle	O
+
+Date	O
+de	O
+diagnostic	O
+
+Prescription	O
+hors	O
+AMM	O
+:	O
+
+Données	O
+médicales	O
+–	O
+RCP	O
+2	O
+du	O
+11/01/2022	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+
+Poids	O
+Taille	O
+IMC	O
+Surface	O
+corporelle	O
+
+Date	O
+de	O
+diagnostic	O
+
+Page	O
+3	O
+/	O
+4	O
+
+NIP	O
+:	O
+8011513550Patient	O
+:	O
+delsousse	O
+meritxell	O
+RCP	O
+du	O
+15/02/2022	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+
+Fiche	O
+RCP	O
+validée	O
+le	O
+11/01/2022	O
+
+Relecture	O
+IRM	O
+:	O
+Lésion	O
+de	O
+20	O
+mm	O
+sans	O
+atteinte	O
+cutanée	O
+
+Validation	O
+mastectomie	O
+partielle	O
+et	O
+GS	O
+
+Anatomo	O
+pathologie	O
+:	O
+
+Localisation	O
+:	O
+
+Clinique	O
+ou	O
+localisation	O
+tumorale	O
+:	O
+
+Patiente	O
+de	O
+56	O
+ans,	O
+prise	O
+en	O
+charge	O
+pour	O
+un	O
+cancer	O
+du	O
+sein	O
+droit.	O
+
+Antécédents	O
+
+-Valvulopathie	O
+rhumatismale	O
+sur	O
+RAA	O
+dans	O
+l'enfance	O
+
+-	O
+Cardiomyopathie	O
+hypokinétique	O
+avec	O
+dysfonction	O
+ventriculaire	O
+gauche	O
+modérée	O
+
+-Thyroïdectomie	O
+compliquée	O
+hypoparathyroïdie	O
+
+-11/2020	O
+Cochin	O
+:	O
+Embolie	O
+pulmonaire	O
+segmentaire	O
+bilatérale	O
+avec	O
+infarctus	O
+pulmonaire,	O
+traitée	O
+6	O
+mois	O
+par	O
+
+Eliquis.	O
+
+NB	O
+Pr	O
+chaillet	O
+:adénopathies	O
+hilaires	O
+et	O
+médiastinale	O
+à	O
+l'angioscanner	O
+douteuses,	O
+recontrôlées	O
+3	O
+mois	O
+
+plus	O
+tard	O
+avec	O
+diminution	O
+des	O
+lésions	O
+
+-Insuffisance	O
+rénale	O
+chronique	O
+non	O
+explorée,	O
+créatinine	O
+en	O
+12/20	O
+=	O
+100	O
+umol/L	O
+
+-Ethylisme	O
+chronique	O
+
+Hospitalisation	O
+en	O
+psychiatrie	O
+pour	O
+acte	O
+hétéroagressif	O
+puis	O
+en	O
+réanimation	O
+pour	O
+hypercalcémie.	O
+
+Examen	O
+clinique:	O
+95	O
+C	O
+
+Hématome	O
+du	O
+sein	O
+droit,	O
+Déformation	O
+du	O
+sein	O
+droit	O
+avec	O
+rétraction	O
+cutanée	O
+Quadrant	O
+Inféro	O
+interne	O
+
+Evaluation	O
+masse	O
+difficile	O
+en	O
+raison	O
+de	O
+l'hématome	O
+mais	O
+probable	O
+>	O
+1.5	O
+cm	O
+
+Echo-mammographie:	O
+Lésion	O
+ACR5	O
+du	O
+sein	O
+droit	O
+(CR	O
+à	O
+récupérer)	O
+
+TDM	O
+crane	O
+17/12	O
+normal	O
+
+TDM	O
+AP:	O
+Ostéocondensation	O
+millimétrique	O
+iliaque	O
+gauche	O
+non	O
+caractérisable.	O
+
+Absence	O
+de	O
+lésion	O
+d'allure	O
+évolutive	O
+ou	O
+secondaire	O
+par	O
+ailleurs.	O
+
+Biopsie	O
+:	O
+carcinome	O
+infiltrant	O
+de	O
+type	O
+non	O
+spécifique,	O
+de	O
+grade	O
+II	O
+
+RO+:	O
+90	O
+%	O
+,	O
+RP	O
+-	O
+:	O
+5	O
+%,	O
+Ki67	O
+:	O
+10	O
+%	O
+HER2	O
+:	O
+score	O
+2+	O
+FISH	O
+en	O
+cours	O
+
+IRM	O
+mammaire:	O
+
+TEP	O
+TDM:	O
+
+Mastectomie	O
+totale	O
+ou	O
+partielle	O
+en	O
+fonction	O
+du	O
+l'hématome	O
+et	O
+de	O
+l'IRM	O
+
+Nom	O
+du	O
+protocole	O
+proposé	O
+:	O
+
+Classification	O
+TNM	O
+si	O
+chirurgie	O
+
+T	O
+N	O
+M	O
+
+Nombre	O
+de	O
+ganglions	O
+positifs	O
+
+Nombre	O
+de	O
+ganglions	O
+analysés	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Prescription	O
+hors	O
+AMM	O
+:	O
+
+Page	O
+4	O
+/	O
+4	O
+
+NIP	O
+:	O
+8011513550Patient	O
+:	O
+delsousse	O
+meritxell	O
+RCP	O
+du	O
+15/02/2022	O
+
+RCP	O
+:	O
+Chirurgie	O
+Gynécologique	O
+
+Chirurgie	O
+Gynécologique	O
+
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+BICETRE	O
+

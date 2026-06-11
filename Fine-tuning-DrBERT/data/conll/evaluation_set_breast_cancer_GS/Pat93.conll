@@ -1,0 +1,572 @@
+# doc_id = Pat93
+Pat93	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+71	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+
+Poids	O
+:	O
+57.00	O
+kg	O
+Le	O
+[	O
+3	O
+jours	O
+avant	O
+RCP	O
+]	O
+IMC	O
+(Quetelet)	O
+:	O
+25.0	O
+kg/m	O
+2	O
+
+Taille	O
+:	O
+151	O
+cm	O
+Le	O
+[	O
+3	O
+jours	O
+avant	O
+RCP	O
+]	O
+SC	O
+(Dubois)	O
+:	O
+1.52	O
+m2	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Données	O
+Médicales	O
+:	O
+
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+CONSULTATION	O
+[MEDECIN	O
+REFERANT]DU	O
+[	O
+3	O
+jours	O
+avant	O
+RCP	O
+]:	O
+
+Patiente	O
+âgée	O
+de	O
+71ans,	O
+adressée	O
+par	O
+le	O
+[MEDECIN	O
+EXTERIEUR]pour	O
+carcinome	O
+papillaire	O
+solide	O
+infiltrant	O
+du	O
+sein	O
+gauche.	O
+
+Antécédents:	O
+
+Médicaux:	O
+HTA	O
+non	O
+traitée,	O
+dyslipidémie	O
+non	O
+traitée.	O
+glaucome	O
+incontinence	O
+mixte	O
+a	O
+priori	O
+
+Chirurgicaux:	O
+cancer	O
+du	O
+sein	O
+droit	O
+traitée	O
+par	O
+mastectomie	O
+partielle	O
+et	O
+curage	O
+axillaire	O
+puis	O
+radiothérapieà	O
+JVR	O
+en	O
+[	O
+5119	O
+jours	O
+avant	O
+RCP	O
+].	O
+
+Dernière	O
+mammo/	O
+écho	O
+[	O
+2927	O
+jours	O
+avant	O
+RCP	O
+]	O
+normale	O
+à	O
+priori.OG	O
+catacracte	O
+opéré	O
+
+Obstétricaux:	O
+G3P3	O
+dont	O
+3	O
+AVB.	O
+
+Gynécologique:	O
+Ménopausée	O
+depuis	O
+l'âge	O
+de	O
+57	O
+ans,	O
+pas	O
+de	O
+THM.	O
+
+Familiaux:	O
+cancer	O
+sein	O
+chez	O
+la	O
+soeur	O
+à	O
+63	O
+ans,	O
+cancer	O
+utérus	O
+40	O
+ans	O
+et	O
+pancréas	O
+chez	O
+une	O
+2ème	O
+soeur	O
+à	O
+53	O
+ans,	O
+cancer	O
+poumon	O
+chez	O
+une	O
+3ème	O
+soeur	O
+48	O
+ans	O
+non	O
+fumeuse	O
+(décédée)	O
+.	O
+
+frère	O
+décédé	O
+à	O
+58	O
+ans	O
+d'un	O
+cancer	O
+des	O
+os	O
+autre	O
+frère	O
+cancer	O
+de	O
+prostate	O
+opéré	O
+ne	O
+connaît	O
+pas	O
+ATCD	O
+cancéro	O
+des	O
+ascendants	O
+car	O
+au	O
+vietnam	O
+
+Allergie:	O
+Pénicilline	O
+(éruption	O
+cutanée).	O
+
+N'a	O
+pas	O
+fait	O
+consultation	O
+allergo	O
+
+Anamnèse:	O
+
+Autopalpation	O
+d'une	O
+masse	O
+du	O
+QSI	O
+du	O
+sein	O
+gauche	O
+début	O
+2020,	O
+quelques	O
+douleurs,	O
+pas	O
+d'écoulement.	O
+
+Pas	O
+de	O
+bilan	O
+fait	O
+car	O
+confinement	O
+COVID.	O
+
+Mammographie/	O
+échographie	O
+en	O
+[	O
+2927	O
+jours	O
+avant	O
+RCP	O
+]	O
+normale	O
+à	O
+priori.	O
+
+Masse	O
+QSI	O
+du	O
+sein	O
+gauche	O
+55*47*49mm.	O
+
+Echo/	O
+Mammographie:	O
+pas	O
+de	O
+comte	O
+rendu	O
+sein	O
+gauche	O
+ACR5	O
+masse	O
+de	O
+44	O
+mm	O
+grand	O
+axe	O
+
+Microbiopsie	O
+[	O
+16	O
+jours	O
+avant	O
+RCP	O
+]:	O
+Carcinome	O
+papillaire	O
+solide	O
+infiltrant	O
+grade	O
+III	O
+EE	O
+(3+3+2),	O
+RO	B-Estrogen_receptor
+100%	I-Estrogen_receptor
+RP	B-Progesterone_receptor
+100%	I-Progesterone_receptor
+HER	B-HER2_IHC
+2	I-HER2_IHC
+score	I-HER2_IHC
+0,	I-HER2_IHC
+
+Ki67	B-Ki67
+25%.	I-Ki67
+
+Cytoponction	O
+axillaire	O
+gauche:	O
+localisation	O
+axillaire	O
+du	O
+carcinome.	O
+
+Examen	O
+clinique	O
+
+Le	O
+[	O
+3	O
+jours	O
+avant	O
+RCP	O
+]	O
+:	O
+Poids	O
+:	O
+57	O
+kg,	O
+Taille	O
+:	O
+151	O
+cm,	O
+IMC	O
+:	O
+25	O
+kg/m²,	O
+SC	O
+:	O
+1.5	O
+m²	O
+
+Examen	O
+clinique:	O
+
+Taille	O
+151cm,	O
+poids	O
+57kg,	O
+TGS:	O
+85B	O
+masse	O
+8	O
+cm	O
+du	O
+sein	O
+gauche	O
+avec	O
+possible	O
+debut	O
+infiltrtion	O
+cutanée,	O
+1	O
+adénopathie	O
+mobile	O
+à	O
+la	O
+partie	O
+basse	O
+du	O
+creux	O
+pas	O
+d'adénopathie	O
+sus	O
+claviculaire	O
+perte	O
+de	O
+3	O
+kg	O
+depuis	O
+novembre	O
+pas	O
+d'autres	O
+symptomes	O
+col	O
+atrophique,	O
+atrophie	O
+muqueuse	O
+
+TV	O
+1	O
+doigt	O
+douloureux	O
+:	O
+pas	O
+de	O
+masse	O
+perçue	O
+mais	O
+peu	O
+contributif	O
+
+Examens	O
+complémentaires	O
+
+Résultats	O
+de	O
+biologie	O
+ca	O
+15-3	O
+:	O
+31.8	O
+
+ca	O
+125	O
+:	O
+58	O
+
+Conclusion	O
+
+Carcinome	O
+mammaire	O
+gauche	O
+T3N1Mx	O
+CCI	O
+grade	O
+3	O
+RH+	B-Estrogen_receptor
+Her2	B-HER2_status
+neg	I-HER2_status
+ki67	B-Ki67
+à	I-Ki67
+25%	I-Ki67
+indicationIRM	O
+mammaire	O
+
+TEP	O
+FDG	O
+
+Échographie	O
+pelvienne	O
+ca	O
+125	O
+:	O
+58	O
+
+consultation	O
+oncogénétique	O
+a	O
+priori	O
+chimiothérapie	O
+néoadjuvante	O
+suivie	O
+de	O
+mastectomie	O
+curage	O
+axillaire	O
+gauche	O
+radiothérapie	O
+traitement	O
+anti	O
+hormonal	O
+réévaluation	O
+en	O
+fonction	O
+bilan	O
+extension	O
+
+100%	O
+demandé	O
+par	O
+médecin	O
+traitant	O
+
+Décision	O
+RCP	O
+du	O
+[	O
+0	O
+jours	O
+avant	O
+RCP	O
+]:	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Proposition	O
+de	O
+décision	O
+
+Prévoir	O
+une	O
+consultation	O
+d'oncogénétique	O
+
+On	O
+confirme	O
+la	O
+
+Proposition	O
+
+Proposition	O
+d'inclusion	O
+dans	O
+un	O
+essai	O
+thérapeutique	O
+:	O
+Non	O
+
+Proposition	O
+de	O
+préservation	O
+de	O
+la	O
+fertilité	O
+:	O
+Non	O
+
+Indication	O
+d'onco-génétique	O
+:	O
+Oui	O
+
+Suspicion	O
+de	O
+pathologie	O
+professionnelle	O
+:	O
+Non	O
+

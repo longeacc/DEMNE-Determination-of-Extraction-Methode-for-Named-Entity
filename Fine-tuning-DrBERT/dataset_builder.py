@@ -26,6 +26,14 @@ from typing import Any
 import datasets
 from transformers import AutoTokenizer, PreTrainedTokenizerBase
 
+# Robust import of the BRAT→CoNLL converter whether this module is imported
+# as a package (``from .brat_to_conll``) or as a flat top-level module
+# (``python dataset_builder.py`` / ``from dataset_builder import …``).
+try:
+    from .brat_to_conll import convert_corpus
+except ImportError:
+    from brat_to_conll import convert_corpus
+
 logger = logging.getLogger(__name__)
 
 SEED = 42
@@ -341,13 +349,60 @@ def tokenize_and_align(
 # High-level builder
 # ---------------------------------------------------------------------------
 
+# Default CoNLL cache directory (next to this module), used when explicit
+# corpus paths are supplied without a corpus_dir to anchor the cache.
+_DEFAULT_CONLL_CACHE = Path(__file__).resolve().parent / "data" / "conll"
+
+
+def resolve_corpus_dirs(
+    corpus_dir: Path | None = None,
+    corpus_paths: dict[str, Path] | None = None,
+) -> dict[str, Path]:
+    """Resolve the set of ``{corpus_name: brat_dir}`` to load.
+
+    Two mutually-compatible modes:
+
+    - ``corpus_paths``: explicit mapping of corpus name → BRAT directory
+      (each containing ``.txt``/``.ann`` pairs). Takes priority.
+    - ``corpus_dir``: legacy mode — a root holding the canonical
+      sub-folders ``cantemist/``, ``redjdal/``, ``rcp_esmo/``.
+
+    Args:
+        corpus_dir: Optional legacy root directory.
+        corpus_paths: Optional explicit name→path mapping.
+
+    Returns:
+        Ordered mapping of corpus name → existing BRAT directory.
+    """
+
+    resolved: dict[str, Path] = {}
+
+    if corpus_paths:
+        for name, path in corpus_paths.items():
+            p = Path(path)
+            if p.is_dir():
+                resolved[name] = p
+            else:
+                logger.warning("Corpus path not found: %s — skipping", p)
+
+    if corpus_dir is not None:
+        for corpus_key, subdir_name in CORPUS_SUBDIRS.items():
+            brat_dir = Path(corpus_dir) / subdir_name
+            if brat_dir.is_dir() and corpus_key not in resolved:
+                resolved[corpus_key] = brat_dir
+
+    return resolved
+
+
 def build_dataset(
-    corpus_dir: Path,
+    corpus_dir: Path | None = None,
     model_name: str = "Dr-BERT/DrBERT-7GB",
     max_length: int = 512,
     train_ratio: float = TRAIN_RATIO,
     seed: int = SEED,
     output_dir: Path | None = None,
+    corpus_paths: dict[str, Path] | None = None,
+    conll_cache: Path | None = None,
 ) -> tuple[datasets.DatasetDict, dict[str, int], dict[int, str]]:
     """End-to-end dataset construction pipeline.
 
@@ -359,33 +414,42 @@ def build_dataset(
     6. Returns a HuggingFace DatasetDict.
 
     Args:
-        corpus_dir: Root directory with sub-folders ``cantemist/``,
-            ``redjdal/``, ``rcp_esmo/`` containing BRAT files.
+        corpus_dir: Legacy root directory with sub-folders ``cantemist/``,
+            ``redjdal/``, ``rcp_esmo/`` containing BRAT files. Optional if
+            ``corpus_paths`` is given.
         model_name: HuggingFace model identifier for the tokenizer.
         max_length: Maximum sequence length.
         train_ratio: Train split fraction.
         seed: Random seed.
         output_dir: If provided, save the DatasetDict to disk.
+        corpus_paths: Explicit mapping ``{corpus_name: brat_dir}``. Takes
+            priority over ``corpus_dir``.
+        conll_cache: Directory for cached ``.conll`` output. Defaults to a
+            sub-folder of ``corpus_dir`` (legacy) or ``<module>/data/conll``.
 
     Returns:
         Tuple of ``(dataset_dict, label2id, id2label)``.
     """
 
-    from .brat_to_conll import convert_corpus
+    corpus_dirs = resolve_corpus_dirs(corpus_dir=corpus_dir, corpus_paths=corpus_paths)
+    if not corpus_dirs:
+        raise RuntimeError(
+            "No corpus directories resolved. Provide --corpus_path name=dir "
+            "entries, or a --corpus_dir containing cantemist/, redjdal/, "
+            "rcp_esmo/ sub-folders."
+        )
 
     # Step 1 — Convert BRAT → CoNLL (idempotent)
-    conll_root = corpus_dir / "_conll_cache"
+    if conll_cache is not None:
+        conll_root = Path(conll_cache)
+    elif corpus_dir is not None:
+        conll_root = Path(corpus_dir) / "_conll_cache"
+    else:
+        conll_root = _DEFAULT_CONLL_CACHE
 
     all_sentences: list[ConllSentence] = []
 
-    for corpus_key, subdir_name in CORPUS_SUBDIRS.items():
-        brat_dir = corpus_dir / subdir_name
-        if not brat_dir.is_dir():
-            logger.warning(
-                "Corpus sub-directory not found: %s — skipping", brat_dir
-            )
-            continue
-
+    for corpus_key, brat_dir in corpus_dirs.items():
         conll_dir = conll_root / corpus_key
         if not any(conll_dir.glob("*.conll")):
             logger.info("Converting BRAT→CoNLL for [%s]…", corpus_key)
@@ -396,9 +460,8 @@ def build_dataset(
 
     if not all_sentences:
         raise RuntimeError(
-            f"No sentences loaded from any corpus under {corpus_dir}. "
-            "Check that at least one sub-directory (cantemist/, redjdal/, "
-            "rcp_esmo/) exists and contains .txt/.ann pairs."
+            f"No sentences loaded from corpora: {list(corpus_dirs)}. "
+            "Check that each directory contains .txt/.ann pairs."
         )
 
     logger.info("Total sentences loaded: %d", len(all_sentences))
@@ -445,6 +508,36 @@ def build_dataset(
     return ds, label2id, id2label
 
 
+def parse_corpus_paths(items: list[str]) -> dict[str, Path]:
+    """Parse repeated ``NAME=DIR`` CLI strings into a ``{name: Path}`` dict.
+
+    A bare path without ``=`` uses the directory's own name as the corpus
+    key. Raises ``ValueError`` on duplicate names.
+
+    Args:
+        items: List of ``"name=path"`` (or bare ``"path"``) strings.
+
+    Returns:
+        Ordered mapping of corpus name → Path.
+    """
+
+    paths: dict[str, Path] = {}
+    for item in items:
+        if "=" in item:
+            name, _, raw = item.partition("=")
+            name = name.strip()
+            path = Path(raw.strip())
+        else:
+            path = Path(item.strip())
+            name = path.name
+        if not name:
+            raise ValueError(f"Empty corpus name in --corpus_path entry: {item!r}")
+        if name in paths:
+            raise ValueError(f"Duplicate corpus name: {name!r}")
+        paths[name] = path
+    return paths
+
+
 def _log_label_stats(sentences: list[ConllSentence]) -> None:
     """Log entity label distribution for diagnostic purposes."""
 
@@ -480,8 +573,15 @@ def main() -> None:
     parser.add_argument(
         "--corpus_dir",
         type=Path,
-        required=True,
-        help="Root directory containing cantemist/, redjdal/, rcp_esmo/.",
+        default=None,
+        help="Legacy root directory containing cantemist/, redjdal/, rcp_esmo/.",
+    )
+    parser.add_argument(
+        "--corpus_path",
+        action="append",
+        default=[],
+        metavar="NAME=DIR",
+        help="Explicit corpus as name=path to a BRAT directory. Repeatable.",
     )
     parser.add_argument(
         "--output_dir",
@@ -504,8 +604,13 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    corpus_paths = parse_corpus_paths(args.corpus_path)
+    if not corpus_paths and args.corpus_dir is None:
+        parser.error("Provide at least one --corpus_path NAME=DIR or --corpus_dir.")
+
     ds, label2id, id2label = build_dataset(
         corpus_dir=args.corpus_dir,
+        corpus_paths=corpus_paths or None,
         model_name=args.model_name,
         max_length=args.max_length,
         output_dir=args.output_dir,

@@ -1,0 +1,489 @@
+# doc_id = -7212669882564062981
+Réunion	O
+de	O
+Concertation	O
+Pluridisciplinaire	O
+
+Clinique	O
+Hartmann	O
+
+SEIN	O
+GYNECO	O
+HARTMANN	O
+
+le	O
+11/07/2022	O
+
+Patient	O
+
+Nom	O
+:	O
+amakraz	O
+Prénom	O
+:	O
+haran	O
+Sexe	O
+:	O
+Feminin	O
+
+Date	O
+de	O
+naissance	O
+:	O
+25/07/1961	O
+(	O
+60	O
+ans	O
+)	O
+
+Contexte	O
+de	O
+la	O
+RCP	O
+
+Date	O
+:	O
+11/07/2022	O
+Motif	O
+de	O
+la	O
+RCP	O
+:	O
+Proposition	O
+de	O
+traitement	O
+
+Cas	O
+discuté	O
+en	O
+RCP	O
+
+Médecin	O
+demandeur	O
+:	O
+GUILLOT	O
+EUGENIE	O
+-	O
+RPPS	O
+:	O
+10005175897	O
+
+Médecin	O
+présentateur	O
+:	O
+GUILLOT	O
+EUGENIE	O
+-	O
+RPPS	O
+:	O
+10005175897	O
+
+Médecin	O
+référent	O
+:	O
+GUILLOT	O
+ZOKOUEHI	O
+-	O
+RARZOGLOU	O
+:	O
+10005175897	O
+
+Président	O
+de	O
+séance	O
+:	O
+SEBBAN	O
+Eric	O
+-	O
+10003953436	O
+
+Etablissement	O
+présentateur	O
+:	O
+Clinique	O
+Hartmann	O
+
+Informations	O
+cliniques	O
+et	O
+para-cliniques	O
+
+Circonstance	O
+de	O
+la	O
+découverte	O
+:	O
+Dépistage	O
+individuel	O
+
+OMS	O
+:	O
+0:	O
+Activité	O
+extérieure	O
+normale	O
+sans	O
+restriction	O
+
+Siège	O
+de	O
+la	O
+tumeur	O
+discuté	O
+en	O
+RCP	O
+
+Appareil	O
+:	O
+Sénologie	O
+Organe	O
+:	O
+sein	O
+Latéralité	O
+:	O
+Bilatéral	O
+
+Facteurs	O
+pronostiques	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+:	O
+
+ATCD	O
+DE	O
+CCIS	O
+microinvasif	O
+DU	O
+SEIN	O
+GAUCHE	O
+EN	O
+2002:	O
+tumorectomie	O
+et	O
+curage	O
+axillaire	O
+puis	O
+radiothérapie	O
+
+15	O
+juin	O
+2022	O
+:	O
+mammographie	O
+et	O
+echographie	O
+de	O
+surveillance:	O
+
+sein	O
+gauche	O
+ACR2,	O
+sein	O
+droit	O
+:	O
+surcroit	O
+d'opacité	O
+du	O
+QSE	O
+droit	O
+de	O
+10	O
+mm	O
+,	O
+ACR5,	O
+pas	O
+de	O
+ganglion	O
+suspect	O
+
+Microbiopsie	O
+sous	O
+échographie	O
+le	O
+21	O
+juin	O
+2022	O
+:	O
+CLI	O
+grade	O
+2	O
+,	O
+RH-,	B-Estrogen_receptor
+HER2-,	B-HER2_status
+KI67	B-Ki67
+7%	I-Ki67
+
+IRM	O
+mammaire	O
+le	O
+4	O
+juin	O
+2022	O
+:	O
+lésion	O
+ACR6	O
+unifocale	O
+du	O
+QSE	O
+droit	O
+de	O
+15	O
+mm	O
+sans	O
+adénopathie	O
+suspecte	O
+
+Biologie	O
+:	O
+Ca15.3	O
+normal,	O
+Bilan	O
+hépatique	O
+normal	O
+
+Tep	O
+scanner	O
+prévu	O
+le	O
+11	O
+juillet	O
+
+Proposition	O
+du	O
+médecin	O
+demandeur	O
+:	O
+
+chirurgie	O
+premiere	O
+
+Proposition	O
+de	O
+prise	O
+en	O
+charge	O
+
+Nature	O
+de	O
+la	O
+proposition	O
+:	O
+Mise	O
+en	O
+traitement	O
+
+Type	O
+de	O
+proposition	O
+:	O
+Application	O
+referentiel	O
+
+Nature	O
+de	O
+la	O
+proposition	O
+:	O
+
+Type	O
+de	O
+proposition	O
+:	O
+
+Plan	O
+thérapeutique	O
+:	O
+
+Date	O
+de	O
+validation	O
+:	O
+2Page	O
+:	O
+1	O
+/	O
+
+Chirurgie	O
+
+Médecin	O
+présents	O
+en	O
+RCP	O
+:	O
+
+Essai	O
+thérapeutique	O
+:	O
+Non	O
+
+Proposition	O
+thérapeutique	O
+
+Référentiel	O
+:	O
+Oui	O
+
+Date	O
+de	O
+validation	O
+:	O
+07/07/2022	O
+
+Description	O
+de	O
+la	O
+proposition	O
+thérapeutique	O
+
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+11/07/2022	O
+
+chirurgie	O
+premiere	O
+
+Participants	O
+et	O
+présents	O
+
+Docteur	O
+ANTOINE	O
+ERIC	O
+KOCENTINI	O
+-	O
+Médecin	O
+-	O
+Oncologie	O
+médicale	O
+-	O
+RPPS	O
+:	O
+10003700787	O
+
+Madame	O
+BERDA	O
+BETTEROBOUDINET	O
+-	O
+Secrétaire	O
+médicale	O
+-	O
+-	O
+Secrétaire	O
+RCP	O
+
+Docteur	O
+DARMON	O
+SERWAKA	O
+-	O
+Médecin	O
+-	O
+Oncologie	O
+-	O
+Radiothérapie	O
+-	O
+Radiothérapie	O
+-	O
+RPPS	O
+:	O
+101.34.61.09.86	O
+
+Docteur	O
+GARDAIR	O
+LOIRET	O
+-	O
+Médecin	O
+-	O
+Anatomie	O
+et	O
+cytologie	O
+pathologie	O
+-	O
+RPPS	O
+:	O
+10617787852	O
+
+Docteur	O
+GUILLOT	O
+ZOKOUEHI	O
+-	O
+Médecin	O
+-	O
+Gynécologie	O
+obstétrique	O
+-	O
+RPPS	O
+:	O
+10005175897	O
+
+Docteur	O
+HAMOU	O
+PLOTKINE	O
+NGANSOPNANKAM	O
+-	O
+Médecin	O
+-	O
+Gynécologie	O
+médicale	O
+-	O
+RPPS	O
+:	O
+10005185557	O
+
+Docteur	O
+NAOURA	O
+VINOGRADCHAYA	O
+-	O
+Médecin	O
+-	O
+Gynécologie	O
+obstétrique	O
+-	O
+RPPS	O
+:	O
+10651110028FILS	O
+
+Docteur	O
+SARFATI	O
+BONACCI	O
+-	O
+Médecin	O
+-	O
+Chirurgie	O
+plastique	O
+et	O
+reconstructive	O
+-	O
+RPPS	O
+:	O
+106.60.07.52.53	O
+
+Docteur	O
+SEBBAN	O
+HUZOUSKI	O
+-	O
+Médecin	O
+-	O
+Chirurgie	O
+générale	O
+-	O
+RPPS	O
+:	O
+10003953436	O
+
+amakraz	O
+haran	O
+Date	O
+de	O
+validation	O
+:	O
+2Page	O
+:	O
+2	O
+/	O
+

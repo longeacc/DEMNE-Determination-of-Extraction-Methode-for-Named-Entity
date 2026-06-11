@@ -1,0 +1,272 @@
+# doc_id = Pat102
+Pat102	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+76	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+
+Poids	O
+:	O
+59.00	O
+kg	O
+Le	O
+[	O
+198	O
+jours	O
+avant	O
+RCP	O
+]	O
+IMC	O
+(Quetelet)	O
+:	O
+24.2	O
+kg/m	O
+2	O
+G8	O
+:	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Données	O
+Médicales	O
+:	O
+
+2	O
+
+Taille	O
+:	O
+156	O
+cm	O
+Le	O
+[	O
+198	O
+jours	O
+avant	O
+RCP	O
+]	O
+SC	O
+(Dubois)	O
+:	O
+1.58	O
+m	O
+
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Pour	O
+rappel,	O
+patient	O
+transgenre	O
+suivi	O
+par	O
+[MEDECIN	O
+REFERANT]pour	O
+un	O
+cancer	O
+du	O
+sein	O
+droit	O
+en	O
+[	O
+213	O
+jours	O
+avant	O
+RCP	O
+]	O
+survenu	O
+sous	O
+androtardyl.	O
+
+Mastectomie	O
+droite	O
+en	O
+[	O
+213	O
+jours	O
+avant	O
+RCP	O
+]	O
+
+-Mastectomie	O
+droite	O
+:	O
+carcinome	O
+lobulaire	O
+infiltrant	O
+mesurant	O
+histologiquement	O
+18	O
+x	O
+16	O
+x	O
+14	O
+mm	O
+de	O
+grade	O
+2	O
+de	O
+malignité	O
+selon	O
+Elston	O
+et	O
+Ellis	O
+(3+2+2).	O
+
+RO	B-Estrogen_receptor
+90%	I-Estrogen_receptor
+RP	B-Progesterone_receptor
+95%	I-Progesterone_receptor
+HER2	B-HER2_IHC
+score	I-HER2_IHC
+2	I-HER2_IHC
+Ki67	B-Ki67
+20%	I-Ki67
+RA	O
+95%	O
+;	O
+E-CADHERINE	O
+(ZYMED	O
+clone	O
+4A2C7,	O
+1/100)	O
+:	O
+
+négatif.	O
+
+Stade	O
+pTNM	O
+AJCC	O
+2017,	O
+8e	O
+édition	O
+:	O
+pT1c	O
+N0.	O
+
+RCP	O
+[	O
+168	O
+jours	O
+avant	O
+RCP	O
+]	O
+:	O
+Indication	O
+à	O
+une	O
+radiothérapie	O
+de	O
+paroi	O
++	O
+Tamoxifène	O
+
+Sous	O
+Tamoxifène	O
+actuellement,	O
+arrêt	O
+de	O
+l'androtardyl	O
+
+Se	O
+plaint	O
+de	O
+leucorrhée	O
+et	O
+prurit	O
+vulvaire	O
+résistant	O
+au	O
+Lomexin	O
+
+Compte	O
+tenu	O
+du	O
+statut	O
+hormonal	O
+de	O
+ce	O
+patient	O
+correspondant	O
+en	O
+réalité	O
+après	O
+arrêt	O
+de	O
+l'Androtardyl	O
+a	O
+celui	O
+d'une	O
+femme	O
+ménopausée	O
+se	O
+pose	O
+la	O
+question	O
+d'un	O
+relai	O
+du	O
+Tamoxifene	O
+par	O
+les	O
+inhibiteurs	O
+de	O
+l'aromatase	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Proposition	O
+de	O
+décision	O
+
+En	O
+cas	O
+de	O
+mauvaise	O
+tolérance	O
+du	O
+Tamoxifène	O
+relais	O
+par	O
+inhibiteurs	O
+de	O
+l'aromatase.	O
+

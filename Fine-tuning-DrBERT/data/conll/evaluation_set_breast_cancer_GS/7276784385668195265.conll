@@ -1,0 +1,1405 @@
+# doc_id = 7276784385668195265
+1	O
+Mme	O
+conchi	O
+jaafarbinabdrahmn	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+06.47.33.16.22	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+rowenn	O
+BONAFEHIDVEGHYDEBARSONYETDEPACZOLA	O
+
+Responsable	O
+
+0751232335	O
+
+Signataire	O
+:	O
+Dr	O
+MAZRY	O
+yvonnejanine	O
+
+Paris	O
+le	O
+02/09/2022	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+jaafarbinabdrahmn	O
+conchi	O
+
+Né(e)	O
+le	O
+01/01/1948	O
+-	O
+NIP	O
+:	O
+8001592850	O
+
+Correspondants	O
+:	O
+
+Dr	O
+DUFORT-KAPTCHAVI	O
+alexandraalice,	O
+Dr	O
+valar	O
+MEZALIBRUSA,	O
+Dr	O
+BOYACIYAN	O
+alishbah,	O
+Dr	O
+KINGAMOU	O
+joshan	O
+
+Compte	O
+rendu	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Il	O
+s'agit	O
+donc	O
+d'une	O
+patiente	O
+ayant	O
+eu	O
+un	O
+premier	O
+un	O
+cancer	O
+du	O
+sein	O
+en	O
+2000.	O
+
+Il	O
+s'agissait	O
+d'un	O
+carcinome	O
+intracanalaire	O
+avec	O
+un	O
+foyer	O
+de	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+4	O
+mm	O
+de	O
+grade	O
+1.	O
+
+Elle	O
+avait	O
+été	O
+reprise	O
+avec	O
+une	O
+mastectomie-curage	O
+axillaire	O
+et	O
+les	O
+cinq	O
+ganglions	O
+étaient	O
+négatifs.	O
+
+Il	O
+n'y	O
+avait	O
+
+pas	O
+d'autre	O
+lésion	O
+associée	O
+sur	O
+la	O
+reprise	O
+chirurgicale.	O
+
+Il	O
+n'y	O
+avait	O
+pas	O
+eu	O
+de	O
+traitement	O
+adjuvant.	O
+
+Elle	O
+avait	O
+donc	O
+ensuite	O
+été	O
+surveillée	O
+par	O
+le	O
+Dr	O
+CILUFFO	O
+à	O
+St	O
+Louis	O
+et	O
+lors	O
+de	O
+la	O
+dernière	O
+consultation	O
+en	O
+2014,	O
+il	O
+
+n'y	O
+avait	O
+rien	O
+de	O
+particulier	O
+avec	O
+une	O
+mammographie	O
+contro-latérale	O
+normale	O
+(sein	O
+droit)	O
+et	O
+elle	O
+avait	O
+poursuivi	O
+son	O
+
+suivi	O
+en	O
+ville.	O
+
+En	O
+2018,	O
+est	O
+apparue	O
+une	O
+récidive	O
+controlatérale.	O
+
+Il	O
+s'agissait	O
+d'une	O
+masse	O
+de	O
+17	O
+mm,	O
+RO	B-Estrogen_receptor
++100	I-Estrogen_receptor
+%,	I-Estrogen_receptor
+RP	B-Progesterone_receptor
++90	I-Progesterone_receptor
+%,	I-Progesterone_receptor
+KI	B-Ki67
+
+50	I-Ki67
+%,	I-Ki67
+Her-2	B-HER2_IHC
+modéré	I-HER2_IHC
+avec	O
+un	O
+SISH	B-HER2_FISH
+non	I-HER2_FISH
+contributif	I-HER2_FISH
+qui	O
+avait	O
+été	O
+traitée	O
+par	O
+mastectomie-GS.	O
+
+Il	O
+n'y	O
+avait	O
+pas	O
+
+d'envahissement	O
+ganglionnaire.	O
+
+La	O
+patiente	O
+avait	O
+refusé	O
+la	O
+chimiothérapie	O
+et	O
+avait	O
+donc	O
+eu	O
+un	O
+traitement	O
+
+adjuvant	O
+par	O
+Arimidex.	O
+
+Lors	O
+de	O
+son	O
+suivi	O
+par	O
+le	O
+Dr	O
+valar,	O
+il	O
+y	O
+avait	O
+eu	O
+un	O
+doute	O
+sur	O
+une	O
+récidive	O
+métastatique	O
+fin	O
+2018.	O
+
+Il	O
+
+s'agissait	O
+en	O
+fait	O
+d'une	O
+tuberculose	O
+qui	O
+a	O
+été	O
+traitée.	O
+
+Elle	O
+a	O
+donc	O
+vu	O
+en	O
+janvier	O
+2020	O
+le	O
+Dr	O
+valar.	O
+
+L'examen	O
+clinique	O
+était	O
+sans	O
+particularité	O
+mais	O
+le	O
+bilan	O
+biologique	O
+
+retrouvait	O
+un	O
+ACE	O
+à	O
+21,8	O
+(versus	O
+2,8)	O
+et	O
+CA	O
+15-3	O
+à	O
+73,6	O
+(versus	O
+16,6).	O
+
+Elle	O
+a	O
+lui	O
+a	O
+donc	O
+demandé	O
+un	O
+scanner	O
+thoraco-abdomino-pelvien	O
+avec	O
+injection	O
+et	O
+celui-ci	O
+retrouve	O
+l'apparition	O
+
+de	O
+plusieurs	O
+lésions	O
+osseuses	O
+suspectes	O
+mixtes	O
+L5	O
+et	O
+lytiques	O
+de	O
+T2,	O
+sans	O
+envahissement	O
+canalaire	O
+
+évident,	O
+sans	O
+lésion	O
+évoquant	O
+une	O
+épidurite.	O
+
+A	O
+l'examen	O
+clinique	O
+initial,	O
+elle	O
+pesait	O
+78kg	O
+pour	O
+1m55,	O
+il	O
+n'y	O
+avait	O
+pas	O
+de	O
+masse	O
+palpé,	O
+ni	O
+au	O
+niveau	O
+de	O
+la	O
+cicatrice	O
+
+de	O
+mastectomie	O
+du	O
+sein	O
+droit	O
+ni	O
+du	O
+sein	O
+gauche,	O
+les	O
+aires	O
+ganglionnaires	O
+étaient	O
+libres,	O
+l'auscultation	O
+pulmonaire	O
+
+était	O
+normale	O
+et	O
+il	O
+n'y	O
+avait	O
+pas	O
+de	O
+douleurs	O
+à	O
+la	O
+percussion	O
+des	O
+épineuses.	O
+
+Nous	O
+avions	O
+demandés	O
+une	O
+confrontation	O
+histologique	O
+avec	O
+le	O
+SISH	O
+non	O
+contributif	O
+de	O
+la	O
+récidive	O
+de	O
+2018,	O
+qui	O
+était	O
+
+confirmée	O
+par	O
+une	O
+absence	B-HER2_FISH
+d'amplification	I-HER2_FISH
+d'HER2.	I-HER2_FISH
+
+Elle	O
+a	O
+eu	O
+la	O
+biopsie	O
+le	O
+5	O
+février	O
+2021.	O
+
+Elle	O
+a	O
+préféré	O
+temporiser	O
+l'indication	O
+de	O
+cimentoplastie	O
+du	O
+fait	O
+de	O
+la	O
+pandémie	O
+
+Covid.	O
+
+Par	O
+ailleurs,	O
+elle	O
+a	O
+sa	O
+2ème	O
+injection	O
+demain.	O
+
+Elle	O
+a	O
+débuté	O
+un	O
+traitement	O
+par	O
+VERZENIOS-FASLODEX	O
+en	O
+février	O
+
+2021.	O
+
+A	O
+150mg,	O
+elle	O
+s'est	O
+plaint	O
+de	O
+nombreuses	O
+diarrhées	O
+et	O
+a	O
+motivé	O
+une	O
+diminution	O
+de	O
+la	O
+dose	O
+à	O
+100mg.	O
+
+Depuis	O
+
+elle	O
+va	O
+beaucoup	O
+mieux,	O
+elle	O
+a	O
+une	O
+diarrhée	O
+occasionnelle,	O
+elle	O
+prend	O
+si	O
+besoin	O
+de	O
+l'IMODIUM	O
+mais	O
+pas	O
+de	O
+manière	O
+
+2	O
+Mme	O
+conchi	O
+jaafarbinabdrahmn	O
+
+systématique.	O
+
+Elle	O
+fait	O
+attention	O
+à	O
+ce	O
+qu'elle	O
+mange	O
+et	O
+elle	O
+a	O
+perdu	O
+3	O
+kg,	O
+elle	O
+fait	O
+75	O
+kg.	O
+
+La	O
+patiente	O
+avait	O
+arrêté	O
+spontanément	O
+le	O
+traitement	O
+par	O
+VERZENIOS	O
+pour	O
+des	O
+brûlures	O
+de	O
+l'estomac	O
+et	O
+des	O
+
+troubles	O
+de	O
+l'humeur.	O
+
+Nous	O
+avions	O
+donc	O
+switcher	O
+par	O
+du	O
+PALBOCICLIB	O
+en	O
+août	O
+2021.	O
+
+Devant	O
+une	O
+progression	O
+biologique,	O
+je	O
+lui	O
+ai	O
+demandé	O
+un	O
+scanner	O
+thoraco-abdomino-pelvien.	O
+
+Celui-ci	O
+retrouve	O
+
+une	O
+progression	O
+osseuse	O
+au	O
+niveau	O
+de	O
+T2	O
+et	O
+l'apparition	O
+d'une	O
+métastase	O
+au	O
+niveau	O
+de	O
+L5.	O
+
+Notamment	O
+avec	O
+une	O
+
+lyse	O
+focale	O
+du	O
+mur	O
+postérieur.	O
+
+Celle-ci	O
+est	O
+parfaitement	O
+asymptomatique.	O
+
+Nous	O
+avons	O
+discuté	O
+son	O
+dossier	O
+en	O
+RCP	O
+le	O
+26	O
+novembre	O
+2021	O
+et	O
+convenu	O
+d'un	O
+traitement	O
+par	O
+XELODA.	O
+
+Absence	O
+
+de	O
+déficit	O
+en	O
+DPD.	O
+
+Elle	O
+a	O
+eu	O
+une	O
+IRM	O
+du	O
+rachis	O
+le	O
+21	O
+décembre	O
+2021,	O
+retrouvant	O
+plusieurs	O
+localisations	O
+secondaires	O
+avec	O
+épidurite	O
+en	O
+
+T2.	O
+
+Elle	O
+a	O
+donc	O
+été	O
+vue	O
+en	O
+radiothérapie	O
+en	O
+27	O
+décembre	O
+2021,	O
+pour	O
+l'organisation	O
+d'une	O
+radiothérapie	O
+T1-T3	O
+à	O
+la	O
+
+dose	O
+de	O
+30Gy	O
+en	O
+10	O
+fractions.	O
+
+Celle-ci	O
+s'est	O
+terminée	O
+il	O
+y	O
+a	O
+1	O
+mois.	O
+
+Sa	O
+consultation	O
+de	O
+radiothérapie	O
+est	O
+prévue	O
+
+demain.	O
+
+=>	O
+Lors	O
+de	O
+sa	O
+consultation	O
+auprès	O
+du	O
+Dr	O
+BONNET-FAUSSAU	O
+le	O
+16/02/2022,	O
+le	O
+patiente	O
+allait	O
+bien.	O
+
+Le	O
+
+XELODA	O
+était	O
+parfaitement	O
+toléré,	O
+pas	O
+de	O
+diarrhée,	O
+pas	O
+d'aphte.	O
+
+L'examen	O
+clinique	O
+était	O
+sans	O
+particularité.	O
+
+Absence	O
+de	O
+prise	O
+de	O
+sang	O
+récente.	O
+
+Consultation	O
+de	O
+fin	O
+de	O
+radiothérapie	O
+en	O
+février	O
+2022,	O
+à	O
+visée	O
+antalgique	O
+de	O
+T1	O
+à	O
+T3.	O
+
+=>	O
+Le	O
+12	O
+mai	O
+2022,	O
+je	O
+rencontrais	O
+Madame	O
+jaafarbinabdrahmn,	O
+accompagnée	O
+de	O
+sa	O
+fille.	O
+
+Elle	O
+présentait	O
+une	O
+mauvaise	O
+tolérance	O
+du	O
+XELODA	O
+avec	O
+un	O
+syndrome	O
+mains-pieds	O
+grade	O
+3,	O
+une	O
+sensation	O
+
+vertigineuse	O
+et	O
+une	O
+asthénie	O
+grade	O
+2.	O
+
+Elle	O
+avait	O
+suspendu	O
+son	O
+traitement	O
+depuis	O
+3	O
+semaines.	O
+
+A	O
+l'examen	O
+clinique	O
+:	O
+75kg,	O
+1m40.	O
+
+Examen	O
+sans	O
+particularité,	O
+notamment	O
+pas	O
+de	O
+douleur	O
+à	O
+la	O
+palpation	O
+des	O
+
+épineuses,	O
+pas	O
+d'hépatomégalie,	O
+auscultation	O
+pulmonaire	O
+normale.	O
+
+Analyse	O
+de	O
+sang	O
+du	O
+10/05/22	O
+:	O
+élévation	O
+des	O
+GGT	O
+à	O
+4	O
+fois	O
+la	O
+norme,	O
+glycémies	O
+à	O
+jeun	O
+à	O
+1,32	O
+g/L	O
+(non	O
+à	O
+jeun).	O
+
+Evolution	O
+dissociée	O
+des	O
+marqueurs	O
+avec	O
+a	O
+un	O
+CA	O
+15-3	O
+à	O
+129,7	O
+versus	O
+180	O
+le	O
+26/11/21,	O
+ACE	O
+à	O
+27,3	O
+ng/mL	O
+
+versus	O
+19,1	O
+le	O
+26/11/21.	O
+
+Carence	O
+en	O
+vitamine	O
+D.	O
+
+Il	O
+n'y	O
+avait	O
+pas	O
+eu	O
+d'imagerie	O
+de	O
+contrôle	O
+avant	O
+ce	O
+rendez-vous.	O
+
+J'avais	O
+reconduit	O
+le	O
+XELODA	O
+à	O
+dose	O
+diminuée	O
+(800mg/m²,	O
+2x/jour	O
+:	O
+soit	O
+1300mg	O
+matin	O
+et	O
+soir).	O
+
+=>	O
+Ce	O
+jour,	O
+29/08/2022	O
+:	O
+Madame	O
+jaafarbinabdrahmn	O
+présente	O
+des	O
+douleurs	O
+lombaires	O
+stables,	O
+sans	O
+irradiation	O
+aux	O
+
+membres	O
+inférieurs.	O
+
+Elle	O
+est	O
+en	O
+bon	O
+état	O
+général	O
+et	O
+tolère	O
+bien	O
+le	O
+XELODA	O
+à	O
+dose	O
+réduite,	O
+depuis	O
+mai	O
+2022	O
+
+(1300mg	O
+matin	O
+et	O
+soir).	O
+
+Examen	O
+clinique	O
+:	O
+71kg.	O
+
+Cicatrices	O
+de	O
+mastectomie	O
+régulières.	O
+
+Pas	O
+de	O
+masse	O
+palpable.	O
+
+Aires	O
+ganglionnaires	O
+
+libres.	O
+
+Abdomen	O
+pléthorique.	O
+
+Pas	O
+d'hépatosplénomégalie	O
+perçue.	O
+
+BHA	O
++,	O
+pas	O
+d'argument	O
+pour	O
+une	O
+TVP.	O
+
+Auscultation	O
+pulmonaire	O
+normale.	O
+
+Pas	O
+de	O
+douleur	O
+à	O
+la	O
+percussion	O
+des	O
+épineuses.	O
+
+Pas	O
+de	O
+déficit	O
+moteur.	O
+
+Examens	O
+paracliniques	O
+:	O
+
+Scanner	O
+thoraco-abdomino-pelvien	O
+du	O
+30/05/2022	O
+:	O
+majoration	O
+de	O
+l'aspect	O
+lytique	O
+de	O
+L5	O
+et	O
+lyse	O
+pédiculaire	O
+
+gauche	O
+L5	O
+débutante,	O
+comparativement	O
+à	O
+novembre	O
+2021.	O
+
+Embolie	O
+pulmonaire	O
+segmentaire	O
+bilatérale,	O
+sans	O
+
+retentissement	O
+sur	O
+les	O
+cavités	O
+cardiaques	O
+droites.	O
+
+RCP	O
+GHOST	O
+du	O
+14/06/2022	O
+:	O
+pas	O
+d'indication	O
+à	O
+un	O
+geste	O
+chirurgical	O
+au	O
+niveau	O
+de	O
+T2,	O
+en	O
+l'absence	O
+de	O
+signe	O
+
+clinique.	O
+
+Pas	O
+de	O
+radiothérapie	O
+de	O
+T2	O
+(a	O
+déjà	O
+été	O
+irradiée).	O
+
+Nous	O
+avons	O
+reporté	O
+une	O
+discussion	O
+sur	O
+un	O
+changement	O
+de	O
+ligne	O
+thérapeutique	O
+devant	O
+le	O
+départ	O
+de	O
+Madame	O
+
+jaafarbinabdrahmn	O
+à	O
+l'étranger	O
+pour	O
+plusieurs	O
+mois.	O
+
+Je	O
+reprogramme	O
+ce	O
+jour,	O
+un	O
+scanner	O
+thoraco-abdominopelvien,	O
+ainsi	O
+qu'une	O
+IRM	O
+du	O
+rachis.	O
+
+Analyse	O
+de	O
+sang	O
+du	O
+06/08/22	O
+:	O
+Hb	O
+11,8	O
+g/dL.	O
+
+VGM	O
+98.	O
+
+Leucocytes	O
+3500/mm³	O
+dont	O
+PNN	O
+à	O
+1660	O
+et	O
+monocytes	O
+
+340/mm³.	O
+
+Plaquettes	O
+209	O
+/mm³.	O
+
+ASAT	O
+17	O
+U/C.	O
+
+MAIN	O
+10	O
+U/L.	O
+
+GGT	O
+32	O
+U/L.	O
+
+PAL	O
+100	O
+U/L.	O
+
+Créatininémie	O
+44	O
+µmol/L	O
+
+avec	O
+DFG	O
+à	O
+110	O
+mL/min.	O
+
+Calcémie	O
+corrigée	O
+2,65	O
+mmol/L.	O
+
+Albuminémie	O
+40	O
+g/L.	O
+
+Nous	O
+ne	O
+disposons	O
+pas	O
+des	O
+marqueurs	O
+tumoraux	O
+ce	O
+jour.	O
+
+Je	O
+demande	O
+donc	O
+:	O
+
+Un	O
+contrôle	O
+de	O
+la	O
+calcémie	O
+corrigée,	O
+dès	O
+le	O
+30/08/2022,	O
+avec	O
+une	O
+indication	O
+à	O
+une	O
+hydratation	O
+importante.	O
+
+3	O
+Mme	O
+conchi	O
+jaafarbinabdrahmn	O
+
+Un	O
+TDM	O
+thoraco-abdomino-pelvien	O
+ainsi	O
+qu'une	O
+IRM	O
+du	O
+rachis,	O
+à	O
+la	O
+recherche	O
+d'une	O
+progression	O
+du	O
+cancer.	O
+
+Nous	O
+discuterons	O
+en	O
+RCP	O
+du	O
+dossier	O
+de	O
+Madame	O
+jaafarbinabdrahmn,	O
+sur	O
+l'indication	O
+d'unenouvelle	O
+ligne	O
+
+thérapeutique.	O
+
+Je	O
+reverrai	O
+Madame	O
+jaafarbinabdrahmn	O
+dans	O
+6	O
+semaines	O
+en	O
+consultation.	O
+
+A	O
+noter,	O
+prescription	O
+ce	O
+jour	O
+d'un	O
+panoramique	O
+dentaire,	O
+afin	O
+de	O
+pouvoir	O
+introduire	O
+un	O
+traitement	O
+par	O
+XGEVA.	O
+
+Bien	O
+confraternellement,	O
+
+Docteur	O
+joshan	O
+KINGAMOU	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+02/09/2022.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+fiqiret,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+gration	O
+
+Parmacologie	O
+:	O
+Dr	O
+olivier	O
+
+Arc	O
+:	O
+Mme	O
+tasmiyaahmed.	O
+
+IDE	O
+:	O
+Mme	O
+alexandrarolan,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+progression	O
+osseuse.	O
+
+Souhaite	O
+repartir	O
+et	O
+traitement	O
+oral	O
+
+Conclusion	O
+
+Exemestane-Everolimus	O
+

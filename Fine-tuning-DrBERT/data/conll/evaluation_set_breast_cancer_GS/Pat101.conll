@@ -1,0 +1,337 @@
+# doc_id = Pat101
+Pat101	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+65	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+
+Poids	O
+:	O
+56.00	O
+kg	O
+Le	O
+[	O
+24	O
+jours	O
+avant	O
+RCP	O
+]	O
+IMC	O
+(Quetelet)	O
+:	O
+22.4	O
+kg/m	O
+2	O
+
+Taille	O
+:	O
+158	O
+cm	O
+Le	O
+[	O
+24	O
+jours	O
+avant	O
+RCP	O
+]	O
+SC	O
+(Dubois)	O
+:	O
+1.56	O
+m2	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Résultats	O
+histo	O
+
+Données	O
+Médicales	O
+:	O
+
+Motif	O
+de	O
+présentation	O
+Résultats	O
+histo	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Patiente	O
+de	O
+64	O
+ans.	O
+
+Ménopausée	O
+depuis	O
+l'âge	O
+de	O
+50	O
+ans.	O
+
+Nulligeste	O
+
+ATCD	O
+:	O
+amygdalectomie/appendicectomie/	O
+2	O
+EP	O
+en	O
+[	O
+10936	O
+jours	O
+avant	O
+RCP	O
+]	O
+et	O
+1992/ulcère	O
+duodénal/dépresion.	O
+
+Père	O
+:	O
+cancer	O
+des	O
+glandes	O
+salivaires.	O
+
+Frère	O
+:	O
+cancer	O
+des	O
+poumons	O
+(tabac)	O
+
+Mammographie	O
+bilatérale	O
+de	O
+dépistage	O
+:	O
+foyer	O
+de	O
+microcalcification	O
+de	O
+30	O
+X	O
+15	O
+mm	O
+ACR4B	O
+du	O
+sein	O
+gauche.	O
+
+sein	O
+droit	O
+ACR2	O
+
+Macrobiopsie	O
+:	O
+carcinome	O
+canalaire	O
+in	O
+situ	O
+de	O
+haut	O
+grade	O
+avec	O
+nécrose.	O
+
+Mammographie	O
+post	O
+macrobiopsie	O
+:	O
+persistance	O
+d'un	O
+foyer	O
+de	O
+microcalcifications	O
+de	O
+20	O
+X	O
+15	O
+mm	O
+
+Cliniquement	O
+:	O
+85B.	O
+
+T0N0.	O
+(hématome	O
+de	O
+macrobiopsie	O
+rétroaréolaire)	O
+.	O
+
+RCP	O
+[	O
+42	O
+jours	O
+avant	O
+RCP	O
+]	O
+Proposition	O
+de	O
+tumorectomie	O
+après	O
+repérage	O
+et	O
+oncoplastie	O
+par	O
+round	O
+block	O
+
+Résultats	O
+anatomopathologiques	O
+:	O
+
+Tumorectomie	O
+du	O
+sein	O
+gauche	O
+:	O
+
+Carcinome	O
+canalaire	O
+in	O
+situ	O
+de	O
+haut	O
+grade	O
+nucléaire,	O
+identifié	O
+au	O
+pourtour	O
+des	O
+cicatrcies	O
+de	O
+macrobiopsies	O
+sur	O
+une	O
+taille	O
+de	O
+20	O
+mm.	O
+
+Absence	O
+de	O
+composante	O
+carcinomateuse	O
+infiltrante.	O
+
+La	O
+lésion	O
+carcinomateuse	O
+in	O
+situ	O
+est	O
+située	O
+au	O
+minimum	O
+à	O
+0,4	O
+mm	O
+de	O
+la	O
+limite	O
+interne	O
+et	O
+à	O
+0,5	O
+mm	O
+de	O
+la	O
+limite	O
+superficielle.	O
+
+Recoupes	O
+inférieure,	O
+supérieure,	O
+interne	O
+et	O
+externe:	O
+toutes	O
+indemnes	O
+de	O
+lésion	O
+carcinomateuse	O
+in	O
+situ	O
+ou	O
+invasive.	O
+
+Proposition	O
+:	O
+radiothérapie	O
+du	O
+sein	O
+gauche	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Proposition	O
+de	O
+décision	O
+
+On	O
+confirme	O
+la	O
+
+Proposition	O
+.	O
+
+Proposition	O
+d'inclusion	O
+dans	O
+un	O
+essai	O
+thérapeutique	O
+:	O
+Non	O
+
+Proposition	O
+de	O
+préservation	O
+de	O
+la	O
+fertilité	O
+:	O
+Non	O
+
+Indication	O
+d'onco-génétique	O
+:	O
+Non	O
+
+Suspicion	O
+de	O
+pathologie	O
+professionnelle	O
+:	O
+Non	O
+

@@ -15,35 +15,86 @@ DuraXELL est un pipeline d'extraction d'informations médicales (biomarqueurs) c
 
 ![Exemple de résultats principaux](Results/figures/front_pareto_exemple.png)
 
-## Installation et Exécution Reproductible
+## Installation et exécution reproductible
 
-1. **Cloner le dépôt** :
+Suivez ces étapes pour obtenir un environnement reproductible (Linux/macOS/Windows). Les commandes Windows sont fournies quand elles diffèrent.
 
-   ```bash
-   git clone https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity.git
-   cd DuraXELL
-   ```
+1. Cloner le dépôt :
 
-2. **Créer un environnement virtuel et installer les dépendances** :
+```bash
+git clone https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity.git
+cd DEMNE-Determination-of-Extraction-Methode-for-Named-Entity
+```
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Sur Windows : .venv\Scripts\activate
-   pip install -e .[dev,ner]
-   ```
+2. Créer et activer un environnement Python (recommandé Python 3.10+) :
 
-3. **Exécuter le pipeline complet** :
-   Ouvrez et exécutez le notebook maître :
+Linux/macOS
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 
-   ```bash
-   jupyter notebook Reports/DuraXELL_Pipeline.ipynb
-   ```
+Windows (PowerShell)
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-   Ou exécutez le script de rapport :
+3. Installer les dépendances via le packaging (extras utiles : `dev`, `ner`, `dashboard`) :
 
-   ```bash
-   python scripts/run_full_pipeline_report.py
-   ```
+```bash
+pip install --upgrade pip
+pip install -e ".[dev,ner,dashboard]"
+```
+
+4. Configuration des variables d'environnement (reproductibilité des chemins)
+
+Copiez le fichier d'exemple et adaptez les chemins locaux :
+
+```bash
+# Linux/macOS
+cp config/example_env.sh .env
+# Windows (PowerShell)
+Copy-Item config\example_env.sh .env
+# Ensuite, éditez .env pour ajuster les chemins (DEMNE_DATA_DIR, ...)
+```
+
+Le projet utilise aussi `config/reproducibility.yaml` pour fixer les seeds et configurations de répétabilité.
+
+5. Exécuter le pipeline ou les composants
+
+- Lancer le notebook principal (jupyter) :
+
+```bash
+jupyter notebook Reports/DuraXELL_Pipeline.ipynb
+```
+
+- Exécuter un script de génération de rapport (exemples) :
+
+```bash
+python scripts/run_full_pipeline_report.py
+python scripts/run_sens.py
+```
+
+- Lancer le dashboard Streamlit (dans `dashboard/`) :
+
+```bash
+# à partir du répertoire racine du projet
+python -m streamlit run dashboard/app.py
+```
+
+6. Tests et contribution
+
+```bash
+pytest -q
+# Formatage/lint (si installé via extras dev)
+black .
+ruff check .
+```
+
+Notes
+- Le packaging est géré par `pyproject.toml`. Les extras permettent d'installer uniquement ce dont vous avez besoin.
+- Pour une reproduction complète sur CI, exportez et fixez la version des dépendances (pip freeze > requirements.txt) ou utilisez un environnement isolé (Docker/CI).
 
 ## Références et Citation
 

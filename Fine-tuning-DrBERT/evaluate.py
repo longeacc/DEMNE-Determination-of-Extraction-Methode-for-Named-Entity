@@ -30,11 +30,24 @@ from transformers import (
     Trainer,
 )
 
-from fine_tuning.data.dataset_builder import (
-    PRIORITY_ENTITIES,
-    build_dataset,
-)
-from fine_tuning.train import export_metrics_csv, resolve_device
+# Make sibling modules importable whether run as ``python evaluate.py`` or
+# ``python -m``.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+try:
+    from .dataset_builder import (
+        PRIORITY_ENTITIES,
+        build_dataset,
+        parse_corpus_paths,
+    )
+    from .train import export_metrics_csv, resolve_device
+except ImportError:
+    from dataset_builder import (
+        PRIORITY_ENTITIES,
+        build_dataset,
+        parse_corpus_paths,
+    )
+    from train import export_metrics_csv, resolve_device
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +58,12 @@ logger = logging.getLogger(__name__)
 
 def evaluate_checkpoint(
     checkpoint_dir: Path,
-    corpus_dir: Path,
+    corpus_dir: Path | None = None,
     device: str = "auto",
     max_length: int = 512,
     batch_size: int = 32,
     results_dir: Path = Path("results"),
+    corpus_paths: dict[str, Path] | None = None,
 ) -> dict[str, float]:
     """Evaluate a fine-tuned checkpoint on the DEMNE test split.
 
@@ -98,6 +112,7 @@ def evaluate_checkpoint(
     model_name = str(checkpoint_dir)
     ds, _, _ = build_dataset(
         corpus_dir=corpus_dir,
+        corpus_paths=corpus_paths,
         model_name=model_name,
         max_length=max_length,
     )
@@ -193,7 +208,7 @@ def evaluate_checkpoint(
         model=model,
         args=eval_args,
         eval_dataset=test_ds,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics,
     )
@@ -233,8 +248,15 @@ def main() -> None:
     parser.add_argument(
         "--corpus_dir",
         type=Path,
-        required=True,
-        help="Root BRAT corpus directory.",
+        default=None,
+        help="Legacy root BRAT corpus directory (with cantemist/, redjdal/, rcp_esmo/).",
+    )
+    parser.add_argument(
+        "--corpus_path",
+        action="append",
+        default=[],
+        metavar="NAME=DIR",
+        help="Explicit corpus as name=path to a BRAT directory. Repeatable.",
     )
     parser.add_argument(
         "--device",
@@ -257,6 +279,10 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    corpus_paths = parse_corpus_paths(args.corpus_path)
+    if not corpus_paths and args.corpus_dir is None:
+        parser.error("Provide at least one --corpus_path NAME=DIR or --corpus_dir.")
+
     logger.info("=" * 60)
     logger.info("DEMNE — DrBERT NER Evaluation")
     logger.info("=" * 60)
@@ -264,6 +290,7 @@ def main() -> None:
     results = evaluate_checkpoint(
         checkpoint_dir=args.checkpoint,
         corpus_dir=args.corpus_dir,
+        corpus_paths=corpus_paths or None,
         device=args.device,
         batch_size=args.batch_size,
         results_dir=args.results_dir,

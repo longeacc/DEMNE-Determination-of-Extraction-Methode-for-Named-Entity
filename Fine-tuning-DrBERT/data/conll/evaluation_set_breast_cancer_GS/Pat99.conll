@@ -1,0 +1,449 @@
+# doc_id = Pat99
+Pat99	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+59	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+pas	O
+de	O
+données	O
+biometriques	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Données	O
+Médicales	O
+:	O
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Consultation	O
+[MEDECIN	O
+REFERANT]du	O
+[	O
+3	O
+jours	O
+avant	O
+RCP	O
+]	O
+:	O
+
+Patiente	O
+de	O
+[Age	O
+Patiente]	O
+adressée	O
+pour	O
+lésion	O
+ACR4c	O
+du	O
+sein	O
+droit.	O
+
+Antécédents	O
+:	O
+
+T:	O
+166	O
+cm;	O
+Poids:	O
+75	O
+kg;	O
+TSG:	O
+95-100E.	O
+
+Gyneco	O
+:	O
+DPR:	O
+12	O
+ans.	O
+3	O
+enfants	O
+AVBx3.	O
+
+Ménopausée	O
+à	O
+51	O
+ans.	O
+
+Pas	O
+de	O
+THM.	O
+
+Chir:	O
+péritonite	O
+appendiculaire	O
+à	O
+7	O
+ans,	O
+hernie	O
+discale	O
+L5-S1.	O
+
+Med:	O
+Troubles	O
+anxieux	O
+depuis	O
+le	O
+début	O
+du	O
+Covid.	O
+
+Sciatique	O
+droite.	O
+
+Pas	O
+de	O
+thrombose,	O
+cancer,	O
+
+HTA	O
+ni	O
+diabète.	O
+
+Hypercholestérolémie.	O
+
+Allergie	O
+med:	O
+intolérance	O
+à	O
+la	O
+codéine.	O
+
+Tabac	O
+:	O
+en	O
+sevrage,	O
+10-15	O
+PA.	O
+
+Fam:	O
+pas	O
+de	O
+cancer.	O
+
+Mode	O
+de	O
+vie	O
+:	O
+vit	O
+en	O
+[PAYS]	O
+à	O
+Egine.	O
+artiste.	O
+
+Pas	O
+de	O
+médecin	O
+correspondant.	O
+
+Nouvelle	O
+gynécologue	O
+:	O
+[MEDECIN	O
+EXTERIEUR].	O
+
+Traitement	O
+:	O
+alprazolam.	O
+
+Anamnèse	O
+:	O
+Découverte	O
+lors	O
+d'un	O
+bilan	O
+d'imagerie	O
+d'une	O
+lésion	O
+ACR4c	O
+du	O
+sein	O
+droit.	O
+
+Bilan	O
+sénologique	O
+de	O
+ville	O
+du	O
+22.09.21	O
+
+Mammographie	O
+:	O
+foyer	O
+de	O
+microcalcifications	O
+du	O
+QSE	O
+du	O
+sein	O
+droit	O
+de	O
+2	O
+cm	O
+de	O
+trajet	O
+intra	O
+galactophorique.	O
+
+Sein	O
+gauche	O
+:	O
+pas	O
+d'anomalie	O
+visible	O
+
+Echographie	O
+mammaire	O
+du	O
+:	O
+pas	O
+d'anomalie	O
+visible	O
+dans	O
+le	O
+sein	O
+droit	O
+et	O
+le	O
+sein	O
+gauche.	O
+
+Pas	O
+d'adénomégalie.	O
+
+Conclusion	O
+:	O
+sein	O
+droit	O
+ACR4c,	O
+sein	O
+gauche	O
+ACR2	O
+01.10.21	O
+Macrobiopsies	O
+:	O
+QSE	O
+du	O
+sein	O
+droit	O
++	O
+pose	O
+de	O
+clip	O
+(pas	O
+de	O
+description)	O
+
+Mammo	O
+post	O
+clip	O
+:	O
+impression	O
+de	O
+clip	O
+migré	O
+en	O
+inférieur	O
+de	O
+la	O
+lésion.	O
+pas	O
+de	O
+CR.	O
+
+Histologie	O
+:	O
+carcinome	O
+canalaire	O
+in	O
+situ	O
+de	O
+haut	O
+grade	O
+et	O
+grade	O
+intermédiaire	O
+d'architecture	O
+comédomateuse	O
+calcifié	O
+et	O
+cribliforme.	O
+
+Absence	O
+de	O
+micro-infiltration.	O
+
+Examen	O
+clinique	O
+:	O
+
+Sein	O
+droit	O
+:	O
+pas	O
+de	O
+nodule	O
+palpé.	O
+
+Sein	O
+gauche:	O
+pas	O
+de	O
+nodule	O
+palpé.	O
+
+Aires	O
+ganglionnaires	O
+axillaires	O
+et	O
+sus	O
+claviculaire	O
+libres.	O
+
+Pas	O
+d'écoulement.	O
+
+Complément	O
+de	O
+bilan	O
+par	O
+échographie	O
+mammaire	O
+second	O
+look	O
++	O
+relecture	O
+des	O
+mammographies	O
+à	O
+[ETABLISSEMENT]	O
+le	O
+[	O
+1	O
+jours	O
+avant	O
+RCP	O
+]	O
+:	O
+
+CLIP	O
+à	O
+vérifier	O
+
+Indication	O
+de	O
+tumorectomie	O
+du	O
+QSE	O
+du	O
+sein	O
+droit	O
+après	O
+repérage	O
+le	O
+[	O
+19	O
+jours	O
+apres	O
+RCP	O
+].	O
+
+BLOC	O
+opératoire	O
+réservé	O
+le	O
+[	O
+19	O
+jours	O
+apres	O
+RCP	O
+]	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Type	O
+de	O
+
+Proposition	O
+Application	O
+référentiel	O
+
+Proposition	O
+de	O
+décision	O
+on	O
+confirme	O
+l'indication	O
+chirurgicale	O
+
+Proposition	O
+d'inclusion	O
+dans	O
+un	O
+essai	O
+thérapeutique	O
+:	O
+Non	O
+
+Proposition	O
+de	O
+préservation	O
+de	O
+la	O
+fertilité	O
+:	O
+Non	O
+
+Indication	O
+d'onco-génétique	O
+:	O
+Non	O
+
+Suspicion	O
+de	O
+pathologie	O
+professionnelle	O
+:	O
+Non	O
+

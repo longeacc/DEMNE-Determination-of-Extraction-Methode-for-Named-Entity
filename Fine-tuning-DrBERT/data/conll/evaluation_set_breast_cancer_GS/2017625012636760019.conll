@@ -1,0 +1,918 @@
+# doc_id = 2017625012636760019
+"	O
+
+1	O
+Mme	O
+togney	O
+takounppassuth	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+06.45.09.56.57	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+frederiquemanuela	O
+HEUMMANN	O
+
+Responsable	O
+
+0681374701	O
+
+Signataire	O
+:	O
+Dr	O
+BILBAO	O
+singthong	O
+
+Paris	O
+le	O
+02/12/2022	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+takounppassuth	O
+togney	O
+
+Né(e)	O
+le	O
+17/05/1928	O
+-	O
+NIP	O
+:	O
+8002273100	O
+
+Correspondants	O
+:	O
+
+Dr	O
+AJNA	O
+snak,	O
+Dr	O
+BRILLAUDDECONDE	O
+magta	O
+
+Compte	O
+rendu	O
+
+Lésion	O
+initiale	O
+sein	O
+
+Dagnostic	O
+établi	O
+le	O
+15/10/1996	O
+
+Lésion	O
+initiale	O
+côté	O
+Gauche.	O
+
+Histologie	O
+:	O
+CCI.	O
+
+Taille	O
+totale	O
+:	O
+
+15	O
+
+Grade	O
+:	O
+2.	O
+
+Cerb	B-HER2_IHC
+B2	I-HER2_IHC
+:	I-HER2_IHC
+0.	I-HER2_IHC
+
+Décision	O
+thérapeutique	O
+
+Traitement	O
+chirurgical	O
+
+Chirurgie	O
+de	O
+type	O
+Conservatrice	O
+
+pT	O
+:	O
+1.	O
+pN	O
+:	O
+0.	O
+
+Traitement	O
+systémique	O
+
+Une	O
+hormonothérapie	O
+de	O
+type	O
+:	O
+TAMOXIFENE.	O
+
+Radiothérapie	O
+:	O
+OUI.	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Antécédent	O
+de	O
+CCI	O
+du	O
+sein	O
+gauche	O
+en	O
+1996,	O
+puis	O
+elle	O
+du	O
+sein	O
+droit	O
+en	O
+1999	O
+traité	O
+par	O
+tumorectomie	O
+
+radiothérapie	O
+et	O
+en	O
+1999	O
+par	O
+hormonothérapie	O
+jusqu'en	O
+2003.	O
+
+Altération	O
+de	O
+l'état	O
+général	O
+à	O
+partir	O
+de	O
+septembre	O
+2019.	O
+
+TEP-TDM	O
+du	O
+19/09/2019	O
+:	O
+infiltration	O
+hétérogène	O
+sur	O
+environ	O
+10cm	O
+du	O
+creux	O
+axillaire	O
+droit	O
+hyper-métabolique,	O
+
+foyers	O
+mammaires	O
+au	O
+contact	O
+des	O
+clips	O
+chirurgicaux	O
+à	O
+l'union	O
+des	O
+quadrants	O
+externes	O
+du	O
+sein	O
+gauche,	O
+pas	O
+de	O
+lésion	O
+
+par	O
+ailleurs.	O
+
+Mai	O
+2020	O
+:	O
+Apparition	O
+de	O
+lésions	O
+cutanées	O
+du	O
+sein	O
+droit,	O
+nodule	O
+de	O
+perméation	O
+:	O
+carcinome	O
+lobulaire	O
+infiltrant	O
+RO	B-Estrogen_receptor
+
+3+	I-Estrogen_receptor
+100%,	O
+RP	O
+3+	O
+80%,	O
+HER2	O
+non	O
+surexprimé,	O
+1+.	O
+
+RCP	O
+d'onco-sénologie	O
+du	O
+07/08/2020	O
+:	O
+proposition	O
+d'une	O
+1ère	O
+ligne	O
+thérapeutique	O
+par	O
+FULVESTRANT	O
+en	O
+
+monothérapie.	O
+
+Suite	O
+de	O
+la	O
+prise	O
+en	O
+charge	O
+par	O
+le	O
+Dr	O
+TENTUKWALUKOMBO,	O
+oncogériatre	O
+à	O
+Saint-Louis.	O
+
+Initiation	O
+du	O
+FULVESTRANT	O
+le	O
+23/08/2020,	O
+marqueurs	O
+tumoraux	O
+au	O
+C1	O
+J1	O
+:	O
+ACE	O
+5.76,	O
+CA	O
+15.3	O
+490.	O
+
+2	O
+Mme	O
+togney	O
+takounppassuth	O
+
+IRM	O
+cérébrale	O
+du	O
+01/07/2020	O
+:	O
+Atrophie	O
+cortico-sous-corticale	O
+diffuse,	O
+avec	O
+leucopathie	O
+vasculaire	O
+sus	O
+et	O
+sous	O
+
+tentorielles.	O
+
+Lacune	O
+sylvienne	O
+superficielle	O
+droite.	O
+
+Ischémie	O
+semi-récente	O
+sous-corticale	O
+sylvienne	O
+droite.	O
+
+Absence	O
+
+de	O
+saignement	O
+intracrânien.	O
+3	O
+prises	O
+de	O
+contraste	O
+nodulaire	O
+de	O
+2mm,	O
+dont	O
+2	O
+accolés	O
+à	O
+l'hémisphère	O
+cérébelleux	O
+
+droit.	O
+
+IRM	O
+cérébrale	O
+du	O
+09/11/2020	O
+:	O
+stabilité	O
+de	O
+l'imagerie.	O
+
+IRM	O
+cérébrale	O
+du	O
+29/04/2022	O
+:	O
+stabilité	O
+de	O
+l'imagerie	O
+comparativement	O
+aux	O
+examens	O
+antérieurs.	O
+
+Devant	O
+l'élévation	O
+du	O
+CA	O
+15-3,	O
+nouveau	O
+TEP-TDM	O
+en	O
+juillet	O
+2021	O
+:	O
+régression	O
+partielle	O
+de	O
+l'infiltration	O
+tissulaire	O
+
+droite	O
+et	O
+pré-pectorale,	O
+faiblement	O
+hyper-métabolique	O
+avec	O
+régression	O
+des	O
+nodules	O
+mammaires	O
+droits.	O
+
+Disparition	O
+
+du	O
+renfoncement	O
+du	O
+QIE	O
+du	O
+sein	O
+gauche.	O
+
+Disparition	O
+des	O
+adénopathies	O
+médiastinales.	O
+
+Globale	O
+stabilité	O
+de	O
+
+l'hétérogénéité	O
+de	O
+la	O
+trame	O
+osseuse	O
+avec	O
+hyper-métabolismes	O
+hétérogènes.	O
+
+Diminution	O
+progressive	O
+des	O
+marqueurs	O
+tumoraux	O
+et	O
+spontanés.	O
+
+Ostéodensitométrie	O
+de	O
+mai	O
+2022	O
+:	O
+absence	O
+d'ostéoporose.	O
+
+Devant	O
+une	O
+nouvelle	O
+élévation	O
+du	O
+CA	O
+15-3,	O
+prescription	O
+d'un	O
+TEP-TDM	O
+le	O
+22/08/2022	O
+:	O
+comparé	O
+au	O
+TEP-TDM	O
+
+du	O
+8	O
+juillet	O
+2021	O
+:	O
+poursuite	O
+de	O
+la	O
+réponse	O
+métabolique	O
+partielle	O
+de	O
+l'infiltration	O
+tissulaire	O
+axillaire	O
+et	O
+pré-pectorale	O
+
+droite,	O
+restant	O
+faiblement	O
+hyper-métabolique.	O
+
+Globale	O
+stabilité	O
+de	O
+l'hétérogénéité	O
+de	O
+la	O
+trame	O
+osseuse	O
+de	O
+fixations	O
+
+hétérogènes	O
+(origine	O
+iatrogène	O
+?),	O
+absence	O
+d'apparition	O
+de	O
+nouveau	O
+foyer	O
+hyper-métabolique	O
+suspect	O
+de	O
+malignité	O
+
+par	O
+ailleurs.	O
+
+Suite	O
+à	O
+une	O
+poursuite	O
+de	O
+l'élévation	O
+du	O
+marqueur	O
+CA	O
+15-3,	O
+le	O
+Dr	O
+TENTUKWALUKOMBO	O
+m'adresse	O
+en	O
+consultation	O
+Mme	O
+
+takounppassuth,	O
+afin	O
+de	O
+juger	O
+de	O
+l'utilité	O
+d'un	O
+changement	O
+de	O
+ligne	O
+thérapeutique.	O
+
+A	O
+l'examen	O
+clinique	O
+le	O
+02/10/2022	O
+:	O
+induration	O
+péri-cicatricielle	O
+de	O
+la	O
+double	O
+tumorectomie	O
+droite	O
+et	O
+gauche.	O
+
+Pas	O
+de	O
+
+lymphœdème.	O
+
+Pas	O
+de	O
+masse	O
+ni	O
+de	O
+nodule	O
+palpable.	O
+
+Pas	O
+de	O
+nodule	O
+de	O
+perméation.	O
+
+Auscultation	O
+pulmonaire	O
+
+normale.	O
+
+Pas	O
+de	O
+douleur	O
+à	O
+la	O
+percussion	O
+des	O
+épineuses.	O
+
+Palpation	O
+abdominale	O
+normale.	O
+
+OMS	O
+1.	O
+
+Poids	O
+52kg	O
+pour	O
+
+158cm.	O
+
+Analyse	O
+de	O
+sang	O
+du	O
+20/10/2022	O
+:	O
+Hb	O
+10.9g/dl,	O
+VGM	O
+95,	O
+TG	O
+1.57g/L	O
+(N<1.5),	O
+créatininémie	O
+à	O
+102µmol/L,	O
+DFG	O
+
+40ml/min,	O
+calcémie	O
+2.55mmol/L,	O
+reste	O
+du	O
+bilan	O
+biologique	O
+normal.	O
+
+Marqueurs	O
+tumoraux	O
+:	O
+
+Dates	O
+ACE	O
+CA	O
+15-3	O
+
+Avril	O
+2020	O
+184	O
+
+Août	O
+2020	O
+5.7	O
+490	O
+
+Octobre	O
+2020	O
+5	O
+655	O
+
+Janvier	O
+2021	O
+483	O
+
+Février	O
+2021	O
+368	O
+
+Avril	O
+2021	O
+406	O
+
+Décembre	O
+2021	O
+206	O
+
+Avril	O
+2022	O
+184	O
+
+20/10/2022	O
+3.8	O
+293	O
+
+Au	O
+total,	O
+récidive	O
+sous-forme	O
+métastatique	O
+d'un	O
+carcinome	O
+lobulaire	O
+infiltrant	O
+au	O
+niveau	O
+cutanée	O
+et	O
+ganglionnaire	O
+
+depuis	O
+à	O
+minima	O
+août	O
+2020.	O
+1ère	O
+ligne	O
+thérapeutique	O
+par	O
+FULVESTRANT	O
+depuis	O
+le	O
+23/08/2020.	O
+
+Depuis,	O
+marqueurs	O
+tumoraux	O
+CA	O
+15-3	O
+fluctuant,	O
+toujours	O
+au-dessus	O
+de	O
+la	O
+norme.	O
+
+Ascension	O
+du	O
+CA	O
+15-3	O
+par	O
+rapport	O
+au	O
+mois	O
+d'avril	O
+2022.	O
+
+Je	O
+demande	O
+ce	O
+jour	O
+l'avis	O
+aux	O
+radiologues	O
+et	O
+médecins	O
+nucléaires,	O
+afin	O
+de	O
+connaître	O
+l'imagerie	O
+la	O
+plus	O
+
+sensible	O
+à	O
+l'évaluation	O
+de	O
+la	O
+réponse	O
+thérapeutique	O
+dans	O
+le	O
+cadre	O
+d'un	O
+carcinome	O
+lobulaire	O
+infiltrant.	O
+
+Nous	O
+recontrôlerons	O
+en	O
+fonction	O
+de	O
+l'imagerie	O
+et	O
+adapterons	O
+notre	O
+thérapeutique	O
+après	O
+discussion	O
+en	O
+RCP.	O
+
+Je	O
+reverrai	O
+pour	O
+ma	O
+part	O
+Mme	O
+takounppassuth	O
+en	O
+décembre	O
+2022	O
+en	O
+consultation.	O
+
+D'ici	O
+là	O
+nous	O
+contrôlons	O
+
+mensuellement	O
+les	O
+analyses	O
+de	O
+sang.	O
+
+Je	O
+renouvelle	O
+ce	O
+jour	O
+l'ordonnance	O
+de	O
+FULVESTRANT,	O
+2	O
+injections	O
+tous	O
+les	O
+28	O
+jours.	O
+
+3	O
+Mme	O
+togney	O
+takounppassuth	O
+
+Bien	O
+confraternellement,	O
+
+Docteur	O
+jazy	O
+VANPAESSCHEN	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+02/12/2022.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+ngawangtsering,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+fahadulhassan	O
+
+Parmacologie	O
+:	O
+Dr	O
+neriavissa	O
+
+Arc	O
+:	O
+Mme	O
+tahamouts.	O
+
+IDE	O
+:	O
+Mme	O
+naoumou,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+Progression	O
+osseuse	O
+et	O
+biologique	O
+
+Conclusion	O
+
+letrozole-abémaciclib	O
+50mg	O
+
+"	O
+

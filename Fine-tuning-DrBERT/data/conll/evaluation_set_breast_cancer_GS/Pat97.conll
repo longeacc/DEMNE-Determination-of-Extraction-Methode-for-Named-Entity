@@ -1,0 +1,377 @@
+# doc_id = Pat97
+Pat97	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+41	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+
+Poids	O
+:	O
+45.00	O
+kg	O
+Le	O
+[	O
+1	O
+jours	O
+avant	O
+RCP	O
+]	O
+IMC	O
+(Quetelet)	O
+:	O
+15.8	O
+kg/m2	O
+
+Taille	O
+:	O
+169	O
+cm	O
+Le	O
+[	O
+1	O
+jours	O
+avant	O
+RCP	O
+]	O
+SC	O
+(Dubois)	O
+:	O
+1.49	O
+m2	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Décision	O
+complexe	O
+de	O
+Données	O
+Médicales	O
+:	O
+
+Motif	O
+de	O
+présentation	O
+Décision	O
+complexe	O
+de	O
+traitement	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+F[Age	O
+Patiente]	O
+
+Antécédents	O
+gynécologiques	O
+:	O
+
+G0P0.	O
+
+Pas	O
+de	O
+notion	O
+de	O
+contraception.	O
+
+Antécédents	O
+médicaux:	O
+colopathie	O
+fonctionnelle.	O
+
+Vertiges	O
+sur	O
+arthropathie	O
+articulaire	O
+de	O
+l'articulation	O
+temporomandibulaire.	O
+
+Antécédents	O
+chirurgicaux	O
+coelioscopie	O
+pour	O
+exérèse	O
+d'un	O
+endométriome	O
+gauche.	O
+
+Antécédents	O
+familiaux	O
+:	O
+RAS	O
+
+A	O
+noter	O
+l'existence	O
+d'allergie	O
+au	O
+Bactrim	O
+et	O
+à	O
+l'Amoxicilline.	O
+
+90	O
+B	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+:	O
+
+Palpation	O
+par	O
+la	O
+patiente	O
+d'un	O
+nodule	O
+du	O
+quadrant	O
+supéro-externe	O
+du	O
+sein	O
+gauche	O
+ayant	O
+conduit	O
+à	O
+la	O
+réalisation	O
+d'une	O
+mammographie	O
+avec	O
+échographie	O
+et	O
+d'autre	O
+part	O
+une	O
+microbiopsie.	O
+
+L'aspect	O
+est	O
+ACR5	O
+du	O
+côté	O
+gauche	O
+ACR2	O
+du	O
+côté	O
+droit.	O
+
+L'échographie	O
+évoque	O
+un	O
+processus	O
+d'environ	O
+30	O
+x	O
+25	O
+mm.	O
+
+La	O
+microbiopsie	O
+est	O
+en	O
+faveur	O
+d'un	O
+carcinome	O
+canalaire	O
+non	O
+spécifiques	O
+grade	O
+2,	O
+RO	B-Estrogen_receptor
+100	I-Estrogen_receptor
+%	I-Estrogen_receptor
+RP	B-Progesterone_receptor
+positive	I-Progesterone_receptor
+à	I-Progesterone_receptor
+80	I-Progesterone_receptor
+%	I-Progesterone_receptor
+;	O
+HER2	B-HER2_IHC
+score	I-HER2_IHC
+1	I-HER2_IHC
+et	O
+Ki67	B-Ki67
+à	I-Ki67
+20	I-Ki67
+%.	I-Ki67
+
+A	O
+l'examen	O
+clinique,	O
+on	O
+retrouve	O
+effectivement	O
+dans	O
+le	O
+quadrant	O
+supéro-externe	O
+un	O
+nodule	O
+d'environ	O
+3	O
+cm	O
+mobile	O
+par	O
+rapport	O
+aux	O
+plans	O
+profond	O
+et	O
+superficiel	O
+ce	O
+qui	O
+le	O
+classe	O
+T2	O
+sans	O
+adénopathie	O
+satellite	O
+homolatérale	O
+N	O
+à	O
+0.	O
+
+Se	O
+pose	O
+le	O
+problème	O
+de	O
+la	O
+stratégie	O
+thérapeutique.	O
+
+Nous	O
+proposons	O
+à	O
+la	O
+patiente	O
+de	O
+bénéficier	O
+d'une	O
+IRM	O
+mammaire	O
+complémentaire.	O
+
+Deux	O
+options	O
+peuvent	O
+être	O
+discutées.	O
+
+La	O
+première	O
+option	O
+serait	O
+celle	O
+d'une	O
+oncoplastie	O
+supéro-externe	O
+avec	O
+procédure	O
+du	O
+ganglion	O
+sentinelle	O
+avec	O
+pour	O
+conséquence	O
+la	O
+possibilité	O
+d'une	O
+réduction	O
+du	O
+volume	O
+mammaire	O
+sur	O
+un	O
+sein	O
+qui	O
+est	O
+déjà	O
+de	O
+petite	O
+taille.	O
+
+La	O
+deuxième	O
+option	O
+serait	O
+la	O
+possibilité	O
+d'une	O
+chimiothérapie	O
+néoadjuvante	O
+compte-tenu	O
+du	O
+grade	O
+2	O
+et	O
+du	O
+Ki67	B-Ki67
+à	I-Ki67
+20	I-Ki67
+%.	I-Ki67
+
+Avis	O
+demandé	O
+à	O
+notre	O
+comité	O
+d’oncologie	O
+pour	O
+arrêter	O
+la	O
+stratégie	O
+thérapeutique	O
+définitive.	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Proposition	O
+de	O
+décision	O
+
+Sous	O
+réserve	O
+de	O
+l'IRM	O
+qui	O
+montrerait	O
+une	O
+taille	O
+supérieure,	O
+on	O
+opterait	O
+pour	O
+une	O
+chirurgie	O
+première.	O
+

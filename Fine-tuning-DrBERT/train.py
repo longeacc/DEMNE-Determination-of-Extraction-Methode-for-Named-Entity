@@ -41,6 +41,23 @@ from transformers import (
     TrainingArguments,
 )
 
+# Make sibling modules importable whether run as ``python train.py`` or
+# ``python -m``. The script's own directory holds dataset_builder.py.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+try:
+    from .dataset_builder import (
+        PRIORITY_ENTITIES,
+        build_dataset,
+        parse_corpus_paths,
+    )
+except ImportError:
+    from dataset_builder import (
+        PRIORITY_ENTITIES,
+        build_dataset,
+        parse_corpus_paths,
+    )
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -149,8 +166,6 @@ def build_compute_metrics(id2label: dict[int, str]):
         }
 
         # Per-entity F1 for priority biomarkers
-        from fine_tuning.data.dataset_builder import PRIORITY_ENTITIES
-
         for ent in PRIORITY_ENTITIES:
             key = ent
             if key in report:
@@ -235,16 +250,19 @@ def export_metrics_csv(
 # ---------------------------------------------------------------------------
 
 def train(
-    corpus_dir: Path,
+    corpus_dir: Path | None,
     config: dict[str, Any],
     device: str = "auto",
+    corpus_paths: dict[str, Path] | None = None,
 ) -> Path:
     """Run the full training pipeline.
 
     Args:
-        corpus_dir: Root directory with BRAT sub-corpora.
+        corpus_dir: Legacy root directory with BRAT sub-corpora (optional
+            if ``corpus_paths`` is given).
         config: Training configuration dict.
         device: Target compute device.
+        corpus_paths: Explicit ``{corpus_name: brat_dir}`` mapping.
 
     Returns:
         Path to the best checkpoint directory.
@@ -262,12 +280,10 @@ def train(
 
     if device == "cuda":
         gpu_name = torch.cuda.get_device_name(0)
-        gpu_mem = torch.cuda.get_device_properties(0).total_mem / 1e9
+        gpu_mem = torch.cuda.get_device_properties(0).total_memory / 1e9
         logger.info("GPU: %s (%.1f GB)", gpu_name, gpu_mem)
 
     # ---- Dataset ----
-    from fine_tuning.data.dataset_builder import build_dataset
-
     model_name = config.get("model_name", DEFAULTS["model_name"])
     max_length = int(config.get("max_length", DEFAULTS["max_length"]))
     output_dir = Path(config.get("output_dir", DEFAULTS["output_dir"]))
@@ -276,6 +292,7 @@ def train(
 
     ds, label2id, id2label = build_dataset(
         corpus_dir=corpus_dir,
+        corpus_paths=corpus_paths,
         model_name=model_name,
         max_length=max_length,
     )
@@ -336,7 +353,7 @@ def train(
         args=training_args,
         train_dataset=ds["train"],
         eval_dataset=ds["test"],
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=build_compute_metrics(id2label),
         callbacks=[early_stop],
@@ -344,6 +361,8 @@ def train(
 
     # ---- eco2ai carbon tracking ----
     try:
+        if os.environ.get("DISABLE_ECO2AI"):
+            raise RuntimeError("eco2ai disabled via DISABLE_ECO2AI env var")
         import eco2ai
 
         tracker = eco2ai.Tracker(
@@ -361,6 +380,20 @@ def train(
         )
         eco2ai_active = False
         tracker = None
+    except Exception as exc:  # eco2ai/pandas version incompatibilities, etc.
+        logger.warning("eco2ai tracker failed to start (%s) — carbon tracking disabled", exc)
+        eco2ai_active = False
+        tracker = None
+
+
+    def _stop_tracker() -> None:
+        """Stop eco2ai without ever letting its errors abort training/saving."""
+        if eco2ai_active and tracker is not None:
+            try:
+                tracker.stop()
+                logger.info("eco2ai tracker stopped — see %s", results_dir / "emissions.csv")
+            except Exception as exc:  # noqa: BLE001 — carbon tracking must never be fatal
+                logger.warning("eco2ai tracker.stop() failed (non-fatal): %s", exc)
 
     # ---- Train ----
     start_time = time.time()
@@ -375,8 +408,7 @@ def train(
                 training_args.per_device_train_batch_size,
                 max_length,
             )
-            if eco2ai_active and tracker is not None:
-                tracker.stop()
+            _stop_tracker()
             raise
         raise
 
@@ -384,9 +416,7 @@ def train(
     logger.info("Training completed in %.1f seconds (%.1f min)", elapsed, elapsed / 60)
 
     # ---- Stop eco2ai ----
-    if eco2ai_active and tracker is not None:
-        tracker.stop()
-        logger.info("eco2ai tracker stopped — see %s", results_dir / "emissions.csv")
+    _stop_tracker()
 
     # ---- Final evaluation ----
     eval_results = trainer.evaluate()
@@ -433,13 +463,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--corpus_dir",
         type=Path,
-        required=True,
-        help="Root dir with sub-folders cantemist/, redjdal/, rcp_esmo/.",
+        default=None,
+        help="Legacy root dir with sub-folders cantemist/, redjdal/, rcp_esmo/.",
+    )
+    parser.add_argument(
+        "--corpus_path",
+        action="append",
+        default=[],
+        metavar="NAME=DIR",
+        help="Explicit corpus as name=path to a BRAT directory. Repeatable.",
     )
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("fine_tuning/config/drbert_ner_config.yaml"),
+        default=Path(__file__).resolve().parent / "drbert_ner_config.yaml",
         help="Path to YAML config file.",
     )
     parser.add_argument(
@@ -461,6 +498,18 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Override results/metrics directory.",
     )
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=None,
+        help="Override num_train_epochs from the config.",
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=None,
+        help="Override per_device_train_batch_size from the config.",
+    )
     return parser.parse_args()
 
 
@@ -476,22 +525,34 @@ def main() -> None:
     args = parse_args()
     config = load_config(args.config)
 
+    corpus_paths = parse_corpus_paths(args.corpus_path)
+    if not corpus_paths and args.corpus_dir is None:
+        raise SystemExit(
+            "Provide at least one --corpus_path NAME=DIR or --corpus_dir."
+        )
+
     # CLI overrides
     if args.output_dir is not None:
         config["output_dir"] = str(args.output_dir)
     if args.results_dir is not None:
         config["results_dir"] = str(args.results_dir)
+    if args.epochs is not None:
+        config["num_train_epochs"] = args.epochs
+    if args.batch_size is not None:
+        config["per_device_train_batch_size"] = args.batch_size
 
     logger.info("=" * 60)
     logger.info("DEMNE — DrBERT NER Fine-Tuning")
     logger.info("=" * 60)
     logger.info("Corpus dir : %s", args.corpus_dir)
+    logger.info("Corpus paths: %s", corpus_paths or "(none)")
     logger.info("Config     : %s", args.config)
     logger.info("Device     : %s", args.device)
     logger.info("Output     : %s", config.get("output_dir"))
 
     best_path = train(
         corpus_dir=args.corpus_dir,
+        corpus_paths=corpus_paths or None,
         config=config,
         device=args.device,
     )

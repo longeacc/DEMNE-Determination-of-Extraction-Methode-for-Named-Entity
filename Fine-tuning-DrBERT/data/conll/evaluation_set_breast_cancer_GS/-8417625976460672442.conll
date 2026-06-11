@@ -1,0 +1,1075 @@
+# doc_id = -8417625976460672442
+"	O
+
+1	O
+Mme	O
+larbhi	O
+ALEXINITZER	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+0651456839FILLE	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+marekjanusz	O
+PITEIRAPARREIRA	O
+
+Responsable	O
+
+01.43.40.74.11	O
+
+Signataire	O
+:	O
+Dr	O
+BAUDIERMENDIBURE	O
+missira	O
+
+Paris	O
+le	O
+18/11/2022	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+ALEXINITZER	O
+larbhi	O
+
+Né(e)	O
+le	O
+12/09/1952	O
+-	O
+NIP	O
+:	O
+8006618086	O
+
+Correspondants	O
+:	O
+
+Dr	O
+BAUDIERMENDIBURE	O
+missira,	O
+Dr	O
+ALMANZOR	O
+seynabourosine,	O
+Dr	O
+USELDINGER	O
+guylith	O
+
+Compte	O
+rendu	O
+
+Lésion	O
+initiale	O
+sein	O
+
+Dagnostic	O
+établi	O
+le	O
+07/10/2016	O
+
+Lésion	O
+initiale	O
+côté	O
+Gauche.	O
+
+Histologie	O
+:	O
+CCI.	O
+
+Grade	O
+:	O
+2.	O
+
+Cerb	B-HER2_IHC
+B2	I-HER2_IHC
+:	I-HER2_IHC
+3+.	I-HER2_IHC
+
+Récepteurs	O
+RE/RP	B-Estrogen_receptor
+:	I-Estrogen_receptor
++/-.	B-Progesterone_receptor
+
+Décision	O
+thérapeutique	O
+
+Traitement	O
+chirurgical	O
+
+Chirurgie	O
+de	O
+type	O
+Conservatrice	O
+le	O
+20/04/2017.	O
+
+pT	O
+:	O
+2.	O
+
+Résultat	O
+du	O
+curage	O
+axillaire	O
+(N+/N)	O
+:	O
+2/8	O
+
+Traitement	O
+systémique	O
+
+Chimiothérapie	O
+néo	O
+adjuvante	O
+:	O
+ECTH.	O
+
+Une	O
+hormonothérapie	O
+de	O
+type	O
+:	O
+ANASTROZOLE.	O
+
+Radiothérapie	O
+:	O
+OUI.	O
+
+Curiethérapie	O
+:	O
+OUI	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+18/02/2015	O
+:	O
+Mammographie	O
+bilatérale	O
+systématique	O
+=	O
+Il	O
+n'existe	O
+pas	O
+d'image	O
+de	O
+lésion	O
+intra-mammaire	O
+
+inquiétante.	O
+
+Fin	O
+aout	O
+2016	O
+:	O
+Autopalpation	O
+d'un	O
+nodule	O
+du	O
+sein	O
+gauche	O
+
+Septembre	O
+2016	O
+:	O
+Mammographie	O
+et	O
+échographie	O
+mammaire	O
+bilatérale	O
+=	O
+Présence	O
+d'une	O
+opacité	O
+spiculée	O
+de	O
+
+l'union	O
+des	O
+quadrants	O
+inférieurs	O
+gauche	O
+en	O
+mammographie.	O
+
+Présence	O
+d'une	O
+masse	O
+hypoéchogène	O
+très	O
+irrégulière,	O
+
+du	O
+sein	O
+gauche,	O
+d'environ	O
+30	O
+mm	O
+de	O
+grand	O
+axe	O
+en	O
+échographie.	O
+
+22/09/2016	O
+:	O
+Microbiopsie	O
+échoguidée	O
+du	O
+sein	O
+gauche	O
+=	O
+Carcinome	O
+canalaire	O
+invasif	O
+du	O
+sein	O
+gauche,	O
+de	O
+grade	O
+
+d'Elston	O
+et	O
+Ellis	O
+II	O
+(3	O
++	O
+2	O
++	O
+2).	O
+
+Index	O
+mitotique	O
+intermédiaire.	O
+
+Indice	O
+de	O
+prolifération	O
+à	O
+35%.	O
+
+Le	O
+stroma	O
+est	O
+fibrohyalin	O
+
+non	O
+inflammatoire.	O
+
+	O
+RE	B-Estrogen_receptor
++++	I-Estrogen_receptor
+(100%),	I-Estrogen_receptor
+RP	B-Progesterone_receptor
+négatif	I-Progesterone_receptor
+et	O
+HER2	B-HER2_IHC
++++	I-HER2_IHC
+
+L'examen	O
+clinique,	O
+lors	O
+de	O
+la	O
+1ère	O
+consultation	O
+le	O
+04	O
+octobre	O
+2016,	O
+on	O
+palpait	O
+une	O
+masse	O
+de	O
+3x3	O
+cm	O
+à	O
+l'union	O
+des	O
+
+quadrants	O
+inférieurs	O
+gauches,	O
+avec	O
+une	O
+rétraction	O
+mamelonnaire	O
+bilatérale	O
+ancienne,	O
+il	O
+n'y	O
+avait	O
+pas	O
+d'adénopathie	O
+
+palpable.	O
+
+La	O
+radiographie	O
+thoracique,	O
+la	O
+scintigraphie	O
+osseuse,	O
+le	O
+bilan	O
+biologique	O
+avec	O
+marqueurs	O
+tumoraux	O
+se	O
+sont	O
+avérés	O
+
+normaux,	O
+sinon	O
+un	O
+CA	O
+15-3	O
+limite	O
+supérieur	O
+à	O
+34.	O
+
+L'IRM	O
+n'objectivait	O
+que	O
+la	O
+lésion	O
+du	O
+sein	O
+gauche,	O
+mesurée	O
+à	O
+25	O
+mm	O
+et	O
+une	O
+adénopathie	O
+axillaire	O
+gauche,	O
+qui	O
+a	O
+été	O
+
+biopsiée	O
+le	O
+18	O
+octobre.	O
+
+L'examen	O
+histologique,	O
+retrouvait	O
+des	O
+lésions	O
+d'adénocarcinome	O
+de	O
+type	O
+RE+,	B-Estrogen_receptor
+RP-,	B-Progesterone_receptor
+
+Her2+++.	B-HER2_IHC
+
+Le	O
+TEP-scan	O
+ne	O
+montrait	O
+pas	O
+d'anomalie	O
+à	O
+distance,	O
+mais	O
+seulement	O
+le	O
+nodule	O
+hypermétabolique	O
+inféro-interne	O
+
+gauche	O
+avec	O
+un	O
+SUV	O
+à	O
+7.6	O
+et	O
+une	O
+adénopathie	O
+infracentimétrique	O
+hypermétabolique	O
+axillaire	O
+gauche	O
+avec	O
+un	O
+SUV	O
+
+à7,	O
+il	O
+n'y	O
+a	O
+avait	O
+pas	O
+donc	O
+d'anomalie	O
+à	O
+distance.	O
+
+2	O
+Mme	O
+larbhi	O
+ALEXINITZER	O
+
+De	O
+nouvelles	O
+microbiopsies	O
+au	O
+niveau	O
+du	O
+sein	O
+gauche	O
+de	O
+cette	O
+masse	O
+palpable	O
+ont	O
+été	O
+réalisées	O
+le	O
+07	O
+octobre	O
+
+2016,	O
+qui	O
+confirment	O
+la	O
+lésion	O
+de	O
+type	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+grade	O
+II	O
+fort,	O
+sans	O
+in-situ,	O
+sans	O
+embole,	O
+
+RE+++	B-Estrogen_receptor
+pour	O
+100%	O
+des	O
+cellules,	O
+RP-,	B-Progesterone_receptor
+Her2++,	B-HER2_IHC
+
+mais	O
+SISH	O
+positif.	O
+
+Une	O
+voie	O
+d'abord	O
+centrale	O
+a	O
+été	O
+mise	O
+en	O
+place	O
+le	O
+11/10/2016.	O
+
+L'immuno-scintigraphie	O
+cardiaque	O
+réalisée	O
+le	O
+07	O
+octobre	O
+2016,	O
+a	O
+conclu	O
+à	O
+une	O
+FEVG	O
+normale	O
+à	O
+62%.	O
+
+La	O
+chimiothérapie	O
+a	O
+été	O
+instituée	O
+le	O
+18	O
+octobre	O
+2016.	O
+
+La	O
+patiente	O
+a	O
+reçu	O
+4	O
+cures	O
+de	O
+FARMORUBICINE-ENDOXAN	O
+
+puis	O
+quatre	O
+cures	O
+de	O
+TAXOTERE-HERCEPTIN.	O
+
+On	O
+notait	O
+alors	O
+une	O
+réponse	O
+complète	O
+clinique.	O
+
+Une	O
+tumorectomie	O
+avec	O
+curage	O
+axillaire	O
+a	O
+été	O
+réalisée	O
+le	O
+20	O
+avril	O
+2017.	O
+
+L'examen	O
+histologique	O
+définitif	O
+retrouve	O
+
+des	O
+lésions	O
+de	O
+carcinome	O
+canalaire	O
+infiltrant	O
+sur	O
+25	O
+mm,	O
+sans	O
+in	O
+situ,	O
+marges	O
+saines	O
+(bord	O
+inférieur	O
+=	O
+bord	O
+
+superficiel)	O
+2N+/8.	O
+
+La	O
+patiente	O
+a	O
+ensuite	O
+poursuivi	O
+l'HERCEPTIN	O
+en	O
+monothérapie	O
+pour	O
+un	O
+total	O
+de	O
+18	O
+injections	O
+qui	O
+se	O
+sont	O
+
+terminées	O
+le	O
+15	O
+janvier	O
+2018.	O
+
+Une	O
+radiothérapie	O
+au	O
+niveau	O
+du	O
+sein	O
+gauche	O
+et	O
+des	O
+aires	O
+ganglionnaires	O
+sus	O
+et	O
+sous-claviculaires	O
+a	O
+
+été	O
+délivrée	O
+et	O
+la	O
+patiente	O
+a	O
+reçu	O
+une	O
+hormonothérapie	O
+de	O
+type	O
+ANASTROZOLE	O
+à	O
+partir	O
+de	O
+mai	O
+2017.	O
+
+En	O
+mars	O
+2021,	O
+la	O
+patiente	O
+palpait	O
+une	O
+masse	O
+au	O
+niveau	O
+axillaire	O
+gauche.	O
+
+Un	O
+bilan	O
+biologique	O
+a	O
+objectivé	O
+une	O
+
+augmentation	O
+du	O
+CA	O
+15-3	O
+à	O
+40	O
+et	O
+une	O
+échographie	O
+axillaire	O
+qui	O
+a	O
+retrouvé	O
+une	O
+masse	O
+hypoéchogène,	O
+mal	O
+
+limitée	O
+de	O
+ce	O
+creux	O
+axillaire	O
+gauche.	O
+
+A	O
+l'examen	O
+clinique,	O
+on	O
+palpait	O
+effectivement	O
+une	O
+masse	O
+de	O
+3	O
+cm	O
+dans	O
+le	O
+creux	O
+axillaire	O
+gauche	O
+bas.	O
+
+Des	O
+microbiopsies	O
+ont	O
+été	O
+effectuées,	O
+le	O
+1er	O
+avril	O
+2021.	O
+
+L'examen	O
+histologique,	O
+concluait	O
+à	O
+des	O
+lésions	O
+de	O
+
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+grade	O
+II	O
+faible,	O
+RE+++	B-Estrogen_receptor
+90%,	O
+RP++	B-Progesterone_receptor
+90%,	O
+Her2	B-HER2_IHC
+:	I-HER2_IHC
+3+,	I-HER2_IHC
+Ki67	B-Ki67
+60%	I-Ki67
+(masse	O
+de	O
+11	O
+
+mm	O
+de	O
+grand	O
+axe).	O
+
+Un	O
+TEP-scan	O
+avait	O
+retrouvé	O
+cette	O
+masse	O
+axillaire	O
+gauche,	O
+mais	O
+également	O
+un	O
+hypermétabolisme	O
+au	O
+niveau	O
+du	O
+
+cotyle	O
+droit	O
+avec	O
+un	O
+SUV	O
+à	O
+10.9.	O
+
+L'IRM	O
+confirmait	O
+l'aspect	O
+secondaire.	O
+
+Il	O
+avait	O
+été	O
+décidé	O
+en	O
+RCP	O
+de	O
+proposer	O
+à	O
+la	O
+patiente	O
+une	O
+association	O
+PACLITAXEL-Trastuzumab-Pertuzumab.	O
+
+Une	O
+voie	O
+d'abord	O
+centrale	O
+a	O
+été	O
+mise	O
+en	O
+place	O
+le	O
+22	O
+avril	O
+2021	O
+et	O
+la	O
+chimiothérapie	O
+a	O
+été	O
+instituée	O
+le	O
+30	O
+avril	O
+
+2021.	O
+
+La	O
+FEVG	O
+du	O
+28	O
+avril	O
+2021	O
+était	O
+normale	O
+à	O
+55%.	O
+
+La	O
+patiente	O
+a	O
+reçu	O
+14	O
+cures	O
+(le	O
+lequel	O
+a	O
+été	O
+arrêté	O
+en	O
+octobre	O
+2021)	O
+et	O
+elle	O
+poursuit	O
+maintenant	O
+le	O
+Trastuzumab-	O
+
+PERJETA	O
+en	O
+association	O
+sous-cutanée	O
+(PHESGO)	O
+3x/4	O
+à	O
+domicile.	O
+
+La	O
+radiothérapie	O
+de	O
+l'aire	O
+ganglionnaire	O
+axillaire	O
+gauche	O
+a	O
+été	O
+effectuée	O
+du	O
+25	O
+mars	O
+au	O
+04	O
+avril	O
+2022.	O
+
+Ce	O
+jour,	O
+la	O
+patiente	O
+est	O
+en	O
+très	O
+bon	O
+état	O
+général.	O
+
+Elle	O
+n'a	O
+pas	O
+de	O
+symptomatologie	O
+notable,	O
+mais	O
+une	O
+sécheresse	O
+
+nasale	O
+et	O
+quelques	O
+courbatures	O
+post-injections	O
+de	O
+PHESGO.	O
+
+L'examen	O
+clinique	O
+n'est	O
+pas	O
+contributif,	O
+en	O
+dehors	O
+des	O
+séquelles	O
+fibreuses,	O
+indurées	O
+du	O
+sein	O
+gauche	O
+connues	O
+et	O
+
+inchangées.	O
+
+Les	O
+marqueurs	O
+tumoraux	O
+sont	O
+normaux.	O
+
+La	O
+FEVG	O
+du	O
+14	O
+septembre	O
+2022	O
+était	O
+normale	O
+à	O
+67%.	O
+
+Poursuite	O
+du	O
+PHESGO.	O
+
+Je	O
+reverrai	O
+la	O
+patiente	O
+dans	O
+2	O
+mois	O
+avec	O
+un	O
+TEP-scan.	O
+
+Bien	O
+confraternellement.	O
+
+Docteur	O
+missira	O
+BAUDIERMENDIBURE	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+18/11/2022.	O
+
+Médecin	O
+référent	O
+:	O
+tharmaratnamala.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+em-ly,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+zenina	O
+
+3	O
+Mme	O
+larbhi	O
+ALEXINITZER	O
+
+Parmacologie	O
+:	O
+Dr	O
+bernaed	O
+
+Arc	O
+:	O
+Mme	O
+sirilia.	O
+
+IDE	O
+:	O
+Mme	O
+chongsui,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+TEP	O
+TDM	O
+:	O
+progression	O
+hépatique	O
+isolée	O
+d'une	O
+lésion	O
+préexistante	O
+
+Conclusion	O
+
+Trastuzumab	O
+Deruxtecan	O
+
+"	O
+

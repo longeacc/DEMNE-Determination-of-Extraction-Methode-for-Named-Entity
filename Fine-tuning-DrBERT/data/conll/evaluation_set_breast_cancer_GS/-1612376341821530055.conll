@@ -1,0 +1,1421 @@
+# doc_id = -1612376341821530055
+1	O
+Mme	O
+kevin	O
+somritchosson	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+06.50.70.65.96	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+rabaka	O
+DZAKOS	O
+
+Responsable	O
+
+0141776900RES	O
+
+Signataire	O
+:	O
+Dr	O
+ADENIJI	O
+kiddinapillai	O
+
+Paris	O
+le	O
+29/07/2022	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+somritchosson	O
+kevin	O
+
+Né(e)	O
+le	O
+29/01/1950	O
+-	O
+NIP	O
+:	O
+8001707727	O
+
+Correspondants	O
+:	O
+
+Dr	O
+CAHEN	O
+KIMBUCCELLATO	O
+asdgig,	O
+Dr	O
+FIEVET-PALIES	O
+gandaradjou,	O
+Dr	O
+ADENIJI	O
+kiddinapillai,	O
+Dr	O
+DZAKOS	O
+rabaka,	O
+GASTROENTEROLOGIE	O
+,	O
+Dr	O
+PATMARAJAH	O
+depangkar,	O
+Dr	O
+
+PAPAREL	O
+sousstationjacquesmignot,	O
+Pr	O
+MONTEIRODEMOURA	O
+ashevin,	O
+Dr	O
+FILOCHE	O
+lanujan,	O
+Dr	O
+MIEZAL	O
+viria	O
+
+Compte	O
+rendu	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+La	O
+patiente	O
+a	O
+découvert	O
+une	O
+masse	O
+de	O
+son	O
+sein	O
+droit,	O
+ce	O
+qui	O
+a	O
+motivé	O
+un	O
+bilan	O
+radiologique,	O
+lequel	O
+a	O
+mis	O
+en	O
+
+évidence	O
+une	O
+opacité	O
+spiculée	O
+avec	O
+une	O
+masse	O
+échographique	O
+de	O
+2	O
+cm	O
+à	O
+l'union	O
+des	O
+quadrants	O
+externes	O
+droits.	O
+
+Des	O
+biopsies	O
+:	O
+ont	O
+été	O
+réalisées	O
+le	O
+23.05.2014.	O
+
+L'examen	O
+histologique	O
+conclut	O
+:	O
+à	O
+un	O
+carcinome	O
+canalaire	O
+grade	O
+3.	O
+
+RE	B-Estrogen_receptor
+:	I-Estrogen_receptor
+80	I-Estrogen_receptor
+%,	I-Estrogen_receptor
+RP	B-Progesterone_receptor
+:	I-Progesterone_receptor
+5	I-Progesterone_receptor
+%,	I-Progesterone_receptor
+Her	B-HER2_status
+2-,	I-HER2_status
+Ki	B-Ki67
+67	I-Ki67
+à	I-Ki67
+40	I-Ki67
+%.	I-Ki67
+
+La	O
+micro	O
+biopsie	O
+axillaire	O
+droite	O
+retrouve	O
+cellules	O
+malignes.	O
+
+A	O
+l'examen	O
+clinique	O
+initial	O
+le	O
+3/06/14	O
+:	O
+on	O
+palpe	O
+une	O
+masse	O
+de	O
+5x4,5	O
+cm	O
+du	O
+quadrant	O
+supéro	O
+externe	O
+du	O
+sein	O
+droit,	O
+
+avec	O
+un	O
+ganglion	O
+axillaire	O
+d'1	O
+cm	O
+mobile.	O
+
+On	O
+note	O
+également	O
+une	O
+fossette	O
+cutanée	O
+en	O
+regard	O
+de	O
+la	O
+masse	O
+palpée.	O
+
+Bilan	O
+complémentaire	O
+par	O
+:	O
+
+Nouvelle	O
+microbiopsie	O
+à	O
+Saint	O
+Louis	O
+le	O
+6/06/14,	O
+qui	O
+retrouve	O
+un	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+grade	O
+III.	O
+
+RE	B-Estrogen_receptor
++	I-Estrogen_receptor
+à	O
+
++++	O
+70	O
+%.	O
+
+RP-,	B-Progesterone_receptor
+Her	B-HER2_status
+2-.	I-HER2_status
+
+Pas	O
+d'embole.	O
+
+IRM	O
+mammaire	O
+du	O
+12/06/14,	O
+qui	O
+retrouve	O
+une	O
+masse	O
+de	O
+31	O
+mm	O
+associée	O
+à	O
+une	O
+adénopathie	O
+axillaire	O
+droite	O
+de	O
+14	O
+
+mm.	O
+
+Pas	O
+d'autre	O
+prise	O
+de	O
+contraste	O
+suspect.	O
+
+Examen	O
+classé	O
+ACR	O
+6	O
+à	O
+droite	O
+et	O
+ACR	O
+2	O
+à	O
+gauche.	O
+
+Tep-scanner	O
+du	O
+10/06/14,	O
+qui	O
+retrouve	O
+un	O
+hypermétabolisme	O
+du	O
+QSE	O
+du	O
+sein	O
+droit	O
+(SUmax	O
+à	O
+8,9	O
+et	O
+d'une	O
+
+adénopathie	O
+axillaire	O
+droite	O
+(SUVmax	O
+à	O
+3,8)	O
+sans	O
+autre	O
+lésion	O
+à	O
+distance.	O
+
+Scintigraphie	O
+osseuse	O
+du	O
+6/06/14,	O
+qui	O
+ne	O
+retrouve	O
+pas	O
+d'argument	O
+en	O
+faveur,	O
+de	O
+localisation	O
+secondaire	O
+mais	O
+
+simplement	O
+des	O
+foyers	O
+arthrosiques	O
+diffus.	O
+
+Radiographie	O
+thoracique	O
+:	O
+normale.	O
+
+Echographie	O
+abdomino-pelvienne	O
+:	O
+normale	O
+
+La	O
+chimiothérapie	O
+a	O
+été	O
+instituée	O
+le	O
+19.06.2006.	O
+
+La	O
+patiente	O
+a	O
+reçu	O
+4	O
+cures	O
+de	O
+FARMORUBICINE-ENDOXAN	O
+
+puis	O
+3	O
+cures	O
+de	O
+TAXOTERE,	O
+la	O
+dernière	O
+cure	O
+n'ayant	O
+pas	O
+été	O
+effectuée	O
+du	O
+fait	O
+d'une	O
+toxicité	O
+neurologique	O
+
+périphérique.	O
+
+A	O
+l'issu	O
+de	O
+la	O
+chimiothérapie,	O
+on	O
+notait	O
+une	O
+réponse	O
+clinique	O
+partielle	O
+qui	O
+a	O
+été	O
+confirmée	O
+par	O
+
+l'échographie.	O
+
+Une	O
+tumorectomie	O
+avec	O
+curage	O
+axillaire	O
+a	O
+donc	O
+été	O
+réalisée	O
+le	O
+28.11.2014.	O
+
+2	O
+Mme	O
+kevin	O
+somritchosson	O
+
+L'examen	O
+histologique	O
+retrouvait	O
+des	O
+lésions	O
+de	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+20	O
+mm	O
+de	O
+grand	O
+axe	O
+avec	O
+
+une	O
+régression	O
+estimée	O
+à	O
+50%,	O
+sans	O
+embole,	O
+sans	O
+composante	O
+intra-canalaire,	O
+RE++	B-Estrogen_receptor
+pour	O
+80%	O
+des	O
+cellules,	O
+
+RP-,	B-Progesterone_receptor
+Her2-,	B-HER2_status
+3	O
+ganglions	O
+métastatiques	O
+sur	O
+12.	O
+
+Un	O
+traitement	O
+par	O
+ANASTROZOLE	O
+a	O
+été	O
+institué	O
+en	O
+décembre	O
+2014	O
+associé	O
+de	O
+l'OROCAL	O
+D3,	O
+l'irradiation	O
+a	O
+
+ensuite	O
+été	O
+délivrée	O
+qui	O
+s'est	O
+terminée	O
+avec	O
+la	O
+curiethérapie	O
+le	O
+16.03.2015.	O
+
+Le	O
+30	O
+mars	O
+2021,	O
+la	O
+patiente	O
+a	O
+fait	O
+une	O
+1ère	O
+injection	O
+d'AstraZeneca	O
+pour	O
+la	O
+vaccination	O
+Covid.	O
+
+Deux	O
+semaines	O
+
+après,	O
+elle	O
+a	O
+présenté	O
+une	O
+douleur	O
+basithoracique	O
+droite	O
+qui	O
+a	O
+permis	O
+de	O
+mettre	O
+en	O
+évidence	O
+un	O
+aspect	O
+de	O
+
+pneumopathie.	O
+
+Elle	O
+a	O
+pris	O
+de	O
+l'AMOXICILLINE,	O
+elle	O
+a	O
+fait	O
+un	O
+clostridium	O
+et	O
+finalement,	O
+le	O
+bilan	O
+de	O
+contrôle	O
+avec	O
+
+scanner	O
+thoraco-abdominal	O
+a	O
+mis	O
+en	O
+évidence	O
+une	O
+opacité	O
+du	O
+lobe	O
+inférieur	O
+droit,	O
+des	O
+adénopathies	O
+
+médiastinales	O
+nécrotiques,	O
+la	O
+plus	O
+volumineuse	O
+mesurant	O
+12	O
+mm	O
+et	O
+des	O
+nodules	O
+hépatiques	O
+tout	O
+à	O
+fait	O
+
+suspects.	O
+
+Des	O
+biopsies	O
+ont	O
+été	O
+effectuées	O
+au	O
+niveau	O
+d'un	O
+nodule	O
+hépatique	O
+(segment	O
+V),	O
+le	O
+31	O
+mai	O
+2021.	O
+
+L'examen	O
+
+anatomopathologique,	O
+conclut	O
+à	O
+la	O
+localisation	O
+d'un	O
+adénocarcinome	O
+mammaire,	O
+RE+	B-Estrogen_receptor
+fort	O
+à	O
+80%,	O
+RP-,	B-Progesterone_receptor
+Her2-.	B-HER2_status
+
+Il	O
+avait	O
+été	O
+décidé,	O
+si	O
+la	O
+biopsie	O
+hépatique	O
+concluait	O
+à	O
+la	O
+localisation	O
+hépatique	O
+d'un	O
+adénocarcinome	O
+mammaire,	O
+de	O
+
+biopsier	O
+l'opacité	O
+du	O
+poumon	O
+droit.	O
+
+Finalement,	O
+les	O
+pneumologues	O
+avaient	O
+jugé	O
+préférable	O
+d'effectuer	O
+une	O
+biopsie	O
+per-fibroscopie,	O
+ce	O
+qui	O
+a	O
+été	O
+réalisé	O
+
+le	O
+25	O
+juin	O
+2021.	O
+
+L'examen	O
+a	O
+permis	O
+d'objectiver	O
+une	O
+trachée	O
+épaissie.	O
+
+Des	O
+biopsies	O
+ont	O
+été	O
+pratiquées	O
+:	O
+trachée	O
+
+normale	O
+avec	O
+sur-élévation	O
+des	O
+cartilages	O
+à	O
+plusieurs	O
+niveaux.	O
+
+Au	O
+niveau	O
+de	O
+l'arbre	O
+bronchique	O
+droit,	O
+étaient	O
+mises	O
+en	O
+évidence	O
+quelques	O
+sécrétions	O
+épaisses.	O
+
+Des	O
+biopsies	O
+
+ont	O
+été	O
+effectuées	O
+en	O
+regard	O
+des	O
+ganglions	O
+et	O
+de	O
+l'éperon	O
+sous-segmentaire	O
+de	O
+la	O
+latéro-basale.	O
+
+Un	O
+lavage	O
+a	O
+
+été	O
+effectué.	O
+
+L'examen	O
+histologique,	O
+ne	O
+retrouvait	O
+aucune	O
+lésion	O
+néoplasique.	O
+
+La	O
+patiente	O
+a	O
+refusé	O
+une	O
+nouvelle	O
+biopsie.	O
+
+Par	O
+ailleurs,	O
+le	O
+TEP-scanner	O
+du	O
+22	O
+juin	O
+2021	O
+a	O
+objectivé	O
+des	O
+localisations	O
+osseuses	O
+multiples,	O
+en	O
+particulier	O
+au	O
+
+niveau	O
+C2,	O
+humérus	O
+droit,	O
+T4,	O
+bassin,	O
+diaphyse	O
+fémorale	O
+gauche.	O
+
+On	O
+notait	O
+aussi	O
+au	O
+TEP-scanner,	O
+plusieurs	O
+
+lésions	O
+hépatiques,	O
+des	O
+ganglions	O
+thoraciques	O
+et	O
+le	O
+nodule	O
+pulmonaire	O
+du	O
+lobe	O
+inférieur	O
+droit	O
+avec	O
+un	O
+SUV	O
+
+à	O
+9.4	O
+et	O
+un	O
+hyprmétabolisme	O
+colique	O
+et	O
+un	O
+ganglion	O
+intra-parotidien	O
+droit	O
+avec	O
+un	O
+SUV	O
+à	O
+15.6.	O
+
+Il	O
+a	O
+été	O
+décidé	O
+en	O
+RCP	O
+d'un	O
+traitement	O
+par	O
+ABEMACICLIB-LETROLE	O
+que	O
+la	O
+patiente	O
+a	O
+débuté	O
+le	O
+26	O
+juin	O
+2021.	O
+
+Les	O
+doses	O
+ont	O
+rapidement	O
+été	O
+diminuées	O
+à	O
+100	O
+pour	O
+l'ABEMACICLIB	O
+du	O
+fait	O
+de	O
+diarrhées	O
+et	O
+de	O
+douleurs	O
+
+abdominales.	O
+
+La	O
+coloscopie	O
+du	O
+17	O
+décembre	O
+2021	O
+avait	O
+montré	O
+une	O
+lésion	O
+inflammatoire	O
+ulcérée,	O
+à	O
+bords	O
+surélevés	O
+au	O
+
+niveau	O
+du	O
+côlon	O
+droit.	O
+
+Les	O
+biopsies	O
+avaient	O
+conclu	O
+à	O
+des	O
+lésions	O
+inflammatoires.	O
+
+Fin	O
+janvier	O
+2022,	O
+on	O
+notait	O
+une	O
+augmentation	O
+du	O
+CA	O
+15-3	O
+à	O
+57.	O
+
+Le	O
+TEP-scan	O
+avait	O
+conclu	O
+à	O
+la	O
+stabilité	O
+des	O
+lésions	O
+pulmonaires	O
+et	O
+hépatiques,	O
+à	O
+l'absence	O
+de	O
+ganglion,	O
+mais	O
+à	O
+
+une	O
+augmentation	O
+de	O
+certaines	O
+lésions	O
+osseuses	O
+qui	O
+avait	O
+été	O
+confirmée	O
+par	O
+une	O
+relecture	O
+et	O
+en	O
+RCP.	O
+
+On	O
+
+notait	O
+également	O
+un	O
+hypermétabolisme	O
+au	O
+niveau	O
+du	O
+quadrant	O
+inféro-externe	O
+gauche.	O
+
+L'IRM	O
+cérébrale	O
+pratiquée,	O
+le	O
+08	O
+février	O
+2022	O
+du	O
+fait	O
+de	O
+douleurs	O
+de	O
+la	O
+voûte	O
+crânienne,	O
+retrouvait	O
+des	O
+plages	O
+
+osseuses	O
+hétérogènes,	O
+en	O
+particulier	O
+en	O
+frontal	O
+gauche	O
+et	O
+des	O
+lésions	O
+en	O
+hyposignal	O
+au	O
+niveau	O
+de	O
+C2,	O
+C3	O
+
+(les	O
+coupes	O
+scanners	O
+du	O
+TEP-scan	O
+objectivaient	O
+une	O
+lyse	O
+majeure	O
+de	O
+T4).	O
+
+Il	O
+avait	O
+été	O
+décidé	O
+en	O
+RCP	O
+de	O
+proposer	O
+à	O
+la	O
+patiente,	O
+sur	O
+le	O
+plan	O
+systémique,	O
+une	O
+chimiothérapie	O
+de	O
+type	O
+
+PACLITAXEL	O
+en	O
+monothérapie,	O
+qui	O
+a	O
+été	O
+instituée	O
+le	O
+11	O
+février	O
+2022.	O
+
+La	O
+patiente,	O
+par	O
+ailleurs,	O
+est	O
+sous	O
+INNOHEP	O
+pour	O
+une	O
+thrombose	O
+veineuse	O
+profonde	O
+du	O
+membre	O
+inférieur	O
+
+gauche.	O
+
+La	O
+RCP	O
+osseuse	O
+a	O
+proposé	O
+une	O
+radiothérapie	O
+au	O
+niveau	O
+cervicale	O
+et	O
+une	O
+radiothérapie	O
+au	O
+niveau	O
+T4	O
+avant	O
+
+une	O
+cimentoplastie.	O
+
+Le	O
+Neurochirurgien	O
+avait	O
+confirmé	O
+cette	O
+décision.	O
+
+La	O
+radiothérapie	O
+au	O
+niveau	O
+C1,	O
+C2,	O
+T3	O
+et	O
+T5	O
+est	O
+en	O
+cours,	O
+5	O
+séances	O
+sont	O
+prévues.	O
+
+Il	O
+sera	O
+ensuite	O
+discuté	O
+
+d'une	O
+cimentoplastie	O
+en	O
+T4.	O
+
+Par	O
+ailleurs,	O
+des	O
+microbiopsies	O
+ont	O
+été	O
+effectuées	O
+au	O
+niveau	O
+d'une	O
+plage	O
+échographique	O
+correspondant	O
+à	O
+
+l'hypermétabolisme	O
+du	O
+quadrant	O
+inféro-externe	O
+gauche,	O
+le	O
+10	O
+mars	O
+2022.	O
+
+L'examen	O
+histologique,	O
+concluait	O
+à	O
+des	O
+
+lésions	O
+de	O
+carcinome	O
+canalaire	O
+infiltrant,	O
+RE+++	B-Estrogen_receptor
+90%,	O
+RP-,	B-Progesterone_receptor
+Her2	B-HER2_IHC
+:	I-HER2_IHC
+0.	I-HER2_IHC
+
+Il	O
+s'agit	O
+d'un	O
+grade	O
+histologique	O
+II	O
+avec	O
+
+un	O
+Ki67	B-Ki67
+à	I-Ki67
+35%.	I-Ki67
+
+Un	O
+clip	O
+a	O
+été	O
+mis	O
+en	O
+place.	O
+
+La	O
+patiente	O
+continue	O
+le	O
+PACLITAXEL.	O
+
+3	O
+Mme	O
+kevin	O
+somritchosson	O
+
+Ce	O
+jour,	O
+elle	O
+est	O
+plutôt	O
+en	O
+bon	O
+état	O
+général	O
+mais	O
+elle	O
+a	O
+eu	O
+un	O
+gros	O
+épisode	O
+de	O
+constipation.	O
+
+Elle	O
+se	O
+plaint	O
+aussi	O
+
+d'anorexie,	O
+de	O
+dysgeusie,	O
+d'hyposialie.	O
+
+Le	O
+Surfarlem	O
+s'était	O
+avéré	O
+peu	O
+efficace.	O
+
+Les	O
+douleurs	O
+sont	O
+globalement	O
+
+stables.	O
+
+Elle	O
+continue	O
+l'Actiskenan	O
+5	O
+deux	O
+fois	O
+par	O
+jour,	O
+et,	O
+donc	O
+le	O
+Solupred	O
+20.	O
+
+Elle	O
+présente	O
+une	O
+neuropathie	O
+
+périphérique	O
+grade	O
+1.	O
+
+Au	O
+niveau	O
+biologique,	O
+on	O
+note	O
+un	O
+CA	O
+15-3	O
+normalisé	O
+à	O
+26.	O
+
+Je	O
+demande	O
+à	O
+la	O
+patiente	O
+un	O
+TEP-scanner	O
+pour	O
+fin	O
+juillet	O
+à	O
+son	O
+retour	O
+de	O
+vacances.	O
+
+Elle	O
+verra	O
+aussi	O
+bientôt	O
+la	O
+gastro-entérologue.	O
+
+Bien	O
+confraternellement.	O
+
+Docteur	O
+kiddinapillai	O
+ADENIJI	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+29/07/2022.	O
+
+Médecin	O
+référent	O
+:	O
+ahaziran.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+elhadjibrahim,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+nagyhafed	O
+
+Parmacologie	O
+:	O
+Dr	O
+zerene	O
+
+Arc	O
+:	O
+Mme	O
+nazihahmedmohamedahmed.	O
+
+IDE	O
+:	O
+Mme	O
+ariman,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+TEP	O
+TDM	O
+du	O
+25/07/22	O
+:	O
+réponse	O
+métabolique	O
+dissociée	O
+avec	O
+apparition	O
+d'une	O
+lésion	O
+hypermétabolique	O
+
+de	O
+C7	O
+et	O
+progression	O
+de	O
+la	O
+lésion	O
+de	O
+l'aile	O
+iliaque	O
+gauche	O
+
+soit	O
+PD	O
+
+Conclusion	O
+
+aromasine	O
+everolimus	O
+

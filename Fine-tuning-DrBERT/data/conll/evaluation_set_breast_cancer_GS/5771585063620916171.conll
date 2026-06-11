@@ -1,0 +1,1676 @@
+# doc_id = 5771585063620916171
+"	O
+
+1	O
+Mme	O
+tuanmohamed	O
+sounac	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+0607649564	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+dumitrupetru	O
+PBLMRSSPITROIS	O
+
+Responsable	O
+
+0164391350	O
+
+Signataire	O
+:	O
+Dr	O
+BALNY	O
+keshwurnath	O
+
+Paris	O
+le	O
+10/03/2023	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+sounac	O
+tuanmohamed	O
+
+Né(e)	O
+le	O
+13/01/1964	O
+-	O
+NIP	O
+:	O
+8002051268	O
+
+Correspondants	O
+:	O
+
+Dr	O
+COHEN	O
+KHALIDMAHMOODGONDAL	O
+bladounou,	O
+Dr	O
+EL	O
+BACTOGOSSE	O
+daofen,	O
+Dr	O
+PBLMRSSPITROIS	O
+dumitrupetru	O
+(néoadjuvant),	O
+Dr	O
+GERENAZOUAOUI	O
+barke,	O
+Dr	O
+LAHOUARGAMRA	O
+thewabrigitte,	O
+Dr	O
+ALIOUX	O
+
+Hannah,	O
+PNEUMOLOGIE	O
+,	O
+Dr	O
+PRIGENT	O
+JEANMARIEDIANU	O
+rassalan	O
+
+Compte	O
+rendu	O
+
+Lésion	O
+initiale	O
+sein	O
+
+Grade	O
+:	O
+2.	O
+
+Cerb	B-HER2_IHC
+B2	I-HER2_IHC
+:	I-HER2_IHC
+0.	I-HER2_IHC
+
+Récepteurs	B-Estrogen_receptor
+RE/RP	I-Estrogen_receptor
+:	I-Estrogen_receptor
++/+.	B-Progesterone_receptor
+
+Ki67	B-Ki67
+20	I-Ki67
+%.	I-Ki67
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+-	O
+Dernière	O
+mammo-échographie	O
+en	O
+2019	O
+:	O
+ACR2	O
+bilatéral.	O
+
+-	O
+Février	O
+2021	O
+:	O
+Douleurs	O
+lombaires	O
+depuis	O
+plusieurs	O
+mois,	O
+asthénie,	O
+perte	O
+de	O
+poids	O
+jusqu'à	O
+84	O
+kg.	O
+
+-	O
+Mammographie	O
+11/02/21	O
+:	O
+Epaississement	O
+rétractile	O
+de	O
+la	O
+plaque	O
+aréolo-mamelonnaire	O
+avec	O
+apparition	O
+de	O
+dépôt	O
+de	O
+
+microcalcification	O
+rétro-aréolaire	O
+et	O
+du	O
+quadrant	O
+externe	O
+de	O
+disposition	O
+ductale	O
+hétéromorphe	O
+nécessitant	O
+une	O
+évaluation	O
+
+histologique	O
+par	O
+mammotome,	O
+un	O
+ACR5	O
+à	O
+droite	O
+et	O
+ACR2	O
+à	O
+gauche,	O
+
+-	O
+Echographie	O
+du	O
+sein	O
+droit	O
+:	O
+atténuation	O
+ultra	O
+sonique	O
+assez	O
+diffuse	O
+sans	O
+lésions	O
+circonscrites	O
+nettement	O
+identifiables,	O
+on	O
+
+note	O
+une	O
+hyper	O
+vascularisation	O
+diffuse	O
+en	O
+doppler	O
+sans	O
+caractère	O
+spécifique,	O
+pas	O
+de	O
+masse	O
+axillaire.	O
+
+-	O
+Scanner	O
+TAP	O
+17/02/21	O
+:	O
+Atteinte	O
+mammaire	O
+et	O
+mamelonnaire	O
+droite	O
+avec	O
+image	O
+ganglionnaire	O
+axillaire	O
+droite	O
+
+équivoque,	O
+stéatose	O
+hépatique	O
+et	O
+ses	O
+mages	O
+osseux	O
+vertébrales	O
+et	O
+pelvi	O
+fémorales	O
+avec	O
+un	O
+aspect	O
+remanié	O
+de	O
+la	O
+texture	O
+
+osseuse	O
+vertébrale	O
+avec	O
+des	O
+images	O
+ostéolytiques	O
+intra-somatiques	O
+et	O
+des	O
+taches	O
+dorsales	O
+de	O
+T6	O
+à	O
+T11.	O
+
+Un	O
+tassement	O
+
+pathologique	O
+de	O
+L1,	O
+des	O
+lacunes	O
+osseuses	O
+de	O
+L2-L3	O
+et	O
+des	O
+images	O
+ostéolytiques	O
+également	O
+en	O
+regard	O
+du	O
+squelette	O
+pelvi	O
+
+fémorale	O
+et	O
+des	O
+ailes	O
+iliaques.	O
+
+-	O
+A	O
+l'examen	O
+clinique	O
+initial,	O
+OMS1,	O
+poids	O
+89kg	O
+pour	O
+1m60,	O
+Bonnet	O
+110	O
+D.	O
+
+Douleurs	O
+lombaires	O
+et	O
+du	O
+rachis	O
+également	O
+thoracique	O
+et	O
+les	O
+douleurs	O
+de	O
+côtes	O
+à	O
+droite	O
+et	O
+d'une	O
+asthénie	O
+au	O
+moindre	O
+effort.	O
+
+Rétraction	O
+du	O
+mamelon	O
+sans	O
+signes	O
+inflammatoires	O
+locaux	O
+au	O
+niveau	O
+du	O
+sein	O
+droit,	O
+sans	O
+maladie	O
+de	O
+Paget,	O
+avec	O
+
+masse	O
+rétro-mamelonnaire	O
+de	O
+4x3	O
+cm.	O
+
+Douleurs	O
+profondes	O
+en	O
+regard	O
+des	O
+côtes,	O
+pas	O
+de	O
+douleurs	O
+sternales,	O
+pas	O
+
+d'adénopathie	O
+axillaire	O
+ni	O
+sous	O
+ni	O
+sus	O
+claviculaire.	O
+
+Reste	O
+de	O
+l'examen	O
+sans	O
+particularité.	O
+
+-	O
+TEP	O
+Scanner	O
+02/03/21	O
+:	O
+Multiples	O
+lésions	O
+ostéolytiques	O
+hyper	O
+métabolique	O
+du	O
+squelette	O
+axial	O
+et	O
+s'est	O
+périphérique	O
+
+avec	O
+des	O
+lésions	O
+au	O
+niveau	O
+du	O
+tiers	O
+supérieur	O
+du	O
+fémur	O
+droit	O
+SUV	O
+max	O
+7,2,	O
+avec	O
+rupture	O
+de	O
+la	O
+corticale	O
+étendue	O
+jusqu'au	O
+
+col,	O
+tiers	O
+supérieur	O
+du	O
+fémur	O
+gauche	O
+infra	O
+centimétriques,	O
+SUV	O
+à	O
+4,9,	O
+aile	O
+iliaque	O
+SUV	O
+max	O
+à	O
+8,	O
+hémi	O
+sacrum	O
+gauche	O
+SUV	O
+
+à	O
+7,5,	O
+gril	O
+costale	O
+bilatérale,	O
+la	O
+quasi-totalité	O
+des	O
+vertèbres,	O
+avec	O
+comme	O
+cible,	O
+L4	O
+SUV	O
+à	O
+7,9,	O
+L1	O
+8.2,	O
+T10	O
+SUV	O
+à	O
+7,7	O
+au	O
+
+niveau	O
+du	O
+manubrium	O
+sternal	O
+latéralisé	O
+à	O
+gauche	O
+SUV	O
+max	O
+à	O
+7.	O
+
+Absence	O
+de	O
+métastase	O
+hépatique,	O
+présence	O
+de	O
+micronodule	O
+lobaire	O
+supérieur	O
+droit	O
+non	O
+hyper	O
+métabolique,	O
+hypertrophie	O
+
+modérément	O
+hyper	O
+métabolique	O
+de	O
+la	O
+glande	O
+mammaire	O
+droite,	O
+avec	O
+rétraction	O
+mamelonnaire	O
+SUV	O
+à	O
+3,5	O
+et	O
+plusieurs	O
+
+ganglions	O
+infra	O
+centimétriques	O
+axillaires	O
+droit,	O
+on	O
+en	O
+dénombre	O
+plus	O
+de	O
+6	O
+avec	O
+un	O
+hyper	O
+métabolisme	O
+à	O
+2.5.	O
+
+-	O
+Macrobiopsie	O
+sous	O
+radiographie	O
+10/03/21	O
+de	O
+2	O
+cibles,	O
+une	O
+rétro-mamelonnaire	O
+profonde	O
+et	O
+une	O
+rétro-mamelonnaire	O
+
+superficielle	O
+du	O
+fait	O
+de	O
+l'étendu	O
+des	O
+micro-calcifications	O
+avec	O
+pose	O
+de	O
+clip	O
+:	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+grade	O
+II,	O
+RE	B-Estrogen_receptor
+
+100%	I-Estrogen_receptor
++++,	O
+RP	O
+100%	O
++++,	O
+Ki67	O
+20%,	O
+HER2	O
+-,	O
+score	O
+0,	O
+E-Cadhérine	O
++.	O
+
+Les	O
+2	O
+zones	O
+de	O
+macro-biopsies	O
+son	O
+positives.	O
+
+-	O
+Bilan	O
+dentaire	O
+,	O
+normal	O
+d'après	O
+la	O
+patiente	O
+(compte	O
+rendu	O
+non	O
+vu).	O
+
+XGEVA	O
+débuté	O
+en	O
+mars	O
+2021.	O
+
+-	O
+RCP	O
+26/03/21	O
+:	O
+Hormonothérapie	O
+par	O
+anti-aromatases	O
+inhibiteurs	O
+de	O
+CDK4/6.	O
+
+-	O
+Échographie	O
+cardiaque	O
+le	O
+25/02/21	O
+:	O
+FEVG	O
+à	O
+65	O
+%.	O
+
+2	O
+Mme	O
+tuanmohamed	O
+sounac	O
+
+-	O
+TEP	O
+TDM	O
+18/11/21	O
+:	O
+Réponse	O
+métabolique	O
+quasi-complète	O
+de	O
+l'atteinte	O
+ostéolytique	O
+diffuse	O
+du	O
+squelette	O
+axial	O
+et	O
+
+appendiculaire	O
+proximal	O
+et	O
+complète	O
+de	O
+ganglions	O
+axillaires	O
+droits.	O
+
+-	O
+IRM	O
+mammaire	O
+18/11/21	O
+:	O
+Pas	O
+de	O
+prise	O
+de	O
+contraste	O
+suspecte	O
+notamment	O
+au	O
+contact	O
+des	O
+clips	O
+à	O
+l'UQInt	O
+du	O
+sein	O
+droit.	O
+
+Bilan	O
+classé	O
+ACR	O
+2	O
+bilatéral.	O
+
+*	O
+Janvier	O
+2022	O
+:	O
+Hospitalisation	O
+pour	O
+pneumopathie	O
+à	O
+Légionnelle.	O
+
+Découverte	O
+en	O
+hospitalisation	O
+lors	O
+de	O
+l'exploration	O
+d'une	O
+anémie	O
+d'un	O
+envahissement	O
+médullaire	O
+au	O
+myélogramme.	O
+
+Interruption	O
+de	O
+l'ABEMACICLIB	O
+fin	O
+décembre	O
+2021	O
+initialement	O
+en	O
+prévision	O
+de	O
+la	O
+chirurgie.	O
+
+Annulation	O
+de	O
+la	O
+chirurgie	O
+mammaire	O
+conservatrice	O
+initialement	O
+prévue	O
+fin	O
+janvier	O
+2021.	O
+
+-	O
+TEP	O
+TDM	O
+11/03/22	O
+:	O
+Poursuite	O
+de	O
+la	O
+réponse	O
+métabolique	O
+quasi-complète	O
+de	O
+l'atteinte	O
+osseuse	O
+disséminée	O
+
+(ostéolytique	O
+du	O
+squelette	O
+axial	O
+et	O
+appendiculaire	O
+proximal).	O
+
+Pas	O
+de	O
+nouvelle	O
+lésion	O
+hypermétabolique	O
+suspecte	O
+dans	O
+
+le	O
+reste	O
+du	O
+volume	O
+exploré,	O
+en	O
+particulier	O
+ganglionnaire.	O
+
+-	O
+IRM	O
+rachidienne	O
+10/06/22	O
+:	O
+Lésions	O
+secondaires	O
+osseuses	O
+étagées	O
+du	O
+rachis	O
+dorso-lombaire	O
+Absence	O
+de	O
+signe	O
+
+d'épidurite.	O
+
+-	O
+RCP	O
+juin	O
+2022	O
+:	O
+discussion	O
+de	O
+mastectomie	O
+si	O
+disparition	O
+des	O
+signes	O
+inflammatoires.	O
+
+Absence	O
+de	O
+mutation	O
+BRCA1/2	O
+en	O
+tumoral	O
+
+-	O
+Depuis	O
+la	O
+dernière	O
+consultation	O
+:	O
+
+-	O
+Douleurs	O
+épigastriques	O
+intenses	O
+EVA	O
+8/10	O
+selon	O
+la	O
+patiente	O
+avec	O
+pyrosis	O
+intermittent.	O
+
+Pour	O
+rappel	O
+:	O
+ATCD	O
+de	O
+fibroscopie	O
+gastriques	O
+normales	O
+en	O
+dehors	O
+d'une	O
+oesophagite	O
+/	O
+gastrite	O
+sous	O
+IPP	O
+
+-	O
+Persistance	O
+de	O
+quelques	O
+douleurs	O
+rachidiennes,	O
+en	O
+rapport	O
+avec	O
+les	O
+lésions	O
+osseuses	O
+étagées	O
+connues	O
+(pas	O
+
+d'épidurite	O
+sur	O
+l'IRM	O
+de	O
+juin	O
+2022)	O
+et	O
+stables.	O
+
+-	O
+Tremblement	O
+de	O
+repos	O
+et	O
+lors	O
+des	O
+mouvements	O
+en	O
+diminution.	O
+
+Consultation	O
+avec	O
+un	O
+neurologue	O
+toujours	O
+en	O
+attente.	O
+
+-	O
+La	O
+tolérance	O
+du	O
+traitement	O
+par	O
+LETROZOLE	O
+-	O
+ABEMACICLIB	O
+-	O
+XGEVA	O
+est	O
+:	O
+correcte.	O
+
+Asthénie	O
+grade	O
+II.	O
+
+Diarrhée	O
+grade	O
+I.	O
+
+Alopécie	O
+grade	O
+I.	O
+
+Quelques	O
+bouffées	O
+de	O
+chaleur.	O
+
+-	O
+Traitement	O
+en	O
+cours	O
+:	O
+Letrozole	O
+1/jour,	O
+Abémaciclib	O
+150mgx2/jour,	O
+X-Geva,	O
+Tramadol	O
+100mg	O
+LP	O
+matin	O
+et	O
+ou	O
+soir	O
+selon	O
+
+les	O
+douleurs,	O
+Paracétamol	O
+2	O
+à	O
+3g/jour,	O
+Lansoprazole	O
+15mg	O
+1	O
+à	O
+2	O
+/jour,	O
+Eliquis	O
+5mgx2/jour,	O
+Bisoprolol	O
+2.5mg	O
+x2/jour	O
+
+-	O
+A	O
+l'examen	O
+clinique	O
+:	O
+OMS	O
+1	O
+.	O
+
+Poids	O
+85	O
+kg	O
+(stable),	O
+Taille	O
+160	O
+cm.	O
+
+Apyrétique.	O
+
+Sein	O
+droit	O
+:	O
+pas	O
+de	O
+masse	O
+palpée,	O
+rétraction	O
+mamelonnaire	O
+persistante,	O
+aspect	O
+de	O
+peau	O
+d'orange	O
+des	O
+QI	O
+
+Sein	O
+gauche	O
+:	O
+pas	O
+de	O
+masse	O
+palpée,	O
+pas	O
+d'écoulement	O
+ni	O
+rétraction	O
+mamelonnaire.	O
+
+Aires	O
+ganglionnaires	O
+:	O
+libres.	O
+
+Auscultation	O
+cardiopulmonaire	O
+sans	O
+particularité.	O
+
+Séquelle	O
+d'érysipèle	O
+MID,	O
+toujours	O
+dur	O
+mais	O
+moins	O
+inflammatoire.	O
+
+Abdomen	O
+souple	O
+dépressible	O
+indolore	O
+sans	O
+masse	O
+palpée.	O
+
+BHA+	O
+
+Sensibilité	O
+à	O
+la	O
+percussion	O
+des	O
+épineuses	O
+surtout	O
+en	O
+lombaire	O
+et	O
+thoracique	O
+haut.	O
+
+Pas	O
+de	O
+radiculalgie.	O
+
+Pas	O
+
+de	O
+déficit	O
+sensitivomoteur.	O
+
+-	O
+Sur	O
+le	O
+plan	O
+biologique	O
+:	O
+Bilan	O
+du	O
+17/11/2022	O
+:	O
+
+Hb	O
+12.1g/dl,	O
+plaquettes	O
+148000	O
+/mm3	O
+
+Leucocytes	O
+3690/mm3	O
+dont	O
+PNN	O
+1400/mm3	O
+et	O
+Lymphocytes1460/mm3	O
+
+Créatinine	O
+78µmol/l,	O
+soit	O
+DFG	O
+estimé	O
+58ml/min	O
+
+BH	O
+normal	O
+
+Albumine	O
+:	O
+38g/l	O
+
+Calcémie	O
+corrigée	O
+2.30mmol/l	O
+
+Marqueurs	O
+tumoraux	O
+:	O
+
+17/11/22	O
+05/09/22	O
+12/07/22	O
+16/04/22	O
+24/02/22	O
+01/02/22	O
+17/11/21	O
+30/08/21	O
+23/07/21	O
+
+initiation	O
+traitement	O
+
+25/02/21	O
+03/21/21	O
+
+ACE	O
+ng/ml	O
+(N<5)	O
+2.5	O
+3.7	O
+3.3	O
+6.6	O
+9.6	O
+10.9	O
+11.7	O
+24	O
+32	O
+138	O
+119.1	O
+
+CA	O
+15-3	O
+ku/l	O
+
+(N<31.3)	O
+25.1	O
+27.7	O
+24.3	O
+23.4	O
+24.2	O
+27.4	O
+23.8	O
+19	O
+17	O
+20.4	O
+16.5	O
+
+-	O
+Sur	O
+le	O
+plan	O
+morphologique	O
+:	O
+
+-	O
+TEP	O
+TDM	O
+11/03/22	O
+:	O
+Poursuite	O
+de	O
+la	O
+réponse	O
+métabolique	O
+quasi-complète	O
+de	O
+l'atteinte	O
+osseuse	O
+disséminée	O
+
+(ostéolytique	O
+du	O
+squelette	O
+axial	O
+et	O
+appendiculaire	O
+proximal).	O
+
+Pas	O
+de	O
+nouvelle	O
+lésion	O
+hypermétabolique	O
+suspecte	O
+dans	O
+
+le	O
+reste	O
+du	O
+volume	O
+exploré,	O
+en	O
+particulier	O
+ganglionnaire.	O
+
+-	O
+IRM	O
+rachidienne	O
+10/06/22	O
+:	O
+Lésions	O
+secondaires	O
+connues	O
+du	O
+rachis	O
+thoraco-lombaire.	O
+
+Lésion	O
+postéro-latérale	O
+droite	O
+de	O
+T7	O
+et	O
+du	O
+pédicule	O
+homolatéral	O
+sans	O
+signe	O
+d'épidurite.	O
+
+Fracture	O
+-	O
+tassement	O
+pathologique	O
+de	O
+T12	O
+connu,	O
+avec	O
+perte	O
+de	O
+hauteur	O
+
+Pas	O
+de	O
+rehaussement	O
+pathologique	O
+de	O
+la	O
+moelle.	O
+
+Anomalie	O
+transitionnelle	O
+à	O
+type	O
+de	O
+sacralisation	O
+de	O
+L5.	O
+
+Hernie	O
+intra-spongieuse	O
+du	O
+plateau	O
+vertébral	O
+supérieur	O
+et	O
+inférieur	O
+de	O
+T10	O
+et	O
+du	O
+plateau	O
+inférieur	O
+de	O
+L1.	O
+
+Infiltration	O
+liquidienne	O
+des	O
+parties	O
+molles	O
+à	O
+l'étage	O
+lombaire.	O
+
+Conclusion	O
+:	O
+
+3	O
+Mme	O
+tuanmohamed	O
+sounac	O
+
+Lésions	O
+secondaires	O
+osseuses	O
+étagées	O
+du	O
+rachis	O
+dorso-lombaire.	O
+
+Absence	O
+de	O
+signe	O
+d'épidurite.	O
+
+-	O
+Au	O
+total,	O
+
+Patiente	O
+en	O
+cours	O
+de	O
+1ère	O
+ligne	O
+de	O
+traitement	O
+par	O
+LETROZOLE	O
+1cp/jour	O
+-	O
+ABEMACICLIB	O
+150mgx2/jour	O
+-	O
+XGEVA	O
+/3	O
+
+mois	O
+dans	O
+le	O
+cadre	O
+d'un	O
+carcinome	O
+canalaire	O
+infiltrant	O
+du	O
+sein	O
+droit	O
+de	O
+grade	O
+II,	O
+RE	O
+100%	O
++++,	O
+RP	O
+100%	O
++++,	O
+Ki67	O
+
+20%,	O
+HER2	O
+-,	O
+score	O
+0,	O
+métastatique	O
+osseux	O
+d'emblée.	O
+
+Chirurgie	O
+du	O
+primitif	O
+initialement	O
+programmée	O
+devant	O
+la	O
+très	O
+bonne	O
+réponse	O
+au	O
+traitement,	O
+annulée	O
+en	O
+raison	O
+d'une	O
+
+pneumopathie	O
+à	O
+légionnelle	O
+en	O
+janvier	O
+2022	O
+et	O
+découverte	O
+au	O
+décours	O
+de	O
+l'hospitalisation	O
+d'un	O
+envahissement	O
+médullaire	O
+
+sans	O
+cytopénie,	O
+dont	O
+l'ancienneté	O
+n'est	O
+pas	O
+connue.	O
+
+Le	O
+TEP	O
+scanner	O
+du	O
+11/03/22	O
+confirmait	O
+la	O
+poursuite	O
+de	O
+la	O
+
+réponse	O
+métabolique	O
+quasi	O
+complète	O
+sans	O
+nouvelle	O
+lésion	O
+apparue.	O
+
+L'envahissement	O
+médullaire	O
+est	O
+donc	O
+
+probablement	O
+antérieur	O
+au	O
+début	O
+du	O
+traitement.	O
+
+Devant	O
+la	O
+persistance	O
+des	O
+signes	O
+inflammatoires	O
+(peau	O
+d'orange	O
+UQI),	O
+la	O
+prise	O
+en	O
+charge	O
+du	O
+primitif	O
+mammaire	O
+n'est	O
+
+pas	O
+possible	O
+actuellement.	O
+
+Si	O
+celle-ci	O
+était	O
+envisagée,	O
+elle	O
+nécessiterait	O
+une	O
+suspension	O
+transitoire	O
+de	O
+15	O
+jours	O
+de	O
+
+l'Abémaciclib	O
+avant	O
+la	O
+chirurgie,	O
+ainsi	O
+qu'une	O
+suspension	O
+transitoire	O
+de	O
+l'Eliquis	O
+avec	O
+un	O
+relai	O
+par	O
+HBPM.	O
+
+Poursuite	O
+de	O
+l'ABEMACICLIB	O
+et	O
+du	O
+LETROZOLE	O
+et	O
+du	O
+XGEVA	O
+avec	O
+supplémentation	O
+vitamine	O
+D	O
+-	O
+calcium.	O
+
+Devant	O
+les	O
+douleurs	O
+abdominales	O
+épigastriques	O
+persistantes,	O
+je	O
+réadresse	O
+ce	O
+jour	O
+Madame	O
+sounac	O
+à	O
+son	O
+
+Gastroentérologue.	O
+
+Je	O
+reverrai	O
+Mme	O
+sounac	O
+dans	O
+3	O
+mois	O
+en	O
+consultation	O
+avec	O
+un	O
+TEP-scanner,	O
+le	O
+dernier	O
+datant	O
+de	O
+1	O
+an.	O
+
+Bien	O
+confraternellement,	O
+
+Docteur	O
+denisyves	O
+VANDENBOREEMBOULE	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+10/03/2023.	O
+
+Médecin	O
+référent	O
+:	O
+matheoalexis.	O
+
+Médecin	O
+référent	O
+:	O
+aguinayamaria.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+mudao,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+yamedou	O
+
+Parmacologie	O
+:	O
+Dr	O
+benmakhlouf	O
+
+Arc	O
+:	O
+Mme	O
+zeessou.	O
+
+IDE	O
+:	O
+Mme	O
+melchiore,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+Marqueurs	O
+non	O
+contributifs.	O
+
+Progression	O
+radiologique	O
+:	O
+augmentation	O
+de	O
+l'infiltration	O
+mammaire.	O
+
+Conclusion	O
+
+Progression	O
+locale	O
+a	O
+priori.	O
+
+Si	O
+véritable	O
+progression	O
+inflammatoire	O
+:	O
+chimiothérapie	O
+par	O
+EC	O
+puis	O
+envisager	O
+une	O
+chirurgie.	O
+
+"	O
+

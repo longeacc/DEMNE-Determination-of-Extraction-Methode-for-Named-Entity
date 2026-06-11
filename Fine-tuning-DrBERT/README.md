@@ -21,7 +21,7 @@ Training includes:
 ## Installation
 
 ```bash
-cd fine_tuning/
+cd Fine-tuning-DrBERT/
 pip install -r requirements.txt
 ```
 
@@ -32,9 +32,51 @@ pip install huggingface_hub
 huggingface-cli download Dr-BERT/DrBERT-7GB
 ```
 
-## Corpus Layout
+## Pipeline order
 
-Organise your BRAT corpora under a single root directory:
+The scripts form a dependency chain — each consumes the previous script's
+output, so the order is **not** arbitrary:
+
+```
+BRAT (.txt/.ann)
+      │
+      ▼  ①  brat_to_conll.py        format → CoNLL BIO          (run once PER corpus)
+   .conll
+      │
+      ▼  ②  dataset_builder.py      fusion + label map + 80/20 split + tokenisation
+ DatasetDict + label_map.json                                   (optional: QA / inspection)
+      │
+      ▼  ③  train.py                DrBERT fine-tuning → best checkpoint
+ models/drbert_finetuned/best/
+      │
+      ▼  ④  evaluate.py             per-entity seqeval report
+ results/metrics_*_eval.csv
+```
+
+| Order | Script | Why |
+|---|---|---|
+| 1 | `brat_to_conll.py` | BRAT standoff (`.txt`/`.ann` char offsets) → CoNLL BIO, the format HuggingFace token-classification needs. Run **once per corpus**. |
+| 2 | `dataset_builder.py` | Fuses corpora, builds the `label2id`/`id2label` map (sizes the classifier head), does the stratified 80/20 split *before* tokenisation (no leakage), tokenises + aligns labels. **Optional** as a standalone step — `train.py` calls `build_dataset()` internally; run it on its own only to inspect/validate the dataset. |
+| 3 | `train.py` | Loads DrBERT-7GB, fine-tunes with early stopping on macro-F1, saves the best checkpoint + `label_map.json`. |
+| 4 | `evaluate.py` | Reloads the saved checkpoint and produces the per-entity F1/P/R report on the test split. Needs the checkpoint from step 3. |
+
+> **Minimal path** (skip the standalone QA step 2): `brat_to_conll.py` (×N corpora) → `train.py` → `evaluate.py`.
+
+## Corpus input
+
+Two equivalent ways to point at your BRAT corpora (paired `.txt` + `.ann`
+files in standoff format):
+
+**A — explicit paths (recommended)** — pass each corpus as `NAME=DIR`,
+repeatable. `NAME` becomes the corpus key used for the stratified split and
+the CoNLL cache folder:
+
+```bash
+--corpus_path cantemist=/path/to/Emmanuelle_35_cantemist \
+--corpus_path rcp_esmo=/path/to/evaluation_set_breast_cancer_GS
+```
+
+**B — legacy single root** — a directory holding the canonical sub-folders:
 
 ```
 corpus_dir/
@@ -43,14 +85,37 @@ corpus_dir/
 └── rcp_esmo/           # RCP/ESMO 95-patient corpus
 ```
 
-Each sub-directory contains paired `.txt` and `.ann` files in BRAT standoff format.
+```bash
+--corpus_dir /path/to/corpus_dir
+```
 
-## Training
+## Step ① — BRAT → CoNLL
+
+Run once per corpus (output goes under `data/conll/<name>/`, reused as cache):
 
 ```bash
-python -m fine_tuning.train \
-    --corpus_dir /path/to/corpus_dir \
-    --config fine_tuning/config/drbert_ner_config.yaml \
+python brat_to_conll.py \
+    --input_dir /path/to/Emmanuelle_35_cantemist \
+    --output_dir data/conll/Emmanuelle_35_cantemist \
+    --corpus_name cantemist
+```
+
+## Step ② — Build dataset (optional QA)
+
+```bash
+python dataset_builder.py \
+    --corpus_path cantemist=/path/to/Emmanuelle_35_cantemist \
+    --corpus_path rcp_esmo=/path/to/evaluation_set_breast_cancer_GS \
+    --output_dir data/demne_hf_dataset
+```
+
+## Step ③ — Training
+
+```bash
+python train.py \
+    --corpus_path cantemist=/path/to/Emmanuelle_35_cantemist \
+    --corpus_path rcp_esmo=/path/to/evaluation_set_breast_cancer_GS \
+    --config drbert_ner_config.yaml \
     --device auto
 ```
 
@@ -58,11 +123,16 @@ python -m fine_tuning.train \
 
 | Argument | Default | Description |
 |---|---|---|
-| `--corpus_dir` | *(required)* | Root BRAT corpus directory |
-| `--config` | `fine_tuning/config/drbert_ner_config.yaml` | YAML config |
+| `--corpus_path` | *(repeatable)* | Corpus as `NAME=DIR` (BRAT dir). Use this **or** `--corpus_dir`. |
+| `--corpus_dir` | `None` | Legacy root with `cantemist/`, `redjdal/`, `rcp_esmo/`. |
+| `--config` | `drbert_ner_config.yaml` | YAML config (next to the scripts) |
 | `--device` | `auto` | `cuda`, `cpu`, `mps`, or `auto` |
 | `--output_dir` | `models/drbert_finetuned` | Checkpoint output |
 | `--results_dir` | `results` | Metrics CSV + eco2ai output |
+
+> **Carbon tracking**: set `DISABLE_ECO2AI=1` to skip eco2ai (e.g. if it is
+> incompatible with the installed `pandas` and floods the log). Tracking
+> failures are non-fatal and never abort training or model saving.
 
 ### Outputs
 

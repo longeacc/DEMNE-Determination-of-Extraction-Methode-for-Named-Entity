@@ -1,0 +1,356 @@
+# doc_id = Pat94
+Pat94	O
+
+Raison	O
+Complexite	O
+:	O
+nan	O
+
+Age	O
+:	O
+63	O
+
+Données	O
+biométriques	O
+et	O
+score	O
+:	O
+
+Poids	O
+:	O
+100.0	O
+kg	O
+Le	O
+[	O
+2	O
+jours	O
+avant	O
+RCP	O
+]	O
+IMC	O
+(Quetelet)	O
+:	O
+35.0	O
+kg/m2	O
+
+Taille	O
+:	O
+169	O
+cm	O
+Le	O
+[	O
+2	O
+jours	O
+avant	O
+RCP	O
+]	O
+SC	O
+(Dubois)	O
+:	O
+2.10	O
+m2	O
+
+Motif	O
+de	O
+présentation	O
+:	O
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Données	O
+Médicales	O
+:	O
+
+Motif	O
+de	O
+présentation	O
+Validation	O
+simple	O
+de	O
+RCP	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Patiente	O
+de	O
+[Age	O
+Patiente].	O
+
+Handicap	O
+mental.	O
+
+Travaille	O
+en	O
+ESAT.	O
+
+Sous	O
+tutelle.	O
+
+Hystérectomie	O
+totale	O
+sans	O
+annexectomie	O
+à	O
+[ETABLISSEMENT]	O
+il	O
+y	O
+a	O
+environ	O
+15	O
+ans	O
+pour?	O
+
+Mère	O
+en	O
+cours	O
+de	O
+traitement	O
+antihormonal	O
+pour	O
+cancer	O
+du	O
+sein	O
+
+Mammographie	O
+de	O
+dépistage	O
+:	O
+en	O
+[	O
+758	O
+jours	O
+avant	O
+RCP	O
+]	O
+:asymétrie	O
+de	O
+densité	O
+du	O
+sein	O
+droit.	O
+
+Contrôle	O
+[	O
+58	O
+jours	O
+avant	O
+RCP	O
+]	O
+:	O
+
+Sein	O
+droit	O
+:	O
+masse	O
+ACR	O
+5	O
+de	O
+l'UQS	O
+du	O
+sein	O
+droit	O
+de	O
+18	O
+X	O
+15	O
+X	O
+11	O
+mm	O
+.	O
+
+Microbiopsie	O
+:	O
+CCI	O
+SBR	O
+I	O
+(2	O
++	O
+2	O
++	O
+1)	O
+RO+	B-Estrogen_receptor
+100%	I-Estrogen_receptor
+RP+	B-Progesterone_receptor
+50%	I-Progesterone_receptor
+cerbB2	B-HER2_IHC
+score	I-HER2_IHC
+0	I-HER2_IHC
+Ki67	B-Ki67
+à	I-Ki67
+10%.	I-Ki67
+
+Sein	O
+gauche	O
+:	O
+
+-	O
+Masse	O
+de	O
+l'union	O
+des	O
+quadrants	O
+externes,	O
+à	O
+8	O
+cm	O
+du	O
+mamelon,	O
+hypoéchogène,	O
+irrégulière,	O
+de	O
+8	O
+x	O
+7	O
+mm,	O
+de	O
+contours	O
+bien	O
+circonscrits,	O
+non	O
+hypervasculaire,	O
+d'élastographie	O
+molle,	O
+classée	O
+ACR	O
+4	O
+:	O
+microbiopsie	O
+:	O
+tissu	O
+mammaire	O
+normal	O
+:	O
+reclassée	O
+ACR	O
+3	O
+contrôle	O
+4	O
+mois	O
+
+-	O
+Masse	O
+de	O
+l'union	O
+des	O
+quadrants	O
+externes,	O
+1	O
+cm	O
+plus	O
+en	O
+dedans,	O
+à	O
+7	O
+cm	O
+du	O
+mamelon,	O
+hypoéchogène,	O
+irrégulière,	O
+de	O
+5	O
+x	O
+4	O
+
+mm,	O
+similaire	O
+,	O
+non	O
+hypervasculaire,	O
+d'élastographie	O
+molle,	O
+classée	O
+ACR	O
+4:	O
+microbiopsie	O
+:	O
+tissu	O
+mammaire	O
+normal	O
+:	O
+reclassée	O
+ACR	O
+3	O
+contrôle	O
+4	O
+mois	O
+
+-Ces	O
+deux	O
+lésions	O
+sont	O
+distantes	O
+de	O
+1	O
+cm	O
+
+-	O
+Creux	O
+axillaire	O
+normal.	O
+
+Cliniquement	O
+120D	O
+Seins	O
+denses.	O
+
+Pas	O
+vraiment	O
+de	O
+masse	O
+palpable.	O
+
+N0.	O
+
+Proposition	O
+:	O
+tumorectomie	O
+du	O
+sein	O
+droit	O
+après	O
+repérage	O
+et	O
+procédure	O
+du	O
+ganglion	O
+sentinelle	O
+
+Décision	O
+de	O
+la	O
+RCP	O
+:	O
+
+Proposition	O
+de	O
+décision	O
+
+Proposition	O
+de	O
+décision	O
+
+IRM	O
+mammaire	O
+pour	O
+caractériser	O
+les	O
+lésions	O
+du	O
+sein	O
+gauche.	O
+
+On	O
+confirme	O
+la	O
+
+Proposition	O
+.	O
+

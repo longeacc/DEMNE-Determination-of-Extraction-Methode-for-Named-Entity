@@ -1,0 +1,2 @@
+id,project_name,experiment_description,epoch,start_time,duration(s),power_consumption(kWh),CO2_emissions(kg),CPU_name,GPU_name,OS,region/country,cost
+5e09894a-0243-40cc-8251-416adb36c583,DEMNE-DrBERT-finetune,NER fine-tuning Dr-BERT/DrBERT-7GB on 39 labels,N/A,2026-06-02 17:42:04,10.144392728805542,6.61365576403263e-05,4.466201737451235e-06,"Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz/1 device(s), TDP:45.0",NVIDIA GeForce GTX 1650 1 device(s),Windows,FR/Île-de-France,0

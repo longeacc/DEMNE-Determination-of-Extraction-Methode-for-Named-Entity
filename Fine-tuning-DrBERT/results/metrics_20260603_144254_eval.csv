@@ -1,0 +1,93 @@
+metric,value
+eval_f1_ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge,0.000000
+eval_f1_Biomarqueurs_therapeutiques,0.000000
+eval_f1_Estrogen_receptor,0.843750
+eval_f1_Evolutivite_en_lien_avec_le_cancer,0.000000
+eval_f1_HER2_FISH,0.333333
+eval_f1_HER2_IHC,0.500000
+eval_f1_HER2_status,0.651163
+eval_f1_Histologie_tumorale,0.000000
+eval_f1_Ki67,0.863636
+eval_f1_Progesterone_receptor,0.807018
+eval_f1_Reponse_a_la_chimiotherapie,0.048193
+eval_f1_Signes_physiques,0.000000
+eval_f1_Stade_OMS_ECOG_Karnofsky,0.000000
+eval_f1_Stade_metastatique_avec_localisations,0.062500
+eval_f1_Statut_tabagique,0.000000
+eval_f1_Symptomes,0.000000
+eval_f1_Topographie_du_primitif,0.000000
+eval_f1_Traitement_specifique_du_cancer,0.028571
+eval_f1_macro,0.229898
+eval_f1_macro avg,0.229898
+eval_f1_micro avg,0.312704
+eval_f1_weighted avg,0.283231
+eval_loss,0.283155
+eval_model_preparation_time,0.003900
+eval_precision_ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge,0.000000
+eval_precision_Biomarqueurs_therapeutiques,0.000000
+eval_precision_Estrogen_receptor,0.818182
+eval_precision_Evolutivite_en_lien_avec_le_cancer,0.000000
+eval_precision_HER2_FISH,0.500000
+eval_precision_HER2_IHC,0.470588
+eval_precision_HER2_status,0.518519
+eval_precision_Histologie_tumorale,0.000000
+eval_precision_Ki67,0.791667
+eval_precision_Progesterone_receptor,0.851852
+eval_precision_Reponse_a_la_chimiotherapie,0.045455
+eval_precision_Signes_physiques,0.000000
+eval_precision_Stade_OMS_ECOG_Karnofsky,0.000000
+eval_precision_Stade_metastatique_avec_localisations,0.090909
+eval_precision_Statut_tabagique,0.000000
+eval_precision_Symptomes,0.000000
+eval_precision_Topographie_du_primitif,0.000000
+eval_precision_Traitement_specifique_du_cancer,0.047619
+eval_precision_macro,0.229711
+eval_precision_macro avg,0.229711
+eval_precision_micro avg,0.329897
+eval_precision_weighted avg,0.279018
+eval_recall_ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge,0.000000
+eval_recall_Biomarqueurs_therapeutiques,0.000000
+eval_recall_Estrogen_receptor,0.870968
+eval_recall_Evolutivite_en_lien_avec_le_cancer,0.000000
+eval_recall_HER2_FISH,0.250000
+eval_recall_HER2_IHC,0.533333
+eval_recall_HER2_status,0.875000
+eval_recall_Histologie_tumorale,0.000000
+eval_recall_Ki67,0.950000
+eval_recall_Progesterone_receptor,0.766667
+eval_recall_Reponse_a_la_chimiotherapie,0.051282
+eval_recall_Signes_physiques,0.000000
+eval_recall_Stade_OMS_ECOG_Karnofsky,0.000000
+eval_recall_Stade_metastatique_avec_localisations,0.047619
+eval_recall_Statut_tabagique,0.000000
+eval_recall_Symptomes,0.000000
+eval_recall_Topographie_du_primitif,0.000000
+eval_recall_Traitement_specifique_du_cancer,0.020408
+eval_recall_macro,0.242515
+eval_recall_macro avg,0.242515
+eval_recall_micro avg,0.297214
+eval_recall_weighted avg,0.297214
+eval_runtime,17.318800
+eval_samples_per_second,120.678000
+eval_steps_per_second,3.811000
+eval_support_ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge,7.000000
+eval_support_Biomarqueurs_therapeutiques,8.000000
+eval_support_Estrogen_receptor,31.000000
+eval_support_Evolutivite_en_lien_avec_le_cancer,1.000000
+eval_support_HER2_FISH,4.000000
+eval_support_HER2_IHC,15.000000
+eval_support_HER2_status,16.000000
+eval_support_Histologie_tumorale,15.000000
+eval_support_Ki67,20.000000
+eval_support_Progesterone_receptor,30.000000
+eval_support_Reponse_a_la_chimiotherapie,39.000000
+eval_support_Signes_physiques,22.000000
+eval_support_Stade_OMS_ECOG_Karnofsky,6.000000
+eval_support_Stade_metastatique_avec_localisations,21.000000
+eval_support_Statut_tabagique,1.000000
+eval_support_Symptomes,29.000000
+eval_support_Topographie_du_primitif,9.000000
+eval_support_Traitement_specifique_du_cancer,49.000000
+eval_support_macro avg,323.000000
+eval_support_micro avg,323.000000
+eval_support_weighted avg,323.000000

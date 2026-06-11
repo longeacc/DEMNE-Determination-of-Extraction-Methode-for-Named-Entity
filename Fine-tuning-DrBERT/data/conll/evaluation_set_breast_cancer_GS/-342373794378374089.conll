@@ -1,0 +1,1788 @@
+# doc_id = -342373794378374089
+"	O
+
+1	O
+Mme	O
+osvald	O
+MARDAS	O
+
+HOPITAL	O
+SAINT-LOUIS	O
+
+1,	O
+Avenue	O
+Claude	O
+Vellefaux	O
+
+75475	O
+PARIS	O
+CEDEX	O
+10	O
+
+Standard	O
+:	O
+(33)	O
+0171503853	O
+
+Centre	O
+des	O
+maladies	O
+du	O
+sein	O
+
+Policlinique	O
+onco-hématologique	O
+
+________________________	O
+
+Docteur	O
+hannachantal	O
+GROUFFAL	O
+
+Responsable	O
+
+0783379000	O
+
+Signataire	O
+:	O
+Dr	O
+DJEBBARIRIVERA	O
+imenenour	O
+
+Paris	O
+le	O
+20/10/2023	O
+
+Réunion	O
+de	O
+concertation	O
+pluridisciplinaire	O
+
+Concernant	O
+Mme	O
+MARDAS	O
+osvald	O
+
+Né(e)	O
+le	O
+26/07/1977	O
+-	O
+NIP	O
+:	O
+8010844755	O
+
+Correspondants	O
+:	O
+
+Pr	O
+ESBAY	O
+sethandrew,	O
+Pr	O
+LAMASFERNANDES	O
+mbaloufatoumat,	O
+Dr	O
+RARIMAMONJY	O
+pryscilia	O
+
+Compte	O
+rendu	O
+
+Lésion	O
+initiale	O
+sein	O
+
+Lésion	O
+initiale	O
+côté	O
+Gauche.	O
+
+PEV	O
+:	O
+0	O
+
+Histologie	O
+:	O
+CCI.	O
+
+Grade	O
+:	O
+3.	O
+
+Cerb	B-HER2_IHC
+B2	I-HER2_IHC
+:	I-HER2_IHC
+0.	I-HER2_IHC
+
+Récepteurs	B-Progesterone_receptor
+RE/RP	I-Progesterone_receptor
+:	I-Progesterone_receptor
++/+.	I-Progesterone_receptor
+
+Ki67	B-Ki67
+30	I-Ki67
+%.	I-Ki67
+
+Décision	O
+thérapeutique	O
+
+Traitement	O
+chirurgical	O
+
+Chirurgie	O
+de	O
+type	O
+Mastectomie	O
+le	O
+04/03/2014.	O
+pN	O
+:	O
+4	O
+à	O
+9.	O
+
+Résultat	O
+du	O
+curage	O
+axillaire	O
+(N+/N)	O
+:	O
+4/22	O
+
+Traitement	O
+systémique	O
+
+Chimiothérapie	O
+néo	O
+adjuvante	O
+:	O
+ECT.	O
+
+Une	O
+hormonothérapie	O
+de	O
+type	O
+:	O
+TAMOXIFENE.	O
+
+Radiothérapie	O
+:	O
+OUI.	O
+
+Sein	O
+controlatéral	O
+
+Lésion	O
+sein	O
+controlatéral	O
+
+Latéralité	O
+controlatérale	O
+:	O
+Droit	O
+Synchrone	O
+ADICAP	O
+:	O
+A7.B2	O
+Histologie	O
+controlatérale	O
+:	O
+CCI	O
+Grade	O
+controlatérale	O
+:	O
+3	O
+
+Cerb	B-HER2_IHC
+B2	I-HER2_IHC
+(controlatéral)	I-HER2_IHC
+:	I-HER2_IHC
+0	I-HER2_IHC
+Récepteurs	O
+RE/RP	B-Estrogen_receptor
+(controlatéral)	I-Estrogen_receptor
+:	I-Estrogen_receptor
++/+	B-Progesterone_receptor
+
+Traitement	O
+chirurgical	O
+
+Chirurgie	O
+(controlatéral)	O
+:	O
+Mastectomie	O
+Ganglion	O
+sentinelle	O
+controlatéral	O
+Résultat	O
+ganglion	O
+sentinel	O
+controlatéral	O
+:	O
+0/1	O
+
+Histoire	O
+de	O
+la	O
+maladie	O
+
+Découverte	O
+par	O
+la	O
+patiente	O
+elle-même	O
+d'une	O
+adénopathie	O
+axillaire	O
+gauche	O
+qui	O
+fait	O
+découvrir	O
+d'une	O
+part	O
+une	O
+masse	O
+
+mammaire	O
+gauche	O
+d'à	O
+peu	O
+près	O
+5cm	O
+avec	O
+une	O
+adénopathie	O
+axillaire	O
+satellite.	O
+
+La	O
+mammographie	O
+fera	O
+découvrir	O
+des	O
+lésions	O
+également	O
+sur	O
+le	O
+sein	O
+droit.	O
+
+Des	O
+microbiopsies	O
+sont	O
+réalisées	O
+le	O
+23.07.2013:	O
+
+-A	O
+gauche,	O
+on	O
+retrouvera	O
+des	O
+lésions	O
+de	O
+carcinome	O
+canalaire	O
+infiltrant	O
+de	O
+type	O
+mucineux	O
+grade	O
+SBR3,	O
+faible	O
+
+contingent	O
+de	O
+carcinome	O
+in	O
+situ	O
+micropapillaire	O
+et	O
+haut	O
+grade	O
+nucléaire,	O
+RE+++	B-Estrogen_receptor
+100%,	O
+RP++	B-Progesterone_receptor
+50%,	O
+Ki67	B-Ki67
+30%,	I-Ki67
+
+Cerb-B2	B-HER2_status
+négatif,	I-HER2_status
+la	O
+biopsie	O
+au	O
+niveau	O
+du	O
+ganglion	O
+montrera	O
+une	O
+infiltration	O
+métastatique	O
+par	O
+un	O
+
+adénocarcinome	O
+peu	O
+différencié.	O
+
+-A	O
+droite,	O
+on	O
+retrouvera	O
+des	O
+lésions	O
+plurifocales	O
+de	O
+lésion	O
+intra-canalaire.	O
+
+Une	O
+chimiothérapie	O
+néo-adjuvante	O
+a	O
+été	O
+proposée	O
+à	O
+Madame	O
+MARDAS.	O
+
+Celle-ci	O
+a	O
+reçu	O
+3	O
+cures	O
+de	O
+FEC	O
+100	O
+
+et	O
+4	O
+cures	O
+de	O
+TAXOTERE.	O
+
+2	O
+Mme	O
+osvald	O
+MARDAS	O
+
+A	O
+l'issue	O
+de	O
+la	O
+chimiothérapie,	O
+une	O
+mammectomie	O
+bilatérale	O
+a	O
+été	O
+réalisée.	O
+
+Un	O
+curage	O
+axillaire	O
+à	O
+gauche	O
+et	O
+un	O
+
+ganglion	O
+sentinelle	O
+à	O
+droite.	O
+
+-A	O
+gauche,	O
+on	O
+retrouve	O
+un	O
+reliquat	O
+tumoral	O
+étendu	O
+sur	O
+5cm.	O
+
+Il	O
+s'agit	O
+d'un	O
+carcinome	O
+canalaire	O
+infiltrant	O
+
+moyennement	O
+différencié	O
+RE+++	B-Estrogen_receptor
+100%,	O
+RP+++	B-Progesterone_receptor
+50%,	O
+Cerb-B2+,	B-HER2_status
+Ki67	B-Ki67
+10%,	I-Ki67
+associé	O
+à	O
+un	O
+contingent	O
+de	O
+type	O
+
+mucineux,	O
+présence	O
+d'un	O
+contingent	O
+de	O
+carcinome	O
+intra	O
+canalaire	O
+de	O
+haut	O
+grade,	O
+présence	O
+d'emboles,	O
+il	O
+
+existe	O
+4N+/22.	O
+
+-A	O
+droite,	O
+on	O
+retrouve	O
+des	O
+lésions	O
+tumorales	O
+de	O
+carcinome	O
+intra-canalaire	O
+de	O
+haut	O
+grade	O
+étendu	O
+sur	O
+5cm.	O
+
+Il	O
+
+existe	O
+un	O
+foyer	O
+de	O
+carcinome	O
+infiltrant	O
+de	O
+7mm,	O
+SBR3,	O
+RE+++	B-Estrogen_receptor
+100%,	O
+RP++	B-Progesterone_receptor
+20%.	O
+
+Pas	O
+de	O
+métastase	O
+
+ganglionnaire	O
+sur	O
+le	O
+sentinelle.	O
+
+Reconstruction	O
+immédiate,	O
+irradiation	O
+de	O
+la	O
+paroi	O
+et	O
+des	O
+aires	O
+ganglionnaires	O
+à	O
+gauche.	O
+
+Avant	O
+tout	O
+traitement,	O
+découverte	O
+lors	O
+du	O
+bilan	O
+d'extension	O
+au	O
+scanner	O
+thoracique	O
+de	O
+2	O
+micronodules	O
+pulmonaires	O
+
+à	O
+droite	O
+et	O
+un	O
+à	O
+gauche.	O
+
+Une	O
+exérèse	O
+des	O
+nodules	O
+pulmonaires	O
+droits	O
+avait	O
+été	O
+réalisée	O
+à	O
+l'Institut	O
+Montsouris	O
+
+dont	O
+l'examen	O
+anapath	O
+montrait	O
+des	O
+lésions	O
+bénignes	O
+(histologie	O
+en	O
+attente).	O
+
+La	O
+patiente	O
+reçoit	O
+une	O
+hormonothérapie	O
+par	O
+TAMOXIFENE	O
+de	O
+mai	O
+2014	O
+à	O
+ce	O
+jour,	O
+avril	O
+2016.	O
+
+Lors	O
+d'une	O
+consultation	O
+de	O
+surveillance,	O
+l'augmentation	O
+du	O
+CA	O
+15.3	O
+fait	O
+découvrir	O
+une	O
+métastase	O
+hépatique	O
+unique	O
+
+au	O
+niveau	O
+du	O
+segment	O
+VI.	O
+
+Une	O
+biopsie	O
+sera	O
+réalisée	O
+le	O
+23.02.2016	O
+qui	O
+montrera	O
+qu'il	O
+s'agit	O
+d'une	O
+localisation	O
+d'un	O
+
+adénocarcinome	O
+peu	O
+différencié	O
+pouvant	O
+être	O
+d'origine	O
+mammaire	O
+avec	O
+un	O
+aspect	O
+d'adénocarcinome	O
+mucineux.	O
+
+Devant	O
+cet	O
+aspect	O
+d'adénocarcinome	O
+mucineux,	O
+le	O
+diagnostic	O
+de	O
+métastase	O
+hépatique	O
+d'un	O
+carcinome	O
+ovarien	O
+
+est	O
+évoqué	O
+d'autant	O
+que	O
+la	O
+patiente	O
+présente	O
+un	O
+kyste	O
+ovarien	O
+de	O
+6	O
+cm.	O
+
+Une	O
+annexectomie	O
+bilatérale	O
+est	O
+décidée	O
+en	O
+RCP	O
+et	O
+réalisée	O
+le	O
+24.03.2016	O
+ainsi	O
+qu'une	O
+toilette	O
+péritonéale.	O
+
+A	O
+la	O
+
+cytologie	O
+péritonéale,	O
+il	O
+n'y	O
+a	O
+pas	O
+de	O
+cellule	O
+anormale.	O
+
+L'appendice	O
+présente	O
+des	O
+lésions	O
+d'appendicite	O
+chronique,	O
+
+l'annexe	O
+gauche	O
+est	O
+normal,	O
+l'annexe	O
+droite	O
+montre	O
+un	O
+kyste	O
+de	O
+nature	O
+fonctionnelle	O
+hémorragique	O
+de	O
+6	O
+cm.	O
+
+Il	O
+n'y	O
+a	O
+
+aucune	O
+cellule	O
+suspecte.	O
+
+La	O
+patiente	O
+est	O
+alors	O
+adressée	O
+au	O
+Pr.	O
+
+ESBAY,	O
+pour	O
+segmentectomie	O
+hépatique.	O
+
+Une	O
+chimiothérapie	O
+avant	O
+
+chirurgie	O
+hépatique	O
+est	O
+préconisée.	O
+
+J'ai	O
+vu	O
+pour	O
+la	O
+1ère	O
+fois	O
+Madame	O
+MARDAS	O
+le	O
+20.04.2016.	O
+
+A	O
+l'examen	O
+clinique,	O
+patiente	O
+en	O
+très	O
+bon	O
+état	O
+général.	O
+
+Pas	O
+de	O
+masse	O
+au	O
+niveau	O
+des	O
+deux	O
+seins,	O
+pas	O
+
+d'adénopathie	O
+axillaire.	O
+
+L'abdomen	O
+était	O
+souple,	O
+il	O
+n'y	O
+avait	O
+pas	O
+d'hépatomégalie.	O
+
+Le	O
+CA	O
+15.3	O
+était	O
+à	O
+52.	O
+
+Le	O
+dossier	O
+avait	O
+été	O
+discuté	O
+au	O
+staff	O
+de	O
+séno-oncologie	O
+et	O
+une	O
+1ère	O
+ligne	O
+de	O
+chimiothérapie	O
+par	O
+TAXOL	O
+AVASTIN,	O
+
+3	O
+semaines	O
+sur	O
+4,	O
+avait	O
+été	O
+proposée	O
+à	O
+Madame	O
+MARDAS.	O
+
+Celle-ci	O
+a	O
+reçu	O
+5	O
+cures	O
+de	O
+TAXOL-AVASTIN	O
+(1	O
+cure	O
+
+=	O
+3	O
+injections	O
+de	O
+TAXOL	O
+et	O
+2	O
+injections	O
+d'AVASTIN)	O
+du	O
+29	O
+avril	O
+2016	O
+à	O
+novembre	O
+2016	O
+avec	O
+une	O
+très	O
+bonne	O
+
+tolérance	O
+et	O
+une	O
+réponse	O
+partielle	O
+avec	O
+une	O
+diminution	O
+du	O
+CA	O
+15-3	O
+et	O
+une	O
+diminution	O
+de	O
+50%	O
+du	O
+nodule	O
+du	O
+segment	O
+
+VIII	O
+et	O
+du	O
+segment	O
+VI.	O
+
+Une	O
+échographie	O
+hépatique	O
+a	O
+donc	O
+été	O
+proposée	O
+à	O
+Madame	O
+MARDAS	O
+et	O
+réalisée	O
+le	O
+11	O
+octobre	O
+2016.	O
+
+La	O
+
+chirurgie	O
+a	O
+donc	O
+consisté	O
+en	O
+une	O
+segmentectomie	O
+du	O
+segment	O
+VII	O
+et	O
+une	O
+sous-segmentectomie	O
+V-VI	O
+le	O
+11	O
+
+octobre	O
+2016.	O
+
+A	O
+l'histologie	O
+(16PH02758),	O
+on	O
+retrouve	O
+:	O
+
+-Au	O
+niveau	O
+du	O
+segment	O
+VII:	O
+un	O
+nodule	O
+de	O
+4mm,	O
+situé	O
+à	O
+7mm	O
+de	O
+la	O
+limite	O
+d'exérèse.	O
+
+Il	O
+s'agit	O
+d'un	O
+carcinome	O
+
+lobulaire	O
+infiltrant,	O
+il	O
+existe	O
+des	O
+emboles,	O
+le	O
+nodule	O
+n'est	O
+pas	O
+encapsulé,	O
+CK7	O
+négatif,	O
+CK20	O
+négatif,	O
+RE+	O
+faible,	O
+
+RP+.	O
+
+-Hépatectomie	O
+segment	O
+V-VI:	O
+on	O
+retrouve	O
+un	O
+nodule	O
+tumoral,	O
+mesurant	O
+3cm	O
+de	O
+grand	O
+axe,	O
+qui	O
+arrive	O
+à	O
+2mm	O
+des	O
+
+limites	O
+d'exérèse,	O
+il	O
+s'agit	O
+de	O
+lésion	O
+d'adénocarcinome	O
+mucineux,	O
+CK7	O
++/-	O
+CK20	O
+négatif,	O
+RE+++,	B-Estrogen_receptor
+RP-.	B-Progesterone_receptor
+
+L'architecture	O
+hépatique	O
+active	O
+d'hyperplasie	O
+nodulaire	O
+régénérative	O
+sans	O
+maladie	O
+veineuse,	O
+la	O
+résection	O
+hépatique	O
+
+est	O
+donc	O
+complète	O
+avec	O
+des	O
+marges	O
+saines.	O
+
+Nous	O
+avions	O
+proposé	O
+à	O
+la	O
+patiente	O
+de	O
+poursuivre	O
+le	O
+TAXOL-AVASTIN	O
+en	O
+post-chirurgie.	O
+
+Madame	O
+MARDAS	O
+a	O
+reçu	O
+13	O
+cures	O
+de	O
+TAXOL-AVASTIN	O
+(1	O
+cure	O
+=	O
+2	O
+injections	O
+d'AVASTIN	O
+et	O
+3	O
+injections	O
+de	O
+
+TAXOL)	O
+du	O
+29	O
+avril	O
+2016	O
+au	O
+27	O
+mars	O
+2017.	O
+
+Puis,	O
+l'AVASTIN	O
+a	O
+été	O
+poursuivi	O
+seul,	O
+associé	O
+à	O
+du	O
+FEMARA,	O
+depuis	O
+le	O
+27	O
+avril	O
+2017.	O
+
+Dernière	O
+injection	O
+d'AVASTIN,	O
+le	O
+1er	O
+octobre	O
+2021.	O
+
+En	O
+février	O
+2021,	O
+petite	O
+augmentation	O
+du	O
+CA	O
+15-3	O
+qui,	O
+en	O
+septembre	O
+2021	O
+était	O
+monté	O
+jusqu'à	O
+47.	O
+
+Il	O
+est	O
+
+actuellement	O
+à	O
+48.	O
+
+Un	O
+scanner	O
+thoraco-abdomino-pelvien	O
+fait	O
+hors	O
+Saint-Louis	O
+et	O
+Paul	O
+Brousse,	O
+avait	O
+montré	O
+l'absence	O
+du	O
+nodule	O
+
+hépatique.	O
+
+La	O
+relecture	O
+rétrospective	O
+des	O
+clichés	O
+permet	O
+de	O
+voir	O
+un	O
+nodule	O
+à	O
+ce	O
+niveau.	O
+
+Une	O
+IRM	O
+hépatique	O
+a	O
+été	O
+réalisée,	O
+qui	O
+montre	O
+l'apparition	O
+d'une	O
+formation	O
+nodulaire	O
+de	O
+23mm	O
+à	O
+la	O
+jonction	O
+
+des	O
+segments	O
+IV	O
+et	O
+V	O
+hépatique.	O
+
+On	O
+retrouve	O
+également	O
+les	O
+kystes	O
+hépatiques	O
+au	O
+niveau	O
+du	O
+segment	O
+VII.	O
+
+3	O
+Mme	O
+osvald	O
+MARDAS	O
+
+Un	O
+PET-scan	O
+a	O
+été	O
+également	O
+réalisé,	O
+qui	O
+retrouve	O
+la	O
+masse	O
+hépatique	O
+avec	O
+un	O
+SUV	O
+à	O
+10.25	O
+en	O
+regard	O
+de	O
+la	O
+
+vésicule	O
+biliaire	O
+et	O
+au	O
+niveau	O
+cervical,	O
+un	O
+foyer	O
+de	O
+fixation	O
+de	O
+C2	O
+avec	O
+un	O
+SUV	O
+à	O
+6.29.	O
+
+Une	O
+IRM	O
+cervicale	O
+a	O
+donc	O
+été	O
+réalisée,	O
+le	O
+21	O
+octobre	O
+2021,	O
+qui	O
+retrouve	O
+une	O
+lésion	O
+de	O
+la	O
+moitié	O
+gauche	O
+du	O
+corps	O
+
+vertébral	O
+de	O
+C2,	O
+mesurant	O
+20	O
+x	O
+16mm	O
+rompant	O
+la	O
+cortical	O
+antérieure,	O
+envahissant	O
+discrètement	O
+les	O
+parties	O
+
+molles	O
+antérieures	O
+pré-vertébrales,	O
+sans	O
+envahissement	O
+postérieur.	O
+
+L'arc	O
+postérieur	O
+de	O
+la	O
+vertèbre	O
+n'est	O
+pas	O
+
+touché,	O
+l'apophyse	O
+odontoïde	O
+n'est	O
+pas	O
+touchée.	O
+
+Pas	O
+de	O
+lésion	O
+épidurale	O
+ou	O
+médullaire	O
+en	O
+regard.	O
+
+Il	O
+existe	O
+donc	O
+2	O
+
+localisations	O
+métastatiques.	O
+
+Nous	O
+lui	O
+avions	O
+donc	O
+proposé	O
+du	O
+FULVESTRANT	O
+associé	O
+à	O
+un	O
+inhibiteur	O
+CDK	O
+4/6	O
+de	O
+type	O
+RIBOCICLIB,	O
+qu'elle	O
+
+a	O
+débuté	O
+le	O
+29	O
+octobre	O
+2021,	O
+avec	O
+surveillance	O
+de	O
+l'électrocardiogramme	O
+pour	O
+les	O
+2	O
+premiers	O
+mois	O
+(essai	O
+
+Dolaf	O
+fermé).	O
+
+Le	O
+dossier	O
+avait	O
+été	O
+largement	O
+discuté	O
+à	O
+la	O
+RCP	O
+OS,	O
+du	O
+fait	O
+d'une	O
+lésion	O
+lytique	O
+du	O
+corps	O
+vertébral	O
+de	O
+C2.	O
+
+Dans	O
+
+un	O
+1er	O
+temps,	O
+la	O
+patiente	O
+a	O
+eu	O
+de	O
+l'XGEVA	O
+et	O
+une	O
+minerve	O
+Philadelphia.	O
+
+Il	O
+avait	O
+été	O
+évoqué	O
+une	O
+cimentoplastie,	O
+qui	O
+finalement	O
+n'avait	O
+été	O
+réalisée	O
+car	O
+le	O
+scanner	O
+cervical	O
+fait	O
+à	O
+
+Lariboisière,	O
+montrait	O
+une	O
+ostéolyse	O
+finalement	O
+modérée	O
+du	O
+corps	O
+vertébral	O
+de	O
+C2.	O
+
+Il	O
+avait	O
+plutôt	O
+préconisé	O
+une	O
+radiothérapie	O
+stéréotaxique	O
+qui	O
+a	O
+été	O
+réalisée,	O
+du	O
+26	O
+avril	O
+2022	O
+au	O
+06	O
+mai	O
+2022.	O
+
+Il	O
+a	O
+
+été	O
+délivré	O
+25Gy,	O
+en	O
+5	O
+fractions	O
+et	O
+en	O
+2	O
+semaines,	O
+au	O
+niveau	O
+de	O
+C2.	O
+
+Pet-scan	O
+le	O
+11	O
+mars	O
+2022,	O
+montrant	O
+une	O
+réponse	O
+métabolique	O
+complète	O
+au	O
+niveau	O
+hépatique	O
+et	O
+osseux,	O
+alors	O
+
+que	O
+l'IRM	O
+rachidienne	O
+à	O
+l'époque,	O
+montrait	O
+une	O
+lésion	O
+ostéolytique	O
+de	O
+C2,	O
+qui	O
+n'avait	O
+pas	O
+de	O
+traduction	O
+au	O
+Pet-	O
+
+scan.	O
+
+Ce	O
+jour,	O
+Mme	O
+MARDAS	O
+va	O
+bien.	O
+
+Elle	O
+tolère	O
+bien	O
+le	O
+traitement.	O
+
+Elle	O
+a	O
+des	O
+douleurs	O
+importantes	O
+après	O
+
+l'injection	O
+du	O
+générique	O
+du	O
+FASDEX	O
+qui	O
+a	O
+duré	O
+pendant	O
+plusieurs	O
+semaines.	O
+
+Elle	O
+tolère	O
+bien	O
+le	O
+KISQALI	O
+
+avec	O
+une	O
+baisse	O
+de	O
+globules	O
+à	O
+chaque	O
+reprise,	O
+mais	O
+pas	O
+d'autre	O
+symptomatologie.	O
+
+Elle	O
+n'a	O
+plus	O
+du	O
+tout	O
+de	O
+douleurs,	O
+notamment	O
+cervicales.	O
+
+A	O
+l'examen	O
+clinique,	O
+patiente	O
+en	O
+très	O
+bon	O
+état	O
+général,	O
+pas	O
+de	O
+masse	O
+au	O
+niveau	O
+des	O
+2	O
+cicatrices	O
+de	O
+mammectomie,	O
+
+pas	O
+d'adénopathie	O
+axillaire	O
+ni	O
+sus-claviculaire.	O
+
+Le	O
+reste	O
+de	O
+l'examen	O
+clinique	O
+est	O
+sans	O
+particularité.	O
+
+Elle	O
+a	O
+repris	O
+une	O
+activité	O
+sportive	O
+complète	O
+:	O
+jogging	O
+trois	O
+fois	O
+par	O
+semaine	O
+(50	O
+minutes)	O
+et	O
+danse	O
+deux	O
+fois	O
+par	O
+
+semaine.	O
+
+Au	O
+plan	O
+biologique,	O
+numération	O
++	O
+plaquette	O
+normale.	O
+
+Le	O
+bilan	O
+lipidique	O
+est	O
+normal	O
+avec	O
+une	O
+fraction	O
+LDL	O
+à	O
+1.09	O
+
+g/litre,	O
+ionogramme	O
+sanguin	O
+et	O
+créatininémie	O
+normal.	O
+
+La	O
+calcémie	O
+est	O
+normale.	O
+
+Le	O
+bilan	O
+hépatique	O
+est	O
+normal.	O
+
+L'ACE	O
+est	O
+normal,	O
+le	O
+CA	O
+15-3	O
+est	O
+à	O
+38	O
+(il	O
+était	O
+à	O
+35	O
+en	O
+mai	O
+mais	O
+il	O
+est	O
+fluctuant	O
+entre	O
+34	O
+et	O
+38),	O
+ce	O
+qui	O
+est	O
+non	O
+
+significatif.	O
+
+Je	O
+propose	O
+à	O
+la	O
+patiente	O
+de	O
+poursuivre	O
+le	O
+même	O
+traitement	O
+et	O
+de	O
+la	O
+revoir	O
+en	O
+octobre	O
+avec	O
+un	O
+scanner	O
+thoraco-	O
+
+abdomino-pelvien.	O
+
+Elle	O
+reverra	O
+à	O
+cette	O
+date,	O
+également,	O
+le	O
+Pr	O
+ESBAY.	O
+
+Bien	O
+confraternellement,	O
+
+Docteur	O
+aniciaakua	O
+HUBERTINE	O
+
+Courrier	O
+signé	O
+électroniquement	O
+
+Discussion	O
+de	O
+la	O
+RCP	O
+
+1	O
+-	O
+Date	O
+de	O
+la	O
+RCP	O
+:	O
+20/10/2023.	O
+
+Médecin	O
+référent	O
+:	O
+kilin.	O
+
+Présents	O
+à	O
+la	O
+RCP	O
+:	O
+
+Oncologues	O
+:	O
+Drs	O
+Espié,	O
+Cuvier,	O
+Giacchetti,	O
+Teixeira	O
+
+Gynécologues	O
+:	O
+Drs	O
+Bonnet-Bensimon,	O
+Dr	O
+chuanyou,	O
+Dr	O
+de	O
+Castelbajac	O
+
+Chirurgien	O
+:	O
+Dr	O
+walu	O
+
+Parmacologie	O
+:	O
+Dr	O
+michelerada	O
+
+Arc	O
+:	O
+Mme	O
+dilsey.	O
+
+IDE	O
+:	O
+Mme	O
+guittechantal,	O
+Pineau	O
+
+Problème	O
+posé	O
+:	O
+
+progression	O
+hépatique	O
+
+Conclusion	O
+
+Biopsie	O
+hépatique	O
+pour	O
+statut	O
+HER2	O
+et	O
+RH	O
+
+Olaparib	O
+ou	O
+Talazoparib	O
+
+4	O
+Mme	O
+osvald	O
+MARDAS	O
+
+"	O
+

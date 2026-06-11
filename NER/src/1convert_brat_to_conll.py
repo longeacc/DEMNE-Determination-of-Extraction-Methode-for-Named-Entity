@@ -1,6 +1,6 @@
 # src/convert_brat_to_conll.py
 # Usage:
-#   python src/convert_brat_to_conll.py --brat_dir data/raw/brat --out_dir data/conll \
+#   python NER/src/1convert_brat_to_conll.py --brat_dir NER/data/raw/brat --out_dir NER/data/conll
 #       --labels BIOMARKER STATUS VALUE METHOD --dev_ratio 0.1 --test_ratio 0.1 --seed 42
 import argparse
 import pathlib
