@@ -1,5 +1,16 @@
 """Routage simplifié DuraXell — Arbre à 4 nœuds, 3 sorties."""
 
+import importlib.util as _il
+from pathlib import Path
+
+# Seuils par défaut = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
+_pspec = _il.spec_from_file_location(
+    "demne_params", Path(__file__).resolve().parents[2] / "src" / "duraxell" / "params.py"
+)
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+_DT = _pmod.load_params()["decision_thresholds"]
+
 
 def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> tuple[str, str]:
     """Arbre de décision simplifié : Te++ → He++ → R− → RÈGLES | Feas++ → TBM | LLM.
@@ -16,12 +27,11 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     r: float = metrics.get("R", metrics.get("r", 0.0))
     feas: float = metrics.get("Feas", metrics.get("feas", 0.0))
 
-    # Seuils par défaut = optimum du grid search DEMNE (échelle 0-1)
-    # {Te_HIGH: 0.1, He_HIGH: 0.85, R_HIGH: 0.25, Feas_NER: 0.2}
-    t_te: float = thresholds.get("Te", 0.10)
-    t_he: float = thresholds.get("He", 0.85)
-    t_r: float = thresholds.get("R", 0.25)
-    t_feas: float = thresholds.get("Feas", 0.20)
+    # Seuils par défaut = decision_thresholds de data/demne_params.json (échelle 0-1)
+    t_te: float = thresholds.get("Te", _DT["TE_HIGH"])
+    t_he: float = thresholds.get("He", _DT["HE_HIGH"])
+    t_r: float = thresholds.get("R", _DT["R_HIGH"])
+    t_feas: float = thresholds.get("Feas", _DT["FEAS_NER"])
 
     # Branche RÈGLES : Te élevée + He élevée + R faible
     if te >= t_te and he >= t_he and r <= t_r:

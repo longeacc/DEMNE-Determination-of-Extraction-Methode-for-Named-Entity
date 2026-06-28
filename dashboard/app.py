@@ -21,17 +21,11 @@ def main() -> None:
         st.session_state.custom_metrics = {k: v.copy() for k, v in DEMO_METRICS.items()}
 
     if "thresholds" not in st.session_state:
-        # Seuils par défaut = optimum du grid search DEMNE (Train=Cantemist-35 / Test=Redjdal+RCP)
-        st.session_state.thresholds = {
-            "Te": 0.10,
-            "He": 0.85,
-            "R": 0.25,
-            "Freq": 0.30,
-            "Yield": 0.60,
-            "Feas": 0.20,
-            "DomainShift": 0.60,
-            "LLM_Necessity": 0.70,
-        }
+        # Seuils par défaut = preset FRUGAL de data/demne_params.json
+        # (source unique partagée avec la CLI et les scorers — aucun écart possible).
+        from core.metrics import PARAMS
+
+        st.session_state.thresholds = dict(PARAMS["presets"]["FRUGAL"])
 
     if "routings" not in st.session_state:
         st.session_state.routings = {}

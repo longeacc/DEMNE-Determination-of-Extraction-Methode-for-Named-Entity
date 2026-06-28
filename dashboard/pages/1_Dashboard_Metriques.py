@@ -3,11 +3,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from core import BratCorpusParser, MetricsCalculator, compute_routing
+from core.metrics import PARAMS
 
 st.set_page_config(page_title="Dashboard Métriques", page_icon="📊", layout="wide")
 
-PRESET_FRUGAL = {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20}
-PRESET_QUALITY = {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70}
+# Presets = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
+PRESET_FRUGAL = dict(PARAMS["presets"]["FRUGAL"])
+PRESET_QUALITY = dict(PARAMS["presets"]["QUALITY"])
 
 if "thresholds" not in st.session_state:
     st.session_state["thresholds"] = PRESET_FRUGAL.copy()

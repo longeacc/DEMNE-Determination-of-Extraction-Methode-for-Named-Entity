@@ -32,10 +32,14 @@ CONFIG_PATH = ROOT / "data" / "decision_config.json"
 RESULTS_DIR = ROOT / "Results"
 DEFAULT_PORT = 8888
 
-PRESETS = {
-    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20},
-    "QUALITY": {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70},
-}
+# Presets = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
+import importlib.util as _il
+_pspec = _il.spec_from_file_location("demne_params", SRC / "duraxell" / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
+
+PRESETS = PARAMS["presets"]
 
 ROUTING_COLORS = {
     "RÈGLES": "#1B7F2A",
@@ -205,9 +209,6 @@ class DuraXellGUI:
 
         cli_buttons = [
             ("ℹ️  info",          self._cli_info,        "Diagnostic environnement"),
-            ("📤 extract",        self._cli_extract,     "Extraire 1 entité d'un texte"),
-            ("📤 extract-all",    self._cli_extract_all, "Toutes entités d'un texte"),
-            ("📦 batch",          self._cli_batch,       "Batch sur dossier de .txt"),
             ("📐 metrics",        self._cli_metrics,     "Te / He / Freq / R / Feas"),
             ("🌳 tree + image",   self._cli_tree,        "Arbre de décision + PNG"),
             ("🚀 evaluate",       self._cli_evaluate,    "Pipeline complet"),
@@ -572,37 +573,6 @@ class DuraXellGUI:
 
     def _cli_info(self) -> None:
         self._run_cli(["info"])
-
-    def _cli_extract(self) -> None:
-        doc = self._ask("extract", "Texte du document :",
-                        "Estrogen receptor positive 95%")
-        if not doc:
-            return
-        ent = self._ask("extract", "Entité à extraire :", "Estrogen_receptor")
-        if not ent:
-            return
-        self._run_cli(["extract", "--doc", doc, "--entity", ent])
-
-    def _cli_extract_all(self) -> None:
-        path = filedialog.askopenfilename(
-            title="extract-all — fichier .txt à étudier",
-            filetypes=[("Texte", "*.txt"), ("Tous", "*.*")])
-        if not path:
-            return
-        try:
-            doc = Path(path).read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            doc = Path(path).read_text(encoding="latin-1", errors="replace")
-        self.corpus_path.set(str(Path(path).parent))  # mémo pour les prochains appels
-        self._log(f"📄 extract-all sur {path} ({len(doc)} caractères)")
-        self._run_cli(["extract-all", "--doc", doc])
-
-    def _cli_batch(self) -> None:
-        d = filedialog.askdirectory(title="batch — dossier de .txt à traiter")
-        if not d:
-            return
-        self.corpus_path.set(d)
-        self._run_cli(["batch", "--input_dir", d])
 
     def _cli_metrics(self) -> None:
         d = filedialog.askdirectory(

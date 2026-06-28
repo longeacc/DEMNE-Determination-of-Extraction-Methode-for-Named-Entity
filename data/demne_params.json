@@ -1,0 +1,51 @@
+{
+    "decision_thresholds": {
+        "TE_HIGH": 0.16,
+        "HE_HIGH": 0.63,
+        "R_HIGH": 0.2,
+        "FEAS_NER": 0.26,
+        "MIN_TE_SAMPLES": 2
+    },
+    "risk_weights": {
+        "negation": 0.19,
+        "uncertainty": 0.85,
+        "contradiction": 0.6
+    },
+    "risk_window_size": 50,
+    "feasibility_weights": {
+        "alpha_freq": 0.62,
+        "beta_he": 0.08,
+        "he_default": 0.5,
+        "sat_count": 90.0
+    },
+    "homogeneity_sigmoid": {
+        "k": 10.940000000000001,
+        "x0": 0.43
+    },
+    "templatability_bonus": {
+        "symbol_bonus": 0.18,
+        "digit_bonus": 0.23,
+        "digit_gate": 0.75
+    },
+    "frequency": {
+        "rare_threshold_count": 10
+    },
+    "kfold": {
+        "folds": 3,
+        "calibration_percentile": 0.75
+    },
+    "presets": {
+        "FRUGAL": {
+            "Te": 0.16,
+            "He": 0.63,
+            "R": 0.2,
+            "Feas": 0.26
+        },
+        "QUALITY": {
+            "Te": 0.25,
+            "He": 0.55,
+            "R": 0.15,
+            "Feas": 0.7
+        }
+    }
+}

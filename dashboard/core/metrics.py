@@ -1,7 +1,18 @@
+import importlib.util as _il
 import math
 import re
 from collections import Counter
+from pathlib import Path
 from typing import Any
+
+# --- Tunable weights loaded from data/demne_params.json (single source of truth).
+# Same file the CLI scorers read → dashboard and command line can never drift. ---
+_pspec = _il.spec_from_file_location(
+    "demne_params", Path(__file__).resolve().parents[2] / "src" / "duraxell" / "params.py"
+)
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 ENTITIES = [
     "Histologie_tumorale",
@@ -20,28 +31,10 @@ ENTITIES = [
 
 
 class MetricsCalculator:
-    def __init__(self):
-        self.rules = {
-            "Estrogen_receptor": re.compile(
-                r"(?:RE|RO|ER|Estrogen)[\s:]*(\d+\s*%|positif|négatif|positive|negative|\+|\-)",
-                re.IGNORECASE,
-            ),
-            "Progesterone_receptor": re.compile(
-                r"(?:RP|PR|Progesterone)[\s:]*(\d+\s*%|positif|négatif|positive|negative|\+|\-)",
-                re.IGNORECASE,
-            ),
-            "Ki67": re.compile(r"Ki[\-\s]?67[\s:]*(\d+\s*%)", re.IGNORECASE),
-            "HER2_status": re.compile(
-                r"HER[\-\s]?2[\s:]*(\d\+?|positif|négatif|équivoque|score)",
-                re.IGNORECASE,
-            ),
-            "HER2_IHC": re.compile(
-                r"HER[\-\s]?2[\s:]*(\d\+?|positif|négatif|équivoque|score)",
-                re.IGNORECASE,
-            ),
-            "HER2_FISH": re.compile(r"FISH|amplifié", re.IGNORECASE),
-            "Genetic_mutation": re.compile(r"mutation|variant|BRCA", re.IGNORECASE),
-        }
+    def __init__(self, params: dict | None = None):
+        # params defaults to the shared config; the optimizer passes trial-specific
+        # weights/thresholds here so the SAME formulas are reused (no drift).
+        self.params = params if params is not None else PARAMS
         self.NEGATION_PATTERNS = [
             r"\baucun\b",
             r"\bsans\b",
@@ -65,24 +58,11 @@ class MetricsCalculator:
             r"\bdiscordant\b",
             r"\bdiscordance\b",
         ]
-        self.CONTRADICTION_PATTERNS = [
-            r"\bcependant\b",
-            r"\bmais\b",
-            r"\bnéanmoins\b",
-            r"\bau contraire\b",
-            r"\bmalgré\b",
-            r"\btoutefois\b",
-            r"\bà l'inverse\b",
-        ]
-
     def has_negation(self, text: str) -> bool:
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
 
     def has_uncertainty(self, text: str) -> bool:
         return any(re.search(pat, text) for pat in self.UNCERTAINTY_PATTERNS)
-
-    def has_contradiction(self, text: str) -> bool:
-        return any(re.search(pat, text) for pat in self.CONTRADICTION_PATTERNS)
 
     def compute_all_metrics(self, documents: list[Any], entity_type: str) -> dict[str, float]:
         annotations = []
@@ -99,10 +79,7 @@ class MetricsCalculator:
                 "He": 0.0,
                 "R": 0.0,
                 "Freq": 0.0,
-                "Yield": 0.0,
                 "Feas": 0.0,
-                "DomainShift": 0.0,
-                "LLM_Necessity": 0.0,
             }
 
         values = [a.value.strip() for a in annotations if a.value]
@@ -121,18 +98,20 @@ class MetricsCalculator:
                 "He": 0.0,
                 "R": 0.0,
                 "Freq": 0.0,
-                "Yield": 0.0,
                 "Feas": 0.0,
-                "DomainShift": 0.0,
-                "LLM_Necessity": 0.0,
             }
 
         # 1. Te [0.0 - 1.0] - Abstraction and Entropy
+        # Templatabilité = forme CONSTANTE, indépendante de la casse et de la longueur.
+        # Lettre→L (casse-insensible) puis collapse des répétitions (LLD == LLLD,
+        # "SEIN   DROIT" == "SEIN DROIT") : sinon la casse/longueur gonflent le nombre
+        # de patterns → entropie haute → Te artificiellement bas. Symboles (%,+,-…)
+        # conservés pour le bonus_semantic.
         normalized_patterns = []
         for v in values:
             v_norm = re.sub(r"[0-9]", "D", v)
-            v_norm = re.sub(r"[A-ZÀ-ÖØ-Þ]", "X", v_norm)
-            v_norm = re.sub(r"[a-zß-ÿ]", "x", v_norm)
+            v_norm = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", v_norm)
+            v_norm = re.sub(r"(.)\1+", r"\1", v_norm)
             normalized_patterns.append(v_norm)
 
         num_unique = len(set(normalized_patterns))
@@ -146,14 +125,18 @@ class MetricsCalculator:
             )
             h_norm = entropy / math.log(num_unique)
 
+        _tb = self.params["templatability_bonus"]
         structure_consistency = 1.0 - h_norm
         bonus_semantic = (
-            0.1
+            _tb["symbol_bonus"]
             if any(c in p for p in set(normalized_patterns) for c in ["%", "+", "-", ">", "<"])
             else 0.0
         )
-        if any("D" in p for p in set(normalized_patterns)) and structure_consistency > 0.6:
-            bonus_semantic += 0.1
+        if (
+            any("D" in p for p in set(normalized_patterns))
+            and structure_consistency > _tb["digit_gate"]
+        ):
+            bonus_semantic += _tb["digit_bonus"]
 
         te = min(1.0, max(0.0, structure_consistency + bonus_semantic))
 
@@ -168,27 +151,31 @@ class MetricsCalculator:
             n_total = len(all_tokens)
             n_unique = len(set(all_tokens))
             redundancy = (n_total - n_unique) / n_total if n_total > 0 else 0
-            k, x0 = 10, 0.5
+            _sig = self.params["homogeneity_sigmoid"]
+            k, x0 = _sig["k"], _sig["x0"]
             try:
                 he_raw = 1 / (1 + math.exp(-k * (redundancy - x0)))
             except OverflowError:
                 he_raw = 0.0 if (-k * (redundancy - x0)) > 0 else 1.0
             he = min(1.0, max(0.0, he_raw))
 
-        # 3. R [0.0 - 1.0] - Risk Context calculation
+        # 3. R [0.0 - 1.0] - R(E) = min(1, α_R·f_neg + β_R·f_unc + γ_R·f_cont)
+        # Same weights as the CLI scorer (E_risk_context.py) via shared config.
+        # f_cont (contradiction) needs document-level analysis the dashboard does not
+        # run on this short-text view → its rate is 0 here, identical to the CLI's
+        # per-call default (compute_score_from_stats(..., contradicted_rate=0.0)).
+        _rw = self.params["risk_weights"]
+        ALPHA_R, BETA_R, GAMMA_R = _rw["negation"], _rw["uncertainty"], _rw["contradiction"]
+        contradicted_rate = 0.0
         total_texts = len(contexts) if contexts else len(values)
         text_to_search = contexts if contexts else [v.lower() for v in values]
         negated = sum(1 for t in text_to_search if self.has_negation(t))
         uncertain = sum(1 for t in text_to_search if self.has_uncertainty(t))
-        contradictory = sum(1 for t in text_to_search if self.has_contradiction(t))
 
-        # Poids ALIGNÉS sur la ligne de commande (E_risk_context.py) :
-        # R(E) = min(1, α_R·f_neg + β_R·f_unc + γ_R·f_contradiction)
-        ALPHA_R, BETA_R, GAMMA_R = 0.1, 0.3, 0.6
         r_raw = (
             (negated / total_texts) * ALPHA_R
             + (uncertain / total_texts) * BETA_R
-            + (contradictory / total_texts) * GAMMA_R
+            + contradicted_rate * GAMMA_R
             if total_texts > 0
             else 0.0
         )
@@ -199,29 +186,17 @@ class MetricsCalculator:
         count = len(annotations)
         freq = count / max(total_tokens, 1)
 
-        # 5. Yield
-        if entity_type in self.rules:
-            matches = sum(1 for c in contexts if self.rules[entity_type].search(c))
-            y = matches / len(contexts) if len(contexts) > 0 else 0.0
-        else:
-            y = min(1.0, max(0.0, te * 0.6 + he * 0.3))
-
-        # 6. Feas — formule ALIGNÉE sur la ligne de commande (E_feasibility_NER.py)
-        # Feas(E) = α_Feas · min(1, Freq) + β_Feas · He, avec α_Feas = β_Feas = 0.2
-        # He ∈ [0, 1] (sortie sigmoïde) et Freq = occurrences / total_tokens du corpus.
-        ALPHA_FEAS = 0.2
-        BETA_FEAS = 0.2
-        feas = min(1.0, max(0.0, ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he))
-
-        # 7. Domain Shift
-        base_shift = 0.15
-        he_penalty = max(0.0, (1.0 - he) / 2.0)
-        te_penalty = max(0.0, (1.0 - te) / 3.0)
-        min(1.0, max(0.0, base_shift + he_penalty + te_penalty))
-
-        # 8. LLM Necessity
-        necessity = 0.30 * (1.0 - y) + 0.25 * (r * 4.0) + 0.25 * (1.0 - feas) + 0.20 * (1.0 - he)
-        min(1.0, max(0.0, necessity))
+        # 5. Feas — disponibilité de données pour un template :
+        # Feas(E) = α_Feas · min(1, count/C) + β_Feas · He
+        # On sature le COMPTE absolu (assez d'exemples pour énumérer un template),
+        # pas la densité count/tokens : une entité fréquente dans un gros corpus a
+        # une densité faible mais plein d'exemples — la densité la pénalisait à tort.
+        _fw = self.params["feasibility_weights"]
+        ALPHA_FEAS = _fw["alpha_freq"]
+        BETA_FEAS = _fw["beta_he"]
+        SAT_COUNT = _fw.get("sat_count", 300)
+        feas_freq = min(1.0, count / SAT_COUNT) if SAT_COUNT > 0 else 0.0
+        feas = min(1.0, max(0.0, ALPHA_FEAS * feas_freq + BETA_FEAS * he))
 
         return {
             "Te": round(te, 4),

@@ -10,10 +10,17 @@ High R indicates the entity is surrounded by:
 """
 
 import csv
+import importlib.util as _il
 import os
 import re
 from collections import defaultdict
 from pathlib import Path
+
+# --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
+_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 # Eco2AI for energy tracking
 try:
@@ -52,7 +59,7 @@ class RiskContextScorer:
         # --- CONFIGURATION DES RADARS ---
 
         # Fenêtre d'analyse : nombre de caractères autour de l'entité à lire
-        self.WINDOW_SIZE = 50
+        self.WINDOW_SIZE = PARAMS["risk_window_size"]
 
         # 1. Patterns de Négation (Augmente R un peu)
         # Patterns volontairement restrictifs : on évite "pas", "ni", "non" seuls qui
@@ -97,9 +104,10 @@ class RiskContextScorer:
         }
 
         # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
-        self.ALPHA_R = 0.1
-        self.BETA_R = 0.3
-        self.GAMMA_R = 0.6
+        _rw = PARAMS["risk_weights"]
+        self.ALPHA_R = _rw["negation"]
+        self.BETA_R = _rw["uncertainty"]
+        self.GAMMA_R = _rw["contradiction"]
         self.weights = {
             "negation": self.ALPHA_R,
             "uncertainty": self.BETA_R,

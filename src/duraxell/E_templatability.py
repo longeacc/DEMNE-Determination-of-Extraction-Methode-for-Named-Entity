@@ -7,6 +7,7 @@ Templatability is the capacity of an entity to follow predictable structured pat
 Example: TNM staging always follows the pattern T[0-4]N[0-3]M[0-1].
 """
 
+import importlib.util as _il
 import json
 import math
 import os
@@ -15,6 +16,12 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+# --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
+_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 # eco2ai dependencies
 try:
@@ -177,14 +184,15 @@ class TemplatabilityScorer:
         pattern_counts = Counter(normalized_patterns)
 
         # Semantic Bonus for standard markers
+        _tb = PARAMS["templatability_bonus"]
         bonus_semantic = 0.0
         # Check for numeric patterns, symbols
         has_digit = any("D" in p for p in unique_patterns)
         has_symbol = any(c in p for p in unique_patterns for c in ["%", "+", "-", ">", "<"])
         if has_symbol:
-            bonus_semantic += 0.1
-        if has_digit and structure_consistency > 0.6:
-            bonus_semantic += 0.1
+            bonus_semantic += _tb["symbol_bonus"]
+        if has_digit and structure_consistency > _tb["digit_gate"]:
+            bonus_semantic += _tb["digit_bonus"]
 
         # Te calculation
         # Baseline is structure_consistency

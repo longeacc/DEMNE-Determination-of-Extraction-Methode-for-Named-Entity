@@ -5,7 +5,7 @@ Generates 'decision_config.json' and 'output_decision.txt'.
 Decision Tree Logic (Priority Order):
 1. Templatability (Te) & Homogeneity (He) (Structure) -> HIGH? -> RULES
 2. Risk Context (R) -> HIGH? -> LLM / REVIEW
-3. Frequency (Freq) & Annotation Yield -> RULES vs ML (NER) vs LLM
+3. Feasibility (Feas) -> RULES vs ML (NER) vs LLM
 
 Outputs:
 - decision_config.json: Machine-readable config for the orchestrator.
@@ -13,10 +13,17 @@ Outputs:
 """
 
 import csv
+import importlib.util as _il
 import json
 import os
 from pathlib import Path
 from typing import Any
+
+# --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
+_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 # Eco2AI tracking
 try:
@@ -38,43 +45,32 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
     tracker = Tracker()
     tracker.start()
 
-# Import metrics scorers (Assuming they are in same package or path)
-try:
-    # We try local imports if running as script in same dir
-    from E_annotation_yield import AnnotationYieldScorer
-except ImportError:
-    try:
-        from duraxell.E_annotation_yield import AnnotationYieldScorer
-    except ImportError:
-        try:
-            from .E_annotation_yield import AnnotationYieldScorer
-        except (ImportError, SystemError):
-            pass
-
 
 class DecisionTreeBuilder:
     def __init__(self, config_path: Path):
         self.config_path = config_path
         self.decisions = {}
 
-        # --- CALIBRATED THRESHOLDS (To heavily favor RULES) ---
+        # --- CALIBRATED THRESHOLDS (data/demne_params.json → decision_thresholds) ---
+        _dt = PARAMS["decision_thresholds"]
         self.THRESHOLDS = {
-            "TE_HIGH": 0.10,
-            "HE_HIGH": 0.85,
-            "R_HIGH": 0.25,
-            "FEAS_NER": 0.20,
+            "TE_HIGH": _dt["TE_HIGH"],
+            "HE_HIGH": _dt["HE_HIGH"],
+            "R_HIGH": _dt["R_HIGH"],
+            "FEAS_NER": _dt["FEAS_NER"],
         }
+        # Nombre minimum d'occurrences pour que Te soit fiable
+        self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
 
-    # Nombre minimum d'occurrences pour que Te soit fiable (Aligné avec THRESHOLDS_JUSTIFICATION.md)
-    MIN_TE_SAMPLES = 2
-
-    def validate_thresholds_kfold(self, entities_metrics: dict[str, dict[str, float]], k: int = 5):
+    def validate_thresholds_kfold(self, entities_metrics: dict[str, dict[str, float]], k: int | None = None):
         """
         Validation croisée k-fold sur les seuils : partitionner le corpus en k plis,
         calibrer les seuils sur k-1 plis, mesurer la stabilité des décisions sur le pli restant.
         """
         import random
 
+        if k is None:
+            k = PARAMS["kfold"]["folds"]
         entities = list(entities_metrics.keys())
         if len(entities) < k:
             print(f"Pas assez d'entités pour une CV {k}-fold.")
@@ -95,8 +91,8 @@ class DecisionTreeBuilder:
             # Simulation d'une calibration : modification mineure d'un seuil basée sur le train set
             train_te_vals = sorted([entities_metrics[ent].get("Te", 0.0) for ent in train_entities])
             if train_te_vals:
-                # 75e percentile manuel
-                idx = int(len(train_te_vals) * 0.75)
+                # percentile manuel (data/demne_params.json → kfold.calibration_percentile)
+                idx = int(len(train_te_vals) * PARAMS["kfold"]["calibration_percentile"])
                 calibrated_te_high = (
                     train_te_vals[idx] if idx < len(train_te_vals) else self.THRESHOLDS["TE_HIGH"]
                 )
@@ -357,46 +353,12 @@ def main():
     corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
     metrics_db = load_metrics_from_csv(results_dir, corpus_name)
 
-    # 2. Compute Yield on the fly (Hybrid approach)
-    if args.gs_dir and args.pred_dir:
-        gs_dir = Path(args.gs_dir)
-        pred_dir = Path(args.pred_dir)
-    else:
-        base_esmo = Path(os.environ.get("DEMNE_ESMO_DIR", "data/ESMO2025"))
-        gs_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_GS"
-        pred_dir = base_esmo / "Breast" / "RCP" / "evaluation_set_breast_cancer_pred_rules"
-
-    # If using CHIR as well? For now stick to RCP as primary benchmark
-
-    if gs_dir.exists() and pred_dir.exists():
-        try:
-            print("Computing Annotation Yield (Rules vs GS)...")
-            yield_scorer = AnnotationYieldScorer(gs_dir, pred_dir)
-            yield_scorer.compute_all()
-            yield_scores = yield_scorer.get_scores()
-
-            for ent, score_dict in yield_scores.items():
-                f1 = (
-                    score_dict.get("F1-Yield", 0.0)
-                    if isinstance(score_dict, dict)
-                    else float(score_dict)
-                )
-                if ent in metrics_db:
-                    metrics_db[ent]["Yield"] = f1
-                else:
-                    metrics_db[ent] = {"Yield": f1}  # If missing in other stats
-            print("Annotation Yield computed.")
-        except NameError:
-            print("AnnotationYieldScorer class not found (import failed). Skipping Yield.")
-    else:
-        print(f"Warning: GS/Pred folders not found for Yield calculation.\nScan path: {gs_dir}")
-
-    # 3. Build Tree
+    # 2. Build Tree
     builder = DecisionTreeBuilder(config_file)
-    builder.validate_thresholds_kfold(metrics_db, k=3)
+    builder.validate_thresholds_kfold(metrics_db)
     builder.build_full_config(metrics_db)
 
-    # 4. Save Outputs
+    # 3. Save Outputs
     builder.save_config()
     builder.export_text_report(report_file)
     if HAS_ECO2AI:

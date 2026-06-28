@@ -102,21 +102,16 @@ story += [code(
     "├── main.py                       # Point d'entrée CLI unifié\n"
     "├── data/\n"
     "│   ├── decision_config.json      # Routage entité → méthode (généré)\n"
-    "│   ├── ESMO2025/                 # Corpus BRAT (CHIR, RCP, sein, prostate)\n"
-    "│   └── Consumtion_of_Duraxell.csv\n"
+    "│   └── ESMO2025/                 # Corpus BRAT (CHIR, RCP, sein, prostate)\n"
     "├── src/duraxell/\n"
-    "│   ├── cascade_orchestrator.py   # Orchestrateur Rules→ML→LLM\n"
     "│   ├── E_templatability.py       # Score Te (templatabilité, JSON)\n"
     "│   ├── E_homogeneity.py          # Score He (homogénéité, CSV)\n"
     "│   ├── E_frequency.py            # Score Freq (fréquence, CSV)\n"
     "│   ├── E_risk_context.py         # Score R (risque contextuel, CSV)\n"
-    "│   ├── E_feasibility_NER.py      # Score Feas (MMD + heuristique, CSV)\n"
-    "│   ├── E_annotation_yield.py     # Yield = F1 Rules vs GS\n"
+    "│   ├── E_feasibility_NER.py      # Score Feas (CSV)\n"
     "│   ├── E_creation_arbre_decision.py  # Arbre de décision, écrit\n"
     "│   │                              decision_config.json\n"
     "│   ├── visualize_decision_tree.py\n"
-    "│   ├── energy_tracker.py         # Suivi énergie via eco2ai\n"
-    "│   ├── Rules/                    # Règles regex + post-traitement\n"
     "│   └── REST_interface/\n"
     "│        ├── REST.ipynb           # Notebook démo Voila\n"
     "│        └── demo_rest.py         # Serveur FastAPI démo\n"
@@ -128,13 +123,10 @@ story += [code(
     "│   ├── pages/4_Notebook_REST.py\n"
     "│   └── core/                     # Brat parser, metrics, routing\n"
     "├── scripts/\n"
-    "│   ├── run_full_pipeline_report.py\n"
-    "│   ├── demne_grid_search_train_cantemist.py\n"
-    "│   └── validation_cantemist.py\n"
+    "│   └── generate_manifest.py\n"
     "├── tests/                        # Tests unitaires\n"
     "├── notebooks/commandes.ipynb     # Notebook d'exploration\n"
     "├── Results/                      # Sorties : *.csv, *.json\n"
-    "│   ├── batch_extraction_results.csv\n"
     "│   ├── templatability_analysis.json\n"
     "│   ├── homogeneity_analysis.csv\n"
     "│   ├── frequency_analysis.csv\n"
@@ -158,16 +150,13 @@ story += [code(
     "# Pipeline complet (métriques + arbre + CSV résumé)\n"
     "python main.py evaluate\n\n"
     "# Pour les commandes nécessitant pandas/torch/voila :\n"
-    "./.venv/Scripts/python.exe main.py extract --doc \"…\" --entity Estrogen_receptor")]
+    "./.venv/Scripts/python.exe main.py notebook --port 8888")]
 
 # Section 3 — Subcommands table
 story += [Paragraph("3. Carte des sous-commandes", H2)]
 sub_rows = [
     ["Sous-commande", "Rôle", "Dépendances clés"],
     ["info", "Diagnostic environnement (version, chemins, config)", "stdlib"],
-    ["extract", "Extraction d'une entité depuis un texte donné", "pandas"],
-    ["extract-all", "Extraction des 7 entités depuis un texte", "pandas"],
-    ["batch", "Extraction sur un dossier de .txt → CSV", "pandas"],
     ["metrics", "Lance E_templatability/Homogeneity/Frequency/Risk/Feasibility", "stdlib"],
     ["tree", "Construit l'arbre de décision + export decision_summary.csv", "stdlib"],
     ["evaluate", "Pipeline complet : metrics → tree → CSV", "stdlib"],
@@ -177,7 +166,6 @@ sub_rows = [
     ["notebook", "Mirror page Streamlit 4 : lance Voila sur REST.ipynb + API", "voila"],
     ["rest", "Lance uniquement demo_rest.py (legacy)", "fastapi"],
     ["export-csv", "Régénère decision_summary.csv depuis decision_config.json", "stdlib"],
-    ["serve", "Placeholder (TODO)", "—"],
 ]
 story += [make_table(sub_rows, col_widths=[3.2*cm, 9*cm, 4.5*cm])]
 
@@ -188,21 +176,6 @@ CMD_DOC = [
     ("info", "Affiche la version, la racine du projet, les chemins GS/Pred par défaut, "
               "la liste des entités et l'état du fichier de configuration.",
      "python main.py info"),
-    ("extract", "Extrait une entité d'un texte (chaîne libre). Utilise le "
-                 "CascadeOrchestrator complet (règles → ML → LLM).",
-     "python main.py extract \\\n"
-     "  --doc \"Estrogen receptor positive 95%, Ki67 12%, HER2 negatif\" \\\n"
-     "  --entity Estrogen_receptor"),
-    ("extract-all", "Boucle d'extraction sur les 7 entités (ou liste --entities). "
-                     "Affiche méthode utilisée + énergie cumulée.",
-     "python main.py extract-all --doc \"$(cat report.txt)\"\n"
-     "python main.py extract-all --doc \"…\" \\\n"
-     "  --entities Estrogen_receptor,HER2_status,Ki67"),
-    ("batch", "Extraction massive sur un dossier de .txt. Produit "
-               "Results/batch_extraction_results.csv (UTF-8 BOM, séparateur virgule).",
-     "python main.py batch \\\n"
-     "  --input_dir \"D:\\1_CLEM\\…\\evaluation_set_breast_cancer_GS\" \\\n"
-     "  --entities Estrogen_receptor,Progesterone_receptor,HER2_status"),
     ("metrics", "Lance en séquence les 5 scorers : Te, He, Freq, R, Feas. "
                  "Chaque script écrit son CSV/JSON dans Results/. "
                  "--gs_dir / --pred_dir surchargent les chemins ESMO2025 par défaut.",
@@ -313,13 +286,11 @@ out_rows = [
      "Entity, R_Score, Negation_Rate, Uncertainty_Rate, "
      "Contradiction_Rate, Count"],
     ["Results/ner_feasibility_analysis.csv", "E_feasibility_NER.py",
-     "Entity, Feas_Score, Domain_Shift, LLM_Necessity"],
+     "Entity, Feas_Score"],
     ["data/decision_config.json", "E_creation_arbre_decision.py",
      "{version, global_thresholds, entities: {…, method, justification, trace}}"],
     ["Results/decision_summary.csv", "main.py export-csv",
      "TSV : entity, Te, He, R, Freq, Feas, Method, Justification"],
-    ["Results/batch_extraction_results.csv", "main.py batch",
-     "fichier, entite, valeur, methode, confiance, energie_kwh, …"],
     ["logs/output_decision.txt", "E_creation_arbre_decision.py",
      "Rapport humain : seuils + méthode + trace par entité"],
     ["Consumtion_of_Duraxell.csv", "eco2ai", "Empreinte CO₂ / énergie cumulée"],
@@ -361,9 +332,7 @@ notes = [
     "rest-config (les imports lourds sont contournés par importlib).",
     "main.py force PYTHONIOENCODING=utf-8 et PYTHONUTF8=1 dans les sous-process → "
     "fin du UnicodeEncodeError cp1252 sous Windows.",
-    "Le calcul DrBERT-MMD (E_feasibility_NER.py) télécharge un modèle de 7 GB. Il est "
-    "désactivé par défaut (fallback simulation) ; la valeur Domain_Shift est informative "
-    "et n'affecte pas le routage.",
+    "E_feasibility_NER.py calcule le score Feas à partir de Freq et He.",
     "L'arbre est calibré sur le corpus Breast/RCP. Pour valider la stabilité sur un autre "
     "corpus, lancer `evaluate` avec --gs_dir/--pred_dir adaptés.",
     "decision_config.json est ré-écrit à chaque `tree`/`evaluate`. Un export figé doit "

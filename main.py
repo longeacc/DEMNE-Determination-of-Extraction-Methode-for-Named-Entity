@@ -1,7 +1,6 @@
 """DuraXELL CLI — Central hub for DEMNE.
 
 Provides:
-  - Direct extraction:   extract, extract-all, batch
   - Metric pipeline:     metrics, tree, evaluate
   - Dashboard parity:    dashboard, corpus, rest-config, notebook
   - Misc:                rest, info, export-csv
@@ -13,15 +12,11 @@ from __future__ import annotations
 
 import argparse
 import csv
-import glob
-import io
 import json
-import logging
 import os
 import re
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -115,131 +110,19 @@ def discover_entities_from_config() -> list[str]:
     except Exception:
         return []
 
-PRESETS = {
-    "FRUGAL": {"Te": 0.10, "He": 0.85, "R": 0.25, "Feas": 0.20},
-    "QUALITY": {"Te": 0.25, "He": 0.55, "R": 0.15, "Feas": 0.70},
-}
+# Tunable values (presets + thresholds) from data/demne_params.json — single source
+# of truth shared with the scorers, the decision tree and the dashboard.
+import importlib.util as _il
+_pspec = _il.spec_from_file_location("demne_params", SRC / "duraxell" / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
+
+PRESETS = PARAMS["presets"]
 
 CONFIG_PATH = ROOT / "data" / "decision_config.json"
 RESULTS_DIR = ROOT / "Results"
 DECISION_CSV = RESULTS_DIR / "decision_summary.csv"
-
-
-# ===========================================================================
-# Direct extraction commands
-# ===========================================================================
-def cmd_extract(args: argparse.Namespace) -> None:
-    from duraxell.cascade_orchestrator import CascadeOrchestrator
-
-    orch = CascadeOrchestrator()
-    print(f"Extraction for entity '{args.entity}':")
-    res = orch.extract(args.doc, args.entity)
-    print(
-        f"  Result: {res.value} | Method: {res.method_used} | "
-        f"Confidence: {res.confidence} | Energy: {res.energy_kwh:.6f} kWh"
-    )
-
-
-def cmd_extract_all(args: argparse.Namespace) -> None:
-    from duraxell.cascade_orchestrator import CascadeOrchestrator
-
-    orch = CascadeOrchestrator()
-    if args.entities:
-        entities = [e.strip() for e in args.entities.split(",")]
-    else:
-        entities = (
-            discover_entities(args.corpus_dir)
-            or discover_entities_from_config()
-        )
-    if not entities:
-        print("Aucune entité fournie ni découvrable. Utilisez --entities ou --corpus_dir.")
-        return
-    print(f"Extraction de {len(entities)} entités depuis le document...")
-    print("-" * 80)
-    total_energy = 0.0
-    for ent in entities:
-        res = orch.extract(args.doc, ent)
-        status = res.value if res.value else "NON TROUVÉ"
-        print(
-            f"  {ent:<25s} => {status:<20s} | {res.method_used:<12s} | "
-            f"conf={res.confidence:.2f} | E={res.energy_kwh:.6f} kWh"
-        )
-        total_energy += res.energy_kwh
-    print("-" * 80)
-    print(f"  Énergie totale : {total_energy:.6f} kWh")
-
-
-def cmd_batch(args: argparse.Namespace) -> None:
-    logging.basicConfig(level=logging.WARNING)
-    from duraxell.cascade_orchestrator import CascadeOrchestrator
-
-    orch = CascadeOrchestrator()
-    if args.entities:
-        entities = [e.strip() for e in args.entities.split(",")]
-    else:
-        # Discover from the input_dir itself (BRAT) → fallback to decision_config.json
-        entities = (
-            discover_entities(args.input_dir)
-            or discover_entities_from_config()
-        )
-    if not entities:
-        print("Aucune entité découverte dans --input_dir (pas d'annotation.conf "
-              "ni de .ann) et decision_config.json vide. Utilisez --entities.")
-        return
-    files = sorted(glob.glob(os.path.join(args.input_dir, "*.txt")))
-    if not files:
-        print(f"Aucun fichier .txt trouvé dans {args.input_dir}")
-        return
-
-    decision_cfg = {}
-    if CONFIG_PATH.exists():
-        with open(CONFIG_PATH, encoding="utf-8") as f:
-            decision_cfg = json.load(f).get("entities", {})
-
-    RESULTS_DIR.mkdir(exist_ok=True)
-    out_path = RESULTS_DIR / "batch_extraction_results.csv"
-
-    rows = []
-    total = len(files) * len(entities)
-    done = 0
-    t0 = time.time()
-    print(f"Batch : {len(files)} fichiers × {len(entities)} entités = {total} extractions")
-    print(f"Sortie CSV : {out_path}")
-    print("-" * 70)
-
-    for fpath in files:
-        text = open(fpath, encoding="utf-8").read()
-        fname = os.path.basename(fpath)
-        for ent in entities:
-            res = orch.extract(text, ent)
-            cfg = decision_cfg.get(ent, {})
-            mets = cfg.get("metrics", {})
-            rows.append({
-                "fichier": fname,
-                "entite": ent,
-                "valeur": res.value or "",
-                "methode_utilisee": res.method_used,
-                "confiance": round(res.confidence, 4),
-                "energie_kwh": round(res.energy_kwh, 8),
-                "Te": mets.get("Te", ""),
-                "He": mets.get("He", ""),
-                "Freq": round(mets["Freq"], 6) if "Freq" in mets else "",
-                "Feas": mets.get("Feas", ""),
-                "methode_recommandee": cfg.get("method", ""),
-                "justification": cfg.get("justification", ""),
-            })
-            done += 1
-            if done % 50 == 0 or done == total:
-                print(f"  [{done}/{total}] {time.time()-t0:.1f}s — {fname} / {ent} => {res.value or '-'}")
-
-    with open(out_path, "w", newline="", encoding="utf-8-sig") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()), delimiter=",")
-        w.writeheader()
-        w.writerows(rows)
-    found = sum(1 for r in rows if r["valeur"])
-    print("-" * 70)
-    print(f"Terminé en {time.time()-t0:.1f}s | {found}/{total} trouvés ({100*found/total:.0f}%)")
-    print(f"CSV écrit : {out_path}")
 
 
 # ===========================================================================
@@ -320,7 +203,6 @@ def _filter_noise(line: str) -> str | None:
     for k in _DROP_PATTERNS:
         if k in line:
             return None
-    # Retire les morceaux ", DS=…, LLM_N=…, Yield=…, DomainShift=…" en place
     cleaned = _STRIP_RE.sub("", line)
     return cleaned
 
@@ -497,7 +379,6 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
 
-    # Bypass duraxell/__init__.py (which pulls pandas via cascade_orchestrator)
     import importlib.util
     spec = importlib.util.spec_from_file_location(
         "_e_tree", SRC / "duraxell" / "E_creation_arbre_decision.py"
@@ -683,7 +564,7 @@ def main() -> None:
         epilog="""Examples:
   python main.py info
   python main.py metrics --gs_dir <path>
-  python main.py tree --gs_dir <path> --pred_dir <path>
+  python main.py tree --gs_dir <path>
   python main.py evaluate                  # full pipeline + CSV export
   python main.py dashboard --preset FRUGAL
   python main.py corpus --path <BRAT-dir>
@@ -692,24 +573,6 @@ def main() -> None:
 """,
     )
     sub = parser.add_subparsers(dest="command")
-
-    p = sub.add_parser("extract", help="Extract single entity from text")
-    p.add_argument("--doc", required=True)
-    p.add_argument("--entity", required=True)
-    p.set_defaults(func=cmd_extract)
-
-    p = sub.add_parser("extract-all", help="Extract all entities from one document")
-    p.add_argument("--doc", required=True)
-    p.add_argument("--entities", default=None,
-                   help="Liste séparée par virgule (sinon découverte automatique)")
-    p.add_argument("--corpus_dir", default=None,
-                   help="Dossier BRAT pour découvrir les entités à extraire")
-    p.set_defaults(func=cmd_extract_all)
-
-    p = sub.add_parser("batch", help="Extract entities from all .txt in a directory")
-    p.add_argument("--input_dir", required=True)
-    p.add_argument("--entities", default=None)
-    p.set_defaults(func=cmd_batch)
 
     p = sub.add_parser("metrics", help="Run E_*.py metric scripts on the corpus")
     _add_corpus_args(p)

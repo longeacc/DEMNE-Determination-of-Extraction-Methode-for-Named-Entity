@@ -10,12 +10,19 @@ Normalization: Sigmoid transform to spread values between 0 and 1 (returned as %
 """
 
 import csv
+import importlib.util as _il
 import math
 import os
 import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+
+# --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
+_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 # Eco2AI for energy tracking
 try:
@@ -68,8 +75,9 @@ class HomogeneityScorer:
         # k=10, x0=0.5 means the transition from low to high happens around 0.5 redundancy
         # "ER positif" repeated 100 times -> Raw=0.99 -> Sigmoid(0.99) ~ 1.0
         # "ER positif" / "Recepteur Estro" (50/50 mix) -> Raw ~ 0.5 -> Sigmoid(0.5) = 0.5
-        self.k = 10
-        self.x0 = 0.5
+        _sig = PARAMS["homogeneity_sigmoid"]
+        self.k = _sig["k"]
+        self.x0 = _sig["x0"]
 
     def compute_from_list(self, values: list[str]) -> float:
         """

@@ -15,10 +15,17 @@ Outputs:
 """
 
 import csv
+import importlib.util as _il
 import math
 import os
 from collections import defaultdict
 from pathlib import Path
+
+# --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
+_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+_pmod = _il.module_from_spec(_pspec)
+_pspec.loader.exec_module(_pmod)
+PARAMS = _pmod.load_params()
 
 # Eco2AI for energy tracking
 try:
@@ -53,9 +60,8 @@ class FrequencyScorer:
         self.total_tokens = 0
         self.total_docs = 0
 
-        # Seuil critique (défini dans decision_config.json: "FREQ_SUFFICIENT": 0.001)
-        # Mais ici on utilise un seuil absolu pour le "Rare Warning"
-        self.RARE_THRESHOLD_COUNT = 10
+        # Seuil absolu pour le "Rare Warning" (data/demne_params.json → frequency)
+        self.RARE_THRESHOLD_COUNT = PARAMS["frequency"]["rare_threshold_count"]
 
     def _count_words(self, text: str) -> int:
         """Tokenisation simple par espace."""
