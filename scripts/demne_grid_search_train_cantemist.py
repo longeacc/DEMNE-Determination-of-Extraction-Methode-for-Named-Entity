@@ -6,6 +6,7 @@ Optimisation conjointe sur le corpus Cantemist (Train) de :
   - 4 seuils  : Te_HIGH, He_HIGH, R_HIGH, Feas_NER
   - 3 poids R : αR, βR, γR     (R = min(1, αR·f_neg + βR·f_unc + γR·f_cont))
   - 2 poids F : αFeas, βFeas   (Feas = αFeas·min(1,Freq) + βFeas·He)
+  - 1 garde   : MIN_TE_SAMPLES (si te_count < seuil → Te=0, bloque RULES)
 
 Test sur les corpus Redjdal + RCP.
 
@@ -14,6 +15,9 @@ Cantemist et RCP (issues des CSV `risk_context_analysis_*.csv`).
 Pour Redjdal, on ne les a pas — son R reste celui hardcodé (les poids αR/βR/γR
 n'affectent donc PAS Redjdal au test). Feas est recalculé partout (Freq+He
 sont disponibles pour toutes les entités).
+te_count (nombre d'occurrences pour Te) est disponible pour Cantemist et RCP
+(issu des JSON `templatability_analysis_*.json`). Pour Redjdal, te_count est
+absent — la garde MIN_TE_SAMPLES ne s'y applique pas (Te reste tel quel).
 """
 
 from __future__ import annotations
@@ -39,33 +43,35 @@ class Entity:
     f_neg: float | None = None
     f_unc: float | None = None
     f_cont: float | None = None
+    # Nombre d'occurrences pour le calcul de Te (None si indisponible → garde non appliquée)
+    te_count: int | None = None
 
 
 # ═══ CANTEMIST-35 (12) — Données fournies par l'utilisateur + sous-rates CSV ═══
 CANTEMIST = [
-    Entity("Histologie_tumorale",                                                0.132, 0.8537, 0.0414, 0.0034, 0.2570, "RULES", 0.03, 0.07, 0.00),
-    Entity("Traitement_specifique_du_cancer",                                    0.174, 0.8411, 0.3185, 0.0071, 0.2550, "LLM",   0.10, 0.01, 0.29),
-    Entity("Signes_physiques",                                                   0.101, 0.6976, 0.0928, 0.0025, 0.2100, "LLM",   0.29, 0.00, 0.03),
-    Entity("Evolutivite_en_lien_avec_le_cancer",                                 0.000, 0.0067, 0.0000, 0.0001, 0.0020, "LLM",   0.00, 0.00, 0.00),
-    Entity("Reponse_a_la_chimiotherapie",                                        0.105, 0.9221, 0.1789, 0.0043, 0.2780, "RULES", 0.19, 0.04, 0.12),
-    Entity("Stade_metastatique_avec_localisations",                              0.111, 0.8196, 0.0891, 0.0029, 0.2470, "LLM",   0.05, 0.10, 0.03),
-    Entity("Statut_tabagique",                                                   0.100, 0.5883, 0.1000, 0.0005, 0.1770, "LLM",   0.50, 0.00, 0.00),
-    Entity("ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge",0.100, 0.3241, 0.0483, 0.0010, 0.0980, "LLM",   0.24, 0.00, 0.00),
-    Entity("Stade_OMS_ECOG_Karnofsky",                                           0.389, 0.9190, 0.0200, 0.0010, 0.2760, "RULES", 0.10, 0.00, 0.00),
-    Entity("Biomarqueurs_therapeutiques",                                        0.104, 0.7193, 0.6074, 0.0010, 0.2160, "LLM",   0.00, 0.14, 0.54),
-    Entity("Topographie_du_primitif",                                            0.105, 0.7859, 0.0400, 0.0019, 0.2370, "LLM",   0.02, 0.07, 0.00),
-    Entity("Symptomes",                                                          0.133, 0.7440, 0.0617, 0.0036, 0.2250, "LLM",   0.11, 0.01, 0.04),
+    Entity("Histologie_tumorale",                                                0.132, 0.8537, 0.0414, 0.0034, 0.2570, "RULES", 0.03, 0.07, 0.00, 99),
+    Entity("Traitement_specifique_du_cancer",                                    0.174, 0.8411, 0.3185, 0.0071, 0.2550, "LLM",   0.10, 0.01, 0.29, 205),
+    Entity("Signes_physiques",                                                   0.101, 0.6976, 0.0928, 0.0025, 0.2100, "LLM",   0.29, 0.00, 0.03, 72),
+    Entity("Evolutivite_en_lien_avec_le_cancer",                                 0.000, 0.0067, 0.0000, 0.0001, 0.0020, "LLM",   0.00, 0.00, 0.00, 2),
+    Entity("Reponse_a_la_chimiotherapie",                                        0.105, 0.9221, 0.1789, 0.0043, 0.2780, "RULES", 0.19, 0.04, 0.12, 124),
+    Entity("Stade_metastatique_avec_localisations",                              0.111, 0.8196, 0.0891, 0.0029, 0.2470, "LLM",   0.05, 0.10, 0.03, 83),
+    Entity("Statut_tabagique",                                                   0.100, 0.5883, 0.1000, 0.0005, 0.1770, "LLM",   0.50, 0.00, 0.00, 14),
+    Entity("ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge",0.100, 0.3241, 0.0483, 0.0010, 0.0980, "LLM",   0.24, 0.00, 0.00, 29),
+    Entity("Stade_OMS_ECOG_Karnofsky",                                           0.389, 0.9190, 0.0200, 0.0010, 0.2760, "RULES", 0.10, 0.00, 0.00, 30),
+    Entity("Biomarqueurs_therapeutiques",                                        0.104, 0.7193, 0.6074, 0.0010, 0.2160, "LLM",   0.00, 0.14, 0.54, 29),
+    Entity("Topographie_du_primitif",                                            0.105, 0.7859, 0.0400, 0.0019, 0.2370, "LLM",   0.02, 0.07, 0.00, 55),
+    Entity("Symptomes",                                                          0.133, 0.7440, 0.0617, 0.0036, 0.2250, "LLM",   0.11, 0.01, 0.04, 104),
 ]
 
 # ═══ RCP/ESMO (7) — Données fournies par l'utilisateur + sous-rates CSV ═══
 RCP = [
-    Entity("Estrogen_receptor",     0.304, 0.9780, 0.0589, 0.0028, 0.2950, "RULES", 0.08, 0.04, 0.02),
-    Entity("Progesterone_receptor", 0.294, 0.9644, 0.1383, 0.0023, 0.2900, "RULES", 0.08, 0.06, 0.09),
-    Entity("HER2_status",           0.241, 0.9691, 0.0758, 0.0015, 0.2910, "RULES", 0.12, 0.02, 0.04),
-    Entity("HER2_IHC",              0.176, 0.9579, 0.1601, 0.0014, 0.2880, "RULES", 0.13, 0.08, 0.09),
-    Entity("Ki67",                  0.269, 0.9712, 0.0635, 0.0021, 0.2920, "RULES", 0.12, 0.08, 0.00),
-    Entity("Genetic_mutation",      0.000, 0.0143, 0.0000, 0.0000, 0.0040, "LLM",   0.00, 0.00, 0.00),
-    Entity("HER2_FISH",             0.100, 0.5000, 0.2741, 0.0003, 0.1500, "LLM",   0.19, 0.19, 0.14),
+    Entity("Estrogen_receptor",     0.304, 0.9780, 0.0589, 0.0028, 0.2950, "RULES", 0.08, 0.04, 0.02, 157),
+    Entity("Progesterone_receptor", 0.294, 0.9644, 0.1383, 0.0023, 0.2900, "RULES", 0.08, 0.06, 0.09, 132),
+    Entity("HER2_status",           0.241, 0.9691, 0.0758, 0.0015, 0.2910, "RULES", 0.12, 0.02, 0.04, 82),
+    Entity("HER2_IHC",              0.176, 0.9579, 0.1601, 0.0014, 0.2880, "RULES", 0.13, 0.08, 0.09, 77),
+    Entity("Ki67",                  0.269, 0.9712, 0.0635, 0.0021, 0.2920, "RULES", 0.12, 0.08, 0.00, 116),
+    Entity("Genetic_mutation",      0.000, 0.0143, 0.0000, 0.0000, 0.0040, "LLM",   0.00, 0.00, 0.00, 2),
+    Entity("HER2_FISH",             0.100, 0.5000, 0.2741, 0.0003, 0.1500, "LLM",   0.19, 0.19, 0.14, 16),
 ]
 
 # ═══ REDJDAL (46) — Labels REST senior, R conservé (pas de sous-composantes) ═══
@@ -137,21 +143,29 @@ def effective_Feas(e: Entity, aF: float, bF: float) -> float:
     return aF * min(1.0, e.Freq) + bF * e.He
 
 
-def route(e, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF):
+def effective_Te(e: Entity, min_te_samples: int) -> float:
+    """Applique la garde MIN_TE_SAMPLES : Te=0 si pas assez d'échantillons."""
+    if e.te_count is not None and e.te_count < min_te_samples:
+        return 0.0
+    return e.Te
+
+
+def route(e, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF, min_te):
+    te = effective_Te(e, min_te)
     r = effective_R(e, aR, bR, gR)
     f = effective_Feas(e, aF, bF)
-    if e.Te >= Te_H and e.He >= He_H and r < R_H:
+    if te >= Te_H and e.He >= He_H and r < R_H:
         return "RULES"
     if f >= Feas_H:
         return "TBM"
     return "LLM"
 
 
-def evaluate(corpus, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF):
+def evaluate(corpus, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF, min_te):
     exact, loss = 0, 0.0
     details = []
     for e in corpus:
-        pred = route(e, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF)
+        pred = route(e, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF, min_te)
         ok = (pred == e.label)
         d = RANK[pred] - RANK[e.label]
         # Sous-escalade plus coûteuse que sur-escalade
@@ -165,7 +179,7 @@ def evaluate(corpus, Te_H, He_H, R_H, Feas_H, aR, bR, gR, aF, bF):
             "correct": exact, "total": n, "details": details}
 
 
-# ═══ GRID (coarse mais joint sur 9 paramètres) ═══
+# ═══ GRID (coarse mais joint sur 10 paramètres) ═══
 GRID = {
     # Seuils
     "Te_HIGH":  [0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
@@ -179,6 +193,8 @@ GRID = {
     # Poids Feas  (existants : α=0.4, β=0.3)
     "alpha_F":  [0.2, 0.3, 0.4, 0.5, 0.6],
     "beta_F":   [0.2, 0.3, 0.4, 0.5],
+    # Garde MIN_TE_SAMPLES (existant : 10)
+    "MIN_TE_SAMPLES": [2, 5, 10, 15, 20],
 }
 
 
@@ -199,7 +215,7 @@ def run_optimization():
     print(f"TEST  : Redjdal + RCP ({len(test_data)} entités)")
     print(f"{'='*70}")
 
-    print(f"Grille : {n_combos:,} combinaisons (9 paramètres)\n")
+    print(f"Grille : {n_combos:,} combinaisons (10 paramètres)\n")
 
     best_loss = float("inf")
     best_cfgs = []
@@ -284,7 +300,8 @@ def export_all(final):
             "R_HIGH":  universal["R_HIGH"],
             "FEAS_NER": universal["Feas_NER"],
             "TE_MED": 0.10, "FREQ_MIN": 0.001,
-            "RARE_THRESHOLD_COUNT": 10, "MIN_TE_SAMPLES": 10,
+            "RARE_THRESHOLD_COUNT": 10,
+            "MIN_TE_SAMPLES": universal["MIN_TE_SAMPLES"],
         },
         "weights_R": {
             "alpha": universal["alpha_R"],
@@ -324,6 +341,7 @@ def export_all(final):
         f"R_HIGH: {universal['R_HIGH']}, Feas_NER: {universal['Feas_NER']}}}",
         f"Weights R   : α={universal['alpha_R']}, β={universal['beta_R']}, γ={universal['gamma_R']}",
         f"Weights Feas: α={universal['alpha_F']}, β={universal['beta_F']}",
+        f"MIN_TE_SAMPLES: {universal['MIN_TE_SAMPLES']}",
         f"Concordance totale: {final['total_correct']}/{final['total']} ({final['accuracy']:.1%})",
     ]
     Path("Results/grid_search_summary.txt").write_text("\n".join(lines), encoding="utf-8")
@@ -336,13 +354,14 @@ def export_all(final):
 def main():
     t0 = time.time()
     print("DEMNE Optimization — Train=Cantemist-35, Test=Redjdal+RCP")
-    print("4 seuils + αR/βR/γR + αFeas/βFeas, labels ternaires RULES/TBM/LLM\n")
+    print("4 seuils + αR/βR/γR + αFeas/βFeas + MIN_TE_SAMPLES, labels ternaires RULES/TBM/LLM\n")
     for n, c in ALL_CORPORA.items():
         ct = {"RULES": 0, "TBM": 0, "LLM": 0}
         for e in c: ct[e.label] += 1
         sub = sum(1 for e in c if e.f_neg is not None)
+        te_known = sum(1 for e in c if e.te_count is not None)
         print(f"  {n:10s}: {len(c)} entités (R={ct['RULES']}, T={ct['TBM']}, L={ct['LLM']})"
-              f"  sous-rates R : {sub}/{len(c)}")
+              f"  sous-rates R : {sub}/{len(c)}, te_count : {te_known}/{len(c)}")
     print()
     opt = run_optimization()
     final = final_evaluation(opt)

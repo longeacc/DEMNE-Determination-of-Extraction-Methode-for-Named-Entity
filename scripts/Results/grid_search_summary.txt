@@ -1,0 +1,8 @@
+DEMNE Multi-corpus Grid Search
+Train: MACCROBAT+QUEARO+RCP / Test: Cantemist+Redjdal
+Date: 2026-06-28 10:53
+Thresholds : Te_HIGH=0.1, He_HIGH=0.95, R_HIGH=0.25, Feas_NER=0.05
+Weights R   : a=0.1, b=0.3, g=0.6
+Weights Feas: a=0.1, b=0.3
+MIN_TE_SAMPLES: 2
+Concordance totale: 65/102 (63.7%)
