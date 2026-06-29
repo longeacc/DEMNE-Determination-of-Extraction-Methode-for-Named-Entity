@@ -1,7 +1,7 @@
 {
   "thresholds": {
-    "TE_HIGH": 0.1,
-    "HE_HIGH": 0.95,
+    "TE_HIGH": 0.08,
+    "HE_HIGH": 0.85,
     "R_HIGH": 0.25,
     "FEAS_NER": 0.05,
     "TE_MED": 0.1,
@@ -12,7 +12,7 @@
   "weights_R": {
     "alpha": 0.1,
     "beta": 0.3,
-    "gamma": 0.6
+    "gamma": 1.0
   },
   "weights_Feas": {
     "alpha": 0.1,
@@ -22,15 +22,15 @@
     "method": "Train: MACCROBAT+QUEARO+RCP, Test: Cantemist+Redjdal",
     "label_criterion": "Cochran Q (MACCROBAT+QUEARO), REST senior (RCP), REST senior (Cantemist), F1>=0.80 (Redjdal)",
     "total_entities": 102,
-    "concordance": "65/102",
-    "accuracy": 0.6373,
+    "concordance": "67/102",
+    "accuracy": 0.6569,
     "ranges_of_tied_optimal_configs": {
       "Te_HIGH": [
         0.05,
         0.12
       ],
       "He_HIGH": [
-        0.95,
+        0.75,
         0.95
       ],
       "R_HIGH": [
@@ -39,7 +39,7 @@
       ],
       "Feas_NER": [
         0.05,
-        0.12
+        0.25
       ],
       "alpha_R": [
         0.1,
