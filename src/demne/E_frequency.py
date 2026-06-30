@@ -201,9 +201,9 @@ def main():
     else:
         # MÃªme sources de donnÃ©es pour cohÃ©rence
         data_dirs = [
-            root_dir / "src/duraxell/NER/data/Breast/train",
-            root_dir / "src/duraxell/NER/data/Breast/val",
-            root_dir / "src/duraxell/NER/data/Breast/test",
+            root_dir / "src/demne/NER/data/Breast/train",
+            root_dir / "src/demne/NER/data/Breast/val",
+            root_dir / "src/demne/NER/data/Breast/test",
         ]
 
     corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"

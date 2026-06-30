@@ -61,7 +61,7 @@ def main() -> None:
         st.download_button(
             "Télécharger config.json",
             json_str,
-            file_name="duraxell_config.json",
+            file_name="demne_config.json",
             mime="application/json",
         )
 

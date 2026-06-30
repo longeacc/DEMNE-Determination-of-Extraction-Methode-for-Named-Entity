@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Seuils par défaut = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
 _pspec = _il.spec_from_file_location(
-    "demne_params", Path(__file__).resolve().parents[2] / "src" / "duraxell" / "params.py"
+    "demne_params", Path(__file__).resolve().parents[2] / "src" / "demne" / "params.py"
 )
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)

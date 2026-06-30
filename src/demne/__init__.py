@@ -1,6 +1,6 @@
 """
-DuraXELL / duraxell
-===================
+DEMNE / demne
+=============
 Module principal d'analyse de corpus pour la méthode DEMNE.
 
 Exports principaux :

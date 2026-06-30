@@ -5,10 +5,10 @@ import sys
 # Ajout du chemin racine pour les imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from duraxell.REST_interface.convergence_analyzer import ConvergenceAnalyzer
-from duraxell.REST_interface.rest_annotator import RESTAnnotator
-from duraxell.REST_interface.rest_decision_bridge import RESTDecisionBridge
-from duraxell.REST_interface.rest_evaluator import RESTEvaluator
+from demne.REST_interface.convergence_analyzer import ConvergenceAnalyzer
+from demne.REST_interface.rest_annotator import RESTAnnotator
+from demne.REST_interface.rest_decision_bridge import RESTDecisionBridge
+from demne.REST_interface.rest_evaluator import RESTEvaluator
 
 
 def main():

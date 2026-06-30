@@ -94,6 +94,6 @@ st.code(json_str, language="json")
 st.download_button(
     "📥 Télécharger configuration JSON",
     data=json_str,
-    file_name=f"duraxell_config_{datetime.now():%Y%m%d_%H%M}.json",
+    file_name=f"demne_config_{datetime.now():%Y%m%d_%H%M}.json",
     mime="application/json",
 )

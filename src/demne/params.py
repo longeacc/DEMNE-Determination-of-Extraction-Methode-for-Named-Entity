@@ -5,7 +5,7 @@ file or any given start path). DEFAULTS below are used only for keys missing
 from the JSON, so the JSON file is the authority and the CLI scorers, the
 decision tree and the dashboard can never silently diverge.
 
-Standalone-safe: load it without importing the duraxell package, e.g.
+Standalone-safe: load it without importing the demne package, e.g.
 
     import importlib.util as _il
     _spec = _il.spec_from_file_location("demne_params", <path>/"params.py")

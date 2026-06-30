@@ -34,7 +34,7 @@ DEFAULT_PORT = 8888
 
 # Presets = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
 import importlib.util as _il
-_pspec = _il.spec_from_file_location("demne_params", SRC / "duraxell" / "params.py")
+_pspec = _il.spec_from_file_location("demne_params", SRC / "demne" / "params.py")
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -54,7 +54,7 @@ ROUTING_COLORS = {
 # ---------------------------------------------------------------------------
 def _load_tree_builder():
     spec = importlib.util.spec_from_file_location(
-        "_e_tree", SRC / "duraxell" / "E_creation_arbre_decision.py"
+        "_e_tree", SRC / "demne" / "E_creation_arbre_decision.py"
     )
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -411,7 +411,7 @@ class DuraXellGUI:
         path = filedialog.asksaveasfilename(
             defaultextension=".json",
             initialdir=str(RESULTS_DIR),
-            initialfile="duraxell_config.json",
+            initialfile="demne_config.json",
             filetypes=[("JSON", "*.json")])
         if not path:
             return
@@ -489,7 +489,7 @@ class DuraXellGUI:
             )
             mod = _il.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            nb_path = ROOT / "src" / "duraxell" / "REST_interface" / "REST.ipynb"
+            nb_path = ROOT / "src" / "demne" / "REST_interface" / "REST.ipynb"
             self.notebook_viewer = mod.NotebookViewer(viewer_frame, nb_path,
                                                        log_fn=self._log)
         except ModuleNotFoundError as e:

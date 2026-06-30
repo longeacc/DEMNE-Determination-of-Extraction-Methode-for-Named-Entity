@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Bootstrap: make `duraxell.*` importable + force UTF-8 stdout on Windows
+# Bootstrap: make `demne.*` importable + force UTF-8 stdout on Windows
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).parent.resolve()
 SRC = ROOT / "src"
@@ -113,7 +113,7 @@ def discover_entities_from_config() -> list[str]:
 # Tunable values (presets + thresholds) from data/demne_params.json — single source
 # of truth shared with the scorers, the decision tree and the dashboard.
 import importlib.util as _il
-_pspec = _il.spec_from_file_location("demne_params", SRC / "duraxell" / "params.py")
+_pspec = _il.spec_from_file_location("demne_params", SRC / "demne" / "params.py")
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -238,11 +238,11 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
 def cmd_metrics(args: argparse.Namespace) -> None:
     """Run all E_*.py metric scripts on the corpus."""
     scripts = [
-        "src/duraxell/E_templatability.py",
-        "src/duraxell/E_homogeneity.py",
-        "src/duraxell/E_frequency.py",
-        "src/duraxell/E_risk_context.py",
-        "src/duraxell/E_feasibility_NER.py",
+        "src/demne/E_templatability.py",
+        "src/demne/E_homogeneity.py",
+        "src/demne/E_frequency.py",
+        "src/demne/E_risk_context.py",
+        "src/demne/E_feasibility_NER.py",
     ]
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
@@ -264,11 +264,11 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
     """Pipeline de construction de l'arbre (utilisé par `evaluate`)."""
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
-    _run_script("src/duraxell/E_creation_arbre_decision.py", gs, pred)
+    _run_script("src/demne/E_creation_arbre_decision.py", gs, pred)
     if not args.no_visualize:
         print("\nVisualisation de l'arbre...")
         subprocess.run(
-            [sys.executable, str(ROOT / "src/duraxell/visualize_decision_tree.py")],
+            [sys.executable, str(ROOT / "src/demne/visualize_decision_tree.py")],
             cwd=str(ROOT),
         )
     _export_decision_csv()
@@ -381,7 +381,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
 
     import importlib.util
     spec = importlib.util.spec_from_file_location(
-        "_e_tree", SRC / "duraxell" / "E_creation_arbre_decision.py"
+        "_e_tree", SRC / "demne" / "E_creation_arbre_decision.py"
     )
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -472,7 +472,7 @@ def cmd_notebook(args: argparse.Namespace) -> None:
     """Mirror Page 4 — launch the REST notebook (Voila) and/or the REST API."""
     procs = []
     if not args.api_only:
-        notebook = ROOT / "src" / "duraxell" / "REST_interface" / "REST.ipynb"
+        notebook = ROOT / "src" / "demne" / "REST_interface" / "REST.ipynb"
         if not notebook.exists():
             print(f"Notebook introuvable : {notebook}")
         else:
@@ -485,7 +485,7 @@ def cmd_notebook(args: argparse.Namespace) -> None:
             print(f"  → http://127.0.0.1:{args.port}")
 
     if not args.notebook_only:
-        api = ROOT / "src" / "duraxell" / "REST_interface" / "demo_rest.py"
+        api = ROOT / "src" / "demne" / "REST_interface" / "demo_rest.py"
         print(f"Démarrage API REST : {api}")
         procs.append(subprocess.Popen([sys.executable, str(api)], cwd=api.parent))
 
@@ -504,8 +504,8 @@ def cmd_notebook(args: argparse.Namespace) -> None:
 def cmd_rest(args: argparse.Namespace) -> None:
     """Legacy: launches demo_rest.py only."""
     subprocess.run(
-        [sys.executable, str(ROOT / "src/duraxell/REST_interface/demo_rest.py")],
-        cwd=str(ROOT / "src/duraxell/REST_interface"),
+        [sys.executable, str(ROOT / "src/demne/REST_interface/demo_rest.py")],
+        cwd=str(ROOT / "src/demne/REST_interface"),
     )
 
 

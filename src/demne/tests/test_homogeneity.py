@@ -1,9 +1,9 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../duraxell"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../demne"))
 
-from duraxell.E_homogeneity import HomogeneityScorer
+from demne.E_homogeneity import HomogeneityScorer
 
 
 def test_homogeneity_limits():

@@ -25,7 +25,7 @@ from pathlib import Path
 import webview
 
 ROOT = Path(__file__).resolve().parent.parent
-NB_PATH = ROOT / "src" / "duraxell" / "REST_interface" / "REST.ipynb"
+NB_PATH = ROOT / "src" / "demne" / "REST_interface" / "REST.ipynb"
 
 
 def _free_port() -> int:

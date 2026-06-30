@@ -1,9 +1,9 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../duraxell"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../demne"))
 
-from duraxell.E_risk_context import RiskContextScorer
+from demne.E_risk_context import RiskContextScorer
 
 
 def test_negation_detection():

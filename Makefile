@@ -4,7 +4,7 @@ install:
 	pip install -e .[dev,ner]
 
 test:
-	pytest --cov=duraxell --tb=short -q
+	pytest --cov=demne --tb=short -q
 
 lint:
 	ruff check .

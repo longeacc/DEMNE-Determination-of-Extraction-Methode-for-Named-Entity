@@ -353,7 +353,7 @@ if __name__ == "__main__":
     NotebookViewer(
         root,
         Path(__file__).resolve().parent.parent /
-        "src" / "duraxell" / "REST_interface" / "REST.ipynb",
+        "src" / "demne" / "REST_interface" / "REST.ipynb",
         log_fn=print,
     )
     root.mainloop()

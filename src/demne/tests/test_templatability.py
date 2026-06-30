@@ -1,10 +1,10 @@
 import os
 import sys
 
-# Add duraxell to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "../duraxell"))
+# Add demne to path
+sys.path.append(os.path.join(os.path.dirname(__file__), "../demne"))
 
-from duraxell.E_templatability import TemplatabilityScorer
+from demne.E_templatability import TemplatabilityScorer
 
 
 def test_templatability_scores():

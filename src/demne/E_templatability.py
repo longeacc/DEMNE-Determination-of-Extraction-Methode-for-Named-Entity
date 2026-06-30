@@ -335,9 +335,9 @@ def main():
     else:
         # Configuration
         data_dirs_rel = [
-            "src/duraxell/NER/data/Breast/train",
-            "src/duraxell/NER/data/Breast/val",
-            "src/duraxell/NER/data/Breast/test",
+            "src/demne/NER/data/Breast/train",
+            "src/demne/NER/data/Breast/val",
+            "src/demne/NER/data/Breast/test",
         ]
         data_dirs = [root_dir / d for d in data_dirs_rel]
 

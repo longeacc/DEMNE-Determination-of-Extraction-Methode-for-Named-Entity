@@ -3,10 +3,10 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from duraxell.REST_interface.rest_annotator import RESTAnnotator
-from duraxell.REST_interface.rest_decision_bridge import RESTDecisionBridge
-from duraxell.REST_interface.rest_evaluator import RESTEvaluator
-from duraxell.REST_interface.yield_calculator import YieldCalculator
+from demne.REST_interface.rest_annotator import RESTAnnotator
+from demne.REST_interface.rest_decision_bridge import RESTDecisionBridge
+from demne.REST_interface.rest_evaluator import RESTEvaluator
+from demne.REST_interface.yield_calculator import YieldCalculator
 
 
 class RESTPipeline:

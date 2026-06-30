@@ -103,7 +103,7 @@ story += [code(
     "├── data/\n"
     "│   ├── decision_config.json      # Routage entité → méthode (généré)\n"
     "│   └── ESMO2025/                 # Corpus BRAT (CHIR, RCP, sein, prostate)\n"
-    "├── src/duraxell/\n"
+    "├── src/demne/\n"
     "│   ├── E_templatability.py       # Score Te (templatabilité, JSON)\n"
     "│   ├── E_homogeneity.py          # Score He (homogénéité, CSV)\n"
     "│   ├── E_frequency.py            # Score Freq (fréquence, CSV)\n"
@@ -205,7 +205,7 @@ CMD_DOC = [
                      "avec la page Streamlit 3.",
      "python main.py rest-config --export Results/config_export.json\n"
      "python main.py rest-config --import Results/config_export.json"),
-    ("notebook", "Lance Voila sur src/duraxell/REST_interface/REST.ipynb (port 8888 "
+    ("notebook", "Lance Voila sur src/demne/REST_interface/REST.ipynb (port 8888 "
                   "par défaut) et le serveur FastAPI demo_rest.py en parallèle. "
                   "Mirror exact de la page Streamlit 4.",
      "python main.py notebook                       # Voila + API\n"

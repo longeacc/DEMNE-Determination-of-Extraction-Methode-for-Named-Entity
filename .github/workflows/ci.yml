@@ -33,7 +33,7 @@ jobs:
         run: black --check .
 
       - name: Run tests with coverage
-        run: pytest --cov=duraxell --cov-report=xml --tb=short -q
+        run: pytest --cov=demne --cov-report=xml --tb=short -q
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4

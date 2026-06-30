@@ -233,7 +233,7 @@ def main():
     if args.gs_dir:
         abs_data_dirs = [Path(args.gs_dir)]
     else:
-        data_dirs = ["src/duraxell/NER/data/Breast/train", "src/duraxell/NER/data/Breast/val", "src/duraxell/NER/data/Breast/test"]
+        data_dirs = ["src/demne/NER/data/Breast/train", "src/demne/NER/data/Breast/val", "src/demne/NER/data/Breast/test"]
         abs_data_dirs = [root_dir / d for d in data_dirs]
 
     corpus_name = Path(args.gs_dir).parent.name if args.gs_dir else "Breast"
