@@ -1,9 +1,3 @@
-import os
-import sys
-
-# Add demne to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "../demne"))
-
 from demne.E_templatability import TemplatabilityScorer
 
 

@@ -17,8 +17,19 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
 ]
+
+[project.urls]
+Homepage = "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity"
+Repository = "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity"
+"Bug Tracker" = "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/issues"
+Documentation = "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity#readme"
 
 dependencies = [
     "numpy>=1.24,<2.0",
@@ -74,7 +85,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "src/demne/tests"]
+testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short"
 

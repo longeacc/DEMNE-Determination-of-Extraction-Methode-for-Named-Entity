@@ -1,20 +1,20 @@
-# DuraXell Dashboard
+# demne Dashboard
 
-Ce dossier contient l'interface graphique interactive de supervision NLP pour le projet de recherche **DuraXell**.
-L'application Streamlit permet d'analyser les métriques de second niveau (L2) et d'agir sur le routage en cascade (Rules -> CRF -> Transformers -> LLM) selon les scores calculés ou modifiables par l'utilisateur.
+Ce dossier contient l'interface graphique interactive de supervision NLP pour le projet de recherche **demne*.
+L'application Streamlit permet d'analyser les métriques de second niveau (L2) et d'agir sur le routage en cascade (Rules -> Transformers -> LLM) selon les scores calculés ou modifiables par l'utilisateur.
 
 ---
 
 ## Table des matières & Interfaces
 
-1. ** Dashboard Métriques L2** (1_Dashboard_Metriques.py)
+1. ** Dashboard Métriques** (1_Dashboard_Metriques.py)
    - Vue analytique de l'algorithme "Cascade Frugale".
    - **Édition Temps Réel** : Le tableau des métriques permet à l'utilisateur de cliquer et de modifier manuellement les scores (Te, He, R, Yield, etc.). Sitôt modifiés, les graphiques (Radar, Nuages de point) et la décision du modèle (Rules, LLM, etc.) sont recalculés.
-   - Manipulation des Seuils (	hresholds) par sliders pour comparer les modes de frugalité d'énergie.
+   - Manipulation des Seuils (thresholds) par sliders pour comparer les modes de frugalité d'énergie.
 
 2. ** Console CLI** (2_Console_CLI.py)
    - Simulateur et wrapper de l'application Terminal main.py.
-   - Permet de lancer directement les commandes extract, atch, metrics et d'apercevoir les logs du terminal à même l'interface web.
+   - Permet de lancer directement les commandes extract, batch, metrics et d'apercevoir les logs du terminal à même l'interface web.
 
 3. ** REST Integration & Config** (3_REST_Integration.py)
    - Page dédiée à la gestion d'exports de configuration L2 Json.
@@ -30,14 +30,14 @@ L'application Streamlit permet d'analyser les métriques de second niveau (L2) e
 
 1. **Activation de l'environnement virtuel** :
    Veillez à ce que vos libraires soient à jour via :
-   \\\ash
+   \\\dash
    pip install -r dashboard/requirements.txt
    \\\
    *Astuce:* Installez Jupyter (pip install jupyter) si vous comptez lancer l'IFrame du Notebook interactif.
 
 2. **Démarrage de l'Application** :
    Ouvrez un terminal dans le dossier \dashboard\ :
-   \\\ash
+   \\\dash
    cd dashboard    
    streamlit run app.py
    \\\
