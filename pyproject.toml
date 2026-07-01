@@ -48,7 +48,6 @@ ner = [
     "transformers>=4.36",
     "datasets>=2.16",
     "seqeval>=1.2",
-    "pycrfsuite>=0.9",
 ]
 rest = [
     "spacy>=3.7",
