@@ -1,0 +1,13 @@
+include LICENSE README.md CHANGELOG.md CONTRIBUTING.md CITATION.cff Makefile
+include main.py pyproject.toml
+
+recursive-include dashboard *
+include data/README.md
+recursive-include docs *
+recursive-include scripts *
+recursive-include src/demne *
+recursive-include tests *
+
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.egg-info
