@@ -70,7 +70,7 @@ def load_params(start=None) -> dict:
         return _deepcopy_defaults()
     try:
         user = json.loads(f.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         return _deepcopy_defaults()
     user = {k: v for k, v in user.items() if not k.startswith("_")}
     return _merge(_deepcopy_defaults(), user)

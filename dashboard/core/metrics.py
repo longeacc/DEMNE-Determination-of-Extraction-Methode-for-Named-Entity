@@ -165,7 +165,7 @@ class MetricsCalculator:
         # run on this short-text view → its rate is 0 here, identical to the CLI's
         # per-call default (compute_score_from_stats(..., contradicted_rate=0.0)).
         _rw = self.params["risk_weights"]
-        ALPHA_R, BETA_R, GAMMA_R = _rw["negation"], _rw["uncertainty"], _rw["contradiction"]
+        alpha_r, beta_r, gamma_r = _rw["negation"], _rw["uncertainty"], _rw["contradiction"]
         contradicted_rate = 0.0
         total_texts = len(contexts) if contexts else len(values)
         text_to_search = contexts if contexts else [v.lower() for v in values]
@@ -173,9 +173,9 @@ class MetricsCalculator:
         uncertain = sum(1 for t in text_to_search if self.has_uncertainty(t))
 
         r_raw = (
-            (negated / total_texts) * ALPHA_R
-            + (uncertain / total_texts) * BETA_R
-            + contradicted_rate * GAMMA_R
+            (negated / total_texts) * alpha_r
+            + (uncertain / total_texts) * beta_r
+            + contradicted_rate * gamma_r
             if total_texts > 0
             else 0.0
         )
@@ -192,11 +192,11 @@ class MetricsCalculator:
         # pas la densité count/tokens : une entité fréquente dans un gros corpus a
         # une densité faible mais plein d'exemples — la densité la pénalisait à tort.
         _fw = self.params["feasibility_weights"]
-        ALPHA_FEAS = _fw["alpha_freq"]
-        BETA_FEAS = _fw["beta_he"]
-        SAT_COUNT = _fw.get("sat_count", 300)
-        feas_freq = min(1.0, count / SAT_COUNT) if SAT_COUNT > 0 else 0.0
-        feas = min(1.0, max(0.0, ALPHA_FEAS * feas_freq + BETA_FEAS * he))
+        alpha_feas = _fw["alpha_freq"]
+        beta_feas = _fw["beta_he"]
+        sat_count = _fw.get("sat_count", 300)
+        feas_freq = min(1.0, count / sat_count) if sat_count > 0 else 0.0
+        feas = min(1.0, max(0.0, alpha_feas * feas_freq + beta_feas * he))
 
         return {
             "Te": round(te, 4),

@@ -1,7 +1,6 @@
 import os
 import re
 import time
-from datetime import datetime
 
 
 class BratAnnotation:
@@ -96,20 +95,11 @@ class RESTAnnotator:
                 print(text[:300] + "...")
                 print("Entrez 'type:start-end' (ex: HER2:10-15) ou 'n' pour suivant.")
                 # user_input = input("Annot > ") # Commenté pour éviter blocage
-                pass
 
             duration = time.time() - start_time
             annotations.extend(doc_anns)
 
-            # Log de performance de l'annotateur
-            {
-                "doc_id": doc_id,
-                "n_annotations": len(doc_anns),
-                "duration_sec": duration,
-                "mode": mode,
-                "timestamp": datetime.now().isoformat(),
-            }
-            # Enregistrer log_entry (optionnel, ici print)
+            # Log de performance de l'annotateur (optionnel, ici print)
             print(f"  > {len(doc_anns)} annotations found in {duration:.4f}s")
 
         self.export_to_brat(annotations)

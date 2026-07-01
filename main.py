@@ -8,6 +8,7 @@ Provides:
 Mirrors the Streamlit pages so the full workflow can be driven from the terminal.
 """
 
+# pylint: disable=broad-exception-caught,unused-argument
 from __future__ import annotations
 
 import argparse
@@ -113,6 +114,7 @@ def discover_entities_from_config() -> list[str]:
 # Tunable values (presets + thresholds) from data/demne_params.json — single source
 # of truth shared with the scorers, the decision tree and the dashboard.
 import importlib.util as _il
+
 _pspec = _il.spec_from_file_location("demne_params", SRC / "demne" / "params.py")
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
@@ -270,6 +272,7 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
         subprocess.run(
             [sys.executable, str(ROOT / "src/demne/visualize_decision_tree.py")],
             cwd=str(ROOT),
+            check=False,
         )
     _export_decision_csv()
 
@@ -379,11 +382,10 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
 
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
+    spec = _il.spec_from_file_location(
         "_e_tree", SRC / "demne" / "E_creation_arbre_decision.py"
     )
-    mod = importlib.util.module_from_spec(spec)
+    mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     builder = mod.DecisionTreeBuilder(CONFIG_PATH)
     builder.THRESHOLDS = {
@@ -416,23 +418,22 @@ def cmd_corpus(args: argparse.Namespace) -> None:
     if "streamlit" not in sys.modules:
         st_stub = type(sys)("streamlit")
         st_stub.cache_data = lambda *a, **k: (lambda fn: fn) if not (a and callable(a[0])) else a[0]
-        st_stub.cache = st_stub.cache_data
+        st_stub.cache = st_stub.cache_data  # pylint: disable=no-member
         sys.modules["streamlit"] = st_stub
     try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location(
+        spec = _il.spec_from_file_location(
             "_brat", ROOT / "dashboard" / "core" / "brat_parser.py"
         )
-        mod = importlib.util.module_from_spec(spec)
+        mod = _il.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        BratCorpusParser = mod.BratCorpusParser
+        brat_corpus_parser_cls = mod.BratCorpusParser
     except Exception as e:
         print(f"Impossible de charger BratCorpusParser : {e}")
         return
 
     path = args.path or str(DEFAULT_GS)
     print(f"Analyse du corpus BRAT : {path}")
-    parser = BratCorpusParser()
+    parser = brat_corpus_parser_cls()
     docs = parser.parse_directory(path)
     stats = parser.get_entity_statistics(docs)
     print(f"\n✅ {len(docs)} documents chargés.\n")
@@ -506,6 +507,7 @@ def cmd_rest(args: argparse.Namespace) -> None:
     subprocess.run(
         [sys.executable, str(ROOT / "src/demne/REST_interface/demo_rest.py")],
         cwd=str(ROOT / "src/demne/REST_interface"),
+        check=False,
     )
 
 
@@ -540,7 +542,6 @@ def cmd_gui(args: argparse.Namespace) -> None:
     Utile pour les environnements sans navigateur (EDS / Citrix / RDP).
     Aucune dépendance externe : uniquement stdlib.
     """
-    import importlib.util as _il
     spec = _il.spec_from_file_location(
         "_gui_app", ROOT / "dashboard" / "gui_app.py"
     )

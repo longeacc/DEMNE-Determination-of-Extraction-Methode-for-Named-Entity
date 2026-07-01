@@ -11,6 +11,7 @@ Outputs:
 - decision_config.json: Machine-readable config for the orchestrator.
 - output_decision.txt: Human-readable report.
 """
+# pylint: disable=broad-exception-caught,unused-argument
 
 import csv
 import importlib.util as _il
@@ -304,7 +305,7 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
     te_json = _resolve("templatability_analysis.json")
     if te_json.exists():
         try:
-            with open(te_json) as f:
+            with open(te_json, encoding="utf-8") as f:
                 data = json.load(f)
                 for ent, vals in data.items():
                     if ent not in aggregated:
@@ -330,6 +331,7 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
 
 
 import argparse
+
 
 def main():
     parser = argparse.ArgumentParser()

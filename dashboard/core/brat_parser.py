@@ -49,7 +49,7 @@ class BratCorpusParser:
                         start = int(middle[1])
                         end = int(middle[-1])
                     except ValueError:
-                        self.logger.warning(f"Offset invalide : {line}")
+                        self.logger.warning("Offset invalide : %s", line)
                         continue
 
                     value = parts[2] if len(parts) > 2 else ""

@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-def retrieve_bootstrap_data(df, current_entity, df_metrics_locations):
+def retrieve_bootstrap_data(df, _current_entity, df_metrics_locations):
     """
     Retrieve the number of TP, FP and FN present in each file.
 

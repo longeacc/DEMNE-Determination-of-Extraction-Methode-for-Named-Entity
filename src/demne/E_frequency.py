@@ -13,6 +13,7 @@ Outputs:
 - frequency_analysis.csv: Detailed stats per entity.
 - frequency_histogram.txt: Log-scale visual distribution.
 """
+# pylint: disable=broad-exception-caught
 
 import csv
 import importlib.util as _il

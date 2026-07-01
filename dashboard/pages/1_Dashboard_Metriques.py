@@ -156,12 +156,12 @@ else:
 
     st.subheader("Tableau de Décision Routage")
 
-    def color_routing(val):
+    def color_routing(cell_val):
         return {
             "RÈGLES": "background-color: #C8E6C9; color: #1B5E20;",
             "TBM": "background-color: #FFE0B2; color: #E65100;",
             "LLM": "background-color: #FFCDD2; color: #B71C1C;",
-        }.get(val, "")
+        }.get(cell_val, "")
 
     if not df.empty:
         st.dataframe(df.style.map(color_routing, subset=["Routing"]), use_container_width=True)

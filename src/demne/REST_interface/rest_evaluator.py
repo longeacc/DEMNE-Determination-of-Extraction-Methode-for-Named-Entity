@@ -30,7 +30,7 @@ class RESTEvaluator:
         self,
         entity_type: str,
         annotations: list,  # List of BratAnnotation objects
-        context_window: int = 5,
+        context_window: int = 5,  # pylint: disable=unused-argument
     ) -> RESTEntityReport:
         """
         Analyse les annotations pour une entité donnée.

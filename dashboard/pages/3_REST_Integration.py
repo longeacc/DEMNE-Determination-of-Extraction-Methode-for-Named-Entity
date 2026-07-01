@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught
 import json
 
 import streamlit as st

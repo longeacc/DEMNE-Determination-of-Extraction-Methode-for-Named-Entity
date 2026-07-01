@@ -8,6 +8,7 @@ Homogeneity measures linguistic redundancy:
 Formula: He = (Total_Words - Unique_Words) / Total_Words
 Normalization: Sigmoid transform to spread values between 0 and 1 (returned as %).
 """
+# pylint: disable=broad-exception-caught
 
 import csv
 import importlib.util as _il
@@ -229,7 +230,7 @@ def main():
     # RELATIVE PATHS
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent.parent
-    
+
     if args.gs_dir:
         abs_data_dirs = [Path(args.gs_dir)]
     else:

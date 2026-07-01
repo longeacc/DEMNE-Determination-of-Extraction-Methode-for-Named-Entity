@@ -12,6 +12,7 @@ Exécution 100 % in-process via IPython.core.interactiveshell.InteractiveShell.
 Limite physique : les ipywidgets interactifs (widgets.Tab, dropdowns, …)
 sont rendus en placeholder car ils nécessitent un frontend Comm (HTML/JS).
 """
+# pylint: disable=broad-exception-caught,unused-argument,protected-access
 
 from __future__ import annotations
 
@@ -21,9 +22,9 @@ import os
 import re
 import sys
 import tkinter as tk
+from collections.abc import Callable
 from pathlib import Path
 from tkinter import ttk
-from typing import Callable
 
 import nbformat
 from IPython.core.interactiveshell import InteractiveShell
@@ -94,10 +95,11 @@ class NotebookViewer(ttk.Frame):
 
     # ------------------------------------------------------------------ UI
     def _build_toolbar(self) -> None:
-        bar = ttk.Frame(self, padding=6); bar.pack(fill="x")
+        bar = ttk.Frame(self, padding=6)
+        bar.pack(fill="x")
         ttk.Label(bar, text=self.nb_path.name,
                   font=("Segoe UI", 10, "bold")).pack(side="left")
-        ttk.Label(bar, text=f" — exécuté in-process (aucun port)",
+        ttk.Label(bar, text=" — exécuté in-process (aucun port)",
                   foreground="#666").pack(side="left", padx=4)
         ttk.Button(bar, text="▶ Tout exécuter",
                    command=self.run_all).pack(side="right", padx=4)
@@ -188,7 +190,8 @@ class NotebookViewer(ttk.Frame):
         outer = ttk.Frame(self.body, padding=(8, 4))
         outer.pack(fill="x", anchor="w")
 
-        head = ttk.Frame(outer); head.pack(fill="x")
+        head = ttk.Frame(outer)
+        head.pack(fill="x")
         ttk.Label(head, text=f"In [{idx}]", foreground="#1F3A93",
                   font=("Consolas", 9, "bold")).pack(side="left")
         run_btn = ttk.Button(head, text="▶ Run")
@@ -213,7 +216,7 @@ class NotebookViewer(ttk.Frame):
         src = cw["text"].get("1.0", "end-1c")
         self._set_output(cw, "", clear=True)
         # Capture stdout/stderr via shell.run_cell which redirects them
-        from contextlib import redirect_stdout, redirect_stderr
+        from contextlib import redirect_stderr, redirect_stdout
         buf_out, buf_err = io.StringIO(), io.StringIO()
         # Set cwd so relative paths inside the notebook work. The notebook
         # directory has already been inserted into sys.path in __init__ so

@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught
 import os
 import subprocess
 import time

@@ -1,3 +1,4 @@
+# pylint: disable=wildcard-import,unused-wildcard-import
 from .calculs import *
 from .categorization import create_ban_words_tfidf
 from .extraction import *

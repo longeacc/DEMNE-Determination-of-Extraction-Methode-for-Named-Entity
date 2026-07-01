@@ -8,6 +8,7 @@ High R indicates the entity is surrounded by:
 - Uncertainty (probabilistic language)
 - Contradictions (conflicting values in same doc)
 """
+# pylint: disable=unused-argument,broad-exception-caught
 
 import csv
 import importlib.util as _il
@@ -55,6 +56,7 @@ class RiskContextScorer:
     def __init__(self, data_dirs: list[Path] = None):
         self.data_dirs = data_dirs or []
         self.document_data = defaultdict(list)
+        self.entities_stats: dict = {}
 
         # --- CONFIGURATION DES RADARS ---
 
@@ -128,7 +130,7 @@ class RiskContextScorer:
             y = np.array([d[3] for d in annotated_data])
 
             # Contrainte de poids positifs
-            clf = LogisticRegression(fit_intercept=False, positive=True)
+            clf = LogisticRegression(fit_intercept=False)
             clf.fit(x, y)
 
             self.weights["negation"] = float(clf.coef_[0][0])
@@ -312,6 +314,8 @@ class RiskContextScorer:
                 contradicted_rate=f_cont,
             )
 
+            self.entities_stats[etype] = {"f_neg": f_neg, "f_unc": f_unc, "f_cont": f_cont}
+
             results.append(
                 {
                     "Entity": etype,
@@ -357,7 +361,7 @@ def main(learn_weights=False):
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
     parser.add_argument("--learn_weights", action="store_true")
-    args, unknown = parser.parse_known_args()
+    args, _ = parser.parse_known_args()
 
     learn_weights = args.learn_weights or learn_weights
 
@@ -385,14 +389,16 @@ def main(learn_weights=False):
         print("--- Mode apprentissage des poids (Calibration RL) ---")
         import numpy as np
 
+        scorer.compute_all()  # populate entities_stats
         entities = list(scorer.entities_stats.keys())
         if entities:
             x = []
             for ent in entities:
                 stats = scorer.entities_stats[ent]
                 x.append([stats["f_neg"], stats["f_unc"], stats["f_cont"]])
-            y = np.random.randint(0, 2, size=len(x))  # mockup labels
-            scorer._learn_weights(np.array(x), y)
+            y = np.random.randint(0, 2, size=len(x)).tolist()  # mockup labels
+            annotated = [(row[0], row[1], row[2], int(label)) for row, label in zip(x, y, strict=False)]
+            scorer._learn_weights(annotated)  # pylint: disable=protected-access
             print(f"Nouveaux poids appris : {scorer.weights}")
 
     scorer.to_csv(output_file)

@@ -1,3 +1,4 @@
+# pylint: disable=reimported,redefined-outer-name
 import os
 import re
 
@@ -128,6 +129,8 @@ def create_fig_recommandation(spacing_regex_values, title):
             color = "blue"
         elif row["Type"] == "FP":
             color = "red"
+        else:
+            color = "gray"
         plt.text(
             row["Distance"] + 1,
             np.random.uniform(low=-0.15, high=0.15),

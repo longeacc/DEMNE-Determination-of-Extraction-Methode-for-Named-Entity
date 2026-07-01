@@ -1,3 +1,4 @@
+# pylint: disable=wildcard-import,unused-wildcard-import,eval-used
 from .calculs import *
 from .extraction.normalisation import get_ent
 

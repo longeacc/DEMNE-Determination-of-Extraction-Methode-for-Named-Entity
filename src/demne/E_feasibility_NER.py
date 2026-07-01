@@ -1,3 +1,4 @@
+# pylint: disable=broad-exception-caught,unused-argument
 import csv
 import importlib.util as _il
 import os
@@ -70,14 +71,14 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
 
     # Feas(E) = α_Feas · min(1, Freq) + β_Feas · He
     _fw = PARAMS["feasibility_weights"]
-    ALPHA_FEAS = _fw["alpha_freq"]
-    BETA_FEAS = _fw["beta_he"]
-    HE_DEFAULT = _fw["he_default"]
+    alpha_feas = _fw["alpha_freq"]
+    beta_feas = _fw["beta_he"]
+    he_default = _fw["he_default"]
 
     results = []
     for ent, freq in frequencies.items():
-        he = homogeneity.get(ent, HE_DEFAULT)
-        feas = round(ALPHA_FEAS * min(1.0, freq) + BETA_FEAS * he, 3)
+        he = homogeneity.get(ent, he_default)
+        feas = round(alpha_feas * min(1.0, freq) + beta_feas * he, 3)
         results.append({"Entity": ent, "Feas_Score": feas})
         print(f"  {ent}: Feas={feas}")
 

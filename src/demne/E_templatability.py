@@ -7,6 +7,7 @@ Templatability is the capacity of an entity to follow predictable structured pat
 Example: TNM staging always follows the pattern T[0-4]N[0-3]M[0-1].
 """
 
+# pylint: disable=broad-exception-caught
 import importlib.util as _il
 import json
 import math

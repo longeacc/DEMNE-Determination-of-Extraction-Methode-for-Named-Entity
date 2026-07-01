@@ -10,6 +10,7 @@ Usage :
 Quand la fenêtre WebView2 est fermée, le serveur Jupyter/Voila est tué.
 """
 
+# pylint: disable=broad-exception-caught
 from __future__ import annotations
 
 import argparse
@@ -129,7 +130,7 @@ def main() -> int:
     threading.Thread(target=_drain, daemon=True).start()
 
     # Création de la fenêtre WebView2
-    window = webview.create_window(
+    _window = webview.create_window(
         f"DuraXELL — {nb_path.name} ({engine})",
         url_target,
         width=1280, height=860,

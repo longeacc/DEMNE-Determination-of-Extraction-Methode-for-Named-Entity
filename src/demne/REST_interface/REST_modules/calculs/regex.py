@@ -1,4 +1,5 @@
 # from F.text.fr import pluralize
+# pylint: disable=unused-variable,eval-used
 import re
 
 import inflect

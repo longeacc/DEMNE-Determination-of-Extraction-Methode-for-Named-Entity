@@ -191,9 +191,7 @@ def load_from_brat(path, merge_spaced_fragments=True, merge_all_fragments=False)
                             )
                     except Exception as err:
                         raise ValueError(
-                            "Could not parse line {} from {}: {}".format(
-                                line_idx, filename.replace(".txt", ".ann"), repr(line)
-                            )
+                            f"Could not parse line {line_idx} from {ann_file}: {repr(line)}"
                         ) from err
         if merge_all_fragments:
             merged_entities = []
@@ -229,7 +227,7 @@ def export_to_brat(samples, filename_prefix="", overwrite_txt=False, overwrite_a
     for doc in samples:
         txt_filename = os.path.join(filename_prefix, doc["doc_id"] + ".txt")
         if not os.path.exists(txt_filename) or overwrite_txt:
-            with open(txt_filename, "w") as f:
+            with open(txt_filename, "w", encoding="utf-8") as f:
                 f.write(doc["text"])
 
         ann_filename = os.path.join(filename_prefix, doc["doc_id"] + ".ann")
@@ -244,7 +242,7 @@ def export_to_brat(samples, filename_prefix="", overwrite_txt=False, overwrite_a
         entities_ids = EntityIdDict()
 
         if not os.path.exists(ann_filename) or overwrite_ann:
-            with open(ann_filename, "w") as f:
+            with open(ann_filename, "w", encoding="utf-8") as f:
                 if "entities" in doc:
                     for entity in doc["entities"]:
                         idx = None

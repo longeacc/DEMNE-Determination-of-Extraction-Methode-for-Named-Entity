@@ -7,7 +7,7 @@ import networkx as nx
 def visualize_decision_tree(
     decision_config_path: str = "data/decision_config.json",
     output_path: str = "Results/figures/decision_tree_visualization.png",
-    format: str = "png",
+    output_format: str = "png",
 ) -> None:
     """
     Génère une figure de l'arbre de décision à partir du fichier de config.
@@ -108,7 +108,7 @@ def visualize_decision_tree(
     import os
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    plt.savefig(output_path, format=format, dpi=300)
+    plt.savefig(output_path, format=output_format, dpi=300)
     plt.close()
     print(f"Visualisation sauvegardée : {output_path}")
 
