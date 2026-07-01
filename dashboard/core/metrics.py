@@ -58,6 +58,7 @@ class MetricsCalculator:
             r"\bdiscordant\b",
             r"\bdiscordance\b",
         ]
+
     def has_negation(self, text: str) -> bool:
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
 

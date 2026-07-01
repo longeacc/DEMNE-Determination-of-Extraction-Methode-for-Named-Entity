@@ -111,6 +111,7 @@ def discover_entities_from_config() -> list[str]:
     except Exception:
         return []
 
+
 # Tunable values (presets + thresholds) from data/demne_params.json — single source
 # of truth shared with the scorers, the decision tree and the dashboard.
 import importlib.util as _il
@@ -153,8 +154,8 @@ _NOISE_KEYS = (
     "Generalized error in Eco2AI",
     "carbon emission tracking data",
     "Carbon emission tracking",
-    "Job \"",
-    "  File \"",
+    'Job "',
+    '  File "',
     "  return ",
     "       ^^^^",
     "    indexer = self.columns.get_loc",
@@ -191,7 +192,9 @@ _DROP_PATTERNS = (
     " C =",
     " C: ",
 )
-_STRIP_RE = re.compile(r",\s*(DS|LLM_N|Yield|Domain[_ ]?Shift|Concordance)\s*=\s*[\d.]+", re.IGNORECASE)
+_STRIP_RE = re.compile(
+    r",\s*(DS|LLM_N|Yield|Domain[_ ]?Shift|Concordance)\s*=\s*[\d.]+", re.IGNORECASE
+)
 
 
 def _filter_noise(line: str) -> str | None:
@@ -223,10 +226,16 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     env["PYTHONUNBUFFERED"] = "1"
     env["DISABLE_ECO2AI"] = "1"
     proc = subprocess.Popen(
-        cmd, cwd=str(ROOT), env=env,
+        cmd,
+        cwd=str(ROOT),
+        env=env,
         stdin=subprocess.DEVNULL,
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        bufsize=1, text=True, encoding="utf-8", errors="replace",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=1,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     assert proc.stdout is not None
     for line in proc.stdout:
@@ -331,16 +340,18 @@ def _export_decision_csv() -> None:
             te /= 100.0
         if he > 1.0:
             he /= 100.0
-        rows.append([
-            ent,
-            f"{te:.4f}",
-            f"{he:.4f}",
-            f"{m.get('R', 0.0):.4f}",
-            f"{m.get('Freq', 0.0):.4f}",
-            f"{m.get('Feas', 0.0):.4f}",
-            d.get("method", ""),
-            d.get("justification", ""),
-        ])
+        rows.append(
+            [
+                ent,
+                f"{te:.4f}",
+                f"{he:.4f}",
+                f"{m.get('R', 0.0):.4f}",
+                f"{m.get('Freq', 0.0):.4f}",
+                f"{m.get('Feas', 0.0):.4f}",
+                d.get("method", ""),
+                d.get("justification", ""),
+            ]
+        )
 
     header = ["Entity", "Te", "He", "R", "Freq", "Feas", "Method", "Justification"]
     with open(DECISION_CSV, "w", newline="", encoding="utf-8") as f:
@@ -382,9 +393,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
 
-    spec = _il.spec_from_file_location(
-        "_e_tree", SRC / "demne" / "E_creation_arbre_decision.py"
-    )
+    spec = _il.spec_from_file_location("_e_tree", SRC / "demne" / "E_creation_arbre_decision.py")
     mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     builder = mod.DecisionTreeBuilder(CONFIG_PATH)
@@ -395,7 +404,9 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
         "FEAS_NER": thresholds["Feas"],
     }
 
-    print(f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Feas':>6} | {'Method':<8} | Justification")
+    print(
+        f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Feas':>6} | {'Method':<8} | Justification"
+    )
     print("-" * 120)
     for ent, data in cfg.get("entities", {}).items():
         m = data.get("metrics", {})
@@ -421,9 +432,7 @@ def cmd_corpus(args: argparse.Namespace) -> None:
         st_stub.cache = st_stub.cache_data  # pylint: disable=no-member
         sys.modules["streamlit"] = st_stub
     try:
-        spec = _il.spec_from_file_location(
-            "_brat", ROOT / "dashboard" / "core" / "brat_parser.py"
-        )
+        spec = _il.spec_from_file_location("_brat", ROOT / "dashboard" / "core" / "brat_parser.py")
         mod = _il.module_from_spec(spec)
         spec.loader.exec_module(mod)
         brat_corpus_parser_cls = mod.BratCorpusParser
@@ -479,8 +488,13 @@ def cmd_notebook(args: argparse.Namespace) -> None:
         else:
             print(f"Démarrage Voila sur {notebook} (port {args.port})...")
             voila_cmd = [
-                sys.executable, "-m", "voila", str(notebook),
-                "--no-browser", f"--port={args.port}", "--Voila.ip=127.0.0.1",
+                sys.executable,
+                "-m",
+                "voila",
+                str(notebook),
+                "--no-browser",
+                f"--port={args.port}",
+                "--Voila.ip=127.0.0.1",
             ]
             procs.append(subprocess.Popen(voila_cmd, cwd=str(ROOT)))
             print(f"  → http://127.0.0.1:{args.port}")
@@ -542,9 +556,7 @@ def cmd_gui(args: argparse.Namespace) -> None:
     Utile pour les environnements sans navigateur (EDS / Citrix / RDP).
     Aucune dépendance externe : uniquement stdlib.
     """
-    spec = _il.spec_from_file_location(
-        "_gui_app", ROOT / "dashboard" / "gui_app.py"
-    )
+    spec = _il.spec_from_file_location("_gui_app", ROOT / "dashboard" / "gui_app.py")
     mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     mod.launch()
@@ -606,7 +618,9 @@ def main() -> None:
     p.add_argument("--import", dest="import_", type=str, default=None)
     p.set_defaults(func=cmd_rest_config)
 
-    p = sub.add_parser("notebook", help="Mirror Streamlit Page 4 — launch Voila on REST.ipynb + REST API")
+    p = sub.add_parser(
+        "notebook", help="Mirror Streamlit Page 4 — launch Voila on REST.ipynb + REST API"
+    )
     p.add_argument("--port", type=int, default=8888)
     p.add_argument("--notebook-only", action="store_true")
     p.add_argument("--api-only", action="store_true")
@@ -615,7 +629,9 @@ def main() -> None:
     p = sub.add_parser("rest", help="Launch demo_rest.py only (legacy)")
     p.set_defaults(func=cmd_rest)
 
-    p = sub.add_parser("export-csv", help="Re-export the decision_summary.csv from decision_config.json")
+    p = sub.add_parser(
+        "export-csv", help="Re-export the decision_summary.csv from decision_config.json"
+    )
     p.set_defaults(func=cmd_export_csv)
 
     p = sub.add_parser("gui", help="GUI Tkinter native (parité Streamlit, sans navigateur)")

@@ -8,6 +8,7 @@ High R indicates the entity is surrounded by:
 - Uncertainty (probabilistic language)
 - Contradictions (conflicting values in same doc)
 """
+
 # pylint: disable=unused-argument,broad-exception-caught
 
 import csv
@@ -26,6 +27,7 @@ PARAMS = _pmod.load_params()
 # Eco2AI for energy tracking
 try:
     import warnings
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         from eco2ai import Tracker, set_params
@@ -171,9 +173,7 @@ class RiskContextScorer:
 
         # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
         raw_risk = (
-            (self.ALPHA_R * f_neg)
-            + (self.BETA_R * f_unc)
-            + (self.GAMMA_R * contradicted_rate)
+            (self.ALPHA_R * f_neg) + (self.BETA_R * f_unc) + (self.GAMMA_R * contradicted_rate)
         )
         return min(1.0, raw_risk)
 
@@ -357,6 +357,7 @@ class RiskContextScorer:
 # ==================================================================================
 def main(learn_weights=False):
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
@@ -397,7 +398,9 @@ def main(learn_weights=False):
                 stats = scorer.entities_stats[ent]
                 x.append([stats["f_neg"], stats["f_unc"], stats["f_cont"]])
             y = np.random.randint(0, 2, size=len(x)).tolist()  # mockup labels
-            annotated = [(row[0], row[1], row[2], int(label)) for row, label in zip(x, y, strict=False)]
+            annotated = [
+                (row[0], row[1], row[2], int(label)) for row, label in zip(x, y, strict=False)
+            ]
             scorer._learn_weights(annotated)  # pylint: disable=protected-access
             print(f"Nouveaux poids appris : {scorer.weights}")
 

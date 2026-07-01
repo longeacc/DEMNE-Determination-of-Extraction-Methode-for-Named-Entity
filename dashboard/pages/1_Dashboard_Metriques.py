@@ -104,9 +104,7 @@ else:
         df = pd.DataFrame(entity_metrics).T.reset_index()
         df.rename(columns={"index": "Entity"}, inplace=True)
     else:
-        df = pd.DataFrame(
-            columns=["Entity", "Te", "He", "R", "Feas", "Routing", "Justification"]
-        )
+        df = pd.DataFrame(columns=["Entity", "Te", "He", "R", "Feas", "Routing", "Justification"])
 
     col1, col2 = st.columns(2)
     with col1:

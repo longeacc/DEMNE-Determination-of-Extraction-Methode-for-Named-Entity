@@ -12,6 +12,7 @@ PARAMS = _pmod.load_params()
 
 try:
     import warnings
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         from eco2ai import Tracker, set_params
@@ -98,6 +99,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)

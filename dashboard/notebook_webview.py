@@ -60,13 +60,14 @@ def _wait_ready(proc: subprocess.Popen, marker_re: str, timeout: float = 30.0) -
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--engine", choices=["notebook", "lab", "voila"],
-                        default="notebook",
-                        help="Moteur de rendu (Jupyter Notebook, JupyterLab ou Voilà)")
-    parser.add_argument("--port", type=int, default=0,
-                        help="0 = port libre choisi automatiquement")
-    parser.add_argument("--nb", type=str, default=str(NB_PATH),
-                        help="Chemin du .ipynb à ouvrir")
+    parser.add_argument(
+        "--engine",
+        choices=["notebook", "lab", "voila"],
+        default="notebook",
+        help="Moteur de rendu (Jupyter Notebook, JupyterLab ou Voilà)",
+    )
+    parser.add_argument("--port", type=int, default=0, help="0 = port libre choisi automatiquement")
+    parser.add_argument("--nb", type=str, default=str(NB_PATH), help="Chemin du .ipynb à ouvrir")
     args = parser.parse_args()
 
     nb_path = Path(args.nb)
@@ -90,30 +91,60 @@ def main() -> int:
     # plutôt que `python -m jupyter lab` car le wrapper jupyter perd stderr
     # silencieusement sur Windows quand il est lancé via subprocess.
     if engine == "voila":
-        cmd = [sys.executable, "-u", "-m", "voila", str(nb_path),
-               f"--port={port}", "--Voila.ip=127.0.0.1", "--no-browser"]
+        cmd = [
+            sys.executable,
+            "-u",
+            "-m",
+            "voila",
+            str(nb_path),
+            f"--port={port}",
+            "--Voila.ip=127.0.0.1",
+            "--no-browser",
+        ]
         url_target = f"http://127.0.0.1:{port}/"
         ready_pat = r"http://127\.0\.0\.1:\d+/?"
     elif engine == "lab":
-        cmd = [sys.executable, "-u", "-m", "jupyterlab",
-               f"--port={port}", "--ip=127.0.0.1", "--no-browser",
-               "--ServerApp.token=", "--ServerApp.password=",
-               f"--ServerApp.root_dir={cwd}"]
+        cmd = [
+            sys.executable,
+            "-u",
+            "-m",
+            "jupyterlab",
+            f"--port={port}",
+            "--ip=127.0.0.1",
+            "--no-browser",
+            "--ServerApp.token=",
+            "--ServerApp.password=",
+            f"--ServerApp.root_dir={cwd}",
+        ]
         url_target = f"http://127.0.0.1:{port}/lab/tree/{nb_path.name}"
         ready_pat = r"http://127\.0\.0\.1:\d+/lab"
     else:
-        cmd = [sys.executable, "-u", "-m", "notebook",
-               f"--port={port}", "--ip=127.0.0.1", "--no-browser",
-               "--ServerApp.token=", "--ServerApp.password=",
-               f"--ServerApp.root_dir={cwd}"]
+        cmd = [
+            sys.executable,
+            "-u",
+            "-m",
+            "notebook",
+            f"--port={port}",
+            "--ip=127.0.0.1",
+            "--no-browser",
+            "--ServerApp.token=",
+            "--ServerApp.password=",
+            f"--ServerApp.root_dir={cwd}",
+        ]
         url_target = f"http://127.0.0.1:{port}/tree/{nb_path.name}"
         ready_pat = r"http://127\.0\.0\.1:\d+/(?:tree|notebooks|lab)"
 
     print(f"[notebook_webview] lancement {engine} sur {url_target}", file=sys.stderr)
     proc = subprocess.Popen(
-        cmd, cwd=cwd, env=env,
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        bufsize=1, text=True, encoding="utf-8", errors="replace",
+        cmd,
+        cwd=cwd,
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=1,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
 
     found = _wait_ready(proc, ready_pat, timeout=40.0)
@@ -127,14 +158,17 @@ def main() -> int:
         if proc.stdout:
             for _ in proc.stdout:
                 pass
+
     threading.Thread(target=_drain, daemon=True).start()
 
     # Création de la fenêtre WebView2
     _window = webview.create_window(
         f"DuraXELL — {nb_path.name} ({engine})",
         url_target,
-        width=1280, height=860,
-        text_select=True, confirm_close=False,
+        width=1280,
+        height=860,
+        text_select=True,
+        confirm_close=False,
     )
 
     try:

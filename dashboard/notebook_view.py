@@ -12,6 +12,7 @@ Exécution 100 % in-process via IPython.core.interactiveshell.InteractiveShell.
 Limite physique : les ipywidgets interactifs (widgets.Tab, dropdowns, …)
 sont rendus en placeholder car ils nécessitent un frontend Comm (HTML/JS).
 """
+
 # pylint: disable=broad-exception-caught,unused-argument,protected-access
 
 from __future__ import annotations
@@ -36,14 +37,11 @@ class _ScrollFrame(ttk.Frame):
 
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
-        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
-                                 background="#FAFAFA")
-        self.vsb = ttk.Scrollbar(self, orient="vertical",
-                                 command=self.canvas.yview)
+        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0, background="#FAFAFA")
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.vsb.set)
         self.inner = ttk.Frame(self.canvas)
-        self.inner_id = self.canvas.create_window((0, 0), window=self.inner,
-                                                   anchor="nw")
+        self.inner_id = self.canvas.create_window((0, 0), window=self.inner, anchor="nw")
         self.canvas.pack(side="left", fill="both", expand=True)
         self.vsb.pack(side="right", fill="y")
         self.inner.bind("<Configure>", self._on_resize)
@@ -68,8 +66,7 @@ class _ScrollFrame(ttk.Frame):
 class NotebookViewer(ttk.Frame):
     """Affiche et exécute un .ipynb sans serveur."""
 
-    def __init__(self, master, nb_path: Path,
-                 log_fn: Callable[[str], None] | None = None):
+    def __init__(self, master, nb_path: Path, log_fn: Callable[[str], None] | None = None):
         super().__init__(master)
         self.pack(fill="both", expand=True)
         self.nb_path = Path(nb_path)
@@ -97,16 +94,15 @@ class NotebookViewer(ttk.Frame):
     def _build_toolbar(self) -> None:
         bar = ttk.Frame(self, padding=6)
         bar.pack(fill="x")
-        ttk.Label(bar, text=self.nb_path.name,
-                  font=("Segoe UI", 10, "bold")).pack(side="left")
-        ttk.Label(bar, text=" — exécuté in-process (aucun port)",
-                  foreground="#666").pack(side="left", padx=4)
-        ttk.Button(bar, text="▶ Tout exécuter",
-                   command=self.run_all).pack(side="right", padx=4)
-        ttk.Button(bar, text="🔄 Recharger",
-                   command=self._reload).pack(side="right")
-        ttk.Button(bar, text="🧹 Reset kernel",
-                   command=self._reset_kernel).pack(side="right", padx=4)
+        ttk.Label(bar, text=self.nb_path.name, font=("Segoe UI", 10, "bold")).pack(side="left")
+        ttk.Label(bar, text=" — exécuté in-process (aucun port)", foreground="#666").pack(
+            side="left", padx=4
+        )
+        ttk.Button(bar, text="▶ Tout exécuter", command=self.run_all).pack(side="right", padx=4)
+        ttk.Button(bar, text="🔄 Recharger", command=self._reload).pack(side="right")
+        ttk.Button(bar, text="🧹 Reset kernel", command=self._reset_kernel).pack(
+            side="right", padx=4
+        )
         ttk.Separator(self, orient="horizontal").pack(fill="x")
 
     def _build_body(self) -> None:
@@ -117,15 +113,17 @@ class NotebookViewer(ttk.Frame):
     # ------------------------------------------------------------------ load
     def _load_notebook(self) -> None:
         if not self.nb_path.exists():
-            ttk.Label(self.body, text=f"Notebook introuvable : {self.nb_path}",
-                       foreground="#B12727").pack(anchor="w", padx=8, pady=8)
+            ttk.Label(
+                self.body, text=f"Notebook introuvable : {self.nb_path}", foreground="#B12727"
+            ).pack(anchor="w", padx=8, pady=8)
             return
 
         try:
             nb = nbformat.read(str(self.nb_path), as_version=4)
         except Exception as e:
-            ttk.Label(self.body, text=f"Erreur lecture .ipynb : {e}",
-                       foreground="#B12727").pack(anchor="w", padx=8, pady=8)
+            ttk.Label(self.body, text=f"Erreur lecture .ipynb : {e}", foreground="#B12727").pack(
+                anchor="w", padx=8, pady=8
+            )
             return
 
         for w in self.body.winfo_children():
@@ -166,25 +164,24 @@ class NotebookViewer(ttk.Frame):
                 ttk.Label(frame, text="").pack(anchor="w")
                 continue
             if line.startswith("# "):
-                ttk.Label(frame, text=line[2:],
-                           font=("Segoe UI", 14, "bold"),
-                           foreground="#1F3A93").pack(anchor="w")
+                ttk.Label(
+                    frame, text=line[2:], font=("Segoe UI", 14, "bold"), foreground="#1F3A93"
+                ).pack(anchor="w")
             elif line.startswith("## "):
-                ttk.Label(frame, text=line[3:],
-                           font=("Segoe UI", 12, "bold"),
-                           foreground="#26577C").pack(anchor="w")
+                ttk.Label(
+                    frame, text=line[3:], font=("Segoe UI", 12, "bold"), foreground="#26577C"
+                ).pack(anchor="w")
             elif line.startswith("### "):
-                ttk.Label(frame, text=line[4:],
-                           font=("Segoe UI", 11, "bold")).pack(anchor="w")
+                ttk.Label(frame, text=line[4:], font=("Segoe UI", 11, "bold")).pack(anchor="w")
             elif line.startswith("- ") or line.startswith("* "):
-                ttk.Label(frame, text="  • " + line[2:],
-                           wraplength=1000, justify="left").pack(anchor="w")
+                ttk.Label(frame, text="  • " + line[2:], wraplength=1000, justify="left").pack(
+                    anchor="w"
+                )
             else:
                 # Strip simple markdown emphasis for display
                 clean = re.sub(r"\*\*(.+?)\*\*", r"\1", line)
                 clean = re.sub(r"`(.+?)`", r"\1", clean)
-                ttk.Label(frame, text=clean, wraplength=1000,
-                           justify="left").pack(anchor="w")
+                ttk.Label(frame, text=clean, wraplength=1000, justify="left").pack(anchor="w")
 
     def _render_code(self, idx: int, src: str) -> None:
         outer = ttk.Frame(self.body, padding=(8, 4))
@@ -192,15 +189,21 @@ class NotebookViewer(ttk.Frame):
 
         head = ttk.Frame(outer)
         head.pack(fill="x")
-        ttk.Label(head, text=f"In [{idx}]", foreground="#1F3A93",
-                  font=("Consolas", 9, "bold")).pack(side="left")
+        ttk.Label(
+            head, text=f"In [{idx}]", foreground="#1F3A93", font=("Consolas", 9, "bold")
+        ).pack(side="left")
         run_btn = ttk.Button(head, text="▶ Run")
         run_btn.pack(side="right")
 
-        code_text = tk.Text(outer, height=max(2, min(20, src.count("\n") + 1)),
-                             wrap="none", font=("Consolas", 10),
-                             background="#F4F4FF", relief="solid",
-                             borderwidth=1)
+        code_text = tk.Text(
+            outer,
+            height=max(2, min(20, src.count("\n") + 1)),
+            wrap="none",
+            font=("Consolas", 10),
+            background="#F4F4FF",
+            relief="solid",
+            borderwidth=1,
+        )
         code_text.insert("1.0", src)
         code_text.pack(fill="x", pady=2)
 
@@ -217,6 +220,7 @@ class NotebookViewer(ttk.Frame):
         self._set_output(cw, "", clear=True)
         # Capture stdout/stderr via shell.run_cell which redirects them
         from contextlib import redirect_stderr, redirect_stdout
+
         buf_out, buf_err = io.StringIO(), io.StringIO()
         # Set cwd so relative paths inside the notebook work. The notebook
         # directory has already been inserted into sys.path in __init__ so
@@ -245,8 +249,7 @@ class NotebookViewer(ttk.Frame):
         if not result.success:
             err = result.error_in_exec or result.error_before_exec
             if err:
-                self._append_output(cw, f"{type(err).__name__}: {err}\n",
-                                    color="#B12727")
+                self._append_output(cw, f"{type(err).__name__}: {err}\n", color="#B12727")
 
     def run_all(self) -> None:
         for cw in self._cell_widgets:
@@ -263,10 +266,16 @@ class NotebookViewer(ttk.Frame):
     def _append_output(self, cw: dict, text: str, color: str = "#222") -> None:
         if not text.strip():
             return
-        lbl = tk.Text(cw["out"], height=min(20, text.count("\n") + 1),
-                       wrap="word", font=("Consolas", 9),
-                       background="#FFFFFF", foreground=color,
-                       relief="flat", borderwidth=0)
+        lbl = tk.Text(
+            cw["out"],
+            height=min(20, text.count("\n") + 1),
+            wrap="word",
+            font=("Consolas", 9),
+            background="#FFFFFF",
+            foreground=color,
+            relief="flat",
+            borderwidth=0,
+        )
         lbl.insert("1.0", text)
         lbl.configure(state="disabled")
         lbl.pack(fill="x", anchor="w")
@@ -287,8 +296,7 @@ class NotebookViewer(ttk.Frame):
         if "ipywidgets" in modname or "traitlets" in modname:
             self._append_output(
                 cw,
-                f"[widget interactif {type(obj).__name__} — "
-                f"non rendu en mode in-process]\n",
+                f"[widget interactif {type(obj).__name__} — " f"non rendu en mode in-process]\n",
                 color="#8A6D00",
             )
             return
@@ -324,6 +332,7 @@ class NotebookViewer(ttk.Frame):
     def _render_png(self, cw: dict, png_bytes: bytes) -> None:
         try:
             from PIL import Image, ImageTk
+
             img = Image.open(io.BytesIO(png_bytes))
             # Cap width to ~900 px
             if img.width > 900:
@@ -335,8 +344,7 @@ class NotebookViewer(ttk.Frame):
             self._img_refs.append(ph)
             lbl.pack(anchor="w", pady=4)
         except Exception as e:
-            self._append_output(cw, f"[image non rendue : {e}]\n",
-                                 color="#B12727")
+            self._append_output(cw, f"[image non rendue : {e}]\n", color="#B12727")
 
     @staticmethod
     def _strip_html(html: str) -> str:
@@ -355,8 +363,7 @@ if __name__ == "__main__":
     root.geometry("1100x780")
     NotebookViewer(
         root,
-        Path(__file__).resolve().parent.parent /
-        "src" / "demne" / "REST_interface" / "REST.ipynb",
+        Path(__file__).resolve().parent.parent / "src" / "demne" / "REST_interface" / "REST.ipynb",
         log_fn=print,
     )
     root.mainloop()

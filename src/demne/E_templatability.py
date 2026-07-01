@@ -27,6 +27,7 @@ PARAMS = _pmod.load_params()
 # eco2ai dependencies
 try:
     import warnings
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         from eco2ai import Tracker, set_params
@@ -322,6 +323,7 @@ def load_brat_corpus(data_dirs: list[str]) -> list[dict[str, Any]]:
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)

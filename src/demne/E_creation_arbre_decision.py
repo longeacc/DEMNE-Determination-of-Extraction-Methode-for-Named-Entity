@@ -11,6 +11,7 @@ Outputs:
 - decision_config.json: Machine-readable config for the orchestrator.
 - output_decision.txt: Human-readable report.
 """
+
 # pylint: disable=broad-exception-caught,unused-argument
 
 import csv
@@ -29,6 +30,7 @@ PARAMS = _pmod.load_params()
 # Eco2AI tracking
 try:
     import warnings
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         from eco2ai import Tracker, set_params
@@ -63,7 +65,9 @@ class DecisionTreeBuilder:
         # Nombre minimum d'occurrences pour que Te soit fiable
         self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
 
-    def validate_thresholds_kfold(self, entities_metrics: dict[str, dict[str, float]], k: int | None = None):
+    def validate_thresholds_kfold(
+        self, entities_metrics: dict[str, dict[str, float]], k: int | None = None
+    ):
         """
         Validation croisée k-fold sur les seuils : partitionner le corpus en k plis,
         calibrer les seuils sur k-1 plis, mesurer la stabilité des décisions sur le pli restant.
