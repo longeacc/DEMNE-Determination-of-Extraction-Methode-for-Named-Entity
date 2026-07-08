@@ -1,7 +1,15 @@
+import importlib.util as _il
 import json
 from datetime import datetime
+from pathlib import Path
 
 import streamlit as st
+
+_tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "E_tfidf.py"
+_tfidf_spec = _il.spec_from_file_location("_tfidf", _tfidf_path)
+_tfidf_mod = _il.module_from_spec(_tfidf_spec)
+_tfidf_spec.loader.exec_module(_tfidf_mod)
+_compute_tfidf_for_all = _tfidf_mod.compute_tfidf_for_all_entities
 
 st.set_page_config(page_title="Analyse Corpus", page_icon="🎯", layout="wide")
 
@@ -12,6 +20,22 @@ if "corpus" not in st.session_state or not st.session_state["corpus"]:
     st.stop()
 
 st.success(f"✅ Corpus chargé avec succès: {len(st.session_state['corpus'])} documents.")
+
+if "tfidf_scores" not in st.session_state:
+    local_path = st.session_state.get("local_path", "")
+    if local_path:
+        try:
+            tfidf_results = _compute_tfidf_for_all(local_path)
+            st.session_state["tfidf_scores"] = {
+                etype: res["tfidf_score"] for etype, res in tfidf_results.items()
+            }
+        except Exception as _e:
+            st.session_state["tfidf_scores"] = {}
+            st.warning(f"TFIDF non calculé : {_e}")
+    else:
+        st.session_state["tfidf_scores"] = {}
+
+tfidf_scores: dict = st.session_state.get("tfidf_scores", {})
 
 st.markdown("---")
 
@@ -53,6 +77,9 @@ for entity, data in st.session_state["entity_metrics"].items():
             st.write("**Métriques L2:**")
             for metric in ["Te", "He", "R", "Freq", "Feas"]:
                 st.write(f"  • {metric}: {data.get(metric, 0.0):.2f}")
+            tfidf_val = tfidf_scores.get(entity)
+            if tfidf_val is not None:
+                st.write(f"  • TFIDF_Extractability: {tfidf_val:.4f}")
 
         st.write(
             f"**Routage:** {data.get('Routing', 'INCONNU')} (confiance: {data.get('Confidence', 0.0):.2f})"

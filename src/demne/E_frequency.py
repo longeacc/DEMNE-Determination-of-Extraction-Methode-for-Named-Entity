@@ -23,6 +23,8 @@ import os
 from collections import defaultdict
 from pathlib import Path
 
+from demne._table import print_table
+
 # --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
 _pmod = _il.module_from_spec(_pspec)
@@ -67,10 +69,11 @@ class FrequencyScorer:
         self.RARE_THRESHOLD_COUNT = PARAMS["frequency"]["rare_threshold_count"]
 
     def _count_words(self, text: str) -> int:
-        """Tokenisation simple par espace."""
+        """Tokenisation par séquences non-blancs (cohérente avec E_tfidf)."""
         if not text:
             return 0
-        return len(text.split())
+        import re
+        return len(re.findall(r"\S+", text))
 
     def ingest_document(self, text: str, annotation_lines: list[str]):
         """
@@ -152,17 +155,14 @@ class FrequencyScorer:
     def draw_histogram(self, results):
         """Dessine un histogramme ASCII logarithmique."""
         print("\n=== DISTRIBUTION DES FREQUENCES (Echelle Log) ===")
-        print(f"{'Entity':<25} | {'Count':<6} | {'Hist (Log Scale)'}")
-        print("-" * 60)
-
+        rows = []
         for r in results:
             count = r["Count"]
             if count == 0:
                 continue
-            # Log scale bar: log10(1)=0, log10(10)=1, log10(100)=2...
             bar_len = int(math.log10(count) * 4) + 1
-            bar = "█" * bar_len
-            print(f"{r['Entity']:<25} | {count:<6} | {bar}")
+            rows.append([r["Entity"], str(count), "█" * bar_len])
+        print_table(["Entity", "Count", "Hist (Log Scale)"], rows, [45, 6, 16])
 
     def to_csv(self, output_path):
         data = self.get_stats()

@@ -21,6 +21,8 @@ import os
 from pathlib import Path
 from typing import Any
 
+from demne._table import print_table
+
 # --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
 _pmod = _il.module_from_spec(_pspec)
@@ -61,9 +63,14 @@ class DecisionTreeBuilder:
             "HE_HIGH": _dt["HE_HIGH"],
             "R_HIGH": _dt["R_HIGH"],
             "FEAS_NER": _dt["FEAS_NER"],
+            # Seuil TFIDF_Extractability (défaut 0.70 si absent du JSON)
+            "Y": _dt.get("TFIDF_Y", 0.70),
         }
         # Nombre minimum d'occurrences pour que Te soit fiable
         self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
+        # Hyperparamètres du calcul TFIDF_Extractability (calcul paresseux)
+        self.TFIDF_X = _dt.get("TFIDF_X", 5)
+        self.TFIDF_SIM = _dt.get("TFIDF_SIM", 0.50)
 
     def validate_thresholds_kfold(
         self, entities_metrics: dict[str, dict[str, float]], k: int | None = None
@@ -131,72 +138,143 @@ class DecisionTreeBuilder:
         print(f"Stabilité moyenne des décisions (K-Fold, k={k}): {avg_stability:.2%}")
 
     def analyze_entity(self, entity: str, metrics: dict[str, float]) -> dict[str, Any]:
-        """Arbre de décision simplifié : Te++ → He++ → R− → RÈGLES | Feas++ → TBM | LLM.
+        """Arbre de décision DEMNE — graphe exact de la figure de référence.
+
+        Graphe (cf. image) :
+          Te++ ET He++ → R− ? → Oui : RULES / Non (risk of conflict) : Feas++
+          Sinon        → TF-IDF ? → Oui : R− ? → Oui : RULES / Non : Feas++
+                                   → Non : Feas++
+          Feas++ → Oui : TBM / Non : LLM
+
+        Le nœud R− est donc PARTAGÉ entre la branche Te/He et la branche TF-IDF.
+        TF-IDF 'Oui' ne route PAS directement vers RULES : il passe d'abord par R−.
 
         Args:
-            entity: Nom de l'entité cible (ex: 'Estrogen_receptor').
-            metrics: Dictionnaire {Te, He, R, Feas, Freq, Te_count, ...}.
-
-        Returns:
-            Dictionnaire avec 'method', 'justification', 'trace'.
+            entity: Nom de l'entité (utilisé dans les rapports, pas dans la logique).
+            metrics: {Te, He, R, Feas, Te_count, tfidf_score (optionnel, pré-calculé)}.
         """
+        _ = entity  # paramètre API public — utilisé par build_full_config
         te: float = metrics.get("Te", 0.0)
         te_count: int = metrics.get("Te_count", 0)
         he: float = metrics.get("He", 0.0)
         r_score: float = metrics.get("R", 0.0)
         feas: float = metrics.get("Feas", 0.0)
 
-        # Convert Te and He to 0-1 scale to match new thresholds correctly
         if te > 1.0:
             te /= 100.0
         if he > 1.0:
             he /= 100.0
-
-        # Garde-fou existant : Te non fiable si trop peu d'échantillons
         if te_count < self.MIN_TE_SAMPLES:
             te = 0.0
 
         path_trace: list[str] = []
 
-        # NOEUD 1 : Templatabilité élevée ?
-        path_trace.append("Te++ ?")
-        if te >= self.THRESHOLDS["TE_HIGH"]:
-            path_trace.append("Oui → He++ ?")
-            # NOEUD 2 : Homogénéité élevée ?
-            if he >= self.THRESHOLDS["HE_HIGH"]:
-                path_trace.append("Oui → R− ?")
-                # NOEUD 3 : Risque contextuel acceptable ?
-                if r_score <= self.THRESHOLDS["R_HIGH"]:
-                    path_trace.append("Oui → [RÈGLES]")
-                    return {
-                        "method": "RÈGLES",
-                        "justification": f"Te={te:.1f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.1f}≥{self.THRESHOLDS['HE_HIGH']}, R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']}",
-                        "trace": path_trace,
-                    }
-                else:
-                    path_trace.append(
-                        f"Non (R={r_score:.3f} > {self.THRESHOLDS['R_HIGH']}) → Feas++ ?"
-                    )
-            else:
-                path_trace.append(f"Non (He={he:.1f} < {self.THRESHOLDS['HE_HIGH']}) → Feas++ ?")
-        else:
-            path_trace.append(f"Non (Te={te:.1f} < {self.THRESHOLDS['TE_HIGH']}) → Feas++ ?")
+        # Helper : nœud R− partagé (même logique depuis Te/He et depuis TF-IDF)
+        def _noeud_r(context_label: str):
+            path_trace.append(
+                f"R− ? (R={r_score:.3f} ≤ R_HIGH={self.THRESHOLDS['R_HIGH']}) [{context_label}]"
+            )
+            if r_score <= self.THRESHOLDS["R_HIGH"]:
+                path_trace.append("Oui → [RÈGLES]")
+                return {
+                    "method": "RÈGLES",
+                    "justification": (
+                        f"{context_label} : R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
+                        "risque contextuel acceptable."
+                    ),
+                    "trace": path_trace,
+                }
+            path_trace.append(
+                f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?"
+            )
+            return None  # fall-through vers Feas
 
-        # NOEUD 4 : Faisabilité NER ?
+        # NOEUD 1 : Te++ ?
+        path_trace.append(f"Te++ ? (Te={te:.3f}, TE_HIGH={self.THRESHOLDS['TE_HIGH']})")
+        if te >= self.THRESHOLDS["TE_HIGH"]:
+            # NOEUD 2 : He++ ?
+            path_trace.append(f"Oui → He++ ? (He={he:.3f}, HE_HIGH={self.THRESHOLDS['HE_HIGH']})")
+            if he >= self.THRESHOLDS["HE_HIGH"]:
+                # NOEUD R− (branche Te/He)
+                path_trace.append("Oui → R− ?")
+                result = _noeud_r(f"Te={te:.2f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.2f}≥{self.THRESHOLDS['HE_HIGH']}")
+                if result:
+                    return result
+                # R élevé → risk of conflict → Feas
+            else:
+                # He faible → TF-IDF
+                path_trace.append(
+                    f"Non (He={he:.3f} < {self.THRESHOLDS['HE_HIGH']}) → TF-IDF ?"
+                )
+                result = self._noeud_tfidf(metrics, r_score, path_trace)
+                if result:
+                    return result
+        else:
+            # Te faible → TF-IDF
+            path_trace.append(
+                f"Non (Te={te:.3f} < {self.THRESHOLDS['TE_HIGH']}) → TF-IDF ?"
+            )
+            result = self._noeud_tfidf(metrics, r_score, path_trace)
+            if result:
+                return result
+
+        # NOEUD Feas++ (point de convergence de tous les fall-throughs)
+        path_trace.append(f"Feas++ ? (Feas={feas:.3f}, FEAS_NER={self.THRESHOLDS['FEAS_NER']})")
         if feas >= self.THRESHOLDS["FEAS_NER"]:
-            path_trace.append(f"Oui (Feas={feas:.3f}) → [TBM]")
+            path_trace.append("Oui → [TBM]")
             return {
                 "method": "TBM",
-                "justification": f"Feas={feas:.3f}≥{self.THRESHOLDS['FEAS_NER']} — Transformer (DrBERT) faisable.",
+                "justification": (
+                    f"Feas={feas:.3f}≥{self.THRESHOLDS['FEAS_NER']} — "
+                    "Transformer (DrBERT) faisable."
+                ),
                 "trace": path_trace,
             }
-        else:
-            path_trace.append(f"Non (Feas={feas:.3f} < {self.THRESHOLDS['FEAS_NER']}) → [LLM]")
-            return {
-                "method": "LLM",
-                "justification": f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — Escalade vers LLM nécessaire.",
-                "trace": path_trace,
-            }
+        path_trace.append("Non → [LLM]")
+        return {
+            "method": "LLM",
+            "justification": (
+                f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — "
+                "Escalade vers LLM nécessaire."
+            ),
+            "trace": path_trace,
+        }
+
+    def _noeud_tfidf(self, metrics, r_score, path_trace):
+        """Nœud TF-IDF du graphe : score pré-calculé uniquement (pas de calcul interne).
+
+        Retourne un dict résultat si RULES, None sinon (fall-through vers Feas).
+        """
+        tfidf_raw = metrics.get("tfidf_score")
+        if tfidf_raw is None:
+            path_trace.append("TF-IDF absent → Feas++ ?")
+            return None
+        tfidf_score = float(tfidf_raw)
+        path_trace.append(
+            f"TF-IDF ? (score={tfidf_score:.3f}, Y={self.THRESHOLDS['Y']})"
+        )
+        if tfidf_score >= self.THRESHOLDS["Y"]:
+            # TF-IDF Oui → même nœud R− que la branche Te/He
+            path_trace.append("Oui → R− ? (nœud partagé)")
+            if r_score <= self.THRESHOLDS["R_HIGH"]:
+                path_trace.append("Oui → [RÈGLES] (synonymie conceptuelle + R acceptable)")
+                return {
+                    "method": "RÈGLES",
+                    "justification": (
+                        f"TFIDF={tfidf_score:.3f}≥Y={self.THRESHOLDS['Y']} et "
+                        f"R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
+                        "synonymes conceptuels extractibles par règle."
+                    ),
+                    "trace": path_trace,
+                }
+            path_trace.append(
+                f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?"
+            )
+            return None  # R élevé malgré TF-IDF → Feas
+        path_trace.append(
+            f"Non (score={tfidf_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?"
+        )
+        return None
 
     def build_full_config(self, metrics_data: dict[str, dict]):
         """Compile all decisions into the config dict."""
@@ -207,28 +285,18 @@ class DecisionTreeBuilder:
         }
 
         print("\n=== DECISION TREE EXECUTION ===")
-        print(f"{'Entity':<25} | {'Method':<18} | {'Justification'}")
-        print("-" * 100)
-
+        table_rows = []
         for entity_raw, mets in metrics_data.items():
-            # Clean entity name if needed
             entity = entity_raw.strip()
             decision = self.analyze_entity(entity, mets)
-
-            # Print short reason
-            reason_short = (
-                (decision["justification"][:75] + "..")
-                if len(decision["justification"]) > 75
-                else decision["justification"]
-            )
-            print(f"{entity:<25} | {decision['method']:<18} | {reason_short}")
-
+            table_rows.append([entity, decision["method"], decision["justification"]])
             config["entities"][entity] = {
                 "metrics": mets,
                 "method": decision["method"],
                 "justification": decision["justification"],
                 "trace": decision["trace"],
             }
+        print_table(["Entity", "Method", "Justification"], table_rows, [45, 8, 60])
 
         self.decisions = config
         return config
@@ -331,6 +399,9 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
     # 5. NER Feasibility metrics
     _read_csv("ner_feasibility_analysis.csv", "Feas_Score", "Feas")
 
+    # 6. TFIDF_Extractability (synonymie conceptuelle contextuelle)
+    _read_csv("tfidf_analysis.csv", "TFIDF_Score", "tfidf_score")
+
     return aggregated
 
 
@@ -353,6 +424,21 @@ def main():
     # Make dirs
     config_file.parent.mkdir(parents=True, exist_ok=True)
     report_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # 0. Calculer TF-IDF si tfidf_analysis.csv absent ou vide
+    tfidf_csv = results_dir / "tfidf_analysis.csv"
+    gs_dir = Path(args.gs_dir) if args.gs_dir else None
+    if gs_dir and gs_dir.exists() and (not tfidf_csv.exists() or tfidf_csv.stat().st_size == 0):
+        from demne.E_tfidf import run as _run_tfidf
+        _dt_params = PARAMS["decision_thresholds"]
+        print("Computing TF-IDF scores...")
+        _run_tfidf(
+            gs_dir,
+            results_dir,
+            top_x=_dt_params.get("TFIDF_X", 10),
+            sim_threshold=_dt_params.get("TFIDF_SIM", 0.50),
+            y=_dt_params.get("TFIDF_Y", 0.70),
+        )
 
     # 1. Load existing metrics
     print("Loading metrics from Results folder...")

@@ -12,6 +12,8 @@ High R indicates the entity is surrounded by:
 # pylint: disable=unused-argument,broad-exception-caught
 
 import csv
+
+from demne._table import print_table
 import importlib.util as _il
 import os
 import re
@@ -448,10 +450,20 @@ def main(learn_weights=False):
     ]
 
     res = test_scorer.compute_all()
-    for r in res:
-        print(
-            f"Entité Test: {r['Entity']:<15} | Score R: {r['R_Score']:.2f} | (Neg={r['Negation_Rate']}, Unc={r['Uncertainty_Rate']}, Contra={r['Contradiction_Rate']})"
-        )
+    print_table(
+        ["Entity", "Score R", "Neg", "Unc", "Contra"],
+        [
+            [
+                r["Entity"],
+                f"{r['R_Score']:.2f}",
+                str(r["Negation_Rate"]),
+                str(r["Uncertainty_Rate"]),
+                str(r["Contradiction_Rate"]),
+            ]
+            for r in res
+        ],
+        [25, 8, 6, 6, 8],
+    )
 
     if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()

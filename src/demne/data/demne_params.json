@@ -4,7 +4,11 @@
         "HE_HIGH": 0.63,
         "R_HIGH": 0.2,
         "FEAS_NER": 0.26,
-        "MIN_TE_SAMPLES": 2
+        "MIN_TE_SAMPLES": 2,
+        "TFIDF_Y": 0.70,
+        "TFIDF_X": 10,
+        "TFIDF_SIM": 0.50,
+        "TFIDF_WINDOW_TOKENS": 30
     },
     "risk_weights": {
         "negation": 0.19,

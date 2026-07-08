@@ -1,3 +1,6 @@
+import importlib.util as _il
+from pathlib import Path
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -7,9 +10,14 @@ from core.metrics import PARAMS
 
 st.set_page_config(page_title="Dashboard Métriques", page_icon="📊", layout="wide")
 
-# Presets = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
 PRESET_FRUGAL = dict(PARAMS["presets"]["FRUGAL"])
 PRESET_QUALITY = dict(PARAMS["presets"]["QUALITY"])
+
+_tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "E_tfidf.py"
+_tfidf_spec = _il.spec_from_file_location("_tfidf", _tfidf_path)
+_tfidf_mod = _il.module_from_spec(_tfidf_spec)
+_tfidf_spec.loader.exec_module(_tfidf_mod)
+_compute_tfidf_for_all = _tfidf_mod.compute_tfidf_for_all_entities
 
 if "thresholds" not in st.session_state:
     st.session_state["thresholds"] = PRESET_FRUGAL.copy()
@@ -48,6 +56,14 @@ with st.sidebar:
             documents = parser.parse_directory(local_path)
             st.session_state["corpus"] = documents
             st.session_state["entity_stats"] = parser.get_entity_statistics(documents)
+            try:
+                tfidf_results = _compute_tfidf_for_all(local_path)
+                st.session_state["tfidf_scores"] = {
+                    etype: res["tfidf_score"] for etype, res in tfidf_results.items()
+                }
+            except Exception as _e:
+                st.session_state["tfidf_scores"] = {}
+                st.warning(f"TFIDF non calculé : {_e}")
             st.success(f"✅ {len(documents)} documents chargés")
 
     st.markdown("---")
@@ -87,9 +103,15 @@ if "corpus" not in st.session_state or not st.session_state["corpus"]:
 else:
     entity_metrics = {}
     calculator = MetricsCalculator()
+    tfidf_scores: dict[str, float] = st.session_state.get("tfidf_scores", {})
+    thresholds = st.session_state["thresholds"]
+
     for entity_type in st.session_state["entity_stats"].keys():
         metrics = calculator.compute_all_metrics(st.session_state["corpus"], entity_type)
-        routing, justification = compute_routing(metrics, st.session_state["thresholds"])
+        tfidf = tfidf_scores.get(entity_type)
+        if tfidf is not None:
+            metrics["tfidf_score"] = tfidf
+        routing, justification = compute_routing(metrics, thresholds)
 
         entity_metrics[entity_type] = {
             **metrics,
@@ -99,12 +121,13 @@ else:
 
     st.session_state["entity_metrics"] = entity_metrics
 
-    # Create DataFrame
     if entity_metrics:
         df = pd.DataFrame(entity_metrics).T.reset_index()
         df.rename(columns={"index": "Entity"}, inplace=True)
     else:
-        df = pd.DataFrame(columns=["Entity", "Te", "He", "R", "Feas", "Routing", "Justification"])
+        df = pd.DataFrame(
+            columns=["Entity", "Te", "He", "R", "Feas", "tfidf_score", "Routing", "Justification"]
+        )
 
     col1, col2 = st.columns(2)
     with col1:
@@ -115,7 +138,6 @@ else:
                 entity_data = df[df["Entity"] == selected_entity].iloc[0]
                 metrics_radar = ["Te", "He", "R", "Feas"]
                 r_vals = entity_data[metrics_radar].tolist()
-                # Fermer le polygone du radar chart
                 r_vals.append(r_vals[0])
                 theta_vals = metrics_radar + [metrics_radar[0]]
                 fig = go.Figure(data=go.Scatterpolar(r=r_vals, theta=theta_vals, fill="toself"))
@@ -146,7 +168,8 @@ else:
 
     st.subheader("Heatmap Métriques")
     if not df.empty:
-        heatmap_df = df.set_index("Entity")[["Te", "He", "R", "Feas"]]
+        heatmap_cols = [c for c in ["Te", "He", "R", "Feas"] if c in df.columns]
+        heatmap_df = df.set_index("Entity")[heatmap_cols]
         fig_heat = px.imshow(heatmap_df.T, color_continuous_scale="RdYlGn", aspect="auto")
         st.plotly_chart(fig_heat, use_container_width=True)
     else:
@@ -162,4 +185,14 @@ else:
         }.get(cell_val, "")
 
     if not df.empty:
-        st.dataframe(df.style.map(color_routing, subset=["Routing"]), use_container_width=True)
+        display_cols = ["Entity", "Te", "He", "R", "Feas"]
+        if "tfidf_score" in df.columns:
+            display_cols.append("tfidf_score")
+        display_cols += ["Routing", "Justification"]
+        display_df = df[[c for c in display_cols if c in df.columns]].copy()
+        if "tfidf_score" in display_df.columns:
+            display_df = display_df.rename(columns={"tfidf_score": "TFIDF"})
+        st.dataframe(
+            display_df.style.map(color_routing, subset=["Routing"]),
+            use_container_width=True,
+        )

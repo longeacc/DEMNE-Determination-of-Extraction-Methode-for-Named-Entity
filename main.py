@@ -219,7 +219,7 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     if pred_dir:
         cmd += ["--pred_dir", pred_dir]
     short = Path(script).name
-    print(f"\n>>> {short}  --gs_dir {gs_dir}" + (f"  --pred_dir {pred_dir}" if pred_dir else ""))
+    print(f"\n>>> {short}  --gs_dir {gs_dir}")
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUTF8"] = "1"
@@ -248,18 +248,23 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
 
 def cmd_metrics(args: argparse.Namespace) -> None:
     """Run all E_*.py metric scripts on the corpus."""
-    scripts = [
+    scripts_gs_pred = [
         "src/demne/E_templatability.py",
         "src/demne/E_homogeneity.py",
         "src/demne/E_frequency.py",
         "src/demne/E_risk_context.py",
         "src/demne/E_feasibility_NER.py",
     ]
+    scripts_gs_only = [
+        "src/demne/E_tfidf.py",
+    ]
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
-    print(f"Pipeline métriques sur :\n  GS   = {gs}\n  Pred = {pred}")
-    for s in scripts:
+    print(f"Pipeline métriques sur :\n  GS   = {gs}")
+    for s in scripts_gs_pred:
         _run_script(s, gs, pred)
+    for s in scripts_gs_only:
+        _run_script(s, gs, None)
 
 
 def cmd_tree(args: argparse.Namespace) -> None:
@@ -340,6 +345,7 @@ def _export_decision_csv() -> None:
             te /= 100.0
         if he > 1.0:
             he /= 100.0
+        tfidf = m.get("tfidf_score")
         rows.append(
             [
                 ent,
@@ -348,12 +354,13 @@ def _export_decision_csv() -> None:
                 f"{m.get('R', 0.0):.4f}",
                 f"{m.get('Freq', 0.0):.4f}",
                 f"{m.get('Feas', 0.0):.4f}",
+                f"{tfidf:.4f}" if tfidf is not None else "",
                 d.get("method", ""),
                 d.get("justification", ""),
             ]
         )
 
-    header = ["Entity", "Te", "He", "R", "Freq", "Feas", "Method", "Justification"]
+    header = ["Entity", "Te", "He", "R", "Freq", "Feas", "TFIDF", "Method", "Justification"]
     with open(DECISION_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter="\t")
         w.writerow(header)
@@ -364,8 +371,34 @@ def _export_decision_csv() -> None:
     except ValueError:
         rel_csv = str(DECISION_CSV)
     print(f"\n=== CSV synthèse écrit : {rel_csv} ===")
+
+    # Pretty-print as a fixed-width table with wrapping for long cells
+    import textwrap as _tw
+
+    COL_W = {"Entity": 30, "Te": 6, "He": 6, "R": 6, "Freq": 8, "Feas": 6, "TFIDF": 6, "Method": 8, "Justification": 55}
+    sep = "+" + "+".join("-" * (w + 2) for w in COL_W.values()) + "+"
+
+    def _fmt_row(cells: list[str]) -> list[str]:
+        """Return lines for a table row, wrapping cells that exceed column width."""
+        wrapped = [_tw.wrap(str(c), COL_W[h]) or [""] for c, h in zip(cells, COL_W)]
+        height = max(len(w) for w in wrapped)
+        lines = []
+        for i in range(height):
+            parts = []
+            for w, h in zip(wrapped, COL_W):
+                cell = w[i] if i < len(w) else ""
+                parts.append(f" {cell:<{COL_W[h]}} ")
+            lines.append("|" + "|".join(parts) + "|")
+        return lines
+
+    print(sep)
+    for line in _fmt_row(header):
+        print(line)
+    print(sep)
     for r in rows:
-        print("\t".join(r))
+        for line in _fmt_row(r):
+            print(line)
+        print(sep)
 
 
 # ===========================================================================
@@ -402,12 +435,13 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
         "HE_HIGH": thresholds["He"],
         "R_HIGH": thresholds["R"],
         "FEAS_NER": thresholds["Feas"],
+        "Y": PARAMS["decision_thresholds"].get("TFIDF_Y", 0.70),
     }
 
     print(
-        f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Feas':>6} | {'Method':<8} | Justification"
+        f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Freq':>8} | {'Feas':>6} | {'TFIDF':>6} | {'Method':<8} | Justification"
     )
-    print("-" * 120)
+    print("-" * 144)
     for ent, data in cfg.get("entities", {}).items():
         m = data.get("metrics", {})
         decision = builder.analyze_entity(ent, m)
@@ -417,9 +451,11 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
             te /= 100.0
         if he > 1.0:
             he /= 100.0
+        tfidf = m.get("tfidf_score")
+        tfidf_str = f"{tfidf:6.3f}" if tfidf is not None else "   n/a"
         print(
             f"{ent:<25} | {te:6.3f} | {he:6.3f} | {m.get('R',0):6.3f} | "
-            f"{m.get('Feas',0):6.3f} | {decision['method']:<8} | {decision['justification']}"
+            f"{m.get('Freq',0):8.4f} | {m.get('Feas',0):6.3f} | {tfidf_str} | {decision['method']:<8} | {decision['justification']}"
         )
 
 

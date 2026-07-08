@@ -202,9 +202,9 @@ class DuraXellGUI:
         # Right panel split: routing table on top, CLI bar at the bottom
         table_frame = ttk.Frame(right)
         table_frame.pack(side="top", fill="both", expand=True)
-        cols = ("Entity", "Te", "He", "R", "Freq", "Feas", "Method", "Justification")
+        cols = ("Entity", "Te", "He", "R", "Freq", "Feas", "TFIDF", "Method", "Justification")
         self.tree_routing = ttk.Treeview(table_frame, columns=cols, show="headings", height=14)
-        for c, w in zip(cols, (260, 60, 60, 60, 70, 60, 80, 420), strict=False):
+        for c, w in zip(cols, (240, 55, 55, 55, 65, 55, 60, 80, 380), strict=False):
             self.tree_routing.heading(c, text=c)
             self.tree_routing.column(c, width=w, anchor="w")
         for m, color in ROUTING_COLORS.items():
@@ -271,6 +271,7 @@ class DuraXellGUI:
             "HE_HIGH": round(self.threshold_vars["He"].get(), 3),
             "R_HIGH": round(self.threshold_vars["R"].get(), 3),
             "FEAS_NER": round(self.threshold_vars["Feas"].get(), 3),
+            "Y": PARAMS["decision_thresholds"].get("TFIDF_Y", 0.70),
         }
         for ent, data in cfg.get("entities", {}).items():
             m = data.get("metrics", {})
@@ -281,6 +282,8 @@ class DuraXellGUI:
                 te /= 100.0
             if he > 1.0:
                 he /= 100.0
+            tfidf = m.get("tfidf_score")
+            tfidf_str = f"{tfidf:.3f}" if tfidf is not None else "n/a"
             method = decision["method"]
             self.tree_routing.insert(
                 "",
@@ -292,6 +295,7 @@ class DuraXellGUI:
                     f"{m.get('R', 0):.3f}",
                     f"{m.get('Freq', 0):.4f}",
                     f"{m.get('Feas', 0):.3f}",
+                    tfidf_str,
                     method,
                     decision["justification"],
                 ),

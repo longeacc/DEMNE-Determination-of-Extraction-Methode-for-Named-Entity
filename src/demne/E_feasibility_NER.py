@@ -4,6 +4,8 @@ import importlib.util as _il
 import os
 from pathlib import Path
 
+from demne._table import print_table
+
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
 _pmod = _il.module_from_spec(_pspec)
@@ -77,11 +79,13 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     he_default = _fw["he_default"]
 
     results = []
+    feas_rows = []
     for ent, freq in frequencies.items():
         he = homogeneity.get(ent, he_default)
         feas = round(alpha_feas * min(1.0, freq) + beta_feas * he, 3)
         results.append({"Entity": ent, "Feas_Score": feas})
-        print(f"  {ent}: Feas={feas}")
+        feas_rows.append([ent, f"{feas:.3f}"])
+    print_table(["Entity", "Feas"], feas_rows, [60, 8])
 
     out_file = results_dir / f"ner_feasibility_analysis_{corpus_name}.csv"
     out_file.parent.mkdir(parents=True, exist_ok=True)

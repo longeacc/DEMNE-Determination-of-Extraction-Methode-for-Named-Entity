@@ -1,4 +1,8 @@
-"""Routage simplifié DuraXell — Arbre à 4 nœuds, 3 sorties."""
+"""Routage DuraXell — graphe exact de la figure de référence DEMNE.
+
+Nœud R− PARTAGÉ entre la branche Te/He et la branche TF-IDF.
+TF-IDF 'Oui' ne route PAS directement RULES : il passe par R− d'abord.
+"""
 
 import importlib.util as _il
 from pathlib import Path
@@ -13,11 +17,18 @@ _DT = _pmod.load_params()["decision_thresholds"]
 
 
 def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> tuple[str, str]:
-    """Arbre de décision simplifié : Te++ → He++ → R− → RÈGLES | Feas++ → TBM | LLM.
+    """Arbre de décision DEMNE — graphe à nœud R− partagé.
+
+    Graphe (figure de référence) :
+      Te++ ET He++ → R− → R≤R_HIGH : RULES / R>R_HIGH : Feas++
+      sinon        → TF-IDF ?
+                       score≥Y → R− (même nœud !) → RULES / Feas++
+                       score<Y ou absent → Feas++
+      Feas++ → Feas≥FEAS_NER : TBM / sinon : LLM
 
     Args:
-        metrics: Métriques de l'entité (Te, He, R, Feas sur échelle [0-1]).
-        thresholds: Seuils de routage (Te, He, R, Feas sur échelle [0-1]).
+        metrics: {Te, He, R, Feas, tfidf_score (optionnel)} sur échelle [0-1].
+        thresholds: {Te, He, R, Feas, Y (optionnel)} sur échelle [0-1].
 
     Returns:
         Tuple (méthode, justification).
@@ -26,20 +37,31 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     he: float = metrics.get("He", metrics.get("he", 0.0))
     r: float = metrics.get("R", metrics.get("r", 0.0))
     feas: float = metrics.get("Feas", metrics.get("feas", 0.0))
+    tfidf = metrics.get("tfidf_score")
 
-    # Seuils par défaut = decision_thresholds de data/demne_params.json (échelle 0-1)
     t_te: float = thresholds.get("Te", _DT["TE_HIGH"])
     t_he: float = thresholds.get("He", _DT["HE_HIGH"])
     t_r: float = thresholds.get("R", _DT["R_HIGH"])
     t_feas: float = thresholds.get("Feas", _DT["FEAS_NER"])
+    t_y: float = thresholds.get("Y", _DT.get("TFIDF_Y", 0.70))
 
-    # Branche RÈGLES : Te élevée + He élevée + R faible
-    if te >= t_te and he >= t_he and r <= t_r:
-        return "RÈGLES", f"Te={te:.2f}≥{t_te}, He={he:.2f}≥{t_he}, R={r:.3f}≤{t_r}"
+    def _noeud_feas() -> tuple[str, str]:
+        if feas >= t_feas:
+            return "TBM", f"Feas={feas:.3f}≥{t_feas}"
+        return "LLM", "Conditions RÈGLES et TBM non satisfaites"
 
-    # Branche TBM : Faisabilité suffisante
-    if feas >= t_feas:
-        return "TBM", f"Feas={feas:.3f}≥{t_feas}"
+    def _noeud_r(label: str) -> tuple[str, str]:
+        if r <= t_r:
+            return "RÈGLES", f"{label} — R={r:.3f}≤{t_r}"
+        return _noeud_feas()
 
-    # Branche LLM : fallback
-    return "LLM", "Conditions RÈGLES et TBM non satisfaites"
+    # Branche Te++ AND He++
+    if te >= t_te and he >= t_he:
+        return _noeud_r(f"Te={te:.2f}≥{t_te}, He={he:.2f}≥{t_he}")
+
+    # Branche TF-IDF (synonymie conceptuelle)
+    if tfidf is not None and tfidf >= t_y:
+        return _noeud_r(f"TFIDF={tfidf:.3f}≥Y={t_y}")
+
+    # Convergence Feas++
+    return _noeud_feas()

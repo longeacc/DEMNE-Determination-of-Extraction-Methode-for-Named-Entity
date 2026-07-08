@@ -20,6 +20,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from demne._table import print_table
+
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
 _pmod = _il.module_from_spec(_pspec)
@@ -92,8 +94,8 @@ class HomogeneityScorer:
         return res
 
     def _tokenize(self, text: str) -> list[str]:
-        """Split text into words, lowercase, remove noise."""
-        return [w.lower() for w in re.split(r"[^a-zA-Z0-9%]+", text) if w.strip()]
+        """Split text into tokens, lowercase, preserve medical symbols (+, -)."""
+        return [w.lower() for w in re.split(r"[^a-zA-Z0-9%+\-]+", text) if w.strip()]
 
     def _sigmoid(self, x: float) -> float:
         """
@@ -258,8 +260,8 @@ def main():
 
     # 3. Print Top 5
     print("\nTop 5 Homogeneity Scores (He):")
-    for entity, score in sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]:
-        print(f"{entity}: {score:.3f}")
+    top5 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
+    print_table(["Entity", "He"], [[e, f"{s:.3f}"] for e, s in top5], [45, 8])
 
     # 4. Save
     scorer.to_csv(output_file)

@@ -18,6 +18,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from demne._table import print_table
+
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
 _pmod = _il.module_from_spec(_pspec)
@@ -363,10 +365,9 @@ def main():
     scorer.to_json(output_file)
 
     # Optional: Print Top 5
-    print("\nTop 5 Templatability Scores:")
-    for entity, score in sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]:
-        # score is tuple? No, compute returns float. compute_all returns dict[str, float]
-        print(f"{entity}: {score:.3f}")
+    print("\nTop 5 Templatability Scores (Te normalisé [0-1]) :")
+    top5 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
+    print_table(["Entity", "Te [0-1]"], [[e, f"{s / 100:.4f}"] for e, s in top5], [45, 10])
 
     if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
         tracker.stop()
