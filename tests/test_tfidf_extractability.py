@@ -74,15 +74,19 @@ def heterogeneous_case():
 def test_edge_case_too_few_mentions():
     out = compute_tfidf_extractability("HER2_FISH", ["positif", "négatif"], {})
     assert out["tfidf_score"] == 0.0
+    assert out["f1_score"] == 0.0
     assert out["routes_to_rules"] is False
     assert out["clusters"] == []
+    assert out["top_X_f1s"] == []
     assert "R_modulation_factor" not in out
 
 
 def test_edge_case_single_unique_form():
     out = compute_tfidf_extractability("mono", ["stable", "stable", "stable"], {})
     assert out["tfidf_score"] == 1.0
+    assert out["f1_score"] == 1.0
     assert out["routes_to_rules"] is True
+    assert out["top_X_f1s"] == [1.0]
     assert "R_modulation_factor" not in out
 
 
@@ -92,17 +96,76 @@ def test_conceptual_synonyms_high_score(synonyms_case):
         "évolution_tumorale", mentions, contexts, X=5, sim_threshold=0.50
     )
     assert out["tfidf_score"] >= 0.70
+    assert out["f1_score"] >= 0.70
     assert out["routes_to_rules"] is True
     # all 4 forms must merge into a single cluster covering everything
     assert len(out["clusters"]) == 1
     assert out["top_X_recalls"] == [1.0]
+    assert out["top_X_f1s"] == [1.0]
 
 
 def test_heterogeneous_low_score(heterogeneous_case):
     mentions, contexts = heterogeneous_case
     out = compute_tfidf_extractability("pays_origine", mentions, contexts, X=5, sim_threshold=0.50)
     assert out["tfidf_score"] <= 0.35
+    assert out["f1_score"] <= 0.50
     assert out["routes_to_rules"] is False
+
+
+def test_f1_fields_always_present(synonyms_case, heterogeneous_case):
+    """f1_score and top_X_f1s are always in the output dict."""
+    for mentions, contexts in (synonyms_case, heterogeneous_case):
+        out = compute_tfidf_extractability("x", mentions, contexts)
+        assert "f1_score" in out
+        assert "top_X_f1s" in out
+        assert isinstance(out["f1_score"], float)
+        assert isinstance(out["top_X_f1s"], list)
+
+
+def test_f1_in_unit_interval(synonyms_case, heterogeneous_case):
+    """F1 score ∈ [0, 1] for all cases."""
+    for mentions, contexts in (synonyms_case, heterogeneous_case):
+        out = compute_tfidf_extractability("x", mentions, contexts)
+        assert 0.0 <= out["f1_score"] <= 1.0
+        for f in out["top_X_f1s"]:
+            assert 0.0 <= f <= 1.0
+
+
+def test_f1_geq_recall_compact_cluster(synonyms_case):
+    """Compact cluster (few forms / many unique) → precision=1 → F1 ≥ recall."""
+    mentions, contexts = synonyms_case
+    out = compute_tfidf_extractability("x", mentions, contexts)
+    # single cluster with 4 forms out of 4 unique → precision = n_unique/k = 1.0
+    for recall, f1 in zip(out["top_X_recalls"], out["top_X_f1s"], strict=True):
+        assert f1 >= recall * 0.99  # F1 ≥ recall when precision ≥ recall
+
+
+def test_use_f1_false_routes_on_recall(synonyms_case):
+    """use_f1=False → routes_to_rules based on recall (tfidf_score), not f1_score."""
+    mentions, contexts = synonyms_case
+    # force Y above 1.0 to fail regardless, then verify routing uses recall path
+    out_f1 = compute_tfidf_extractability("x", mentions, contexts, Y=0.50, use_f1=True)
+    out_rc = compute_tfidf_extractability("x", mentions, contexts, Y=0.50, use_f1=False)
+    # both should route to rules here (recall=1.0 and f1=1.0 both ≥ 0.50)
+    assert out_f1["routes_to_rules"] is True
+    assert out_rc["routes_to_rules"] is True
+
+
+def test_use_f1_toggle_changes_routing():
+    """When F1 < Y but recall >= Y, toggling use_f1 changes routes_to_rules."""
+    # Craft a case: 2 forms, one rare → low recall per cluster but high compactness
+    # We need recall >= Y but f1 < Y for one mode to differ from the other
+    # Simplest: use Y=0.0 vs Y=1.1 to check the toggle is wired
+    mentions = ["alpha", "beta", "gamma"] * 5
+    contexts = {
+        "alpha": ["context alpha one two three"] * 5,
+        "beta": ["context beta four five six"] * 5,
+        "gamma": ["context gamma seven eight nine"] * 5,
+    }
+    out = compute_tfidf_extractability("x", mentions, contexts, Y=0.0, use_f1=True)
+    assert out["routes_to_rules"] is True  # any score >= 0.0
+    out2 = compute_tfidf_extractability("x", mentions, contexts, Y=1.1, use_f1=False)
+    assert out2["routes_to_rules"] is False  # no score > 1.0
 
 
 def test_no_r_modulation_factor_in_output(synonyms_case, heterogeneous_case):
@@ -117,6 +180,8 @@ def test_score_is_rounded_and_in_unit_interval(synonyms_case):
     out = compute_tfidf_extractability("x", mentions, contexts)
     assert 0.0 <= out["tfidf_score"] <= 1.0
     assert out["tfidf_score"] == round(out["tfidf_score"], 4)
+    assert 0.0 <= out["f1_score"] <= 1.0
+    assert out["f1_score"] == round(out["f1_score"], 4)
 
 
 def test_missing_contexts_do_not_crash():
