@@ -356,14 +356,12 @@ class DuraXellGUI:
         right = ttk.Frame(parent, padding=8)
         right.pack(side="left", fill="both", expand=True)
 
-        ttk.Label(left, text="Selected entities", font=("Segoe UI", 10, "bold")).pack(
-            anchor="w"
-        )
+        ttk.Label(left, text="Selected entities", font=("Segoe UI", 10, "bold")).pack(anchor="w")
         btnrow = ttk.Frame(left)
         btnrow.pack(fill="x")
-        ttk.Button(
-            btnrow, text="Select all", command=lambda: self._toggle_all_entities(True)
-        ).pack(side="left")
+        ttk.Button(btnrow, text="Select all", command=lambda: self._toggle_all_entities(True)).pack(
+            side="left"
+        )
         ttk.Button(
             btnrow, text="Deselect all", command=lambda: self._toggle_all_entities(False)
         ).pack(side="left", padx=4)
@@ -717,9 +715,9 @@ class DuraXellGUI:
         bot = ttk.Frame(parent)
         bot.pack(side="bottom", fill="x")
         ttk.Label(bot, text=str(path), foreground="#888").pack(side="left", padx=4)
-        ttk.Button(
-            bot, text="📂 Open file", command=lambda p=path: os.startfile(str(p))
-        ).pack(side="right")
+        ttk.Button(bot, text="📂 Open file", command=lambda p=path: os.startfile(str(p))).pack(
+            side="right"
+        )
 
     def _cli_tree(self) -> None:
         """Run `main.py tree` then display Results/figures/Graph_decision.png."""

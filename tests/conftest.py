@@ -150,7 +150,11 @@ def synthetic_metrics():
         "Contexte_Social": {"Te": 5.0, "Te_count": 20, "He": 0.10, "R": 0.20, "Feas": 0.1},
         # Te low + TFIDF high + R low → RULES (TFIDF rescue branch)
         "Evolution_Tumorale": {
-            "Te": 5.0, "Te_count": 20, "He": 0.10, "R": 0.05,
-            "Feas": 0.8, "tfidf_score": 0.92,
+            "Te": 5.0,
+            "Te_count": 20,
+            "He": 0.10,
+            "R": 0.05,
+            "Feas": 0.8,
+            "tfidf_score": 0.92,
         },
     }

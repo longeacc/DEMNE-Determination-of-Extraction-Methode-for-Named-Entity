@@ -375,7 +375,17 @@ def _export_decision_csv() -> None:
     # Pretty-print as a fixed-width table with wrapping for long cells
     import textwrap as _tw
 
-    col_w = {"Entity": 30, "Te": 6, "He": 6, "R": 6, "Freq": 8, "Feas": 6, "TFIDF": 6, "Method": 8, "Justification": 55}  # noqa: N806
+    col_w = {
+        "Entity": 30,
+        "Te": 6,
+        "He": 6,
+        "R": 6,
+        "Freq": 8,
+        "Feas": 6,
+        "TFIDF": 6,
+        "Method": 8,
+        "Justification": 55,
+    }  # noqa: N806
     sep = "+" + "+".join("-" * (w + 2) for w in col_w.values()) + "+"
 
     def _fmt_row(cells: list[str]) -> list[str]:

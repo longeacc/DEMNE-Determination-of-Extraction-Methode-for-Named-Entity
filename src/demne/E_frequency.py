@@ -73,6 +73,7 @@ class FrequencyScorer:
         if not text:
             return 0
         import re
+
         return len(re.findall(r"\S+", text))
 
     def ingest_document(self, text: str, annotation_lines: list[str]):

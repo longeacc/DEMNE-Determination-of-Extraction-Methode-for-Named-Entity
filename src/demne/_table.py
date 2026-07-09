@@ -1,4 +1,5 @@
 """Minimal pretty-print table with cell wrapping for terminal output."""
+
 import textwrap
 
 

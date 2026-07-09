@@ -126,9 +126,7 @@ def main() -> None:
 
         st.components.v1.iframe("http://127.0.0.1:8888", height=800, scrolling=True)
     else:
-        st.warning(
-            "Launch the environment using the button above to display the interface."
-        )
+        st.warning("Launch the environment using the button above to display the interface.")
 
 
 if __name__ == "__main__":

@@ -221,9 +221,7 @@ class RiskContextScorer:
                                     meta = parts[1].split()
                                     etype = meta[0]
                                     start = int(meta[1])
-                                    end = int(
-                                        meta[-1]
-                                    )  # "10 15;20 25" → take outermost offsets
+                                    end = int(meta[-1])  # "10 15;20 25" → take outermost offsets
 
                                     # Extract context window
                                     ctx_start = max(0, start - self.WINDOW_SIZE)

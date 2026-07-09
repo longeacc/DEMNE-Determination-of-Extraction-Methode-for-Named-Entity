@@ -186,9 +186,7 @@ class TestFullPipelineRouting:
         assert res["method"] == "LLM"
 
     def test_tfidf_rescue_routes_to_rules(self, builder, synthetic_metrics):
-        res = builder.analyze_entity(
-            "Evolution_Tumorale", synthetic_metrics["Evolution_Tumorale"]
-        )
+        res = builder.analyze_entity("Evolution_Tumorale", synthetic_metrics["Evolution_Tumorale"])
         assert res["method"] == "RULES"
         assert "TFIDF" in res["justification"]
 
@@ -202,9 +200,11 @@ class TestFullPipelineRouting:
             assert "method" in data, f"{ename}: missing 'method'"
             assert "justification" in data, f"{ename}: missing 'justification'"
             assert "trace" in data, f"{ename}: missing 'trace'"
-            assert data["method"] in {"RULES", "TBM", "LLM"}, (
-                f"{ename}: unexpected method '{data['method']}'"
-            )
+            assert data["method"] in {
+                "RULES",
+                "TBM",
+                "LLM",
+            }, f"{ename}: unexpected method '{data['method']}'"
 
     def test_save_config_writes_json(self, builder, synthetic_metrics, tmp_path):
         out = tmp_path / "decision_config.json"
@@ -213,6 +213,7 @@ class TestFullPipelineRouting:
         builder.save_config()
         assert out.exists()
         import json
+
         with open(out, encoding="utf-8") as f:
             data = json.load(f)
         assert "entities" in data
@@ -253,9 +254,7 @@ class TestPipelineEndToEnd:
 
         # --- Step 5: Assemble metrics ---
         # Union of all entity names seen by any scorer
-        all_entities = (
-            set(freq_stats) | set(te_scores) | set(he_scores) | set(risk_results)
-        )
+        all_entities = set(freq_stats) | set(te_scores) | set(he_scores) | set(risk_results)
         metrics_db = {}
         for ent in all_entities:
             metrics_db[ent] = {
@@ -275,9 +274,11 @@ class TestPipelineEndToEnd:
 
         # Every decision must be a valid method
         for ent, data in config["entities"].items():
-            assert data["method"] in {"RULES", "TBM", "LLM"}, (
-                f"{ent}: unexpected method '{data['method']}'"
-            )
+            assert data["method"] in {
+                "RULES",
+                "TBM",
+                "LLM",
+            }, f"{ent}: unexpected method '{data['method']}'"
 
     def test_export_text_report(self, brat_corpus_dir, brat_corpus, tmp_path):
         freq_scorer = FrequencyScorer([brat_corpus_dir])

@@ -25,7 +25,6 @@ test_pipeline_integration.py).  They verify that:
   4. CPU→GPU→CPU transfers are coherent (no data corruption).
 """
 
-
 import pytest
 
 # eco2ai is mocked by the session-scoped fixture in conftest.py (autouse=True)
@@ -128,8 +127,7 @@ def test_cpu_to_gpu_to_cpu_round_trip():
     gpu_tensor = cpu_tensor.to("cuda")
     back_to_cpu = gpu_tensor.cpu()
     assert torch.allclose(cpu_tensor, back_to_cpu), (
-        f"Round-trip CPU→GPU→CPU altered values: "
-        f"{cpu_tensor.tolist()} → {back_to_cpu.tolist()}"
+        f"Round-trip CPU→GPU→CPU altered values: " f"{cpu_tensor.tolist()} → {back_to_cpu.tolist()}"
     )
 
 

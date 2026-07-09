@@ -42,9 +42,7 @@ def main() -> None:
 
     # Update session list
     st.session_state.selected_entities = [ent for ent, checked in checks.items() if checked]
-    st.info(
-        f"{len(st.session_state.selected_entities)}/{len(corpus_entities)} entities selected."
-    )
+    st.info(f"{len(st.session_state.selected_entities)}/{len(corpus_entities)} entities selected.")
 
     st.markdown("---")
     st.header("Synchronization")
@@ -77,9 +75,7 @@ def main() -> None:
                     st.session_state.thresholds.update(data["thresholds"])
                 if "routings" in data:
                     st.session_state.routings.update(data["routings"])
-                st.success(
-                    "Configuration imported successfully! (Refresh or go to the Dashboard)"
-                )
+                st.success("Configuration imported successfully! (Refresh or go to the Dashboard)")
             except Exception as e:
                 st.error(f"JSON read error: {e}")
 

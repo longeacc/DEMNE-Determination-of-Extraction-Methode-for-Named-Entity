@@ -183,9 +183,7 @@ class DecisionTreeBuilder:
                     ),
                     "trace": path_trace,
                 }
-            path_trace.append(
-                f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?"
-            )
+            path_trace.append(f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?")
             return None  # fall-through vers Feas
 
         # NOEUD 1 : Te++ ?
@@ -196,23 +194,21 @@ class DecisionTreeBuilder:
             if he >= self.THRESHOLDS["HE_HIGH"]:
                 # NOEUD R− (branche Te/He)
                 path_trace.append("Yes → R− ?")
-                result = _noeud_r(f"Te={te:.2f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.2f}≥{self.THRESHOLDS['HE_HIGH']}")
+                result = _noeud_r(
+                    f"Te={te:.2f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.2f}≥{self.THRESHOLDS['HE_HIGH']}"
+                )
                 if result:
                     return result
                 # High R → risk of conflict → fall through to Feas
             else:
                 # Low He → TF-IDF
-                path_trace.append(
-                    f"Non (He={he:.3f} < {self.THRESHOLDS['HE_HIGH']}) → TF-IDF ?"
-                )
+                path_trace.append(f"Non (He={he:.3f} < {self.THRESHOLDS['HE_HIGH']}) → TF-IDF ?")
                 result = self._noeud_tfidf(metrics, r_score, path_trace)
                 if result:
                     return result
         else:
             # Low Te → TF-IDF
-            path_trace.append(
-                f"Non (Te={te:.3f} < {self.THRESHOLDS['TE_HIGH']}) → TF-IDF ?"
-            )
+            path_trace.append(f"Non (Te={te:.3f} < {self.THRESHOLDS['TE_HIGH']}) → TF-IDF ?")
             result = self._noeud_tfidf(metrics, r_score, path_trace)
             if result:
                 return result
@@ -233,8 +229,7 @@ class DecisionTreeBuilder:
         return {
             "method": "LLM",
             "justification": (
-                f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — "
-                "LLM escalation required."
+                f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — " "LLM escalation required."
             ),
             "trace": path_trace,
         }
@@ -249,9 +244,7 @@ class DecisionTreeBuilder:
             path_trace.append("TF-IDF absent → Feas++ ?")
             return None
         tfidf_score = float(tfidf_raw)
-        path_trace.append(
-            f"TF-IDF ? (score={tfidf_score:.3f}, Y={self.THRESHOLDS['Y']})"
-        )
+        path_trace.append(f"TF-IDF ? (score={tfidf_score:.3f}, Y={self.THRESHOLDS['Y']})")
         if tfidf_score >= self.THRESHOLDS["Y"]:
             # TF-IDF Yes → same shared R− node as the Te/He branch
             path_trace.append("Yes → R− ? (shared node)")
@@ -266,13 +259,9 @@ class DecisionTreeBuilder:
                     ),
                     "trace": path_trace,
                 }
-            path_trace.append(
-                f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?"
-            )
+            path_trace.append(f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?")
             return None  # High R despite TF-IDF → Feas
-        path_trace.append(
-            f"Non (score={tfidf_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?"
-        )
+        path_trace.append(f"Non (score={tfidf_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?")
         return None
 
     def build_full_config(self, metrics_data: dict[str, dict]):
@@ -429,6 +418,7 @@ def main():
     gs_dir = Path(args.gs_dir) if args.gs_dir else None
     if gs_dir and gs_dir.exists() and (not tfidf_csv.exists() or tfidf_csv.stat().st_size == 0):
         from demne.E_tfidf import run as _run_tfidf
+
         _dt_params = PARAMS["decision_thresholds"]
         print("Computing TF-IDF scores...")
         _run_tfidf(

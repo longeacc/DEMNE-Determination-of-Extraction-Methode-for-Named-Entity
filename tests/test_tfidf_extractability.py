@@ -45,8 +45,16 @@ def synonyms_case():
 @pytest.fixture
 def heterogeneous_case():
     """pays_origine: varied forms, non-shared clinical contexts."""
-    mentions = ["France", "Maroc", "Algérie", "Tunisie", "Mali",
-                "Sénégal", "Cameroun", "Côte d'Ivoire"] * 5
+    mentions = [
+        "France",
+        "Maroc",
+        "Algérie",
+        "Tunisie",
+        "Mali",
+        "Sénégal",
+        "Cameroun",
+        "Côte d'Ivoire",
+    ] * 5
     contexts = {
         "france": ["né en France domicilié paris"] * 5,
         "maroc": ["originaire du Maroc rabat famille"] * 5,
@@ -80,8 +88,9 @@ def test_edge_case_single_unique_form():
 
 def test_conceptual_synonyms_high_score(synonyms_case):
     mentions, contexts = synonyms_case
-    out = compute_tfidf_extractability("évolution_tumorale", mentions, contexts,
-                                       X=5, sim_threshold=0.50)
+    out = compute_tfidf_extractability(
+        "évolution_tumorale", mentions, contexts, X=5, sim_threshold=0.50
+    )
     assert out["tfidf_score"] >= 0.70
     assert out["routes_to_rules"] is True
     # all 4 forms must merge into a single cluster covering everything
@@ -91,8 +100,7 @@ def test_conceptual_synonyms_high_score(synonyms_case):
 
 def test_heterogeneous_low_score(heterogeneous_case):
     mentions, contexts = heterogeneous_case
-    out = compute_tfidf_extractability("pays_origine", mentions, contexts,
-                                       X=5, sim_threshold=0.50)
+    out = compute_tfidf_extractability("pays_origine", mentions, contexts, X=5, sim_threshold=0.50)
     assert out["tfidf_score"] <= 0.35
     assert out["routes_to_rules"] is False
 
@@ -216,21 +224,33 @@ def test_backward_compat_baseline_unchanged(builder):
     The R- node is now SHARED: high Te+He + high R → Feas (TBM), not LLM.
     """
     # High Te+He, low R → RULES
-    assert builder.analyze_entity(
-        "StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1}
-    )["method"] == "RULES"
+    assert (
+        builder.analyze_entity("StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1})[
+            "method"
+        ]
+        == "RULES"
+    )
     # High Te, low He, low R, high Feas → TBM (TF-IDF branch, absent → Feas)
-    assert builder.analyze_entity(
-        "GoodRules", {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
-    )["method"] == "TBM"
+    assert (
+        builder.analyze_entity(
+            "GoodRules", {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
+        )["method"]
+        == "TBM"
+    )
     # Low Te, no TF-IDF, low Feas → LLM
-    assert builder.analyze_entity(
-        "CommonEntity", {"Te": 10.0, "Te_count": 20, "He": 10.0, "R": 0.2, "Feas": 0.1}
-    )["method"] == "LLM"
+    assert (
+        builder.analyze_entity(
+            "CommonEntity", {"Te": 10.0, "Te_count": 20, "He": 10.0, "R": 0.2, "Feas": 0.1}
+        )["method"]
+        == "LLM"
+    )
     # High Te+He, high R (risk of conflict) → high Feas → TBM (preserved behaviour)
-    assert builder.analyze_entity(
-        "RiskyEntity", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.8, "Feas": 0.8}
-    )["method"] == "TBM"
+    assert (
+        builder.analyze_entity(
+            "RiskyEntity", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.8, "Feas": 0.8}
+        )["method"]
+        == "TBM"
+    )
 
 
 def test_tfidf_node_bypassed_when_te_and_he_high(builder):
@@ -244,8 +264,7 @@ def test_tfidf_node_bypassed_when_te_and_he_high(builder):
 
 def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
     """Low He → high TF-IDF + low R → R- node → RULES."""
-    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8,
-               "tfidf_score": 0.95}
+    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8, "tfidf_score": 0.95}
     res = builder.analyze_entity("évolution_tumorale", metrics)
     assert res["method"] == "RULES"
     assert "TFIDF" in res["justification"]
@@ -253,24 +272,28 @@ def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
 
 def test_tfidf_rescue_low_he_r_high_falls_to_feas(builder):
     """Low He → high TF-IDF BUT high R (risk of conflict) → Feas, not RULES."""
-    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8,
-               "tfidf_score": 0.95}
+    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8, "tfidf_score": 0.95}
     assert builder.analyze_entity("x", metrics)["method"] == "TBM"
 
 
 def test_tfidf_below_y_falls_to_feas(builder):
     """TF-IDF < Y → Feas directly (no R- node)."""
-    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8,
-               "tfidf_score": 0.30}
+    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8, "tfidf_score": 0.30}
     # High R but ignored (TF-IDF < Y → direct Feas)
     assert builder.analyze_entity("x", metrics)["method"] == "TBM"
 
 
 def test_tfidf_absent_falls_to_feas_directly(builder):
     """No tfidf_score: TF-IDF node skipped → Feas directly."""
-    assert builder.analyze_entity(
-        "x", {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8}
-    )["method"] == "TBM"
-    assert builder.analyze_entity(
-        "x", {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.1}
-    )["method"] == "LLM"
+    assert (
+        builder.analyze_entity("x", {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8})[
+            "method"
+        ]
+        == "TBM"
+    )
+    assert (
+        builder.analyze_entity("x", {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.1})[
+            "method"
+        ]
+        == "LLM"
+    )

@@ -144,8 +144,9 @@ def collect_entity_data(corpus_dir: Path | str, window_tokens: int = 30) -> dict
 # ---------------------------------------------------------------------------
 # Score TFIDF
 # ---------------------------------------------------------------------------
-def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
-                                 X=5, sim_threshold=0.50, Y=None):  # noqa: N803
+def compute_tfidf_extractability(
+    entity_name, mentions, corpus_contexts, X=5, sim_threshold=0.50, Y=None
+):  # noqa: N803
     """Contextual TF-IDF extractability score for an entity."""
     if Y is None:
         Y = _dt.get("TFIDF_Y", 0.70)  # noqa: N806
@@ -153,13 +154,15 @@ def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
     unique_forms = set(mentions_lower)
 
     if len(mentions) < 3:
-        return {"tfidf_score": 0.0, "routes_to_rules": False,
-                "clusters": [], "top_X_recalls": []}
+        return {"tfidf_score": 0.0, "routes_to_rules": False, "clusters": [], "top_X_recalls": []}
     if len(unique_forms) == 1:
         only = sorted(unique_forms)[0]
-        return {"tfidf_score": 1.0, "routes_to_rules": 1.0 >= Y,
-                "clusters": [{"forms": [only], "total_count": len(mentions)}],
-                "top_X_recalls": [1.0]}
+        return {
+            "tfidf_score": 1.0,
+            "routes_to_rules": 1.0 >= Y,
+            "clusters": [{"forms": [only], "total_count": len(mentions)}],
+            "top_X_recalls": [1.0],
+        }
 
     forms_list = sorted(unique_forms)
 
@@ -169,13 +172,13 @@ def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
         strip = re.compile(r"(?i)\b" + re.escape(f) + r"\b")
         docs.append(strip.sub(" ", raw))
 
-    vectorizer = TfidfVectorizer(analyzer="word", ngram_range=(1, 2),
-                                 max_features=500, min_df=1, sublinear_tf=True)
+    vectorizer = TfidfVectorizer(
+        analyzer="word", ngram_range=(1, 2), max_features=500, min_df=1, sublinear_tf=True
+    )
     try:
         m_tfidf = vectorizer.fit_transform(docs)
     except ValueError:
-        return {"tfidf_score": 0.0, "routes_to_rules": False,
-                "clusters": [], "top_X_recalls": []}
+        return {"tfidf_score": 0.0, "routes_to_rules": False, "clusters": [], "top_X_recalls": []}
 
     sim_matrix = cosine_similarity(m_tfidf)
     form_counts = Counter(mentions_lower)
@@ -194,15 +197,13 @@ def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
             if avg_sim >= sim_threshold:
                 cluster.append(form_j)
                 assigned.add(form_j)
-        clusters.append({"forms": cluster,
-                         "total_count": sum(form_counts[f] for f in cluster)})
+        clusters.append({"forms": cluster, "total_count": sum(form_counts[f] for f in cluster)})
     clusters.sort(key=lambda c: c["total_count"], reverse=True)
 
     total_mentions = len(mentions)
     top_x_recalls = []
-    for cluster in clusters[:min(X, len(clusters))]:
-        pattern = re.compile(
-            r"(?i)\b(" + "|".join(re.escape(f) for f in cluster["forms"]) + r")\b")
+    for cluster in clusters[: min(X, len(clusters))]:
+        pattern = re.compile(r"(?i)\b(" + "|".join(re.escape(f) for f in cluster["forms"]) + r")\b")
         matched = sum(1 for m in mentions_lower if pattern.search(m))
         top_x_recalls.append(matched / total_mentions)
     tfidf_score = float(np.mean(top_x_recalls)) if top_x_recalls else 0.0
@@ -261,7 +262,9 @@ def compute_tfidf_for_all_entities(
     x = top_x if top_x is not None else _dt.get("TFIDF_X", 10)
     sim_threshold = sim_threshold if sim_threshold is not None else _dt.get("TFIDF_SIM", 0.50)
     y = _dt.get("TFIDF_Y", 0.70)
-    window_tokens = window_tokens if window_tokens is not None else _dt.get("TFIDF_WINDOW_TOKENS", 30)
+    window_tokens = (
+        window_tokens if window_tokens is not None else _dt.get("TFIDF_WINDOW_TOKENS", 30)
+    )
     entity_data = collect_entity_data(corpus_dir, window_tokens=window_tokens)
     return {
         etype: compute_tfidf_extractability(
@@ -279,7 +282,9 @@ def compute_tfidf_for_all_entities(
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
-def run(gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: float | None = None) -> None:
+def run(
+    gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: float | None = None
+) -> None:
     """Compute TFIDF per entity and save Results/tfidf_analysis.csv."""
     if y is None:
         y = _dt.get("TFIDF_Y", 0.70)
@@ -306,21 +311,25 @@ def run(gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: fl
             Y=y,
         )
         n_mentions = len(data["mentions"])
-        rows.append({
-            "Entity": etype,
-            "TFIDF_Score": res["tfidf_score"],
-            "Clusters_Count": len(res["clusters"]),
-            "Top_X_Recalls": str(res["top_X_recalls"]),
-            "Routes_To_Rules": res["routes_to_rules"],
-            "Mentions_Count": n_mentions,
-        })
-        table_rows.append([
-            etype,
-            f"{res['tfidf_score']:.4f}",
-            str(len(res["clusters"])),
-            str(n_mentions),
-            str(res["routes_to_rules"]),
-        ])
+        rows.append(
+            {
+                "Entity": etype,
+                "TFIDF_Score": res["tfidf_score"],
+                "Clusters_Count": len(res["clusters"]),
+                "Top_X_Recalls": str(res["top_X_recalls"]),
+                "Routes_To_Rules": res["routes_to_rules"],
+                "Mentions_Count": n_mentions,
+            }
+        )
+        table_rows.append(
+            [
+                etype,
+                f"{res['tfidf_score']:.4f}",
+                str(len(res["clusters"])),
+                str(n_mentions),
+                str(res["routes_to_rules"]),
+            ]
+        )
     print_table(
         ["Entity", "TFIDF", "Clusters", "Mentions", "->Rules"],
         table_rows,
@@ -330,8 +339,14 @@ def run(gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: fl
     with open(out_csv, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(
             f,
-            fieldnames=["Entity", "TFIDF_Score", "Clusters_Count",
-                        "Top_X_Recalls", "Routes_To_Rules", "Mentions_Count"],
+            fieldnames=[
+                "Entity",
+                "TFIDF_Score",
+                "Clusters_Count",
+                "Top_X_Recalls",
+                "Routes_To_Rules",
+                "Mentions_Count",
+            ],
         )
         w.writeheader()
         w.writerows(rows)
@@ -347,7 +362,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Compute TFIDF_Extractability per entity")
     parser.add_argument("--gs_dir", type=str, default=None, help="BRAT gold-standard corpus")
     parser.add_argument("--results_dir", type=str, default=None, help="CSV output directory")
-    parser.add_argument("--pred_dir", type=str, default=None, help="(ignored, pipeline compatibility)")
+    parser.add_argument(
+        "--pred_dir", type=str, default=None, help="(ignored, pipeline compatibility)"
+    )
     args = parser.parse_args()
 
     gs_dir = Path(args.gs_dir) if args.gs_dir else DEFAULT_GS
