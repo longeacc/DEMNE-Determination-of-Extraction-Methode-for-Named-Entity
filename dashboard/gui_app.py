@@ -697,14 +697,14 @@ class DuraXellGUI:
         for r in table:
             tags = ()
             for cell in r:
-                cell_str = str(cell) if not isinstance(cell, (list, dict)) else ""
+                cell_str = str(cell) if not isinstance(cell, list | dict) else ""
                 if cell_str in ROUTING_COLORS:
                     tags = (cell_str,)
                     break
             tv.insert(
                 "",
                 "end",
-                values=[str(c) if not isinstance(c, (list, dict)) else json.dumps(c) for c in r],
+                values=[str(c) if not isinstance(c, list | dict) else json.dumps(c) for c in r],
                 tags=tags,
             )
         sb = ttk.Scrollbar(parent, orient="vertical", command=tv.yview)

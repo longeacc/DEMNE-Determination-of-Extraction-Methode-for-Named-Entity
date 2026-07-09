@@ -145,8 +145,8 @@ def collect_entity_data(corpus_dir: Path | str, window_tokens: int = 30) -> dict
 # Score TFIDF
 # ---------------------------------------------------------------------------
 def compute_tfidf_extractability(
-    entity_name, mentions, corpus_contexts, X=5, sim_threshold=0.50, Y=None
-):  # noqa: N803
+    entity_name, mentions, corpus_contexts, X=5, sim_threshold=0.50, Y=None  # noqa: N803
+):
     """Contextual TF-IDF extractability score for an entity."""
     if Y is None:
         Y = _dt.get("TFIDF_Y", 0.70)  # noqa: N806

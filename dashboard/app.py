@@ -31,14 +31,16 @@ def main() -> None:
         st.session_state.routings = {}
 
     st.title("🧬 DuraXell: NLP onco-biomarker extraction dashboard")
-    st.markdown("""
+    st.markdown(
+        """
     Welcome to the **DuraXell** analysis interface.
     Select a page from the left navigation bar:
     - 📊 **Metrics Dashboard**: L2 supervision, comparative charts, cost/benefit, AI routing
     - 🖥️ **CLI Console**: Command launcher and monitoring
     - 🔧 **REST Integration**: Sync, configuration, JSON export/import
     - 📓 **Notebook & API**: Launch the Jupyter REST server and interface.
-    """)
+    """
+    )
 
     st.info(
         "Use the sidebar to navigate between the different interfaces of the analytics pipeline."
