@@ -1,13 +1,13 @@
-"""Lance REST.ipynb dans une fenêtre WebView2 native (Windows) ou WebKit (Linux).
+"""Launch REST.ipynb in a native WebView2 window (Windows) or WebKit (Linux).
 
-Sans navigateur autonome. Une seule connexion 127.0.0.1 loopback (jamais
-exposée au réseau) sert au protocole Comm d'ipywidgets — strictement local
-au poste, comme JupyterLab Desktop, VS Code, Cursor.
+No standalone browser. A single 127.0.0.1 loopback connection (never exposed
+to the network) serves the ipywidgets Comm protocol — strictly local,
+like JupyterLab Desktop, VS Code, or Cursor.
 
-Usage :
+Usage:
     python dashboard/notebook_webview.py [--engine notebook|lab|voila] [--port 0]
 
-Quand la fenêtre WebView2 est fermée, le serveur Jupyter/Voila est tué.
+When the WebView2 window is closed, the Jupyter/Voila server is killed.
 """
 
 # pylint: disable=broad-exception-caught
@@ -38,7 +38,7 @@ def _free_port() -> int:
 
 
 def _wait_ready(proc: subprocess.Popen, marker_re: str, timeout: float = 30.0) -> str | None:
-    """Lit stdout/stderr du process jusqu'à trouver un marqueur (URL ready)."""
+    """Read stdout/stderr of the process until a marker (ready URL) is found."""
     pat = re.compile(marker_re)
     start = time.time()
     captured: list[str] = []
@@ -51,7 +51,7 @@ def _wait_ready(proc: subprocess.Popen, marker_re: str, timeout: float = 30.0) -
             if m:
                 return m.group(0)
         if proc.poll() is not None:
-            print("[notebook_webview] le process Jupyter s'est arrêté tôt :", file=sys.stderr)
+            print("[notebook_webview] Jupyter process exited early:", file=sys.stderr)
             print("".join(captured), file=sys.stderr)
             return None
         time.sleep(0.05)
@@ -64,15 +64,15 @@ def main() -> int:
         "--engine",
         choices=["notebook", "lab", "voila"],
         default="notebook",
-        help="Moteur de rendu (Jupyter Notebook, JupyterLab ou Voilà)",
+        help="Rendering engine (Jupyter Notebook, JupyterLab, or Voilà)",
     )
-    parser.add_argument("--port", type=int, default=0, help="0 = port libre choisi automatiquement")
-    parser.add_argument("--nb", type=str, default=str(NB_PATH), help="Chemin du .ipynb à ouvrir")
+    parser.add_argument("--port", type=int, default=0, help="0 = automatically pick a free port")
+    parser.add_argument("--nb", type=str, default=str(NB_PATH), help="Path to the .ipynb to open")
     args = parser.parse_args()
 
     nb_path = Path(args.nb)
     if not nb_path.exists():
-        print(f"Notebook introuvable : {nb_path}", file=sys.stderr)
+        print(f"Notebook not found: {nb_path}", file=sys.stderr)
         return 2
 
     port = args.port or _free_port()
@@ -83,13 +83,12 @@ def main() -> int:
     env["PYTHONUTF8"] = "1"
     env["PYTHONUNBUFFERED"] = "1"
 
-    # On lance le serveur dans le dossier du notebook pour que les imports
-    # `from REST_modules import *` fonctionnent.
+    # Launch the server in the notebook directory so `from REST_modules import *` works.
     cwd = str(nb_path.parent)
 
-    # NB: on appelle directement `python -m jupyterlab` / `python -m notebook`
-    # plutôt que `python -m jupyter lab` car le wrapper jupyter perd stderr
-    # silencieusement sur Windows quand il est lancé via subprocess.
+    # Call `python -m jupyterlab` / `python -m notebook` directly rather than
+    # `python -m jupyter lab` because the jupyter wrapper silently drops stderr
+    # on Windows when launched via subprocess.
     if engine == "voila":
         cmd = [
             sys.executable,
@@ -134,7 +133,7 @@ def main() -> int:
         url_target = f"http://127.0.0.1:{port}/tree/{nb_path.name}"
         ready_pat = r"http://127\.0\.0\.1:\d+/(?:tree|notebooks|lab)"
 
-    print(f"[notebook_webview] lancement {engine} sur {url_target}", file=sys.stderr)
+    print(f"[notebook_webview] starting {engine} at {url_target}", file=sys.stderr)
     proc = subprocess.Popen(
         cmd,
         cwd=cwd,
@@ -149,11 +148,11 @@ def main() -> int:
 
     found = _wait_ready(proc, ready_pat, timeout=40.0)
     if not found:
-        print("[notebook_webview] serveur non prêt — abandon.", file=sys.stderr)
+        print("[notebook_webview] server not ready — aborting.", file=sys.stderr)
         proc.terminate()
         return 3
 
-    # Drain le reste du stdout en arrière-plan (pour ne pas bloquer le pipe)
+    # Drain remaining stdout in background to avoid blocking the pipe.
     def _drain():
         if proc.stdout:
             for _ in proc.stdout:
@@ -161,7 +160,7 @@ def main() -> int:
 
     threading.Thread(target=_drain, daemon=True).start()
 
-    # Création de la fenêtre WebView2
+    # Create the WebView2 window.
     _window = webview.create_window(
         f"DuraXELL — {nb_path.name} ({engine})",
         url_target,

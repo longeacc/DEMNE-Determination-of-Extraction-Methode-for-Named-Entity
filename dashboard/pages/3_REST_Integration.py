@@ -7,52 +7,52 @@ st.set_page_config(page_title="REST Integration", page_icon="🔧", layout="wide
 
 
 def main() -> None:
-    st.title("🔧 Configuration et Intégration REST")
+    st.title("🔧 REST Configuration & Integration")
 
     if "entity_stats" not in st.session_state or not st.session_state["entity_stats"]:
         st.warning(
-            "⚠️ Veuillez d'abord charger un corpus depuis la page 'Dashboard Métriques' pour identifier les entités cibles."
+            "⚠️ Please load a corpus from the 'Metrics Dashboard' page first to identify target entities."
         )
         return
 
     corpus_entities = list(st.session_state["entity_stats"].keys())
 
-    st.header("Gestion des Entités")
+    st.header("Entity Management")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Tout sélectionner"):
+        if st.button("Select all"):
             st.session_state.selected_entities = corpus_entities.copy()
     with col2:
-        if st.button("Tout désélectionner"):
+        if st.button("Deselect all"):
             st.session_state.selected_entities = []
 
     selected = st.session_state.get("selected_entities", [])
 
-    st.subheader("Entités cibles :")
+    st.subheader("Target entities:")
     checks = {}
 
-    # Checkboxes layout en grille
+    # Grid checkbox layout
     cols = st.columns(4)
     for i, entity in enumerate(corpus_entities):
         with cols[i % 4]:
-            # Initialiser à True par défaut si non défini
+            # Default to True if not yet set
             is_sel = entity in selected if "selected_entities" in st.session_state else True
             checks[entity] = st.checkbox(entity, value=is_sel)
 
-    # Mise à jour list session
+    # Update session list
     st.session_state.selected_entities = [ent for ent, checked in checks.items() if checked]
     st.info(
-        f"{len(st.session_state.selected_entities)}/{len(corpus_entities)} entités sélectionnées."
+        f"{len(st.session_state.selected_entities)}/{len(corpus_entities)} entities selected."
     )
 
     st.markdown("---")
-    st.header("Synchronisation")
+    st.header("Synchronization")
 
     c1, c2 = st.columns(2)
 
     with c1:
-        st.subheader("Exporter Configuration")
+        st.subheader("Export Configuration")
         config_data = {
             "selected_entities": st.session_state.selected_entities,
             "thresholds": st.session_state.get("thresholds", {}),
@@ -60,15 +60,15 @@ def main() -> None:
         }
         json_str = json.dumps(config_data, indent=2)
         st.download_button(
-            "Télécharger config.json",
+            "Download config.json",
             json_str,
             file_name="demne_config.json",
             mime="application/json",
         )
 
     with c2:
-        st.subheader("Importer Configuration")
-        uploaded = st.file_uploader("Fichier JSON", type=["json"])
+        st.subheader("Import Configuration")
+        uploaded = st.file_uploader("JSON file", type=["json"])
         if uploaded is not None:
             try:
                 data = json.load(uploaded)
@@ -78,19 +78,19 @@ def main() -> None:
                 if "routings" in data:
                     st.session_state.routings.update(data["routings"])
                 st.success(
-                    "Configuration importée avec succès ! (Rafraîchissez ou allez dans le Dashboard)"
+                    "Configuration imported successfully! (Refresh or go to the Dashboard)"
                 )
             except Exception as e:
-                st.error(f"Erreur de lecture du JSON: {e}")
+                st.error(f"JSON read error: {e}")
 
     st.markdown("---")
-    st.subheader("Récapitulatif des Routages")
+    st.subheader("Routing Summary")
     if "routings" in st.session_state and st.session_state.routings:
         for ent, rtg in st.session_state.routings.items():
             if ent in st.session_state.selected_entities:
-                st.markdown(f"- **{ent}** : {rtg}")
+                st.markdown(f"- **{ent}**: {rtg}")
     else:
-        st.write("Aucun routage disponible. Rendez-vous dans le Dashboard Metrics pour générer.")
+        st.write("No routing available. Go to the Metrics Dashboard to generate one.")
 
 
 if __name__ == "__main__":

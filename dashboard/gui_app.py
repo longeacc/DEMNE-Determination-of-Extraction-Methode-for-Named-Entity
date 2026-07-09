@@ -1,9 +1,9 @@
-"""DuraXELL — GUI Tkinter native (parité avec dashboard/ Streamlit).
+"""DuraXELL — Native Tkinter GUI (feature-parity with the dashboard/ Streamlit app).
 
-Cible : environnements EDS / Citrix / RDP sans navigateur. Aucune dépendance
-externe : uniquement la bibliothèque standard Python (tkinter).
+Target: EDS / Citrix / RDP environments without a browser. No external dependency:
+only the Python standard library (tkinter).
 
-Lancement :
+Launch:
     python main.py gui
 """
 
@@ -34,7 +34,7 @@ CONFIG_PATH = ROOT / "data" / "decision_config.json"
 RESULTS_DIR = ROOT / "Results"
 DEFAULT_PORT = 8888
 
-# Presets = data/demne_params.json (source unique partagée CLI/scorers/dashboard)
+# Presets = data/demne_params.json (single source shared by CLI/scorers/dashboard)
 _pspec = _il.spec_from_file_location("demne_params", SRC / "demne" / "params.py")
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
@@ -43,7 +43,7 @@ PARAMS = _pmod.load_params()
 PRESETS = PARAMS["presets"]
 
 ROUTING_COLORS = {
-    "RÈGLES": "#1B7F2A",
+    "RULES": "#1B7F2A",
     "TBM": "#C77800",
     "LLM": "#B12727",
 }
@@ -108,13 +108,13 @@ class DuraXellGUI:
         # Top bar
         top = ttk.Frame(self.root, padding=8)
         top.pack(side="top", fill="x")
-        ttk.Label(top, text="Corpus GS :").pack(side="left")
+        ttk.Label(top, text="Corpus GS:").pack(side="left")
         ttk.Entry(top, textvariable=self.corpus_path, width=70).pack(side="left", padx=4)
-        ttk.Button(top, text="📂 Parcourir…", command=self._pick_gs_dir).pack(side="left")
-        ttk.Label(top, text="   Pred :").pack(side="left")
+        ttk.Button(top, text="📂 Browse…", command=self._pick_gs_dir).pack(side="left")
+        ttk.Label(top, text="   Pred:").pack(side="left")
         ttk.Entry(top, textvariable=self.pred_path, width=40).pack(side="left", padx=4)
         ttk.Button(top, text="📂", command=self._pick_pred_dir).pack(side="left")
-        ttk.Button(top, text="🚀 Évaluer (metrics + tree)", command=self._run_evaluate).pack(
+        ttk.Button(top, text="🚀 Evaluate (metrics + tree)", command=self._run_evaluate).pack(
             side="left", padx=10
         )
 
@@ -123,13 +123,13 @@ class DuraXellGUI:
         nb.pack(fill="both", expand=True, padx=8, pady=4)
 
         self.tab_dash = ttk.Frame(nb)
-        nb.add(self.tab_dash, text="📊 Dashboard Métriques")
+        nb.add(self.tab_dash, text="📊 Metrics Dashboard")
         self.tab_corp = ttk.Frame(nb)
-        nb.add(self.tab_corp, text="🎯 Analyse Corpus")
+        nb.add(self.tab_corp, text="🎯 Corpus Analysis")
         self.tab_rest = ttk.Frame(nb)
         nb.add(self.tab_rest, text="🔧 REST Integration")
         self.tab_nb = ttk.Frame(nb)
-        nb.add(self.tab_nb, text="📓 Notebook REST (in-process)")
+        nb.add(self.tab_nb, text="📓 REST Notebook (in-process)")
 
         self._build_tab_dashboard(self.tab_dash)
         self._build_tab_corpus(self.tab_corp)
@@ -150,7 +150,7 @@ class DuraXellGUI:
         self.log_text.pack(fill="x")
         self.log_text.configure(state="disabled")
 
-    # ============================== TAB 1 — Dashboard Métriques ===============
+    # ============================== TAB 1 — Metrics Dashboard ================
     def _build_tab_dashboard(self, parent: ttk.Frame) -> None:
         left = ttk.Frame(parent, padding=8, width=320)
         left.pack(side="left", fill="y")
@@ -158,7 +158,7 @@ class DuraXellGUI:
         right = ttk.Frame(parent, padding=8)
         right.pack(side="left", fill="both", expand=True)
 
-        ttk.Label(left, text="Presets de seuils", font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        ttk.Label(left, text="Threshold presets", font=("Segoe UI", 10, "bold")).pack(anchor="w")
         for name in ("FRUGAL", "QUALITY"):
             ttk.Radiobutton(
                 left, text=name, variable=self.preset_var, value=name, command=self._apply_preset
@@ -168,13 +168,13 @@ class DuraXellGUI:
         )
 
         ttk.Separator(left, orient="horizontal").pack(fill="x", pady=6)
-        ttk.Label(left, text="Seuils", font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        ttk.Label(left, text="Thresholds", font=("Segoe UI", 10, "bold")).pack(anchor="w")
 
         sliders = [
-            ("Te (Templatabilité ≥)", "Te", 0.0, 1.0),
-            ("He (Homogénéité ≥)", "He", 0.0, 1.0),
-            ("R  (Risque ≤)", "R", 0.0, 1.0),
-            ("Feas (Faisabilité NER ≥)", "Feas", 0.0, 1.0),
+            ("Te (Templatability ≥)", "Te", 0.0, 1.0),
+            ("He (Homogeneity ≥)", "He", 0.0, 1.0),
+            ("R  (Risk ≤)", "R", 0.0, 1.0),
+            ("Feas (NER Feasibility ≥)", "Feas", 0.0, 1.0),
         ]
         for label, key, lo, hi in sliders:
             row = ttk.Frame(left)
@@ -186,18 +186,18 @@ class DuraXellGUI:
             ttk.Scale(
                 row, from_=lo, to=hi, variable=var, command=lambda _v: self.preset_var.set("CUSTOM")
             ).pack(fill="x")
-        ttk.Button(left, text="✅ Appliquer le routage", command=self._refresh_routing_table).pack(
+        ttk.Button(left, text="✅ Apply routing", command=self._refresh_routing_table).pack(
             fill="x", pady=8
         )
 
         ttk.Separator(left, orient="horizontal").pack(fill="x", pady=6)
-        ttk.Label(left, text="Sauvegarde", font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        ttk.Label(left, text="Export", font=("Segoe UI", 10, "bold")).pack(anchor="w")
         ttk.Button(left, text="💾 Exporter decision_summary.csv", command=self._export_csv).pack(
             fill="x", pady=2
         )
 
-        # (la barre Commandes CLI est désormais en bas du panneau droit,
-        #  étalée sur 4 colonnes — voir _build_cli_bar)
+        # (the CLI Commands bar is now at the bottom of the right panel,
+        #  spread across 4 columns — see _build_cli_bar)
 
         # Right panel split: routing table on top, CLI bar at the bottom
         table_frame = ttk.Frame(right)
@@ -218,21 +218,21 @@ class DuraXellGUI:
         self._build_cli_bar(right)
 
     def _build_cli_bar(self, parent: ttk.Frame) -> None:
-        """Grille 4 colonnes des sous-commandes `python main.py`."""
-        bar = ttk.LabelFrame(parent, text="Commandes CLI — python main.py", padding=6)
+        """4-column grid of `python main.py` sub-commands."""
+        bar = ttk.LabelFrame(parent, text="CLI Commands — python main.py", padding=6)
         bar.pack(side="bottom", fill="x", pady=(8, 0))
 
         cli_buttons = [
-            ("ℹ️  info", self._cli_info, "Diagnostic environnement"),
+            ("ℹ️  info", self._cli_info, "Environment diagnostics"),
             ("📐 metrics", self._cli_metrics, "Te / He / Freq / R / Feas"),
-            ("🌳 tree + image", self._cli_tree, "Arbre de décision + PNG"),
-            ("🚀 evaluate", self._cli_evaluate, "Pipeline complet"),
-            ("📊 dashboard", self._cli_dashboard, "Routage preset FRUGAL/QUALITY"),
-            ("🎯 corpus", self._cli_corpus, "Stats BRAT"),
-            ("🔧 rest-config", self._cli_rest_config, "Export config JSON"),
-            ("📓 notebook", self._cli_notebook, "Notebook REST (Voila)"),
+            ("🌳 tree + image", self._cli_tree, "Decision tree + PNG"),
+            ("🚀 evaluate", self._cli_evaluate, "Full pipeline"),
+            ("📊 dashboard", self._cli_dashboard, "FRUGAL/QUALITY preset routing"),
+            ("🎯 corpus", self._cli_corpus, "BRAT stats"),
+            ("🔧 rest-config", self._cli_rest_config, "Export JSON config"),
+            ("📓 notebook", self._cli_notebook, "REST Notebook (Voila)"),
             ("🌐 rest", self._cli_rest, "demo_rest.py (legacy)"),
-            ("💾 export-csv", self._export_csv, "Régénère decision_summary"),
+            ("💾 export-csv", self._export_csv, "Regenerate decision_summary"),
         ]
         cols = 4
         for i, (label, cb, tip) in enumerate(cli_buttons):
@@ -256,12 +256,12 @@ class DuraXellGUI:
         for i in self.tree_routing.get_children():
             self.tree_routing.delete(i)
         if not CONFIG_PATH.exists():
-            self._log(f"⚠️ {CONFIG_PATH.name} introuvable — lance d'abord Évaluer.")
+            self._log(f"⚠️ {CONFIG_PATH.name} not found — run Evaluate first.")
             return
         try:
             cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
         except Exception as e:
-            self._log(f"Erreur lecture config : {e}")
+            self._log(f"Error reading config: {e}")
             return
 
         builder_cls = _load_tree_builder()
@@ -303,14 +303,14 @@ class DuraXellGUI:
             )
         self._refresh_entities_panel()
 
-    # ============================== TAB 2 — Analyse Corpus ====================
+    # ============================== TAB 2 — Corpus Analysis ===================
     def _build_tab_corpus(self, parent: ttk.Frame) -> None:
         top = ttk.Frame(parent, padding=8)
         top.pack(fill="x")
-        ttk.Button(top, text="🔍 Analyser corpus BRAT", command=self._analyze_corpus).pack(
+        ttk.Button(top, text="🔍 Analyze BRAT corpus", command=self._analyze_corpus).pack(
             side="left"
         )
-        self.lbl_corpus_info = ttk.Label(top, text="(aucun corpus chargé)")
+        self.lbl_corpus_info = ttk.Label(top, text="(no corpus loaded)")
         self.lbl_corpus_info.pack(side="left", padx=10)
 
         cols = ("Entity", "Count", "Top values")
@@ -326,17 +326,17 @@ class DuraXellGUI:
     def _analyze_corpus(self) -> None:
         path = self.corpus_path.get().strip()
         if not path or not Path(path).is_dir():
-            messagebox.showerror("Corpus", "Sélectionne d'abord un dossier corpus valide en haut.")
+            messagebox.showerror("Corpus", "Please select a valid corpus folder above first.")
             return
-        self._log(f"Analyse BRAT : {path}")
+        self._log(f"BRAT analysis: {path}")
         try:
             brat_parser_cls = _load_brat_parser()
             parser = brat_parser_cls()
             docs = parser.parse_directory(path)
             stats = parser.get_entity_statistics(docs)
         except Exception as e:
-            self._log(f"Erreur analyse : {e}")
-            messagebox.showerror("Analyse corpus", str(e))
+            self._log(f"Analysis error: {e}")
+            messagebox.showerror("Corpus analysis", str(e))
             return
 
         for i in self.tree_corpus.get_children():
@@ -345,8 +345,8 @@ class DuraXellGUI:
             vals = s.get("value_distribution", {})
             top = ", ".join(f"{k}={v}" for k, v in sorted(vals.items(), key=lambda x: -x[1])[:5])
             self.tree_corpus.insert("", "end", values=(ent, s.get("count", 0), top))
-        self.lbl_corpus_info.config(text=f"✅ {len(docs)} documents — {len(stats)} entités")
-        self._log(f"  → {len(docs)} docs, {len(stats)} entités")
+        self.lbl_corpus_info.config(text=f"✅ {len(docs)} documents — {len(stats)} entities")
+        self._log(f"  → {len(docs)} docs, {len(stats)} entities")
 
     # ============================== TAB 3 — REST Integration ==================
     def _build_tab_rest(self, parent: ttk.Frame) -> None:
@@ -356,16 +356,16 @@ class DuraXellGUI:
         right = ttk.Frame(parent, padding=8)
         right.pack(side="left", fill="both", expand=True)
 
-        ttk.Label(left, text="Entités sélectionnées", font=("Segoe UI", 10, "bold")).pack(
+        ttk.Label(left, text="Selected entities", font=("Segoe UI", 10, "bold")).pack(
             anchor="w"
         )
         btnrow = ttk.Frame(left)
         btnrow.pack(fill="x")
         ttk.Button(
-            btnrow, text="Tout sélectionner", command=lambda: self._toggle_all_entities(True)
+            btnrow, text="Select all", command=lambda: self._toggle_all_entities(True)
         ).pack(side="left")
         ttk.Button(
-            btnrow, text="Tout désélectionner", command=lambda: self._toggle_all_entities(False)
+            btnrow, text="Deselect all", command=lambda: self._toggle_all_entities(False)
         ).pack(side="left", padx=4)
 
         canvas = tk.Canvas(left, borderwidth=0, height=440)
@@ -475,15 +475,15 @@ class DuraXellGUI:
 
     # ============================== TAB 4 — Notebook REST =====================
     def _build_tab_notebook(self, parent: ttk.Frame) -> None:
-        """Deux modes :
-        (a) viewer in-process (zéro port, ipywidgets non interactifs)
-        (b) fenêtre WebView2 native avec Jupyter local sur 127.0.0.1 loopback
-            (ipywidgets pleinement fonctionnels, validable en EDS)
+        """Two rendering modes:
+        (a) in-process viewer (no port, non-interactive ipywidgets)
+        (b) native WebView2 window with local Jupyter on 127.0.0.1 loopback
+            (fully interactive ipywidgets, suitable for EDS environments)
         """
-        # Barre d'action en haut
+        # Action bar at the top
         topbar = ttk.Frame(parent, padding=(8, 6))
         topbar.pack(fill="x")
-        ttk.Label(topbar, text="Mode de rendu :", font=("Segoe UI", 9, "bold")).pack(side="left")
+        ttk.Label(topbar, text="Rendering mode:", font=("Segoe UI", 9, "bold")).pack(side="left")
         self.var_nb_engine = tk.StringVar(value="notebook")
         for label, val in (
             ("Jupyter Notebook", "notebook"),
@@ -495,7 +495,7 @@ class DuraXellGUI:
             )
         ttk.Button(
             topbar,
-            text="🪟 Ouvrir dans une fenêtre WebView2 native",
+            text="🪟 Open in native WebView2 window",
             command=self._launch_webview_notebook,
         ).pack(side="right")
         ttk.Separator(parent, orient="horizontal").pack(fill="x")
@@ -503,11 +503,11 @@ class DuraXellGUI:
         info = ttk.Label(
             parent,
             text=(
-                "Mode WebView2 : ouvre une fenêtre native qui embarque le "
-                "notebook complet avec ipywidgets interactifs. Une connexion "
-                "127.0.0.1 loopback (jamais exposée au réseau) est utilisée "
-                "pour le protocole Comm de Jupyter — identique à JupyterLab "
-                "Desktop / VS Code / Cursor. Validable en EDS."
+                "WebView2 mode: opens a native window embedding the full notebook "
+                "with interactive ipywidgets. A 127.0.0.1 loopback connection "
+                "(never exposed to the network) is used for the Jupyter Comm "
+                "protocol — identical to JupyterLab Desktop / VS Code / Cursor. "
+                "Suitable for EDS environments."
             ),
             foreground="#666",
             wraplength=1200,
@@ -516,10 +516,10 @@ class DuraXellGUI:
         )
         info.pack(fill="x")
 
-        # Viewer in-process (mode b par défaut, toujours visible en bas)
+        # In-process viewer (mode b, always visible at the bottom)
         viewer_frame = ttk.LabelFrame(
             parent,
-            text="Viewer in-process (lecture + exécution, sans port — ipywidgets non rendus)",
+            text="In-process viewer (read + execute, no port — ipywidgets not rendered)",
             padding=4,
         )
         viewer_frame.pack(fill="both", expand=True, padx=4, pady=4)
@@ -534,8 +534,8 @@ class DuraXellGUI:
             ttk.Label(
                 viewer_frame,
                 text=(
-                    f"Viewer notebook indisponible : module manquant « {e.name} ».\n"
-                    "Installe-le pour activer la lecture/exécution intégrée :\n"
+                    f"Notebook viewer unavailable: missing module '{e.name}'.\n"
+                    "Install it to enable integrated read/execute:\n"
                     "    pip install nbformat nbclient jupyter_client ipykernel"
                 ),
                 foreground="#a00",
@@ -547,36 +547,34 @@ class DuraXellGUI:
     def _launch_webview_notebook(self) -> None:
         script = ROOT / "dashboard" / "notebook_webview.py"
         if not script.exists():
-            messagebox.showerror("WebView", f"Script introuvable : {script}")
+            messagebox.showerror("WebView", f"Script not found: {script}")
             return
         try:
             import webview  # pylint: disable=unused-import  # noqa: F401
         except ImportError:
             messagebox.showerror(
-                "pywebview manquant",
-                "Le module `pywebview` n'est pas installé.\n\n"
-                "Installe-le avec :\n"
+                "pywebview missing",
+                "The `pywebview` module is not installed.\n\n"
+                "Install it with:\n"
                 "    ./.venv/Scripts/python.exe -m pip install pywebview\n\n"
-                "WebView2 utilise le contrôle natif Windows (Edge) — pas de "
-                "navigateur autonome.",
+                "WebView2 uses the native Windows control (Edge) — no standalone browser.",
             )
             return
         engine = self.var_nb_engine.get()
         cmd = [sys.executable, str(script), "--engine", engine]
         self._spawn(f"webview_{engine}", cmd, cwd=str(ROOT))
         self._log(
-            f"🪟 Lancement WebView2 ({engine}) — la fenêtre native va "
-            "s'ouvrir sous quelques secondes."
+            f"🪟 Launching WebView2 ({engine}) — the native window will open in a few seconds."
         )
 
     # ============================== Common — pipelines ========================
     def _pick_gs_dir(self) -> None:
-        d = filedialog.askdirectory(title="Dossier corpus GS (BRAT)")
+        d = filedialog.askdirectory(title="GS corpus folder (BRAT)")
         if d:
             self.corpus_path.set(d)
 
     def _pick_pred_dir(self) -> None:
-        d = filedialog.askdirectory(title="Dossier prédictions (BRAT, optionnel)")
+        d = filedialog.askdirectory(title="Predictions folder (BRAT, optional)")
         if d:
             self.pred_path.set(d)
 
@@ -585,8 +583,8 @@ class DuraXellGUI:
         if not gs:
             if (
                 messagebox.askyesno(
-                    "Évaluer",
-                    "Aucun corpus sélectionné — lancer " "avec le corpus par défaut (Breast/RCP) ?",
+                    "Evaluate",
+                    "No corpus selected — launch with the default corpus (Breast/RCP)?",
                 )
                 is False
             ):
@@ -597,10 +595,10 @@ class DuraXellGUI:
         if self.pred_path.get().strip():
             cmd += ["--pred_dir", self.pred_path.get().strip()]
         self._spawn("evaluate", cmd, cwd=str(ROOT), on_exit=self._on_evaluate_done)
-        self._log(f"🚀 Lancement : {' '.join(cmd)}")
+        self._log(f"🚀 Launching: {' '.join(cmd)}")
 
     def _on_evaluate_done(self) -> None:
-        self._log("✅ Pipeline terminé — rechargement de la config.")
+        self._log("✅ Pipeline finished — reloading config.")
         self._refresh_routing_table()
 
     def _export_csv(self) -> None:
@@ -609,7 +607,7 @@ class DuraXellGUI:
 
     # ============================== CLI sub-command handlers ==================
     def _run_cli(self, args: list[str], on_exit=None) -> None:
-        """Exécute `python main.py …` en subprocess, log dans la zone Logs."""
+        """Run `python main.py …` as a subprocess, logging output to the Logs area."""
         cmd = [sys.executable, str(ROOT / "main.py"), *args]
         self._log("$ " + " ".join(cmd[1:]))
         self._spawn(f"cli_{args[0]}", cmd, cwd=str(ROOT), on_exit=on_exit)
@@ -624,7 +622,7 @@ class DuraXellGUI:
 
     def _cli_metrics(self) -> None:
         d = filedialog.askdirectory(
-            title="metrics — dossier corpus (BRAT : .txt + .ann)",
+            title="metrics — corpus folder (BRAT: .txt + .ann)",
             initialdir=self.corpus_path.get() or str(ROOT),
         )
         if not d:
@@ -636,19 +634,19 @@ class DuraXellGUI:
         self._run_cli(args, on_exit=self._show_all_metric_tables)
 
     def _show_all_metric_tables(self) -> None:
-        """Ouvre les CSV de métriques produites par `metrics` dans une fenêtre à onglets."""
+        """Open the metric CSVs produced by `metrics` in a tabbed window."""
         files = [
-            ("Templatabilité (Te)", RESULTS_DIR / "templatability_analysis.json"),
-            ("Homogénéité (He)", RESULTS_DIR / "homogeneity_analysis.csv"),
-            ("Fréquence (Freq)", RESULTS_DIR / "frequency_analysis.csv"),
-            ("Risque (R)", RESULTS_DIR / "risk_context_analysis.csv"),
-            ("Faisabilité (Feas)", RESULTS_DIR / "ner_feasibility_analysis.csv"),
+            ("Templatability (Te)", RESULTS_DIR / "templatability_analysis.json"),
+            ("Homogeneity (He)", RESULTS_DIR / "homogeneity_analysis.csv"),
+            ("Frequency (Freq)", RESULTS_DIR / "frequency_analysis.csv"),
+            ("Risk (R)", RESULTS_DIR / "risk_context_analysis.csv"),
+            ("Feasibility (Feas)", RESULTS_DIR / "ner_feasibility_analysis.csv"),
         ]
         existing = [(t, p) for t, p in files if p.exists()]
         if not existing:
             return
         win = tk.Toplevel(self.root)
-        win.title("Résultats — métriques")
+        win.title("Results — metrics")
         win.geometry("1000x600")
         nb = ttk.Notebook(win)
         nb.pack(fill="both", expand=True)
@@ -658,7 +656,7 @@ class DuraXellGUI:
             self._fill_table_from_file(frame, path)
 
     def _fill_table_from_file(self, parent: ttk.Frame, path: Path) -> None:
-        """Affiche un .csv ou .json comme Treeview dans `parent`."""
+        """Display a .csv or .json as a Treeview inside `parent`."""
         try:
             if path.suffix == ".json":
                 data = json.loads(path.read_text(encoding="utf-8"))
@@ -685,7 +683,7 @@ class DuraXellGUI:
                 cols = rows_raw[0]
                 table = rows_raw[1:]
         except Exception as e:
-            ttk.Label(parent, text=f"Erreur lecture {path.name} : {e}", foreground="#B12727").pack(
+            ttk.Label(parent, text=f"Error reading {path.name}: {e}", foreground="#B12727").pack(
                 anchor="w", padx=8, pady=8
             )
             return
@@ -720,13 +718,13 @@ class DuraXellGUI:
         bot.pack(side="bottom", fill="x")
         ttk.Label(bot, text=str(path), foreground="#888").pack(side="left", padx=4)
         ttk.Button(
-            bot, text="📂 Ouvrir le fichier", command=lambda p=path: os.startfile(str(p))
+            bot, text="📂 Open file", command=lambda p=path: os.startfile(str(p))
         ).pack(side="right")
 
     def _cli_tree(self) -> None:
-        """Lance `main.py tree` puis affiche Results/figures/Graph_decision.png."""
+        """Run `main.py tree` then display Results/figures/Graph_decision.png."""
         d = filedialog.askdirectory(
-            title="tree — dossier corpus (BRAT) — Annuler = utiliser le précédent",
+            title="tree — corpus folder (BRAT) — Cancel = use previous",
             initialdir=self.corpus_path.get() or str(ROOT),
         )
         args = ["tree", "--no-visualize"]
@@ -745,23 +743,23 @@ class DuraXellGUI:
     def _show_decision_tree_image(self) -> None:
         img_path = ROOT / "Results" / "figures" / "Graph_decision.png"
         if not img_path.exists():
-            # fallback : essayer les autres noms connus
+            # fallback: try other known filenames
             for fname in ("decision_tree.png", "decision_tree_visualization.png"):
                 p = ROOT / "Results" / "figures" / fname
                 if p.exists():
                     img_path = p
                     break
         if not img_path.exists():
-            messagebox.showinfo("Arbre", "Aucune image trouvée dans Results/figures/.")
+            messagebox.showinfo("Decision tree", "No image found in Results/figures/.")
             return
-        self._log(f"🖼  Affichage de {img_path.name}")
+        self._log(f"🖼  Displaying {img_path.name}")
         try:
             from PIL import Image, ImageTk
         except ImportError:
-            messagebox.showerror("Affichage", "PIL requis (déjà dans le venv).")
+            messagebox.showerror("Display", "PIL required (already in the venv).")
             return
         top = tk.Toplevel(self.root)
-        top.title(f"Arbre de décision — {img_path.name}")
+        top.title(f"Decision tree — {img_path.name}")
         img = Image.open(img_path)
         # Fit to screen
         max_w = min(self.root.winfo_screenwidth() - 80, img.width)
@@ -779,7 +777,7 @@ class DuraXellGUI:
 
     def _cli_evaluate(self) -> None:
         d = filedialog.askdirectory(
-            title="evaluate — dossier corpus (BRAT : .txt + .ann)",
+            title="evaluate — corpus folder (BRAT: .txt + .ann)",
             initialdir=self.corpus_path.get() or str(ROOT),
         )
         if not d:
@@ -791,22 +789,22 @@ class DuraXellGUI:
         self._run_cli(args, on_exit=self._on_evaluate_done)
 
     def _on_evaluate_done(self) -> None:
-        """À la fin d'evaluate : rafraîchit le routing + popups résumé."""
+        """After evaluate: refresh routing + show summary popups."""
         self._refresh_routing_table()
         self._show_decision_summary_table()
         self._show_all_metric_tables()
 
     def _show_decision_summary_table(self) -> None:
-        """Affiche Results/decision_summary.csv dans une Toplevel propre."""
+        """Display Results/decision_summary.csv in a clean Toplevel window."""
         path = RESULTS_DIR / "decision_summary.csv"
         if not path.exists():
             return
         win = tk.Toplevel(self.root)
-        win.title("📊 Résumé du routage — decision_summary.csv")
+        win.title("📊 Routing summary — decision_summary.csv")
         win.geometry("1200x500")
         wrap = ttk.Frame(win)
         wrap.pack(fill="both", expand=True)
-        # decision_summary.csv n'a pas d'entête → on l'injecte
+        # decision_summary.csv has no header row → inject it
         cols = ("Entity", "Te", "He", "R", "Freq", "Feas", "Method", "Justification")
         widths = (260, 70, 70, 70, 80, 70, 90, 400)
         tv = ttk.Treeview(wrap, columns=cols, show="headings")
@@ -821,7 +819,7 @@ class DuraXellGUI:
                     tag = (row[6],) if len(row) > 6 and row[6] in ROUTING_COLORS else ()
                     tv.insert("", "end", values=row, tags=tag)
         except Exception as e:
-            ttk.Label(wrap, text=f"Erreur : {e}", foreground="#B12727").pack(padx=8, pady=8)
+            ttk.Label(wrap, text=f"Error: {e}", foreground="#B12727").pack(padx=8, pady=8)
             return
         sb = ttk.Scrollbar(wrap, orient="vertical", command=tv.yview)
         tv.configure(yscrollcommand=sb.set)
@@ -830,7 +828,7 @@ class DuraXellGUI:
         bot = ttk.Frame(win)
         bot.pack(fill="x")
         ttk.Label(bot, text=str(path), foreground="#888").pack(side="left", padx=4)
-        ttk.Button(bot, text="📂 Ouvrir le CSV", command=lambda: os.startfile(str(path))).pack(
+        ttk.Button(bot, text="📂 Open CSV", command=lambda: os.startfile(str(path))).pack(
             side="right"
         )
 
@@ -840,7 +838,7 @@ class DuraXellGUI:
 
     def _cli_corpus(self) -> None:
         d = filedialog.askdirectory(
-            title="corpus — dossier BRAT à analyser", initialdir=self.corpus_path.get() or str(ROOT)
+            title="corpus — BRAT folder to analyze", initialdir=self.corpus_path.get() or str(ROOT)
         )
         if not d:
             return
@@ -867,7 +865,7 @@ class DuraXellGUI:
     # ============================== Subprocess plumbing =======================
     def _spawn(self, name: str, cmd: list[str], cwd: str | None = None, on_exit=None) -> None:
         if name in self.processes and self.processes[name].poll() is None:
-            messagebox.showinfo("Process", f"{name} est déjà en cours.")
+            messagebox.showinfo("Process", f"{name} is already running.")
             return
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
@@ -885,12 +883,12 @@ class DuraXellGUI:
                 errors="replace",
             )
         except Exception as e:
-            self._log(f"Erreur lancement {name} : {e}")
+            self._log(f"Error launching {name}: {e}")
             return
         self.processes[name] = p
         threading.Thread(target=self._reader, args=(name, p, on_exit), daemon=True).start()
 
-    # Lignes parasites à filtrer (warnings tiers, ANSI résiduels)
+    # Noise lines to filter out (third-party warnings, residual ANSI codes)
     _NOISE_PATTERNS = (
         "pynvml package is deprecated",
         "FutureWarning",
@@ -918,7 +916,7 @@ class DuraXellGUI:
                 self.log_queue.put(f"[{name}] {cleaned}")
         p.wait()
         ok = "✅" if p.returncode == 0 else "❌"
-        self.log_queue.put(f"[{name}] {ok} terminé (code={p.returncode})")
+        self.log_queue.put(f"[{name}] {ok} finished (code={p.returncode})")
         if on_exit:
             self.root.after(50, on_exit)
 
@@ -926,8 +924,8 @@ class DuraXellGUI:
         p = self.processes.get(name)
         if p and p.poll() is None:
             p.terminate()
-            self._log(f"■ {name} terminé.")
-        # (plus de processus notebook/api à monitorer ici : tout est in-process)
+            self._log(f"■ {name} terminated.")
+        # (no more notebook/api processes to monitor here: all in-process)
 
     def _drain_log_queue(self) -> None:
         try:
@@ -940,7 +938,7 @@ class DuraXellGUI:
 
     def _log(self, msg: str) -> None:
         if not hasattr(self, "log_text"):
-            # Le log_text n'est pas encore construit (init en cours) → on diffère.
+            # log_text not yet built (init in progress) → defer.
             self.root.after(50, lambda m=msg: self._log(m))
             return
         self.log_text.configure(state="normal")

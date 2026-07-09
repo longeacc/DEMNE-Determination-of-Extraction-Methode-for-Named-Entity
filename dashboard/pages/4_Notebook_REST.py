@@ -9,20 +9,20 @@ st.set_page_config(page_title="Notebook & API Server", page_icon="📓", layout=
 
 
 def launch_jupyter() -> None:
-    """Lance Jupyter Notebook et stocke l'état."""
+    """Launch Jupyter Notebook and store state."""
     if "jupyter_process" not in st.session_state:
-        # On définit le répertoire où Jupyter sera exécuté (à la racine)
+        # Working directory: repo root
         work_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
         import json
         import sys
 
-        # Trouver l'exécutable Python du .venv
+        # Locate the .venv Python executable
         venv_python = os.path.join(work_dir, ".venv", "Scripts", "python.exe")
         if not os.path.exists(venv_python):
             venv_python = sys.executable
 
-        # Créer le fichier de configuration jupyter_server_config.json pour autoriser l'IFrame
+        # Write jupyter_server_config.json to allow embedding in an IFrame
         config_path = os.path.join(work_dir, "jupyter_server_config.json")
         try:
             with open(config_path, "w", encoding="utf-8") as f:
@@ -60,14 +60,14 @@ def launch_jupyter() -> None:
         st.session_state.jupyter_process = subprocess.Popen(
             cmd, cwd=work_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        # On donne un peu plus de temps à Voila pour s'initialiser et executer le notebook en pre-rendering
+        # Allow extra time for Voila to pre-render the notebook
         time.sleep(8)
 
 
 def launch_rest_api() -> None:
-    """Lance l'API REST de démonstration."""
+    """Launch the REST demo API."""
     if "api_process" not in st.session_state:
-        # Lancement depuis le répertoire REST_interface
+        # Launch from the REST_interface directory
         root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
         work_dir = os.path.join(root_dir, "src", "demne", "REST_interface")
 
@@ -87,10 +87,9 @@ def launch_rest_api() -> None:
 
 
 def main() -> None:
-    st.title("📓 Serveur de Projet REST & Jupyter")
+    st.title("📓 REST & Jupyter Project Server")
 
     if "jupyter_process" in st.session_state:
-        # Vérify if process is actually running
         if st.session_state.jupyter_process.poll() is not None:
             del st.session_state["jupyter_process"]
 
@@ -99,36 +98,36 @@ def main() -> None:
             del st.session_state["api_process"]
 
     st.markdown("""
-    Cette interface vous permet d'exécuter localement le projet REST API (DuraXell Pipeline)
-    et de lancer le **Jupyter Notebook `REST.ipynb`** pour inspecter et tester l'API directement depuis le dashboard.
+    This interface lets you run the REST API project (DuraXell Pipeline) locally
+    and launch the **Jupyter Notebook `REST.ipynb`** to inspect and test the API
+    directly from the dashboard.
     """)
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Serveur API Pipeline")
-        if st.button("Lancer API REST", type="primary"):
+        st.subheader("Pipeline API Server")
+        if st.button("Launch REST API", type="primary"):
             launch_rest_api()
-            st.success("API Lancée en arrière-plan (Port habituellement 5000/8000)")
+            st.success("API launched in background (port 5000/8000)")
 
     with col2:
-        st.subheader("Environnement Notebook API")
-        if st.button("Lancer l'interface Notebook Interactif", type="primary"):
+        st.subheader("Notebook API Environment")
+        if st.button("Launch Interactive Notebook Interface", type="primary"):
             launch_jupyter()
-            st.success("L'interface Serveur a démarré (Localhost:8888)")
+            st.success("Server started (localhost:8888)")
 
     st.markdown("---")
-    st.subheader("Interface REST Ihm Embarquée")
+    st.subheader("Embedded REST Interface")
 
     if "jupyter_process" in st.session_state:
-        st.info("L'Interface API est active.")
-        st.markdown("Vous pouvez interagir avec le visualiseur REST ci-dessous.")
+        st.info("API interface is active.")
+        st.markdown("You can interact with the REST viewer below.")
 
-        # Embed avec st.components.v1.iframe
         st.components.v1.iframe("http://127.0.0.1:8888", height=800, scrolling=True)
     else:
         st.warning(
-            "Veuillez lancer l'environnement via le bouton ci-dessus pour afficher l'interface."
+            "Launch the environment using the button above to display the interface."
         )
 
 

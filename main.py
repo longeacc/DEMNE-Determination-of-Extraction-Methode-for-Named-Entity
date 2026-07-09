@@ -43,12 +43,12 @@ DEFAULT_PRED = _ESMO_DIR / "Breast/RCP/evaluation_set_breast_cancer_pred_rules"
 
 
 def discover_entities(corpus_path: str | Path | None) -> list[str]:
-    """Découvre la liste des entités annotées dans un corpus BRAT.
+    """Discover the list of entity types annotated in a BRAT corpus.
 
-    Stratégie :
-      1. Lire `annotation.conf` section [entities] s'il existe.
-      2. Sinon, scanner toutes les lignes T* des .ann et collecter les types.
-      3. À défaut, retourner [].
+    Strategy:
+      1. Read `annotation.conf` [entities] section if present.
+      2. Otherwise, scan all T* lines in .ann files and collect types.
+      3. Fall back to [].
     """
     if not corpus_path:
         return []
@@ -102,7 +102,7 @@ def discover_entities(corpus_path: str | Path | None) -> list[str]:
 
 
 def discover_entities_from_config() -> list[str]:
-    """Retourne les entités présentes dans data/decision_config.json (si dispo)."""
+    """Return the entities listed in data/decision_config.json (if available)."""
     if not CONFIG_PATH.exists():
         return []
     try:
@@ -131,7 +131,7 @@ DECISION_CSV = RESULTS_DIR / "decision_summary.csv"
 # ===========================================================================
 # Metric pipeline commands
 # ===========================================================================
-# Lignes de bruit à filtrer dans les sous-process (eco2ai, pandas, apscheduler)
+# Noise lines to filter out in sub-processes (eco2ai, pandas, apscheduler)
 _NOISE_KEYS = (
     "pynvml",
     "FutureWarning",
@@ -186,8 +186,8 @@ _DROP_PATTERNS = (
     "Yield computed for",
     "Annotation Yield computed",
     "Computing Annotation Yield",
-    "Début de la validation croisée",
-    "Stabilité moyenne des décisions",
+    "Starting cross-validation",
+    "Average decision stability",
     "Score C",
     " C =",
     " C: ",
@@ -260,7 +260,7 @@ def cmd_metrics(args: argparse.Namespace) -> None:
     ]
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
-    print(f"Pipeline métriques sur :\n  GS   = {gs}")
+    print(f"Metrics pipeline on:\n  GS   = {gs}")
     for s in scripts_gs_pred:
         _run_script(s, gs, pred)
     for s in scripts_gs_only:
@@ -268,21 +268,21 @@ def cmd_metrics(args: argparse.Namespace) -> None:
 
 
 def cmd_tree(args: argparse.Namespace) -> None:
-    """Affiche le schéma statique de l'arbre de décision DEMNE.
+    """Display the static DEMNE decision tree diagram.
 
-    Ne lance plus le pipeline ni l'export CSV — utilise `evaluate` pour ça.
+    Does not run the pipeline or CSV export — use `evaluate` for that.
     """
-    del args  # signature requise par argparse, contenu non utilisé
+    del args  # required by argparse signature, content unused
     _open_decision_tree_image()
 
 
 def _run_tree_pipeline(args: argparse.Namespace) -> None:
-    """Pipeline de construction de l'arbre (utilisé par `evaluate`)."""
+    """Decision tree build pipeline (called by `evaluate`)."""
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
     _run_script("src/demne/E_creation_arbre_decision.py", gs, pred)
     if not args.no_visualize:
-        print("\nVisualisation de l'arbre...")
+        print("\nVisualizing the tree...")
         subprocess.run(
             [sys.executable, str(ROOT / "src/demne/visualize_decision_tree.py")],
             cwd=str(ROOT),
@@ -292,9 +292,9 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
 
 
 def _open_decision_tree_image() -> None:
-    """Ouvre Results/figures/Graph_decision.png dans le visionneuse par défaut.
+    """Open Results/figures/Graph_decision.png in the default viewer.
 
-    Fallback : decision_tree.png, decision_tree_visualization.png.
+    Fallback: decision_tree.png, decision_tree_visualization.png.
     """
     candidates = [
         ROOT / "Results" / "figures" / "Graph_decision.png",
@@ -303,9 +303,9 @@ def _open_decision_tree_image() -> None:
     ]
     img = next((p for p in candidates if p.exists()), None)
     if not img:
-        print("⚠️  Aucune image d'arbre trouvée dans Results/figures/.")
+        print("⚠️  No tree image found in Results/figures/.")
         return
-    print(f"\n🖼  Ouverture de l'arbre : {img}")
+    print(f"\n🖼  Opening tree: {img}")
     try:
         if sys.platform == "win32":
             os.startfile(str(img))  # type: ignore[attr-defined]
@@ -314,7 +314,7 @@ def _open_decision_tree_image() -> None:
         else:
             subprocess.Popen(["xdg-open", str(img)])
     except Exception as e:
-        print(f"   Impossible d'ouvrir le visualiseur : {e}")
+        print(f"   Could not open viewer: {e}")
 
 
 def cmd_evaluate(args: argparse.Namespace) -> None:
@@ -328,7 +328,7 @@ def _export_decision_csv() -> None:
     Entity \t Te \t He \t R \t Freq \t Feas \t Method \t Justification
     """
     if not CONFIG_PATH.exists():
-        print(f"Pas de decision_config.json trouvé à {CONFIG_PATH}")
+        print(f"No decision_config.json found at {CONFIG_PATH}")
         return
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
@@ -375,19 +375,19 @@ def _export_decision_csv() -> None:
     # Pretty-print as a fixed-width table with wrapping for long cells
     import textwrap as _tw
 
-    COL_W = {"Entity": 30, "Te": 6, "He": 6, "R": 6, "Freq": 8, "Feas": 6, "TFIDF": 6, "Method": 8, "Justification": 55}
-    sep = "+" + "+".join("-" * (w + 2) for w in COL_W.values()) + "+"
+    col_w = {"Entity": 30, "Te": 6, "He": 6, "R": 6, "Freq": 8, "Feas": 6, "TFIDF": 6, "Method": 8, "Justification": 55}  # noqa: N806
+    sep = "+" + "+".join("-" * (w + 2) for w in col_w.values()) + "+"
 
     def _fmt_row(cells: list[str]) -> list[str]:
         """Return lines for a table row, wrapping cells that exceed column width."""
-        wrapped = [_tw.wrap(str(c), COL_W[h]) or [""] for c, h in zip(cells, COL_W)]
+        wrapped = [_tw.wrap(str(c), col_w[h]) or [""] for c, h in zip(cells, col_w, strict=True)]
         height = max(len(w) for w in wrapped)
         lines = []
         for i in range(height):
             parts = []
-            for w, h in zip(wrapped, COL_W):
+            for w, h in zip(wrapped, col_w, strict=True):
                 cell = w[i] if i < len(w) else ""
-                parts.append(f" {cell:<{COL_W[h]}} ")
+                parts.append(f" {cell:<{col_w[h]}} ")
             lines.append("|" + "|".join(parts) + "|")
         return lines
 
@@ -405,13 +405,13 @@ def _export_decision_csv() -> None:
 # Dashboard parity commands (mirror Streamlit pages)
 # ===========================================================================
 def cmd_dashboard(args: argparse.Namespace) -> None:
-    """Mirror Page 1 — Dashboard Métriques.
+    """Mirror Page 1 — Metrics Dashboard.
 
     Apply a threshold preset (FRUGAL / QUALITY / custom) and re-run the
     decision tree on the current metrics, printing the routing table.
     """
     if not CONFIG_PATH.exists():
-        print("⚠️  Pas de decision_config.json — lance d'abord 'metrics' puis 'tree'.")
+        print("⚠️  No decision_config.json — run 'metrics' then 'tree' first.")
         return
 
     preset_name = (args.preset or "FRUGAL").upper()
@@ -421,7 +421,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
         if v is not None:
             thresholds[k] = v
 
-    print(f"Preset : {preset_name}   Seuils : {thresholds}")
+    print(f"Preset: {preset_name}   Thresholds: {thresholds}")
 
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
@@ -460,7 +460,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
 
 
 def cmd_corpus(args: argparse.Namespace) -> None:
-    """Mirror Page 2 — Analyse Corpus BRAT."""
+    """Mirror Page 2 — BRAT Corpus Analysis."""
     # Stub out streamlit before importing brat_parser (which decorates with @st.cache_data)
     if "streamlit" not in sys.modules:
         st_stub = type(sys)("streamlit")
@@ -473,15 +473,15 @@ def cmd_corpus(args: argparse.Namespace) -> None:
         spec.loader.exec_module(mod)
         brat_corpus_parser_cls = mod.BratCorpusParser
     except Exception as e:
-        print(f"Impossible de charger BratCorpusParser : {e}")
+        print(f"Could not load BratCorpusParser: {e}")
         return
 
     path = args.path or str(DEFAULT_GS)
-    print(f"Analyse du corpus BRAT : {path}")
+    print(f"BRAT corpus analysis: {path}")
     parser = brat_corpus_parser_cls()
     docs = parser.parse_directory(path)
     stats = parser.get_entity_statistics(docs)
-    print(f"\n✅ {len(docs)} documents chargés.\n")
+    print(f"\n✅ {len(docs)} documents loaded.\n")
     print(f"{'Entity':<30} | {'Count':>7} | Top values")
     print("-" * 100)
     for ent, s in sorted(stats.items(), key=lambda x: -x[1].get("count", 0)):
@@ -494,7 +494,7 @@ def cmd_rest_config(args: argparse.Namespace) -> None:
     """Mirror Page 3 — REST Integration (export/import config JSON)."""
     if args.export:
         if not CONFIG_PATH.exists():
-            print("Pas de decision_config.json à exporter.")
+            print("No decision_config.json to export.")
             return
         with open(CONFIG_PATH, encoding="utf-8") as f:
             cfg = json.load(f)

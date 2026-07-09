@@ -22,8 +22,8 @@ class RESTEntityReport:
 
 class RESTEvaluator:
     """
-    Analyse empirique des annotations pilotes et compare avec les métriques théoriques.
-    Calcul des "proxies" empiriques.
+    Empirical analysis of pilot annotations compared with theoretical metrics.
+    Computes empirical proxies for Te, He, and R.
     """
 
     def evaluate_entity(
@@ -33,7 +33,7 @@ class RESTEvaluator:
         context_window: int = 5,  # pylint: disable=unused-argument
     ) -> RESTEntityReport:
         """
-        Analyse les annotations pour une entité donnée.
+        Analyse annotations for a given entity.
         """
         relevant_anns = [a for a in annotations if a.entity_type == entity_type]
         n_total = len(relevant_anns)
@@ -42,8 +42,7 @@ class RESTEvaluator:
             return RESTEntityReport(entity_type, 0, 0, 0, 0)
 
         # 1. Empirical Te (Templateability)
-        # Proxy : Faible nombre de textes uniques par rapport au total
-        # "Is the entity always phrased the same way?"
+        # Proxy: low unique-text ratio vs total — "Is the entity always phrased the same way?"
         unique_texts = set(a.text.lower().strip() for a in relevant_anns)
         n_unique = len(unique_texts)
 
@@ -51,24 +50,23 @@ class RESTEvaluator:
         empirical_te = 1.0 - (n_unique / n_total)
 
         # 2. Empirical He (Homogeneity)
-        # Utilisation du TTR (Token-Type Ratio) sur le corpus des annotations
+        # TTR (Token-Type Ratio) on the annotation corpus
         # "Is the vocabulary surrounding/within the entity consistent?"
-        # Ici on utilise le texte de l'entité elle-même pour la diversité lexicale interne
+        # Using entity text itself for internal lexical diversity
         empirical_he = self._calculate_ttr([a.text for a in relevant_anns])
-        # On inverse car TTR haut = Hétérogène, or He haut = Homogène
+        # Inverted: high TTR = heterogeneous, high He = homogeneous
         empirical_he = 1.0 - empirical_he
 
         # 3. Empirical R (Risk)
-        # Analyse du contexte autour du span
-        # Si le contexte est très varié, le risque d'ambiguïté augmente -> R augmente
-        # On utilise le TTR des contextes gauche/droite
+        # Analyse context surrounding the span
+        # High context variability -> higher ambiguity risk -> R increases
+        # Uses TTR of left/right contexts
         left_ctxs = [a.context_left for a in relevant_anns]
         right_ctxs = [a.context_right for a in relevant_anns]
         r_context = self._calculate_ttr(left_ctxs + right_ctxs)
 
-        # Empirical Risk = r_context (plus le contexte varie, plus c'est risqué ?)
-        # Ou inversement : si contexte très stable ("The patient has..."), moins de risque de faux positif contextuel
-        # Disons : Risk = Variability of context = TTR context
+        # Empirical Risk = r_context: higher context variability = riskier.
+        # Stable context ("The patient has...") = lower false-positive risk.
         empirical_r = r_context
 
         return RESTEntityReport(

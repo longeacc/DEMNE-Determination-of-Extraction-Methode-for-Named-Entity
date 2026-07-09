@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-# Ajout du chemin racine pour les imports
+# Add repo root to path for imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from demne.REST_interface.convergence_analyzer import ConvergenceAnalyzer
@@ -13,11 +13,11 @@ from demne.REST_interface.rest_evaluator import RESTEvaluator
 
 def main():
     print("================================================================")
-    print("      DÉMONSTRATION INTEGRATION REST-INTERFACE (DuraXELL)")
+    print("      REST-INTERFACE INTEGRATION DEMO (DuraXELL)")
     print("================================================================")
 
-    # 1. Chargement de documents (Simulés ici pour la démo autonome)
-    print("\n[ETAPE 1] Chargement du Corpus Pilote...")
+    # 1. Load documents (simulated here for standalone demo)
+    print("\n[STEP 1] Loading Pilot Corpus...")
     docs = [
         (
             "doc_001",
@@ -40,19 +40,19 @@ def main():
             "Pathology report. ER neg. PR neg. HER2 positive (3+). Triple negative status excluded.",
         ),
     ]
-    print(f"   > Chargé {len(docs)} documents cliniques simulés.")
+    print(f"   > Loaded {len(docs)} simulated clinical documents.")
 
     # 2. Annotation Pilote (RESTAnnotator)
     print("\n[ETAPE 2] Annotation Rapide (Simulation Expert)...")
     annotator = RESTAnnotator(output_dir="Evaluation/REST_Annotations")
-    # On utilise le mode 'automated_test' qui utilise des regex pour simuler un expert trouvant les entités
+    # 'automated_test' mode uses regex to simulate an expert finding entities
     annotations = annotator.annotate_batch(
         docs, entity_types=["Estrogen_receptor", "HER2", "Ki67"], mode="automated_test"
     )
-    print(f"   > Total annotations collectées : {len(annotations)}")
+    print(f"   > Total annotations collected: {len(annotations)}")
 
-    # 3. Évaluation Empirique (RESTEvaluator)
-    print("\n[ETAPE 3] Calcul des Métriques Empiriques (Bottom-Up)...")
+    # 3. Empirical Evaluation (RESTEvaluator)
+    print("\n[STEP 3] Computing Empirical Metrics (Bottom-Up)...")
     evaluator = RESTEvaluator()
     rest_reports = []
 
@@ -60,37 +60,37 @@ def main():
         report = evaluator.evaluate_entity(entity, annotations)
         rest_reports.append(report)
         print(
-            f"   > Entité '{entity}': Te_obs={report.empirical_te:.2f}, He_obs={report.empirical_he:.2f}"
+            f"   > Entity '{entity}': Te_obs={report.empirical_te:.2f}, He_obs={report.empirical_he:.2f}"
         )
 
-    # 4. Chargement Arbre de Décision (Top-Down)
-    print("\n[ETAPE 4] Comparaison avec l'Arbre de Décision (Top-Down)...")
+    # 4. Load Decision Tree (Top-Down)
+    print("\n[STEP 4] Comparing with Decision Tree (Top-Down)...")
     config_path = "data/decision_config.json"
     if os.path.exists(config_path):
         with open(config_path, encoding="utf-8") as f:
             tree_config = json.load(f)
     else:
-        print("   (Fichier data/decision_config.json absent, utilisation mock)")
+        print("   (data/decision_config.json not found — using mock)")
         tree_config = {
             "Estrogen_receptor": {
-                "method": "FEUILLE NER À BASE DE RÈGLES",
+                "method": "RULES-BASED NER LEAF",
                 "metrics": {"Te": 0.9},
             },
-            "HER2": {"method": "FEUILLE NER À BASE DE RÈGLES", "metrics": {"Te": 0.85}},
-            "Ki67": {"method": "FEUILLE ML LÉGER NER", "metrics": {"Te": 0.4}},
+            "HER2": {"method": "RULES-BASED NER LEAF", "metrics": {"Te": 0.85}},
+            "Ki67": {"method": "LIGHTWEIGHT ML NER LEAF", "metrics": {"Te": 0.4}},
         }
 
-    # 5. Pont de Décision (Bridge)
+    # 5. Decision Bridge
     bridge = RESTDecisionBridge()
     convergence_results = bridge.compare(tree_config, rest_reports)
 
-    # 6. Analyse Convergence
-    print("\n[ETAPE 5] Rapport de Convergence...")
+    # 6. Convergence Analysis
+    print("\n[STEP 5] Convergence Report...")
     analyzer = ConvergenceAnalyzer()
     analyzer.analyze_convergence(convergence_results)
 
     print("\n================================================================")
-    print("      DÉMONSTRATION TERMINÉE - CHECK RESULTS/FIGURES")
+    print("      DEMO COMPLETE - CHECK RESULTS/FIGURES")
     print("================================================================")
 
 

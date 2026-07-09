@@ -6,7 +6,7 @@ Two blocks:
      BRAT context extraction).
   B. Integration tests of DecisionTreeBuilder.analyze_entity:
      - strict backward-compatibility when no TFIDF data is supplied;
-     - conceptual-synonymy rescue (low He but high tfidf_score -> RÈGLES);
+     - conceptual-synonymy rescue (low He but high tfidf_score -> RULES);
      - R modulation / escalation behaviour.
 """
 
@@ -256,7 +256,7 @@ def test_backward_compat_baseline_unchanged(builder):
     # Te+He élevés, R faible → RULES
     assert builder.analyze_entity(
         "StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1}
-    )["method"] == "RÈGLES"
+    )["method"] == "RULES"
     # Te élevé, He faible, R faible, Feas élevé → TBM (branche TF-IDF, absent → Feas)
     assert builder.analyze_entity(
         "GoodRules", {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
@@ -276,16 +276,16 @@ def test_tfidf_node_bypassed_when_te_and_he_high(builder):
     res = builder.analyze_entity(
         "x", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1, "tfidf_score": 0.95}
     )
-    assert res["method"] == "RÈGLES"
+    assert res["method"] == "RULES"
     assert "TFIDF" not in res["justification"]
 
 
 def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
-    """He faible → TF-IDF élevé + R faible → nœud R- → RÈGLES."""
+    """He faible → TF-IDF élevé + R faible → nœud R- → RULES."""
     metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8,
                "tfidf_score": 0.95}
     res = builder.analyze_entity("évolution_tumorale", metrics)
-    assert res["method"] == "RÈGLES"
+    assert res["method"] == "RULES"
     assert "TFIDF" in res["justification"]
 
 

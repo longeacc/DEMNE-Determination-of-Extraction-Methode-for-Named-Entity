@@ -1,7 +1,7 @@
 class RESTDecisionBridge:
     """
-    Composant de validation croisée.
-    Compare les décisions Top-Down (Arbre) vs Bottom-Up (Annotation REST).
+    Cross-validation component.
+    Compares Top-Down (tree) decisions vs Bottom-Up (REST annotation) decisions.
     """
 
     def compare(
@@ -10,7 +10,7 @@ class RESTDecisionBridge:
         rest_reports: list,  # output of RESTEvaluator (list of RESTEntityReport)
     ) -> dict:
         """
-        Compare les décisions et génère un rapport de convergence.
+        Compare decisions and generate a convergence report.
         """
         concordance_count = 0
         total_entities = 0
@@ -20,20 +20,19 @@ class RESTDecisionBridge:
             entity = report.entity_type
             total_entities += 1
 
-            # Décision Top-Down (Arbre)
+            # Top-Down decision (tree)
             top_down_entry = tree_config.get(entity, {})
-            # Parfois la config est structurée différemment (ex: {'entities': {...}})
+            # Config may be structured differently (e.g. {'entities': {...}})
             if "entities" in tree_config:
                 top_down_entry = tree_config["entities"].get(entity, {})
 
             tree_decision = top_down_entry.get("method", "Unknown")
 
-            # Décision Bottom-Up (Empirique REST basée sur TE observé)
+            # Bottom-Up decision (empirical REST based on observed TE)
             report.recommended_method = self._decide_from_empirics(report)
             rest_decision = report.recommended_method
 
-            # Logique de comparaison (Simplifiée: REGLES vs ML vs LLM)
-            # On considère "Rules" == "REGLES"
+            # Comparison logic (simplified: RULES vs ML vs LLM)
             tree_normalized = self._normalize_method(tree_decision)
             rest_normalized = self._normalize_method(rest_decision)
 
@@ -61,10 +60,10 @@ class RESTDecisionBridge:
         }
 
     def _normalize_method(self, method: str) -> str:
-        """Normalise et aligne les noms de méthodes de l'arbre global et de l'interface REST empirique."""
+        """Normalise and align method names from the global decision tree and the empirical REST interface."""
         m = method.upper()
         if m in ["RULES", "REGLES"] or "RÈGLES" in m:
-            return "REGLES"
+            return "RULES"
         if m in ["ML", "ML_NER", "ML_CRF", "TRANSFORMER"] or "ML" in m or "TRANSFORMER" in m:
             return "ML"
         if "LLM" in m:
@@ -73,14 +72,14 @@ class RESTDecisionBridge:
 
     def _decide_from_empirics(self, report) -> str:
         """
-        Logique de décision Bottom-Up.
-        Si l'entité est très répétitive (Te > 0.8) et assez stable (He > 0.7) -> REGLES.
-        Sinon -> ML.
+        Bottom-Up decision logic.
+        If the entity is highly repetitive (Te > 0.8) and stable enough (He > 0.7) -> RULES.
+        Otherwise -> ML.
         """
-        # Si très répétitif (Te observé > 0.8) -> Règles
+        # Highly repetitive (observed Te > 0.8) -> Rules
         if report.empirical_te > 0.8:
-            return "REGLES"
-        # Sinon -> ML
+            return "RULES"
+        # Otherwise -> ML
         return "ML_NER"
 
 

@@ -11,15 +11,15 @@ _tfidf_mod = _il.module_from_spec(_tfidf_spec)
 _tfidf_spec.loader.exec_module(_tfidf_mod)
 _compute_tfidf_for_all = _tfidf_mod.compute_tfidf_for_all_entities
 
-st.set_page_config(page_title="Analyse Corpus", page_icon="🎯", layout="wide")
+st.set_page_config(page_title="Corpus Analysis", page_icon="🎯", layout="wide")
 
-st.title("🎯 Analyse Corpus BRAT")
+st.title("🎯 BRAT Corpus Analysis")
 
 if "corpus" not in st.session_state or not st.session_state["corpus"]:
-    st.warning("⚠️ Veuillez d'abord charger un corpus depuis le Dashboard Métriques.")
+    st.warning("⚠️ Please load a corpus from the Metrics Dashboard first.")
     st.stop()
 
-st.success(f"✅ Corpus chargé avec succès: {len(st.session_state['corpus'])} documents.")
+st.success(f"✅ Corpus loaded successfully: {len(st.session_state['corpus'])} documents.")
 
 if "tfidf_scores" not in st.session_state:
     local_path = st.session_state.get("local_path", "")
@@ -31,7 +31,7 @@ if "tfidf_scores" not in st.session_state:
             }
         except Exception as _e:
             st.session_state["tfidf_scores"] = {}
-            st.warning(f"TFIDF non calculé : {_e}")
+            st.warning(f"TFIDF not computed: {_e}")
     else:
         st.session_state["tfidf_scores"] = {}
 
@@ -39,7 +39,7 @@ tfidf_scores: dict = st.session_state.get("tfidf_scores", {})
 
 st.markdown("---")
 
-st.subheader("📊 Entités détectées dans le corpus")
+st.subheader("📊 Entities detected in the corpus")
 
 selected_entities = []
 for entity, data in st.session_state["entity_metrics"].items():
@@ -53,14 +53,14 @@ for entity, data in st.session_state["entity_metrics"].items():
         st.write(f"**{entity}** ({count} occurrences)")
     with col3:
         routing = data["Routing"]
-        badge_colors = {"RÈGLES": "🟢", "TBM": "🟠", "LLM": "🔴"}
+        badge_colors = {"RULES": "🟢", "TBM": "🟠", "LLM": "🔴"}
         st.write(f"→ {routing} {badge_colors.get(routing, '')}")
 
 st.session_state["selected_entities"] = selected_entities
 
 st.markdown("---")
 
-st.subheader("📋 Détail par Entité")
+st.subheader("📋 Entity Detail")
 
 for entity, data in st.session_state["entity_metrics"].items():
     count = st.session_state["entity_stats"][entity]["count"]
@@ -68,13 +68,13 @@ for entity, data in st.session_state["entity_metrics"].items():
         col1, col2 = st.columns(2)
 
         with col1:
-            st.write("**Valeurs uniques (top 5):**")
+            st.write("**Top 5 unique values:**")
             values = st.session_state["entity_stats"][entity]["value_distribution"]
             for val, v_count in sorted(values.items(), key=lambda x: -x[1])[:5]:
                 st.write(f"  • {val}: {v_count}")
 
         with col2:
-            st.write("**Métriques L2:**")
+            st.write("**L2 Metrics:**")
             for metric in ["Te", "He", "R", "Freq", "Feas"]:
                 st.write(f"  • {metric}: {data.get(metric, 0.0):.2f}")
             tfidf_val = tfidf_scores.get(entity)
@@ -82,7 +82,7 @@ for entity, data in st.session_state["entity_metrics"].items():
                 st.write(f"  • TFIDF_Extractability: {tfidf_val:.4f}")
 
         st.write(
-            f"**Routage:** {data.get('Routing', 'INCONNU')} (confiance: {data.get('Confidence', 0.0):.2f})"
+            f"**Routing:** {data.get('Routing', 'UNKNOWN')} (confidence: {data.get('Confidence', 0.0):.2f})"
         )
         st.caption(f"Justification: {data.get('Justification', 'N/A')}")
 
@@ -119,7 +119,7 @@ json_str = json.dumps(export_config, indent=2, ensure_ascii=False)
 st.code(json_str, language="json")
 
 st.download_button(
-    "📥 Télécharger configuration JSON",
+    "📥 Download JSON configuration",
     data=json_str,
     file_name=f"demne_config_{datetime.now():%Y%m%d_%H%M}.json",
     mime="application/json",

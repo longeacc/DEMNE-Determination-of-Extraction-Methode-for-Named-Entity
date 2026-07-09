@@ -21,8 +21,8 @@ def main() -> None:
         st.session_state.custom_metrics = {k: v.copy() for k, v in DEMO_METRICS.items()}
 
     if "thresholds" not in st.session_state:
-        # Seuils par défaut = preset FRUGAL de data/demne_params.json
-        # (source unique partagée avec la CLI et les scorers — aucun écart possible).
+        # Default thresholds = FRUGAL preset from data/demne_params.json
+        # (single source shared with CLI and scorers — no drift possible).
         from core.metrics import PARAMS
 
         st.session_state.thresholds = dict(PARAMS["presets"]["FRUGAL"])
@@ -30,23 +30,23 @@ def main() -> None:
     if "routings" not in st.session_state:
         st.session_state.routings = {}
 
-    st.title("🧬 DuraXell : Dashboard d'extraction NLP onco-biomarqueurs")
+    st.title("🧬 DuraXell: NLP onco-biomarker extraction dashboard")
     st.markdown("""
-    Bienvenue sur l'interface d'analyse de **DuraXell**.
-    Sélectionnez une page dans la barre de navigation à gauche :
-    - 📊 **Dashboard Métriques** : Supervision L2, graphiques comparatifs, coût/bénéfice, routage d'IA
-    - 🖥️ **Console CLI** : Lancement d'instructions et monitoring
-    - 🔧 **REST Integration** : Synchronisation, configurations, export/import JSON
-    - 📓 **Notebook & API** : Lancement du serveur et de l'interface REST Jupyter.
+    Welcome to the **DuraXell** analysis interface.
+    Select a page from the left navigation bar:
+    - 📊 **Metrics Dashboard**: L2 supervision, comparative charts, cost/benefit, AI routing
+    - 🖥️ **CLI Console**: Command launcher and monitoring
+    - 🔧 **REST Integration**: Sync, configuration, JSON export/import
+    - 📓 **Notebook & API**: Launch the Jupyter REST server and interface.
     """)
 
     st.info(
-        "Utilisez la sidebar pour naviguer dans les différentes interfaces du pipeline analytique."
+        "Use the sidebar to navigate between the different interfaces of the analytics pipeline."
     )
 
     st.markdown("---")
 
-    # Intégration du README directement dans la page d'accueil
+    # Embed README directly in the home page
     try:
         import os
 
@@ -54,7 +54,7 @@ def main() -> None:
         with open(readme_path, encoding="utf-8", errors="replace") as f:
             st.markdown(f.read())
     except FileNotFoundError:
-        st.warning("Fichier README.md introuvable pour affichage.")
+        st.warning("README.md file not found for display.")
 
 
 if __name__ == "__main__":

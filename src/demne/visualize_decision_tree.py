@@ -10,79 +10,73 @@ def visualize_decision_tree(
     output_format: str = "png",
 ) -> None:
     """
-    Génère une figure de l'arbre de décision à partir du fichier de config.
+    Generate a decision tree figure from the config file.
     """
-    # Chargement de la config
+    # Load config
     try:
         with open(decision_config_path, encoding="utf-8") as f:
             config = json.load(f)
 
-        # Adaptation au format JSON
         if "entities" in config:
             entities_config = config["entities"]
         else:
-            # Fallback pour format plat (ancien)
+            # Fallback for flat (legacy) format
             entities_config = {k: v for k, v in config.items() if isinstance(v, dict)}
 
     except FileNotFoundError:
-        print(f"Erreur: {decision_config_path} introuvable.")
+        print(f"Error: {decision_config_path} not found.")
         return
 
-    # Création du graphe
     g_graph = nx.DiGraph()
 
-    # Nœud racine
+    # Root node
     root = "DuraXELL\nDecision Node"
     g_graph.add_node(root, color="#2196F3", shape="box")
 
-    # Couleurs par méthode
+    # Colors by method
     colors = {
-        "RÈGLES": "#4CAF50",  # Vert
-        "RÈGLES PAR DÉFAUT": "#4CAF50",
-        "ML LÉGER": "#FFC107",  # Jaune/Ambre
-        "ML LÉGER PAR DÉFAUT": "#FFC107",
-        "TRANSFORMER BIDIRECTIONNEL": "#FF9800",  # Orange
-        "LLM": "#F44336",  # Rouge
+        "RULES": "#4CAF50",  # Green
+        "RULES DEFAULT": "#4CAF50",
+        "TBM": "#FFC107",  # Yellow/Amber
+        "TBM DEFAULT": "#FFC107",
+        "TRANSFORMER": "#FF9800",  # Orange
+        "LLM": "#F44336",  # Red
     }
 
-    # Construction du graphe (un niveau de profondeur : Entité -> Méthode)
-    # L'arbre réel est logique (if/else), mais ici on visualise le résultat final :
-    # Quel chemin a été pris pour chaque entité.
-
-    # Pour visualiser l'arbre logique complet (les conditions), ce serait plus complexe.
-    # Ici, on représente la décision finale pour chaque entité comme demandé.
+    # One-level graph (Entity -> Method): visualises the final decision per entity.
+    # Visualising the full logical tree (conditions) would require a deeper pass.
 
     for entity, details in entities_config.items():
-        # Ignorer les clés non-dictionnaires si format plat
+        # Skip non-dict keys in flat format
         if not isinstance(details, dict):
             continue
 
         method = details.get("method", "Unknown")
 
-        # Nœud entité
+        # Entity node
         entity_node = entity
         g_graph.add_node(entity_node, color="lightgrey", shape="ellipse")
         g_graph.add_edge(root, entity_node)
 
-        # Nœud méthode (Feuille)
-        # Gestion des métriques pouvant être dans "metrics" ou à la racine
+        # Method node (leaf)
+        # Metrics may be nested under "metrics" or at the root level
         metrics = details.get("metrics", details)
         te_val = metrics.get("Te", "N/A")
 
         leaf_label = f"{method}\n(Te={te_val})"
         color = colors.get(method, "#9E9E9E")
 
-        # Pour éviter les doublons de nœuds méthodes identiques, on utilise un ID unique
+        # Unique ID to avoid duplicate method nodes
         leaf_id = f"{entity}_{method}"
         g_graph.add_node(leaf_id, label=leaf_label, color=color, shape="box", style="filled")
         g_graph.add_edge(entity_node, leaf_id)
 
-    # Dessin
+    # Draw
     plt.figure(figsize=(12, 8))
     pos = nx.spring_layout(g_graph, seed=42)
 
-    # On peut utiliser une disposition hiérarchique plus propre si besoin
-    # (nécessite graphviz souvent, donc on reste sur spring ou shell pour compatibilité)
+    # A hierarchical layout could be used for a cleaner view if needed
+    # (graphviz often required for hierarchical layout; using spring for portability)
 
     node_colors = [
         nx.get_node_attributes(g_graph, "color").get(n, "#FFFFFF") for n in g_graph.nodes()
@@ -101,16 +95,15 @@ def visualize_decision_tree(
         arrows=True,
     )
 
-    plt.title("Arbre de Décision DuraXELL par Entité")
+    plt.title("DEMNE Decision Tree by Entity")
     plt.axis("off")
 
-    # Sauvegarde
     import os
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     plt.savefig(output_path, format=output_format, dpi=300)
     plt.close()
-    print(f"Visualisation sauvegardée : {output_path}")
+    print(f"Visualisation saved: {output_path}")
 
 
 if __name__ == "__main__":

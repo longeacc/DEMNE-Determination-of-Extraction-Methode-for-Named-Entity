@@ -1,14 +1,14 @@
 """
 DEMNE / demne
 =============
-Module principal d'analyse de corpus pour la méthode DEMNE.
+Main corpus analysis module for the DEMNE method.
 
-Exports principaux :
-- TemplatabilityScorer : calcul de la métrique Te
-- HomogeneityScorer : calcul de la métrique He
-- RiskContextScorer : calcul de la métrique R
-- FrequencyScorer : calcul de la métrique Freq
-- DecisionTree : arbre de décision RÈGLES/TBM/LLM
+Main exports:
+- TemplatabilityScorer: compute the Te metric
+- HomogeneityScorer: compute the He metric
+- RiskContextScorer: compute the R metric
+- FrequencyScorer: compute the Freq metric
+- DecisionTree: decision tree routing RULES/TBM/LLM
 """
 
 from .E_creation_arbre_decision import DecisionTreeBuilder

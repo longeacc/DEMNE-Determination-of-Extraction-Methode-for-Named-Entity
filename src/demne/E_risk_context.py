@@ -12,13 +12,13 @@ High R indicates the entity is surrounded by:
 # pylint: disable=unused-argument,broad-exception-caught
 
 import csv
-
-from demne._table import print_table
 import importlib.util as _il
 import os
 import re
 from collections import defaultdict
 from pathlib import Path
+
+from demne._table import print_table
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
@@ -50,11 +50,11 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
 
 class RiskContextScorer:
     """
-    Calcule le score de Risque Contextuel (R).
-    Analyse le texte autour de l'entité (fenêtre de tokens) pour détecter :
-    1. Négation (faible augmentation de R)
-    2. Incertitude (forte augmentation de R)
-    3. Contradiction (R maximal)
+    Compute the Contextual Risk score (R).
+    Analyses the text surrounding an entity (token window) to detect:
+    1. Negation (slight increase of R)
+    2. Uncertainty (strong increase of R)
+    3. Contradiction (maximum R)
     """
 
     def __init__(self, data_dirs: list[Path] = None):
@@ -62,16 +62,16 @@ class RiskContextScorer:
         self.document_data = defaultdict(list)
         self.entities_stats: dict = {}
 
-        # --- CONFIGURATION DES RADARS ---
+        # --- DETECTOR CONFIGURATION ---
 
-        # Fenêtre d'analyse : nombre de caractères autour de l'entité à lire
+        # Analysis window: number of characters to read around the entity
         self.WINDOW_SIZE = PARAMS["risk_window_size"]
 
-        # 1. Patterns de Négation (Augmente R un peu)
-        # Patterns volontairement restrictifs : on évite "pas", "ni", "non" seuls qui
-        # sur-détectent (ex. "non surexprimé" est déjà un état clinique attendu).
-        # "négatif" / "negatif" volontairement exclus : c'est un état clinique
-        # attendu (PR-, HER2-), pas un signal de risque contextuel.
+        # 1. Negation patterns (slight R increase)
+        # Deliberately restrictive: "pas", "ni", "non" alone over-detect
+        # (e.g. "non surexprimé" is an expected clinical state).
+        # "négatif" / "negatif" excluded intentionally: expected clinical state
+        # (PR-, HER2-), not a contextual risk signal.
         self.NEGATION_PATTERNS = [
             r"\bne\s+pas\b",
             r"\babsent\b",
@@ -80,7 +80,7 @@ class RiskContextScorer:
             r"\bsans\b",
         ]
 
-        # 2. Patterns d'Incertitude (Augmente R beaucoup)
+        # 2. Uncertainty patterns (strong R increase)
         self.UNCERTAINTY_PATTERNS = [
             r"\bprobable\b",
             r"\bpossible\b",
@@ -98,7 +98,7 @@ class RiskContextScorer:
             r"\bdiscordance\b",
         ]
 
-        # 3. Termes spécifiques pour détecter les contradictions (Positif vs Négatif)
+        # 3. Terms for contradiction detection (Positive vs Negative)
         self.VAL_POS = {r"positif", r"positive", r"\+", r"pos", r"exprimé", r"present"}
         self.VAL_NEG = {
             r"négatif",
@@ -122,9 +122,9 @@ class RiskContextScorer:
 
     def _learn_weights(self, annotated_data: list[tuple[int, int, int, int]]):
         """
-        Apprend les poids R via Régression Logistique sur un ensemble de validation
-        (Chapman et al., 2001 - approche type NegEx pondéré).
-        annotated_data : list de tuples (has_neg, has_uncert, has_contradiction, is_risky_ground_truth)
+        Learn R weights via Logistic Regression on a validation set
+        (Chapman et al., 2001 - weighted NegEx-style approach).
+        annotated_data: list of tuples (has_neg, has_uncert, has_contradiction, is_risky_ground_truth)
         """
         try:
             import numpy as np
@@ -133,26 +133,26 @@ class RiskContextScorer:
             x = np.array([[d[0], d[1], d[2]] for d in annotated_data])
             y = np.array([d[3] for d in annotated_data])
 
-            # Contrainte de poids positifs
+            # Positive-weight constraint
             clf = LogisticRegression(fit_intercept=False)
             clf.fit(x, y)
 
             self.weights["negation"] = float(clf.coef_[0][0])
             self.weights["uncertainty"] = float(clf.coef_[0][1])
             self.weights["contradiction"] = float(clf.coef_[0][2])
-            print(f"Poids R recalibrés via RL : {self.weights}")
+            print(f"R weights recalibrated via LR: {self.weights}")
         except ImportError:
-            print("scikit-learn non disponible pour la R.L., utilisation des heuristiques.")
+            print("scikit-learn unavailable for LR — falling back to heuristics.")
         except Exception as e:
-            print(f"Erreur lors de l'apprentissage des poids : {e}")
+            print(f"Error during weight learning: {e}")
 
     def has_negation(self, text: str, entity_type: str = "") -> bool:
-        """Vérifie si le texte contient une négation."""
+        """Return True if the text contains a negation pattern."""
         text = text.lower()
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
 
     def has_uncertainty(self, text: str, entity_type: str = "") -> bool:
-        """Vérifie si le texte contient une incertitude."""
+        """Return True if the text contains an uncertainty pattern."""
         text = text.lower()
         return any(re.search(pat, text) for pat in self.UNCERTAINTY_PATTERNS)
 
@@ -164,8 +164,8 @@ class RiskContextScorer:
         contradicted_rate: float = 0.0,
     ) -> float:
         """
-        Méthode unique pour calculer le score R à partir des statistiques de base.
-        Garantit la cohérence de la formule partout.
+        Single method for computing the R score from base statistics.
+        Ensures formula consistency across all call sites.
         """
         if total_count == 0:
             return 0.0
@@ -181,8 +181,8 @@ class RiskContextScorer:
 
     def compute_score(self, texts: list[str], entity_type: str) -> float:
         """
-        Calcule un score R sur une liste de courtes phrases (sans analyse document-level).
-        Fait désormais appel à compute_score_from_stats.
+        Compute the R score over a list of short sentences (no document-level analysis).
+        Delegates to compute_score_from_stats.
         """
         if not texts:
             return 0.0
@@ -194,24 +194,24 @@ class RiskContextScorer:
         return self.compute_score_from_stats(negated, uncertain, total, contradicted_rate=0.0)
 
     def _load_data(self):
-        """Lit les fichiers .ann ET .txt pour avoir le contexte."""
-        print("Chargement des données (Annotations + Texte)...")
+        """Load .ann and .txt files to build annotation context."""
+        print("Loading data (Annotations + Text)...")
         for d in self.data_dirs:
             if not d.exists():
                 continue
 
-            # Pour chaque fichier .ann, on cherche le .txt correspondant
+            # For each .ann file, look up the matching .txt
             for ann_file in d.glob("*.ann"):
                 txt_file = ann_file.with_suffix(".txt")
                 if not txt_file.exists():
                     continue
 
                 try:
-                    # Lire le texte complet
+                    # Read full document text
                     with open(txt_file, encoding="utf-8") as f:
                         full_text = f.read()
 
-                    # Lire les annotations
+                    # Read annotations
                     with open(ann_file, encoding="utf-8") as f:
                         for line in f:
                             if line.startswith("T"):
@@ -223,14 +223,14 @@ class RiskContextScorer:
                                     start = int(meta[1])
                                     end = int(
                                         meta[-1]
-                                    )  # Parfois "10 15;20 25" -> on prend les extrêmes simplifiés
+                                    )  # "10 15;20 25" → take outermost offsets
 
-                                    # Extraire le contexte (fenêtre)
+                                    # Extract context window
                                     ctx_start = max(0, start - self.WINDOW_SIZE)
                                     ctx_end = min(len(full_text), end + self.WINDOW_SIZE)
                                     context = full_text[
                                         ctx_start:ctx_end
-                                    ].lower()  # Contexte normalisé
+                                    ].lower()  # Normalised context
 
                                     self.document_data[ann_file.name].append(
                                         {
@@ -244,7 +244,7 @@ class RiskContextScorer:
                     pass
 
     def _check_contradiction(self, entries: list[dict]) -> bool:
-        """Détecte si une entité a des valeurs contradictoires dans le MEME document."""
+        """Detect whether an entity has contradictory values within the SAME document."""
         has_pos = False
         has_neg = False
 
@@ -260,16 +260,16 @@ class RiskContextScorer:
         return has_pos and has_neg
 
     def compute_all(self) -> list[dict]:
-        """Calcule le score R agrégé par Type d'Entité."""
+        """Compute the aggregated R score per entity type."""
         self._load_data()
 
-        # Regrouper tout par type d'entité pour stats globales
+        # Group everything by entity type for global stats
         entity_stats = defaultdict(
             lambda: {"total": 0, "negated": 0, "uncertain": 0, "contradicted_docs": 0}
         )
         entity_docs = defaultdict(lambda: defaultdict(list))  # type -> doc -> [entries]
 
-        # 1. Analyse Locale (Négation / Incertitude) pour chaque occurrence
+        # 1. Local analysis (Negation / Uncertainty) for each occurrence
         for filename, entries in self.document_data.items():
             for entry in entries:
                 etype = entry["type"]
@@ -278,37 +278,37 @@ class RiskContextScorer:
                 entity_stats[etype]["total"] += 1
                 entity_docs[etype][filename].append(entry)
 
-                # Check Négation
+                # Check negation
                 if any(re.search(pat, ctx) for pat in self.NEGATION_PATTERNS):
                     entity_stats[etype]["negated"] += 1
 
-                # Check Incertitude
+                # Check uncertainty
                 if any(re.search(pat, ctx) for pat in self.UNCERTAINTY_PATTERNS):
                     entity_stats[etype]["uncertain"] += 1
 
-        # 2. Analyse Globale (Contradiction) par document
+        # 2. Global analysis (Contradiction) per document
         for etype, docs in entity_docs.items():
             for _filename, entries in docs.items():
                 if self._check_contradiction(entries):
                     entity_stats[etype]["contradicted_docs"] += 1
 
-        # 3. Calcul du Score R Final
+        # 3. Final R score computation
         results = []
         for etype, stats in entity_stats.items():
             n_total = stats["total"]
             if n_total == 0:
                 continue
 
-            # Fréquences relatives
+            # Relative frequencies
             f_neg = stats["negated"] / n_total
             f_unc = stats["uncertain"] / n_total
 
-            # Pour la contradiction, c'est le ratio de documents contradictoires
-            # On approxime le nombre de docs total pour cette entité comme len(entity_docs[etype])
+            # For contradiction: ratio of contradicted documents
+            # Total doc count per entity approximated as len(entity_docs[etype])
             n_docs = len(entity_docs[etype])
             f_cont = stats["contradicted_docs"] / n_docs if n_docs > 0 else 0
 
-            # Utilisation de la méthode unifiée
+            # Delegate to unified scoring method
             risk_score = self.compute_score_from_stats(
                 negated_count=stats["negated"],
                 uncertain_count=stats["uncertain"],
@@ -351,7 +351,7 @@ class RiskContextScorer:
             rel = os.path.relpath(str(output_path))
         except ValueError:
             rel = str(output_path)
-        print(f"Sauvegardé dans {rel}")
+        print(f"Saved to {rel}")
 
 
 # ==================================================================================
@@ -385,11 +385,11 @@ def main(learn_weights=False):
     output_file = root_dir / "Results" / f"risk_context_analysis_{corpus_name}.csv"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    print("=== Démarrage de l'analyse Risk Context (R) ===")
+    print("=== Starting Risk Context (R) analysis ===")
     scorer = RiskContextScorer(data_dirs)
 
     if learn_weights:
-        print("--- Mode apprentissage des poids (Calibration RL) ---")
+        print("--- Weight learning mode (LR Calibration) ---")
         import numpy as np
 
         scorer.compute_all()  # populate entities_stats
@@ -404,19 +404,17 @@ def main(learn_weights=False):
                 (row[0], row[1], row[2], int(label)) for row, label in zip(x, y, strict=False)
             ]
             scorer._learn_weights(annotated)  # pylint: disable=protected-access
-            print(f"Nouveaux poids appris : {scorer.weights}")
+            print(f"Newly learned weights: {scorer.weights}")
 
     scorer.to_csv(output_file)
 
-    # === TESTS CRITIQUES (Demandés par l'utilisateur) ===
-    print("\n=== VERIFICATION TESTS CRITIQUES ===")
+    # === CRITICAL TESTS ===
+    print("\n=== CRITICAL TESTS VERIFICATION ===")
 
-    # Simulation de cas artificiels pour valider la logique
-    # On crée une instance vide et on injecte des données fake
+    # Simulate artificial cases to validate the logic
     test_scorer = RiskContextScorer([])
 
-    # Test 1: "HER2 non surexprimé" (Négation simple)
-    # Contexte: ... le statut est HER2 non surexprimé sur la lame ...
+    # Test 1: "HER2 non surexprimé" (simple negation)
     test_scorer.document_data["test1.txt"] = [
         {
             "type": "TEST_NEG",
@@ -425,8 +423,7 @@ def main(learn_weights=False):
         }
     ]
 
-    # Test 2: "statut HER2 discordant entre biopsie et pièce opératoire" (Contradiction/Conflit explicite)
-    # Ici simulons une contradiction logique: dans le même doc, une valeur POS et une valeur NEG
+    # Test 2: discordant HER2 status (explicit contradiction — one POS and one NEG in same doc)
     test_scorer.document_data["test2.txt"] = [
         {
             "type": "TEST_CONTRA",
@@ -440,7 +437,7 @@ def main(learn_weights=False):
         },
     ]
 
-    # Test 3: "Incertitude"
+    # Test 3: uncertainty
     test_scorer.document_data["test3.txt"] = [
         {
             "type": "TEST_UNCERT",

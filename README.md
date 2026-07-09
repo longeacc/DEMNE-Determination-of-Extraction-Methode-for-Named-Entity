@@ -1,53 +1,53 @@
-# DuraXELL : Sustainable Information Extraction for LLM en Cancérologie
+# DuraXELL: Sustainable Information Extraction for LLMs in Oncology
 
 [![CI](https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/actions/workflows/ci.yml/badge.svg)](https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 
-DuraXELL est un pipeline d'extraction d'informations médicales (biomarqueurs) conçu pour optimiser le **Trilemme : Performance, Explicabilité, Frugalité**. Au lieu d'utiliser systématiquement des LLM très coûteux en énergie, DuraXELL utilise un arbre de décision pour router chaque entité vers la méthode la plus légère possible (Règles > ML > Transformer > LLM).
+DuraXELL is a medical information extraction pipeline (biomarkers) designed to optimise the **Trilemma: Performance, Explainability, Frugality**. Rather than systematically relying on energy-intensive LLMs, DuraXELL uses a decision tree to route each entity to the lightest extraction method possible (Rules > ML > Transformer > LLM).
 
-## Architecture arbre de décision
+## Decision Tree Architecture
 
-![Pipeline de Décision](Results/figures/Graph_decision.png)
-*Arbre de Décision pour la Sélection Optimale de Méthodes d'Extraction d'Entités*
+![Decision Pipeline](Results/figures/Graph_decision.png)
+*Decision Tree for Optimal Named-Entity Extraction Method Selection*
 
-## Résultats Principaux (Front de Pareto)
+## Main Results (Pareto Front)
 
-![Exemple de résultats principaux](Results/figures/front_pareto_exemple.png)
+![Pareto front example](Results/figures/front_pareto_exemple.png)
 
-## Installation et Exécution Reproductible
+## Installation and Reproducible Execution
 
-1. **Cloner le dépôt** :
+1. **Clone the repository**:
 
    ```bash
    git clone https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity.git
    cd DuraXELL
    ```
 
-2. **Créer un environnement virtuel et installer les dépendances** :
+2. **Create a virtual environment and install dependencies**:
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # Sur Windows : .venv\Scripts\activate
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    pip install -e .[dev,ner]
    ```
 
-3. **Exécuter le pipeline complet** :
-   Ouvrez et exécutez le notebook maître :
+3. **Run the full pipeline**:
+   Open and execute the master notebook:
 
    ```bash
    jupyter notebook Reports/DuraXELL_Pipeline.ipynb
    ```
 
-   Ou exécutez le script de rapport :
+   Or run the report script:
 
    ```bash
    python scripts/run_full_pipeline_report.py
    ```
 
-## Références et Citation
+## References and Citation
 
-Ce travail s'appuie sur les recherches de **Akram REDJDAL et al. 2024** concernant l'extraction d'informations en oncologie et l'évaluation de la frugalité des modèles de langage.
+This work builds on research by **Akram REDJDAL et al. 2024** on information extraction in oncology and the evaluation of language model frugality.
 
-**Citation :**
-> Akram REDJDAL et al. 2024. *Le juste usage des LLM et méthode NLP en cancérologie : Vers une approche frugale et explicable*. ESIEE Paris.
+**Citation:**
+> Akram REDJDAL et al. 2024. *The right use of LLMs and NLP methods in oncology: Towards a frugal and explainable approach*. ESIEE Paris.

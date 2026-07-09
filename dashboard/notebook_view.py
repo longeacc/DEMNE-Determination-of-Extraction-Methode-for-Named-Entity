@@ -1,16 +1,16 @@
-"""Notebook viewer / executor embarqué dans la GUI Tkinter.
+"""Notebook viewer / executor embedded in the Tkinter GUI.
 
-Lit un fichier .ipynb (REST.ipynb par défaut) et reproduit son contenu sous
-forme de widgets Tk natifs :
-  - cellules markdown → labels formatés
-  - cellules code     → Text widget éditable + bouton ▶ Run
-  - sorties           → text/plain, image/png, text/html (texte), errors
+Reads a .ipynb file (REST.ipynb by default) and renders its content as
+native Tk widgets:
+  - markdown cells → formatted labels
+  - code cells     → editable Text widget + ▶ Run button
+  - outputs        → text/plain, image/png, text/html (text), errors
 
-Exécution 100 % in-process via IPython.core.interactiveshell.InteractiveShell.
-**Aucun port ouvert**, aucune connexion réseau, pas de ZMQ ni de kernel séparé.
+100 % in-process execution via IPython.core.interactiveshell.InteractiveShell.
+**No open ports**, no network connection, no ZMQ or separate kernel.
 
-Limite physique : les ipywidgets interactifs (widgets.Tab, dropdowns, …)
-sont rendus en placeholder car ils nécessitent un frontend Comm (HTML/JS).
+Physical limitation: interactive ipywidgets (widgets.Tab, dropdowns, …)
+are rendered as placeholders because they require a Comm frontend (HTML/JS).
 """
 
 # pylint: disable=broad-exception-caught,unused-argument,protected-access
@@ -33,7 +33,7 @@ from IPython.core.interactiveshell import InteractiveShell
 
 # ---------------------------------------------------------------------------
 class _ScrollFrame(ttk.Frame):
-    """Conteneur scrollable contenant un Frame `inner`."""
+    """Scrollable container holding an `inner` Frame."""
 
     def __init__(self, master, **kw):
         super().__init__(master, **kw)
@@ -64,7 +64,7 @@ class _ScrollFrame(ttk.Frame):
 
 # ---------------------------------------------------------------------------
 class NotebookViewer(ttk.Frame):
-    """Affiche et exécute un .ipynb sans serveur."""
+    """Display and execute a .ipynb without a server."""
 
     def __init__(self, master, nb_path: Path, log_fn: Callable[[str], None] | None = None):
         super().__init__(master)
@@ -72,13 +72,13 @@ class NotebookViewer(ttk.Frame):
         self.nb_path = Path(nb_path)
         self.log_fn = log_fn or (lambda _m: None)
 
-        # IPython shell — exécution in-process, zéro socket
+        # IPython shell — in-process execution, zero sockets.
         InteractiveShell.clear_instance()
         self.shell = InteractiveShell.instance()
         self.shell.user_ns["__file__"] = str(self.nb_path)
 
-        # Insère le répertoire du notebook au sys.path pour reproduire le
-        # comportement de Jupyter (sinon `from REST_modules import *` casse).
+        # Insert the notebook directory into sys.path to mirror Jupyter behaviour
+        # (otherwise `from REST_modules import *` breaks).
         nb_dir = str(self.nb_path.parent.resolve())
         if nb_dir not in sys.path:
             sys.path.insert(0, nb_dir)
@@ -95,12 +95,12 @@ class NotebookViewer(ttk.Frame):
         bar = ttk.Frame(self, padding=6)
         bar.pack(fill="x")
         ttk.Label(bar, text=self.nb_path.name, font=("Segoe UI", 10, "bold")).pack(side="left")
-        ttk.Label(bar, text=" — exécuté in-process (aucun port)", foreground="#666").pack(
+        ttk.Label(bar, text=" — in-process execution (no port)", foreground="#666").pack(
             side="left", padx=4
         )
-        ttk.Button(bar, text="▶ Tout exécuter", command=self.run_all).pack(side="right", padx=4)
-        ttk.Button(bar, text="🔄 Recharger", command=self._reload).pack(side="right")
-        ttk.Button(bar, text="🧹 Reset kernel", command=self._reset_kernel).pack(
+        ttk.Button(bar, text="▶ Run all", command=self.run_all).pack(side="right", padx=4)
+        ttk.Button(bar, text="🔄 Reload", command=self._reload).pack(side="right")
+        ttk.Button(bar, text="🧹 Reset kernel", command=self._reset_kernel).pack(  # noqa: RUF001
             side="right", padx=4
         )
         ttk.Separator(self, orient="horizontal").pack(fill="x")
@@ -114,14 +114,14 @@ class NotebookViewer(ttk.Frame):
     def _load_notebook(self) -> None:
         if not self.nb_path.exists():
             ttk.Label(
-                self.body, text=f"Notebook introuvable : {self.nb_path}", foreground="#B12727"
+                self.body, text=f"Notebook not found: {self.nb_path}", foreground="#B12727"
             ).pack(anchor="w", padx=8, pady=8)
             return
 
         try:
             nb = nbformat.read(str(self.nb_path), as_version=4)
         except Exception as e:
-            ttk.Label(self.body, text=f"Erreur lecture .ipynb : {e}", foreground="#B12727").pack(
+            ttk.Label(self.body, text=f"Error reading .ipynb: {e}", foreground="#B12727").pack(
                 anchor="w", padx=8, pady=8
             )
             return
@@ -140,7 +140,7 @@ class NotebookViewer(ttk.Frame):
                 self._render_code(idx, src)
             # raw cells: ignored
 
-        self.log_fn(f"📓 {self.nb_path.name} chargé ({len(nb.cells)} cellules).")
+        self.log_fn(f"📓 {self.nb_path.name} loaded ({len(nb.cells)} cells).")
 
     def _reload(self) -> None:
         self._load_notebook()
@@ -151,13 +151,13 @@ class NotebookViewer(ttk.Frame):
         self.shell.user_ns["__file__"] = str(self.nb_path)
         for cw in self._cell_widgets:
             self._set_output(cw, "", clear=True)
-        self.log_fn("🧹 Kernel réinitialisé (espace de noms vide).")
+        self.log_fn("🧹 Kernel reset (empty namespace).")
 
     # ------------------------------------------------------------------ cells
     def _render_markdown(self, idx: int, src: str) -> None:
         frame = ttk.Frame(self.body, padding=(8, 4))
         frame.pack(fill="x", anchor="w")
-        # Très basique : titres ###, gras **, code `…` → formatage
+        # Basic: headings ###, bold **, inline code `…` → formatted labels
         for raw in src.splitlines():
             line = raw.rstrip()
             if not line.strip():
@@ -281,12 +281,12 @@ class NotebookViewer(ttk.Frame):
         lbl.pack(fill="x", anchor="w")
 
     def _render_pyobj(self, cw: dict, obj) -> None:
-        """Affiche un objet retourné par une cellule.
+        """Render an object returned by a cell.
 
-        Détecte :
-          - dict avec _repr_png_ / _repr_html_ (rich output)
+        Detects:
+          - objects with _repr_png_ / _repr_html_ (rich output)
           - ipywidgets (placeholder)
-          - sinon repr() texte
+          - otherwise falls back to repr() text
         """
         try:
             modname = type(obj).__module__ or ""
@@ -296,7 +296,7 @@ class NotebookViewer(ttk.Frame):
         if "ipywidgets" in modname or "traitlets" in modname:
             self._append_output(
                 cw,
-                f"[widget interactif {type(obj).__name__} — " f"non rendu en mode in-process]\n",
+                f"[interactive widget {type(obj).__name__} — not rendered in in-process mode]\n",
                 color="#8A6D00",
             )
             return
@@ -326,7 +326,7 @@ class NotebookViewer(ttk.Frame):
         except Exception as e:
             text = f"<repr error: {e}>"
         if len(text) > 4000:
-            text = text[:4000] + "\n…[tronqué]"
+            text = text[:4000] + "\n…[truncated]"
         self._append_output(cw, text + "\n")
 
     def _render_png(self, cw: dict, png_bytes: bytes) -> None:
@@ -344,7 +344,7 @@ class NotebookViewer(ttk.Frame):
             self._img_refs.append(ph)
             lbl.pack(anchor="w", pady=4)
         except Exception as e:
-            self._append_output(cw, f"[image non rendue : {e}]\n", color="#B12727")
+            self._append_output(cw, f"[image could not be rendered: {e}]\n", color="#B12727")
 
     @staticmethod
     def _strip_html(html: str) -> str:

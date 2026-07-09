@@ -26,7 +26,7 @@ except ImportError:
 if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
         project_name="Consumtion_of_E_feasibility_NER.py",
-        experiment_description="Calcul Faisabilite NER",
+        experiment_description="NER Feasibility Computation",
         file_name="Consumtion_of_Duraxell.csv",
     )
     tracker = Tracker()
@@ -54,7 +54,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
         with open(freq_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entité")
+                ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entity_Label")
                 if ent:
                     frequencies[ent] = float(row.get("Frequency", 0.0))
 

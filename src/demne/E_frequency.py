@@ -55,8 +55,8 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
 
 class FrequencyScorer:
     """
-    Calcule la fréquence relative de chaque entité.
-    Décide si le volume de données est suffisant pour un entraînement statistique (NER).
+    Compute the relative frequency of each entity.
+    Decide whether the data volume is sufficient for statistical NER training.
     """
 
     def __init__(self, data_dirs):
@@ -65,11 +65,11 @@ class FrequencyScorer:
         self.total_tokens = 0
         self.total_docs = 0
 
-        # Seuil absolu pour le "Rare Warning" (data/demne_params.json → frequency)
+        # Absolute threshold for the "Rare Warning" (data/demne_params.json → frequency)
         self.RARE_THRESHOLD_COUNT = PARAMS["frequency"]["rare_threshold_count"]
 
     def _count_words(self, text: str) -> int:
-        """Tokenisation par séquences non-blancs (cohérente avec E_tfidf)."""
+        """Tokenise by non-whitespace sequences (consistent with E_tfidf)."""
         if not text:
             return 0
         import re
@@ -77,33 +77,31 @@ class FrequencyScorer:
 
     def ingest_document(self, text: str, annotation_lines: list[str]):
         """
-        Met à jour les compteurs pour un document donné.
-        Permet de tester la logique sans dépendre du système de fichiers.
+        Update counters for a given document.
+        Allows testing the logic without depending on the filesystem.
         """
-        # 1. Mise à jour du total de tokens (Dénominateur de la fréquence)
+        # 1. Update total token count (frequency denominator)
         self.total_tokens += self._count_words(text)
         self.total_docs += 1
 
-        # 2. Mise à jour du compte des entités (Numérateur)
+        # 2. Update entity count (frequency numerator)
         for line in annotation_lines:
             line = line.strip()
             if line.startswith("T"):
                 parts = line.split("\t")
                 # Format brat: T1  Entity_Type Start End  Text
-                # Parfois: T1  Entity_Type Start End;Start End Text (discontinu)
+                # Sometimes: T1  Entity_Type Start End;Start End Text (discontinuous)
                 if len(parts) >= 2:
-                    # parts[1] contient "Entity_Type Start End"
-                    # On prend le premier mot comme Entity_Type
+                    # parts[1] contains "Entity_Type Start End"; first token is the type
                     type_info = parts[1]
                     etype = type_info.split(" ")[0]
                     self.entity_counts[etype] += 1
 
     def compute_all(self):
-        """Parcourt le corpus pour compter tokens et entités via ingest_document."""
+        """Scan the corpus to count tokens and entities via ingest_document."""
         print("Scanning corpus for frequencies...")
 
-        # On doit apparier .txt et .ann
-        # Approche simplifiée : on itère sur les .txt et on cherche le .ann correspondant
+        # Pair .txt and .ann files: iterate over .txt and look up the matching .ann
 
         for d in self.data_dirs:
             if not d.exists():
@@ -111,16 +109,13 @@ class FrequencyScorer:
 
             for txt_file in d.glob("*.txt"):
                 try:
-                    # Lire le texte
                     text_content = txt_file.read_text(encoding="utf-8")
 
-                    # Chercher l'annotation correspondante
                     ann_file = txt_file.with_suffix(".ann")
                     ann_lines = []
                     if ann_file.exists():
                         ann_lines = ann_file.read_text(encoding="utf-8").splitlines()
 
-                    # Ingérer
                     self.ingest_document(text_content, ann_lines)
 
                 except Exception as e:
@@ -129,21 +124,21 @@ class FrequencyScorer:
         print(f"Total Corpus: {self.total_docs} docs, {self.total_tokens} words.")
 
     def get_stats(self):
-        """Génère les stats calculées."""
+        """Generate computed statistics."""
         results = []
         for etype, count in self.entity_counts.items():
             freq = count / self.total_tokens if self.total_tokens > 0 else 0
 
             # Recommendation
             if count < self.RARE_THRESHOLD_COUNT:
-                reco = "RARE -> REGLES/LLM"
+                reco = "RARE -> RULES/LLM"
             else:
                 reco = "FREQUENT -> ML POSSIBLE"
 
             results.append(
                 {
                     "Entity": etype,
-                    "Frequency": freq,  # Valeur brute (ex: 0.0004)
+                    "Frequency": freq,  # Raw value (e.g. 0.0004)
                     "Count": count,
                     "Per_1k_tokens": freq * 1000,
                     "Strategy_Hint": reco,
@@ -153,8 +148,8 @@ class FrequencyScorer:
         return sorted(results, key=lambda x: x["Frequency"], reverse=True)
 
     def draw_histogram(self, results):
-        """Dessine un histogramme ASCII logarithmique."""
-        print("\n=== DISTRIBUTION DES FREQUENCES (Echelle Log) ===")
+        """Draw a logarithmic ASCII histogram."""
+        print("\n=== FREQUENCY DISTRIBUTION (Log Scale) ===")
         rows = []
         for r in results:
             count = r["Count"]
@@ -203,7 +198,7 @@ def main():
     if args.gs_dir:
         data_dirs = [Path(args.gs_dir)]
     else:
-        # MÃªme sources de donnÃ©es pour cohÃ©rence
+        # Same data sources for consistency
         data_dirs = [
             root_dir / "src/demne/NER/data/Breast/train",
             root_dir / "src/demne/NER/data/Breast/val",

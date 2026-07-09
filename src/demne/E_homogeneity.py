@@ -52,8 +52,8 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
 
 class HomogeneityScorer:
     """
-    Calcule le score d'Homogénéité (He) pour chaque entité.
-    He mesure la répétition du vocabulaire.
+    Compute the Homogeneity score (He) for each entity.
+    He measures vocabulary repetition.
     """
 
     def __init__(self, corpus: list[dict[str, Any]]):
@@ -86,7 +86,7 @@ class HomogeneityScorer:
 
     def compute_from_list(self, values: list[str]) -> float:
         """
-        Calcule le score He directement depuis une liste de valeurs textuelles.
+        Compute the He score directly from a list of text values.
         """
         # Reset internal storage for this computation
         self.entities_values["TEMP_LIST"] = values

@@ -63,12 +63,12 @@ class DecisionTreeBuilder:
             "HE_HIGH": _dt["HE_HIGH"],
             "R_HIGH": _dt["R_HIGH"],
             "FEAS_NER": _dt["FEAS_NER"],
-            # Seuil TFIDF_Extractability (défaut 0.70 si absent du JSON)
+            # TFIDF_Extractability threshold (default 0.70 if absent from JSON)
             "Y": _dt.get("TFIDF_Y", 0.70),
         }
-        # Nombre minimum d'occurrences pour que Te soit fiable
+        # Minimum occurrence count for Te to be reliable
         self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
-        # Hyperparamètres du calcul TFIDF_Extractability (calcul paresseux)
+        # Hyperparameters for TFIDF_Extractability (lazy computation)
         self.TFIDF_X = _dt.get("TFIDF_X", 5)
         self.TFIDF_SIM = _dt.get("TFIDF_SIM", 0.50)
 
@@ -76,8 +76,8 @@ class DecisionTreeBuilder:
         self, entities_metrics: dict[str, dict[str, float]], k: int | None = None
     ):
         """
-        Validation croisée k-fold sur les seuils : partitionner le corpus en k plis,
-        calibrer les seuils sur k-1 plis, mesurer la stabilité des décisions sur le pli restant.
+        K-fold cross-validation on thresholds: partition the corpus into k folds,
+        calibrate thresholds on k-1 folds, measure decision stability on the remaining fold.
         """
         import random
 
@@ -85,25 +85,25 @@ class DecisionTreeBuilder:
             k = PARAMS["kfold"]["folds"]
         entities = list(entities_metrics.keys())
         if len(entities) < k:
-            print(f"Pas assez d'entités pour une CV {k}-fold.")
+            print(f"Not enough entities for {k}-fold CV.")
             return
 
         random.shuffle(entities)
 
-        # Split en k plis
+        # Split into k folds
         folds = [entities[i::k] for i in range(k)]
         stabilities = []
 
-        print(f"--- Début de la validation croisée {k}-fold des seuils ---")
+        print(f"--- Starting {k}-fold threshold cross-validation ---")
 
         for i in range(k):
             test_entities = folds[i]
             train_entities = [ent for j, f in enumerate(folds) if j != i for ent in f]
 
-            # Simulation d'une calibration : modification mineure d'un seuil basée sur le train set
+            # Simulated calibration: minor threshold adjustment based on the train set
             train_te_vals = sorted([entities_metrics[ent].get("Te", 0.0) for ent in train_entities])
             if train_te_vals:
-                # percentile manuel (data/demne_params.json → kfold.calibration_percentile)
+                # Manual percentile (data/demne_params.json → kfold.calibration_percentile)
                 idx = int(len(train_te_vals) * PARAMS["kfold"]["calibration_percentile"])
                 calibrated_te_high = (
                     train_te_vals[idx] if idx < len(train_te_vals) else self.THRESHOLDS["TE_HIGH"]
@@ -111,19 +111,18 @@ class DecisionTreeBuilder:
             else:
                 calibrated_te_high = self.THRESHOLDS["TE_HIGH"]
 
-            # Stocker l'ancien
             old_te_high = self.THRESHOLDS["TE_HIGH"]
-            # Appliquer le seuil calibré
+            # Apply calibrated threshold
             self.THRESHOLDS["TE_HIGH"] = calibrated_te_high
 
-            # Mesurer l'accord (stabilité) entre les règles par défaut et les calibrées
+            # Measure agreement (stability) between default and calibrated rules
             matches = 0
             for ent in test_entities:
                 metrics = entities_metrics[ent]
-                # Modèle origine
+                # Default model
                 self.THRESHOLDS["TE_HIGH"] = old_te_high
                 orig_decision = self.analyze_entity(ent, metrics).get("method", "")
-                # Modèle calibré
+                # Calibrated model
                 self.THRESHOLDS["TE_HIGH"] = calibrated_te_high
                 new_decision = self.analyze_entity(ent, metrics).get("method", "")
 
@@ -135,25 +134,25 @@ class DecisionTreeBuilder:
             self.THRESHOLDS["TE_HIGH"] = old_te_high  # Reset
 
         avg_stability = sum(stabilities) / len(stabilities)
-        print(f"Stabilité moyenne des décisions (K-Fold, k={k}): {avg_stability:.2%}")
+        print(f"Average decision stability (K-Fold, k={k}): {avg_stability:.2%}")
 
     def analyze_entity(self, entity: str, metrics: dict[str, float]) -> dict[str, Any]:
-        """Arbre de décision DEMNE — graphe exact de la figure de référence.
+        """DEMNE decision graph — exact graph matching the reference figure.
 
-        Graphe (cf. image) :
-          Te++ ET He++ → R− ? → Oui : RULES / Non (risk of conflict) : Feas++
-          Sinon        → TF-IDF ? → Oui : R− ? → Oui : RULES / Non : Feas++
-                                   → Non : Feas++
-          Feas++ → Oui : TBM / Non : LLM
+        Graph (see figure):
+          Te++ AND He++ → R− ? → Yes: RULES / No (risk of conflict): Feas++
+          Otherwise     → TF-IDF ? → Yes: R− ? → Yes: RULES / No: Feas++
+                                    → No: Feas++
+          Feas++ → Yes: TBM / No: LLM
 
-        Le nœud R− est donc PARTAGÉ entre la branche Te/He et la branche TF-IDF.
-        TF-IDF 'Oui' ne route PAS directement vers RULES : il passe d'abord par R−.
+        The R− node is SHARED between the Te/He branch and the TF-IDF branch.
+        TF-IDF 'Yes' does NOT route directly to RULES: it first passes through R−.
 
         Args:
-            entity: Nom de l'entité (utilisé dans les rapports, pas dans la logique).
-            metrics: {Te, He, R, Feas, Te_count, tfidf_score (optionnel, pré-calculé)}.
+            entity: Entity name (used in reports, not in logic).
+            metrics: {Te, He, R, Feas, Te_count, tfidf_score (optional, pre-computed)}.
         """
-        _ = entity  # paramètre API public — utilisé par build_full_config
+        _ = entity  # public API param — consumed by build_full_config
         te: float = metrics.get("Te", 0.0)
         te_count: int = metrics.get("Te_count", 0)
         he: float = metrics.get("He", 0.0)
@@ -169,18 +168,18 @@ class DecisionTreeBuilder:
 
         path_trace: list[str] = []
 
-        # Helper : nœud R− partagé (même logique depuis Te/He et depuis TF-IDF)
+        # Helper: shared R− node (same logic from both the Te/He and TF-IDF branches)
         def _noeud_r(context_label: str):
             path_trace.append(
                 f"R− ? (R={r_score:.3f} ≤ R_HIGH={self.THRESHOLDS['R_HIGH']}) [{context_label}]"
             )
             if r_score <= self.THRESHOLDS["R_HIGH"]:
-                path_trace.append("Oui → [RÈGLES]")
+                path_trace.append("Yes → [RULES]")
                 return {
-                    "method": "RÈGLES",
+                    "method": "RULES",
                     "justification": (
-                        f"{context_label} : R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
-                        "risque contextuel acceptable."
+                        f"{context_label}: R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
+                        "acceptable contextual risk."
                     ),
                     "trace": path_trace,
                 }
@@ -196,13 +195,13 @@ class DecisionTreeBuilder:
             path_trace.append(f"Oui → He++ ? (He={he:.3f}, HE_HIGH={self.THRESHOLDS['HE_HIGH']})")
             if he >= self.THRESHOLDS["HE_HIGH"]:
                 # NOEUD R− (branche Te/He)
-                path_trace.append("Oui → R− ?")
+                path_trace.append("Yes → R− ?")
                 result = _noeud_r(f"Te={te:.2f}≥{self.THRESHOLDS['TE_HIGH']}, He={he:.2f}≥{self.THRESHOLDS['HE_HIGH']}")
                 if result:
                     return result
-                # R élevé → risk of conflict → Feas
+                # High R → risk of conflict → fall through to Feas
             else:
-                # He faible → TF-IDF
+                # Low He → TF-IDF
                 path_trace.append(
                     f"Non (He={he:.3f} < {self.THRESHOLDS['HE_HIGH']}) → TF-IDF ?"
                 )
@@ -210,7 +209,7 @@ class DecisionTreeBuilder:
                 if result:
                     return result
         else:
-            # Te faible → TF-IDF
+            # Low Te → TF-IDF
             path_trace.append(
                 f"Non (Te={te:.3f} < {self.THRESHOLDS['TE_HIGH']}) → TF-IDF ?"
             )
@@ -218,32 +217,32 @@ class DecisionTreeBuilder:
             if result:
                 return result
 
-        # NOEUD Feas++ (point de convergence de tous les fall-throughs)
+        # NODE Feas++ (convergence point for all fall-throughs)
         path_trace.append(f"Feas++ ? (Feas={feas:.3f}, FEAS_NER={self.THRESHOLDS['FEAS_NER']})")
         if feas >= self.THRESHOLDS["FEAS_NER"]:
-            path_trace.append("Oui → [TBM]")
+            path_trace.append("Yes → [TBM]")
             return {
                 "method": "TBM",
                 "justification": (
                     f"Feas={feas:.3f}≥{self.THRESHOLDS['FEAS_NER']} — "
-                    "Transformer (DrBERT) faisable."
+                    "Transformer (DrBERT) feasible."
                 ),
                 "trace": path_trace,
             }
-        path_trace.append("Non → [LLM]")
+        path_trace.append("No → [LLM]")
         return {
             "method": "LLM",
             "justification": (
                 f"Feas={feas:.3f}<{self.THRESHOLDS['FEAS_NER']} — "
-                "Escalade vers LLM nécessaire."
+                "LLM escalation required."
             ),
             "trace": path_trace,
         }
 
     def _noeud_tfidf(self, metrics, r_score, path_trace):
-        """Nœud TF-IDF du graphe : score pré-calculé uniquement (pas de calcul interne).
+        """TF-IDF graph node: uses pre-computed score only (no internal computation).
 
-        Retourne un dict résultat si RULES, None sinon (fall-through vers Feas).
+        Returns a result dict if RULES, None otherwise (fall-through to Feas).
         """
         tfidf_raw = metrics.get("tfidf_score")
         if tfidf_raw is None:
@@ -254,23 +253,23 @@ class DecisionTreeBuilder:
             f"TF-IDF ? (score={tfidf_score:.3f}, Y={self.THRESHOLDS['Y']})"
         )
         if tfidf_score >= self.THRESHOLDS["Y"]:
-            # TF-IDF Oui → même nœud R− que la branche Te/He
-            path_trace.append("Oui → R− ? (nœud partagé)")
+            # TF-IDF Yes → same shared R− node as the Te/He branch
+            path_trace.append("Yes → R− ? (shared node)")
             if r_score <= self.THRESHOLDS["R_HIGH"]:
-                path_trace.append("Oui → [RÈGLES] (synonymie conceptuelle + R acceptable)")
+                path_trace.append("Yes → [RULES] (conceptual synonymy + acceptable R)")
                 return {
-                    "method": "RÈGLES",
+                    "method": "RULES",
                     "justification": (
-                        f"TFIDF={tfidf_score:.3f}≥Y={self.THRESHOLDS['Y']} et "
+                        f"TFIDF={tfidf_score:.3f}≥Y={self.THRESHOLDS['Y']} and "
                         f"R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
-                        "synonymes conceptuels extractibles par règle."
+                        "conceptual synonyms extractable by rule."
                     ),
                     "trace": path_trace,
                 }
             path_trace.append(
-                f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?"
+                f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?"
             )
-            return None  # R élevé malgré TF-IDF → Feas
+            return None  # High R despite TF-IDF → Feas
         path_trace.append(
             f"Non (score={tfidf_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?"
         )
@@ -359,7 +358,7 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
                     return
                 col, mult = chosen
                 for row in reader:
-                    ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entité")
+                    ent = row.get("Entity") or row.get("Entity_Type")
                     if not ent:
                         continue
                     try:
@@ -399,7 +398,7 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
     # 5. NER Feasibility metrics
     _read_csv("ner_feasibility_analysis.csv", "Feas_Score", "Feas")
 
-    # 6. TFIDF_Extractability (synonymie conceptuelle contextuelle)
+    # 6. TFIDF_Extractability (contextual conceptual synonymy)
     _read_csv("tfidf_analysis.csv", "TFIDF_Score", "tfidf_score")
 
     return aggregated
@@ -425,7 +424,7 @@ def main():
     config_file.parent.mkdir(parents=True, exist_ok=True)
     report_file.parent.mkdir(parents=True, exist_ok=True)
 
-    # 0. Calculer TF-IDF si tfidf_analysis.csv absent ou vide
+    # 0. Compute TF-IDF if tfidf_analysis.csv is missing or empty
     tfidf_csv = results_dir / "tfidf_analysis.csv"
     gs_dir = Path(args.gs_dir) if args.gs_dir else None
     if gs_dir and gs_dir.exists() and (not tfidf_csv.exists() or tfidf_csv.stat().st_size == 0):

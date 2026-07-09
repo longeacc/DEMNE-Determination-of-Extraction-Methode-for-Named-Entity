@@ -275,7 +275,7 @@ DEMO_METRICS = {
 }
 
 ROUTING_COLORS = {
-    "RÈGLES": "#2E7D32",
+    "RULES": "#2E7D32",
     "TBM": "#F57C00",
     "LLM": "#C62828",
 }

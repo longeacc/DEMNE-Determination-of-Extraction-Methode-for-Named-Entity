@@ -1,10 +1,9 @@
-"""E_tfidf — TFIDF_Extractability : calcul et routing DEMNE.
+"""E_tfidf — TFIDF_Extractability: score computation and DEMNE routing.
 
-Lit corpus BRAT (.ann/.txt), agrège mentions + contextes par type d'entité,
-calcule le score TF-IDF de synonymie contextuelle, et sauvegarde
-Results/tfidf_analysis.csv.
+Reads a BRAT corpus (.ann/.txt), aggregates mentions and contexts per entity type,
+computes the contextual synonymy TF-IDF score, and saves Results/tfidf_analysis.csv.
 
-CLI :
+CLI:
     python src/demne/E_tfidf.py --gs_dir <path>
 """
 
@@ -36,7 +35,7 @@ DEFAULT_GS = ROOT / "data" / "ESMO2025" / "Breast" / "RCP" / "evaluation_set_bre
 
 
 # ---------------------------------------------------------------------------
-# Utilitaire interne
+# Internal utility
 # ---------------------------------------------------------------------------
 def _bisect_left(arr: list, x: int) -> int:
     lo, hi = 0, len(arr)
@@ -86,9 +85,9 @@ def build_corpus_contexts(brat_ann_path, brat_txt_path, window_tokens: int = 30)
 
 
 def collect_entity_data(corpus_dir: Path | str, window_tokens: int = 30) -> dict[str, dict]:
-    """Lit corpus BRAT -> {entity_type: {mentions, corpus_contexts}}.
+    """Read BRAT corpus -> {entity_type: {mentions, corpus_contexts}}.
 
-    Retourne {etype: {"mentions": [...], "corpus_contexts": {form: [ctx...]}}}
+    Returns {etype: {"mentions": [...], "corpus_contexts": {form: [ctx...]}}}
     """
     corpus_dir = Path(corpus_dir)
     entity_data: dict[str, dict] = {}
@@ -147,9 +146,9 @@ def collect_entity_data(corpus_dir: Path | str, window_tokens: int = 30) -> dict
 # ---------------------------------------------------------------------------
 def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
                                  X=5, sim_threshold=0.50, Y=None):  # noqa: N803
-    """Score d'extractibilite TF-IDF contextuelle pour une entite."""
+    """Contextual TF-IDF extractability score for an entity."""
     if Y is None:
-        Y = _dt.get("TFIDF_Y", 0.70)
+        Y = _dt.get("TFIDF_Y", 0.70)  # noqa: N806
     mentions_lower = [m.lower().strip() for m in mentions]
     unique_forms = set(mentions_lower)
 
@@ -220,15 +219,15 @@ def compute_tfidf_extractability(entity_name, mentions, corpus_contexts,
 # Routing DEMNE
 # ---------------------------------------------------------------------------
 def updated_demne_routing(metrics, thresholds):
-    """Graphe de decision DEMNE avec TFIDF_Extractability.
+    """DEMNE decision graph with TFIDF_Extractability.
 
-    Te >= Te_HIGH ET He >= He_HIGH  -> noeud R-
-    sinon                           -> noeud TF-IDF
-      TF-IDF present ET >= Y        -> noeud R-
-      sinon                         -> noeud Feas
+    Te >= Te_HIGH AND He >= He_HIGH  -> R- node
+    otherwise                        -> TF-IDF node
+      TF-IDF present AND >= Y        -> R- node
+      otherwise                      -> Feas node
 
-    noeud R- : R <= R_HIGH  -> RULES  /  sinon -> noeud Feas
-    noeud Feas : Feas >= Feas_NER -> TBM / sinon -> LLM
+    R- node: R <= R_HIGH  -> RULES  /  otherwise -> Feas node
+    Feas node: Feas >= Feas_NER -> TBM / otherwise -> LLM
     """
     r = metrics["R"]
     feas = metrics["Feas"]
@@ -254,7 +253,7 @@ def updated_demne_routing(metrics, thresholds):
 # ---------------------------------------------------------------------------
 def grid_search_tfidf(entities_with_metrics, reference_labels,
                       te_high=0.10, he_high=0.85):
-    """Optimise (X, Y, sim_threshold) sur le F1 du sous-ensemble TFIDF-eligible."""
+    """Optimise (X, Y, sim_threshold) on the F1 of the TFIDF-eligible subset."""
     x_grid = list(range(1, 11))
     y_grid = [round(0.40 + 0.05 * k, 2) for k in range(13)]
     sim_grid = [0.30, 0.40, 0.50, 0.60, 0.70]
@@ -306,7 +305,7 @@ def compute_tfidf_for_all_entities(
     sim_threshold: float | None = None,
     window_tokens: int | None = None,
 ) -> dict[str, dict]:
-    """Calcule tfidf_extractability pour toutes les entités d'un corpus BRAT."""
+    """Compute tfidf_extractability for all entities in a BRAT corpus."""
     x = top_x if top_x is not None else _dt.get("TFIDF_X", 10)
     sim_threshold = sim_threshold if sim_threshold is not None else _dt.get("TFIDF_SIM", 0.50)
     y = _dt.get("TFIDF_Y", 0.70)
@@ -329,14 +328,14 @@ def compute_tfidf_for_all_entities(
 # CLI
 # ---------------------------------------------------------------------------
 def run(gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: float | None = None) -> None:
-    """Calcule TFIDF par entité et sauvegarde Results/tfidf_analysis.csv."""
+    """Compute TFIDF per entity and save Results/tfidf_analysis.csv."""
     if y is None:
         y = _dt.get("TFIDF_Y", 0.70)
     print(f"TFIDF_Extractability — corpus : {gs_dir}")
 
     entity_data = collect_entity_data(gs_dir)
     if not entity_data:
-        print("  Aucune annotation .ann/.txt trouvée.")
+        print("  No .ann/.txt annotations found.")
         return
 
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -389,14 +388,14 @@ def run(gs_dir: Path, results_dir: Path, top_x: int, sim_threshold: float, y: fl
         rel = str(out_csv.relative_to(ROOT))
     except ValueError:
         rel = str(out_csv)
-    print(f"\n=== tfidf_analysis.csv écrit : {rel} ===")
+    print(f"\n=== tfidf_analysis.csv written: {rel} ===")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Calcul TFIDF_Extractability par entité")
-    parser.add_argument("--gs_dir", type=str, default=None, help="Corpus BRAT gold-standard")
-    parser.add_argument("--results_dir", type=str, default=None, help="Dossier de sortie CSV")
-    parser.add_argument("--pred_dir", type=str, default=None, help="(ignoré, compatibilité pipeline)")
+    parser = argparse.ArgumentParser(description="Compute TFIDF_Extractability per entity")
+    parser.add_argument("--gs_dir", type=str, default=None, help="BRAT gold-standard corpus")
+    parser.add_argument("--results_dir", type=str, default=None, help="CSV output directory")
+    parser.add_argument("--pred_dir", type=str, default=None, help="(ignored, pipeline compatibility)")
     args = parser.parse_args()
 
     gs_dir = Path(args.gs_dir) if args.gs_dir else DEFAULT_GS

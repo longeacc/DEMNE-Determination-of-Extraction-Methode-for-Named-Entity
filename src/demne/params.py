@@ -23,10 +23,10 @@ DEFAULTS = {
         "R_HIGH": 0.25,
         "FEAS_NER": 0.20,
         "MIN_TE_SAMPLES": 2,
-        # --- TFIDF_Extractability (synonymie conceptuelle contextuelle) ---
-        "TFIDF_Y": 0.70,  # seuil sur tfidf_score -> RÈGLES
-        "TFIDF_X": 5,  # nb de top-clusters évalués pour le recall
-        "TFIDF_SIM": 0.50,  # seuil de similarité cosine du clustering glouton
+        # --- TFIDF_Extractability (contextual conceptual synonymy) ---
+        "TFIDF_Y": 0.70,  # threshold on tfidf_score -> RULES
+        "TFIDF_X": 5,  # number of top clusters evaluated for recall
+        "TFIDF_SIM": 0.50,  # cosine similarity threshold for greedy clustering
     },
     "risk_weights": {"negation": 0.1, "uncertainty": 0.3, "contradiction": 0.6},
     "risk_window_size": 50,

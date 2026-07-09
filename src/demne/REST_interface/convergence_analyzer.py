@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 class ConvergenceAnalyzer:
     """
-    Outil de visualisation des résultats de concordance Arbre vs REST.
+    Visualisation tool for tree vs REST concordance results.
     """
 
     def __init__(self, output_dir="Results/figures"):
@@ -14,27 +14,27 @@ class ConvergenceAnalyzer:
 
     def analyze_convergence(self, bridge_report: dict) -> None:
         """
-        Génère un rapport texte et des graphiques simples.
+        Generate a text report and simple charts.
         """
-        print("\n--- RAPPORT DE CONVERGENCE DURAXELL ---")
-        print(f"Taux de concordance global : {bridge_report['concordance_rate'] * 100:.1f}%")
+        print("\n--- DEMNE CONVERGENCE REPORT ---")
+        print(f"Global concordance rate: {bridge_report['concordance_rate'] * 100:.1f}%")
 
         divs = bridge_report.get("divergences", [])
-        print(f"Nombre de divergences : {len(divs)}")
+        print(f"Number of divergences: {len(divs)}")
 
         if divs:
-            print("\nDétail des divergences (Top-Down vs Bottom-Up):")
-            print(f"{'ENTITE':<25} | {'ARBRE':<15} | {'REST (EMPIRIQUE)':<15} | {'DELTA Te'}")
+            print("\nDivergence details (Top-Down vs Bottom-Up):")
+            print(f"{'ENTITY':<25} | {'TREE':<15} | {'REST (EMPIRICAL)':<15} | {'DELTA Te'}")
             print("-" * 75)
             for div in divs:
                 ent = div["entity"]
                 tree = div["tree_decision"]
                 rest = div["rest_decision"]
 
-                # Accès sécurisé aux métriques avec fallback
+                # Safe metric access with fallback
                 metrics = div.get("metrics_delta", {})
                 te_emp = metrics.get("empirical_te", 0.0)
-                # Vérification type pour theoretical_te qui peut être 'N/A'
+                # theoretical_te may be 'N/A' — type-check before use
                 te_theo = metrics.get("theoretical_te", "N/A")
 
                 delta_str = f"E:{te_emp:.2f} vs T:{te_theo}"
@@ -53,12 +53,12 @@ class ConvergenceAnalyzer:
 
         plt.figure(figsize=(6, 6))
         plt.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
-        plt.title("Convergence Arbre de Décision vs Annotation REST")
+        plt.title("Decision Tree vs REST Annotation Convergence")
 
         path = os.path.join(self.output_dir, "convergence_pie_chart.png")
         plt.savefig(path)
         plt.close()
-        print(f"\nGraphique sauvegardé : {path}")
+        print(f"\nChart saved: {path}")
 
 
 if __name__ == "__main__":

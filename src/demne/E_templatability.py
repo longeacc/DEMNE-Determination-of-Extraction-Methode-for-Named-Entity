@@ -61,8 +61,8 @@ class BratAnnotation:
 
 class TemplatabilityScorer:
     """
-    Calcule le score de Templateabilité (Te) pour chaque entité biomédicale.
-    Te mesure le degré de prédictibilité structurelle des patterns d'expression.
+    Compute the Templatability score (Te) for each biomedical entity.
+    Te measures the degree of structural predictability of expression patterns.
     """
 
     def __init__(self, corpus: list[dict[str, Any]]):
@@ -70,7 +70,7 @@ class TemplatabilityScorer:
         Initialize the scorer with a corpus of annotated documents.
 
         Args:
-            corpus: liste de documents annotés {
+            corpus: list of annotated documents {
                 'text': str,
                 'annotations': list[BratAnnotation] or list[dict],
                 'file_id': str (optional)
@@ -98,15 +98,13 @@ class TemplatabilityScorer:
         self.results_cache = {}
 
     def compute_from_list(self, values: list[str]) -> float:
-        """
-        Calcule le score Te directement depuis une liste de chaînes.
-        """
+        """Compute Te score directly from a list of strings."""
         self.entities_values["TEMP_LIST"] = values
         return self.compute("TEMP_LIST")
 
     def normalize_pattern(self, text: str) -> str:
         """
-        Normalise un texte d'entité en template abstrait.
+        Normalize an entity string into an abstract template.
         Ex: "HER2 3+" -> "XXX D+"
         Ex: "ER >80%" -> "XX >DD%"
         Ex: "Ki67 15-20%" -> "XXDD DD-DD%"
@@ -147,15 +145,15 @@ class TemplatabilityScorer:
 
     def compute(self, entity_type: str) -> float:
         """
-        Retourne un score Te ∈ [0, 100].
-        Méthode :
-        1. Extraire toutes les mentions de entity_type dans le corpus
-        2. Normaliser les patterns : "HER2 3+" → "XXXX D+" (regex abstraction)
-        3. Calculer l'entropie de la distribution des patterns normalisés (H)
-        4. Normaliser l'entropie par rapport au maximum possible (H_norm = h / ln(n_unique))
-        5. Calculer la cohérence structurelle: 1.0 - H_norm
-        6. Ajouter un bonus sémantique si présence de marqueurs standards (+ / - / % / > / <)
-        7. Te = (cohérence_structurelle + bonus_sémantique) * 100
+        Return a Te score ∈ [0, 100].
+        Method:
+        1. Extract all mentions of entity_type from the corpus
+        2. Normalize patterns: "HER2 3+" → "XXXX D+" (regex abstraction)
+        3. Compute entropy of the normalized pattern distribution (H)
+        4. Normalize entropy against maximum possible (H_norm = h / ln(n_unique))
+        5. Compute structural consistency: 1.0 - H_norm
+        6. Add semantic bonus if standard markers are present (+ / - / % / > / <)
+        7. Te = (structural_consistency + semantic_bonus) * 100
         """
         values = self.entities_values.get(entity_type, [])
         if not values:
@@ -219,14 +217,14 @@ class TemplatabilityScorer:
         return te_val
 
     def compute_all(self) -> dict[str, float]:
-        """Calcule Te pour toutes les entités du corpus (en %)."""
+        """Compute Te for all entities in the corpus (as %)."""
         scores = {}
         for entity_type in self.entities_values.keys():
             scores[entity_type] = self.compute(entity_type)
         return scores
 
     def to_json(self, output_path: str) -> None:
-        """Sauvegarder les résultats dans templatability_analysis.json"""
+        """Save results to templatability_analysis.json."""
         output = {}
         for entity_type, stats in self.results_cache.items():
             # Convert stats to JSON serializable format
@@ -365,7 +363,7 @@ def main():
     scorer.to_json(output_file)
 
     # Optional: Print Top 5
-    print("\nTop 5 Templatability Scores (Te normalisé [0-1]) :")
+    print("\nTop 5 Templatability Scores (Te normalized [0-1]):")
     top5 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
     print_table(["Entity", "Te [0-1]"], [[e, f"{s / 100:.4f}"] for e, s in top5], [45, 10])
 

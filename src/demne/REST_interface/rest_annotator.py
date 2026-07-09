@@ -36,14 +36,14 @@ class BratAnnotation:
 
 class RESTAnnotator:
     """
-    Outil d'annotation pilote selon la méthodologie REST (Rapid Expert Supervision Tool).
-    Objectif : réduire le temps d'annotation de 15-20 min -> 3-5 min.
+    Pilot annotation tool following the REST methodology (Rapid Expert Supervision Tool).
+    Goal: reduce annotation time from 15-20 min to 3-5 min.
     """
 
     def __init__(self, output_dir="Evaluation/REST_Annotations"):
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
-        # Patterns simples pour le mode automatisé (simulation expert)
+        # Simple patterns for automated mode (expert simulation)
         self.AUTO_PATTERNS = {
             "Estrogen_receptor": [
                 r"(ER\s*(\+|positive|\>\d+%))",
@@ -64,19 +64,19 @@ class RESTAnnotator:
         mode: str = "highlighting",
     ) -> list[BratAnnotation]:
         """
-        Simulation d'une session d'annotation.
+        Simulate an annotation session.
 
         Modes:
-        - 'manual': Interactif (console input)
-        - 'automated_test': Utilise des regex prédéfinies pour simuler un expert rapide
-        - 'highlighting': (Futur) Interface graphique
+        - 'manual': Interactive (console input)
+        - 'automated_test': Uses predefined regex to simulate a fast expert
+        - 'highlighting': (Future) Graphical interface
         """
         if entity_types is None:
             entity_types = ["Estrogen_receptor", "Progesterone_receptor", "HER2", "Ki67"]
         annotations = []
 
-        print(f"--- Démarrage Session REST ({mode}) ---")
-        print(f"Nombre de documents : {len(documents)}")
+        print(f"--- Starting REST Session ({mode}) ---")
+        print(f"Number of documents: {len(documents)}")
 
         for doc_id, text in documents:
             start_time = time.time()
@@ -85,21 +85,21 @@ class RESTAnnotator:
             print(f"\nDocument {doc_id} analysis...")
 
             if mode == "automated_test":
-                # Simulation expert: trouve les entités via regex
+                # Expert simulation: find entities via regex
                 doc_anns = self._auto_annotate(doc_id, text, entity_types)
-                # Simulation temps de lecture humain rapide (0.1s par entité trouvée + base)
+                # Simulate fast human reading time (0.1s per entity found + base)
                 time.sleep(0.05 + 0.01 * len(doc_anns))
 
             elif mode == "manual":
-                # Mode interactif console (simplifié)
+                # Simplified interactive console mode
                 print(text[:300] + "...")
-                print("Entrez 'type:start-end' (ex: HER2:10-15) ou 'n' pour suivant.")
-                # user_input = input("Annot > ") # Commenté pour éviter blocage
+                print("Enter 'type:start-end' (e.g. HER2:10-15) or 'n' to skip.")
+                # user_input = input("Annot > ") # Commented out to avoid blocking
 
             duration = time.time() - start_time
             annotations.extend(doc_anns)
 
-            # Log de performance de l'annotateur (optionnel, ici print)
+            # Annotator performance log
             print(f"  > {len(doc_anns)} annotations found in {duration:.4f}s")
 
         self.export_to_brat(annotations)
@@ -108,7 +108,7 @@ class RESTAnnotator:
     def _auto_annotate(
         self, doc_id: str, text: str, entity_types: list[str]
     ) -> list[BratAnnotation]:
-        """Méthode interne pour simuler l'annotation via patterns regex."""
+        """Internal method to simulate annotation via regex patterns."""
         anns = []
         for ent_type in entity_types:
             patterns = self.AUTO_PATTERNS.get(ent_type, [])
@@ -116,7 +116,7 @@ class RESTAnnotator:
                 for match in re.finditer(pat, text, re.IGNORECASE):
                     start, end = match.span()
                     span_text = match.group()
-                    # Capture contexte (50 chars avant/après)
+                    # Capture context window (50 chars before/after)
                     ctx_left = text[max(0, start - 50) : start]
                     ctx_right = text[end : min(len(text), end + 50)]
 
@@ -126,7 +126,7 @@ class RESTAnnotator:
         return anns
 
     def export_to_brat(self, annotations: list[BratAnnotation], output_dir: str = None) -> None:
-        """Exporte en format .ann (BRAT)."""
+        """Export annotations to .ann (BRAT) format."""
         out = output_dir or self.output_dir
 
         # Group by document

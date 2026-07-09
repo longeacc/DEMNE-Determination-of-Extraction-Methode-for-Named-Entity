@@ -1,56 +1,57 @@
 # demne Dashboard
 
-Ce dossier contient l'interface graphique interactive de supervision NLP pour le projet de recherche **demne*.
-L'application Streamlit permet d'analyser les métriques de second niveau (L2) et d'agir sur le routage en cascade (Rules -> Transformers -> LLM) selon les scores calculés ou modifiables par l'utilisateur.
+This folder contains the interactive NLP supervision GUI for the **demne** research project.
+The Streamlit application lets you analyse level-2 (L2) metrics and act on the cascade routing (Rules → Transformers → LLM) according to scores computed by the pipeline or edited manually by the user.
 
 ---
 
-## Table des matières & Interfaces
+## Table of Contents & Interfaces
 
-1. ** Dashboard Métriques** (1_Dashboard_Metriques.py)
-   - Vue analytique de l'algorithme "Cascade Frugale".
-   - **Édition Temps Réel** : Le tableau des métriques permet à l'utilisateur de cliquer et de modifier manuellement les scores (Te, He, R, Yield, etc.). Sitôt modifiés, les graphiques (Radar, Nuages de point) et la décision du modèle (Rules, LLM, etc.) sont recalculés.
-   - Manipulation des Seuils (thresholds) par sliders pour comparer les modes de frugalité d'énergie.
+1. **Metrics Dashboard** (1_Dashboard_Metriques.py)
+   - Analytical view of the "Frugal Cascade" algorithm.
+   - **Real-time Editing**: the metrics table lets users click and manually modify scores (Te, He, R, Yield, etc.). Charts (Radar, Scatter) and the model decision (Rules, LLM, etc.) are instantly recomputed.
+   - Threshold sliders to compare energy-frugality modes.
 
-2. ** Console CLI** (2_Console_CLI.py)
-   - Simulateur et wrapper de l'application Terminal main.py.
-   - Permet de lancer directement les commandes extract, batch, metrics et d'apercevoir les logs du terminal à même l'interface web.
+2. **CLI Console** (2_Console_CLI.py)
+   - Simulator and wrapper for the `main.py` terminal application.
+   - Lets you launch `extract`, `batch`, and `metrics` commands directly and view terminal logs inside the web interface.
 
-3. ** REST Integration & Config** (3_REST_Integration.py)
-   - Page dédiée à la gestion d'exports de configuration L2 Json.
-   - Permet de filtrer / exclure des entités spécifiques du Dashboard sans les perdre.
+3. **REST Integration & Config** (3_REST_Integration.py)
+   - Page dedicated to L2 JSON configuration export management.
+   - Filter/exclude specific entities from the Dashboard without losing them.
 
-4. ** Serveur REST & Jupyter** (4_Notebook_REST.py)
-   - Panneau de commande de l'API de traitement de rapport clinique (DuraXell REST).
-   - Intègre l'ordinateur Jupyter (REST.ipynb) directement au sein d'une IFrame pour des tests interactifs croisés sur le même serveur web qu'un développeur. 
+4. **REST Server & Jupyter** (4_Notebook_REST.py)
+   - Control panel for the clinical report processing API (DuraXell REST).
+   - Embeds the Jupyter notebook (REST.ipynb) directly in an IFrame for interactive cross-testing on the same web server.
 
 ---
 
-##  Lancement Optimal
+## Optimal Launch
 
-1. **Activation de l'environnement virtuel** :
-   Veillez à ce que vos libraires soient à jour via :
-   \\\dash
+1. **Activate the virtual environment** and ensure dependencies are up to date:
+
+   ```bash
    pip install -r dashboard/requirements.txt
-   \\\
-   *Astuce:* Installez Jupyter (pip install jupyter) si vous comptez lancer l'IFrame du Notebook interactif.
+   ```
 
-2. **Démarrage de l'Application** :
-   Ouvrez un terminal dans le dossier \dashboard\ :
-   \\\dash
-   cd dashboard    
+   *Tip:* Install Jupyter (`pip install jupyter`) if you plan to use the interactive Notebook IFrame.
+
+2. **Start the application** — open a terminal in the `dashboard/` folder:
+
+   ```bash
+   cd dashboard
    streamlit run app.py
-   \\\
+   ```
 
-3. **Port par défaut** : L'interface sera déployée à l'adresse \http://localhost:8501\.
+3. **Default port**: the interface will be served at `http://localhost:8501`.
 
 ---
 
-## Modifier les métriques interactives (Demo/Playground)
+## Editing Interactive Metrics (Demo / Playground)
 
-Sur la page ** Dashboard Métriques L2 **, cherchez le composant **Résumé analytique (Éditable)**.
-Vous pouvez cliquer sur n'importe quelle cellule du tableau (à part la colonne d'Entité et de Décision) :
-- Passez par exemple la valeur \Yield\ ou le \R\ d'un biomarqueur (Ex: Ki67). 
-- Validez l'entrée (Touche "Entrée" du clavier) et vous verrez immédiatement l'entité être rétrogradée au niveau LLM ou passer au niveau Rule. Les graphiques inférieurs capteront l'itération.
+On the **Metrics Dashboard L2** page, find the **Analytical Summary (Editable)** component.
+Click any cell in the table (except the Entity and Decision columns):
+- Change, for example, the `Yield` or `R` value of a biomarker (e.g. Ki67).
+- Confirm the entry (press Enter) and you will immediately see the entity drop to LLM level or rise to Rule level. The charts below will reflect the update.
 
-Pour l'API et le Notebook, allez en **Serveur REST & Jupyter**, pressez "Lancer API" et/ou "Lancer Jupyter", l'Iframe se chargera alors interactivement de vous afficher l'environnement.
+For the API and the Notebook, go to **REST Server & Jupyter**, press "Launch API" and/or "Launch Jupyter"; the IFrame will interactively display the environment.

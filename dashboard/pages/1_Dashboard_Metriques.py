@@ -8,7 +8,7 @@ import streamlit as st
 from core import BratCorpusParser, MetricsCalculator, compute_routing
 from core.metrics import PARAMS
 
-st.set_page_config(page_title="Dashboard Métriques", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Metrics Dashboard", page_icon="📊", layout="wide")
 
 PRESET_FRUGAL = dict(PARAMS["presets"]["FRUGAL"])
 PRESET_QUALITY = dict(PARAMS["presets"]["QUALITY"])
@@ -25,7 +25,7 @@ if "thresholds" not in st.session_state:
         st.session_state[f"slider_{m}"] = float(v)
 
 with st.sidebar:
-    st.subheader("📂 Charger un corpus BRAT")
+    st.subheader("📂 Load a BRAT corpus")
 
     import tkinter as tk
     from tkinter import filedialog
@@ -38,20 +38,20 @@ with st.sidebar:
         root.destroy()
         return folder
 
-    if st.button("🔍 Parcourir... (Sélectionner un dossier)"):
+    if st.button("🔍 Browse... (Select a folder)"):
         folder_path = select_folder()
         if folder_path:
             st.session_state["local_path"] = folder_path
             st.rerun()
 
     local_path = st.text_input(
-        "Chemin du dossier de travail (Corpus BRAT)",
+        "Working folder path (BRAT corpus)",
         value=st.session_state.get("local_path", ""),
-        placeholder="/chemin/vers/corpus_brat/",
+        placeholder="/path/to/brat_corpus/",
     )
 
-    if local_path and st.button("Analyser le corpus"):
-        with st.spinner("Analyse du corpus en cours..."):
+    if local_path and st.button("Analyze corpus"):
+        with st.spinner("Analyzing corpus..."):
             parser = BratCorpusParser()
             documents = parser.parse_directory(local_path)
             st.session_state["corpus"] = documents
@@ -63,19 +63,19 @@ with st.sidebar:
                 }
             except Exception as _e:
                 st.session_state["tfidf_scores"] = {}
-                st.warning(f"TFIDF non calculé : {_e}")
-            st.success(f"✅ {len(documents)} documents chargés")
+                st.warning(f"TFIDF not computed: {_e}")
+            st.success(f"✅ {len(documents)} documents loaded")
 
     st.markdown("---")
-    st.subheader("🎚️ SEUILS DE ROUTAGE")
+    st.subheader("🎚️ ROUTING THRESHOLDS")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🌿 Preset Frugal"):
+        if st.button("🌿 Frugal preset"):
             for k, v in PRESET_FRUGAL.items():
                 st.session_state[f"slider_{k}"] = float(v)
             st.session_state["thresholds"] = PRESET_FRUGAL.copy()
     with col2:
-        if st.button("⭐ Preset Qualité"):
+        if st.button("⭐ Quality preset"):
             for k, v in PRESET_QUALITY.items():
                 st.session_state[f"slider_{k}"] = float(v)
             st.session_state["thresholds"] = PRESET_QUALITY.copy()
@@ -88,18 +88,18 @@ with st.sidebar:
         st.session_state["thresholds"][metric] = val
 
     st.markdown("---")
-    st.subheader("📊 STATISTIQUES CORPUS")
+    st.subheader("📊 CORPUS STATISTICS")
     if "corpus" in st.session_state and st.session_state["corpus"]:
         st.write(f"Documents: {len(st.session_state['corpus'])}")
         st.write(
             f"Annotations: {sum(stats['count'] for stats in st.session_state['entity_stats'].values())}"
         )
-        st.write(f"Entités uniques: {len(st.session_state['entity_stats'])}")
+        st.write(f"Unique entities: {len(st.session_state['entity_stats'])}")
 
-st.title("📊 Dashboard des Métriques")
+st.title("📊 Metrics Dashboard")
 
 if "corpus" not in st.session_state or not st.session_state["corpus"]:
-    st.info("👈 Veuillez charger un corpus depuis la barre latérale pour commencer.")
+    st.info("👈 Please load a corpus from the sidebar to get started.")
 else:
     entity_metrics = {}
     calculator = MetricsCalculator()
@@ -133,7 +133,7 @@ else:
     with col1:
         st.subheader("Radar Chart")
         if not df.empty:
-            selected_entity = st.selectbox("Sélectionner une entité", df["Entity"].tolist())
+            selected_entity = st.selectbox("Select an entity", df["Entity"].tolist())
             if selected_entity:
                 entity_data = df[df["Entity"] == selected_entity].iloc[0]
                 metrics_radar = ["Te", "He", "R", "Feas"]
@@ -147,39 +147,39 @@ else:
                 )
                 st.plotly_chart(fig, use_container_width=True, key=f"radar_{selected_entity}")
         else:
-            st.info("Aucune donnée extraite pour le moment.")
+            st.info("No data extracted yet.")
 
     with col2:
-        st.subheader("Distribution Routage")
+        st.subheader("Routing Distribution")
         if not df.empty:
             fig_pie = px.pie(
                 df,
                 names="Routing",
                 color="Routing",
                 color_discrete_map={
-                    "RÈGLES": "#2E7D32",
+                    "RULES": "#2E7D32",
                     "TBM": "#F57C00",
                     "LLM": "#C62828",
                 },
             )
             st.plotly_chart(fig_pie, use_container_width=True)
         else:
-            st.info("Aucune donnée extraite pour le moment.")
+            st.info("No data extracted yet.")
 
-    st.subheader("Heatmap Métriques")
+    st.subheader("Metrics Heatmap")
     if not df.empty:
         heatmap_cols = [c for c in ["Te", "He", "R", "Feas"] if c in df.columns]
         heatmap_df = df.set_index("Entity")[heatmap_cols]
         fig_heat = px.imshow(heatmap_df.T, color_continuous_scale="RdYlGn", aspect="auto")
         st.plotly_chart(fig_heat, use_container_width=True)
     else:
-        st.info("Aucune entité détectée dans le corpus pour afficher les graphiques.")
+        st.info("No entities detected in the corpus.")
 
-    st.subheader("Tableau de Décision Routage")
+    st.subheader("Routing Decision Table")
 
     def color_routing(cell_val):
         return {
-            "RÈGLES": "background-color: #C8E6C9; color: #1B5E20;",
+            "RULES": "background-color: #C8E6C9; color: #1B5E20;",
             "TBM": "background-color: #FFE0B2; color: #E65100;",
             "LLM": "background-color: #FFCDD2; color: #B71C1C;",
         }.get(cell_val, "")
