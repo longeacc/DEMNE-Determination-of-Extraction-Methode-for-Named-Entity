@@ -24,6 +24,7 @@ from demne._table import print_table
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+assert _pspec is not None and _pspec.loader is not None
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -150,7 +151,7 @@ class HomogeneityScorer:
     def to_csv(self, output_path: str):
         """Save analysis to CSV."""
         scores = self.compute_all()
-        rows = []
+        rows: list[dict[str, float | str | int]] = []
         for entity, score in scores.items():
             values = self.entities_values[entity]
             all_tokens = []

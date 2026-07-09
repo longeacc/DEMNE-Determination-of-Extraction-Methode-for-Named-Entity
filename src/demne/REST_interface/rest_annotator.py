@@ -60,7 +60,7 @@ class RESTAnnotator:
     def annotate_batch(
         self,
         documents: list[tuple[str, str]],  # List of (doc_id, text) tuples
-        entity_types: list[str] = None,
+        entity_types: list[str] | None = None,
         mode: str = "highlighting",
     ) -> list[BratAnnotation]:
         """
@@ -125,12 +125,14 @@ class RESTAnnotator:
                     )
         return anns
 
-    def export_to_brat(self, annotations: list[BratAnnotation], output_dir: str = None) -> None:
+    def export_to_brat(
+        self, annotations: list[BratAnnotation], output_dir: str | None = None
+    ) -> None:
         """Export annotations to .ann (BRAT) format."""
         out = output_dir or self.output_dir
 
         # Group by document
-        docs = {}
+        docs: dict[str, list[BratAnnotation]] = {}
         for ann in annotations:
             if ann.doc_id not in docs:
                 docs[ann.doc_id] = []

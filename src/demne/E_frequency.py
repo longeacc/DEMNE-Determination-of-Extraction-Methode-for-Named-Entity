@@ -27,6 +27,7 @@ from demne._table import print_table
 
 # --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+assert _pspec is not None and _pspec.loader is not None
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()

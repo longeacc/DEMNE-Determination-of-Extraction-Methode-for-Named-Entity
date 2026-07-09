@@ -25,6 +25,7 @@ from demne._table import print_table
 
 # --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+assert _pspec is not None and _pspec.loader is not None
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -54,7 +55,7 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
 class DecisionTreeBuilder:
     def __init__(self, config_path: Path):
         self.config_path = config_path
-        self.decisions = {}
+        self.decisions: dict[str, Any] = {}
 
         # --- CALIBRATED THRESHOLDS (data/demne_params.json → decision_thresholds) ---
         _dt = PARAMS["decision_thresholds"]
@@ -154,7 +155,7 @@ class DecisionTreeBuilder:
         """
         _ = entity  # public API param — consumed by build_full_config
         te: float = metrics.get("Te", 0.0)
-        te_count: int = metrics.get("Te_count", 0)
+        te_count: int = int(metrics.get("Te_count", 0))
         he: float = metrics.get("He", 0.0)
         r_score: float = metrics.get("R", 0.0)
         feas: float = metrics.get("Feas", 0.0)
@@ -266,7 +267,7 @@ class DecisionTreeBuilder:
 
     def build_full_config(self, metrics_data: dict[str, dict]):
         """Compile all decisions into the config dict."""
-        config = {
+        config: dict[str, Any] = {
             "version": "2.1",
             "global_thresholds": self.THRESHOLDS,
             "entities": {},

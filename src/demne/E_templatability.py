@@ -22,6 +22,7 @@ from demne._table import print_table
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+assert _pspec is not None and _pspec.loader is not None
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -95,7 +96,7 @@ class TemplatabilityScorer:
                 self.entities_values[etype].append(text)
 
         # Cache for compute results
-        self.results_cache = {}
+        self.results_cache: dict[str, Any] = {}
 
     def compute_from_list(self, values: list[str]) -> float:
         """Compute Te score directly from a list of strings."""
@@ -157,7 +158,7 @@ class TemplatabilityScorer:
         """
         values = self.entities_values.get(entity_type, [])
         if not values:
-            return 0.0, {}
+            return 0.0
 
         total_count = len(values)
         normalized_patterns = [self.normalize_pattern(v) for v in values]

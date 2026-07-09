@@ -22,6 +22,7 @@ from demne._table import print_table
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 _pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
+assert _pspec is not None and _pspec.loader is not None
 _pmod = _il.module_from_spec(_pspec)
 _pspec.loader.exec_module(_pmod)
 PARAMS = _pmod.load_params()
@@ -57,9 +58,9 @@ class RiskContextScorer:
     3. Contradiction (maximum R)
     """
 
-    def __init__(self, data_dirs: list[Path] = None):
+    def __init__(self, data_dirs: list[Path] | None = None):
         self.data_dirs = data_dirs or []
-        self.document_data = defaultdict(list)
+        self.document_data: defaultdict[str, list] = defaultdict(list)
         self.entities_stats: dict = {}
 
         # --- DETECTOR CONFIGURATION ---
@@ -262,10 +263,12 @@ class RiskContextScorer:
         self._load_data()
 
         # Group everything by entity type for global stats
-        entity_stats = defaultdict(
+        entity_stats: defaultdict[str, dict[str, int]] = defaultdict(
             lambda: {"total": 0, "negated": 0, "uncertain": 0, "contradicted_docs": 0}
         )
-        entity_docs = defaultdict(lambda: defaultdict(list))  # type -> doc -> [entries]
+        entity_docs: defaultdict[str, defaultdict[str, list]] = defaultdict(
+            lambda: defaultdict(list)
+        )
 
         # 1. Local analysis (Negation / Uncertainty) for each occurrence
         for filename, entries in self.document_data.items():
