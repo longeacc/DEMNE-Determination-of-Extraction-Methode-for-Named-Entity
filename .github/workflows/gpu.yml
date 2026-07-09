@@ -12,11 +12,10 @@ name: GPU Tests
 #   4. Make sure CUDA Toolkit (≥11.8) or ROCm (≥5.4) is installed on the machine
 
 on:
-  # pull_request intentionally omitted: self-hosted runners must never execute
-  # code from untrusted forks. GPU jobs run only after a maintainer has merged
-  # or pushed directly, or via manual dispatch.
-  push:
-    branches: [main, develop]
+  # Only manual dispatch: no push trigger, so no job is ever queued automatically.
+  # GPU runners are not registered — automatic triggers would leave jobs pending
+  # indefinitely. Trigger manually from Actions → Run workflow when a runner is
+  # available.
   workflow_dispatch:
     inputs:
       gpu_type:
