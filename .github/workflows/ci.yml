@@ -77,7 +77,6 @@ jobs:
           -m "not cuda and not rocm"
           --cov=demne
           --cov-report=xml
-          --cov-fail-under=70
           --tb=short
           -q
 

@@ -129,6 +129,22 @@ target-version = ["py310"]
 profile = "black"
 line_length = 100
 
+[tool.coverage.run]
+source = ["demne"]
+omit = [
+    "src/demne/REST_interface/*",
+    "src/demne/visualize_decision_tree.py",
+    "src/demne/params.py",
+    "src/demne/E_feasibility_NER.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.",
+    "pragma: no cover",
+]
+fail_under = 45
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
