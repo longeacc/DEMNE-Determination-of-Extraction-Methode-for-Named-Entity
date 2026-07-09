@@ -14,7 +14,7 @@ PRESET_FRUGAL = dict(PARAMS["presets"]["FRUGAL"])
 PRESET_QUALITY = dict(PARAMS["presets"]["QUALITY"])
 
 # Extractabilité par COUVERTURE de mots-clés (coverage-F1) — remplace la synonymie
-# contextuelle : sépare mieux les classes (cf. optimisation). f1_score = coverage-F1.
+# contextuelle : sépare mieux les classes (cf. optimisation). tfidf_score = recall cumulatif.
 _tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "E_tfidf_coverage.py"
 _tfidf_spec = _il.spec_from_file_location("_tfidf_cov", _tfidf_path)
 _tfidf_mod = _il.module_from_spec(_tfidf_spec)
@@ -61,10 +61,7 @@ with st.sidebar:
             try:
                 tfidf_results = _compute_tfidf_for_all(local_path)
                 st.session_state["tfidf_scores"] = {
-                    etype: {
-                        "tfidf_score": res["tfidf_score"],
-                        "f1_score": res.get("f1_score", 0.0),
-                    }
+                    etype: {"tfidf_score": res["tfidf_score"]}
                     for etype, res in tfidf_results.items()
                 }
             except Exception as _e:
@@ -118,7 +115,6 @@ else:
         if tfidf_entry is not None:
             if isinstance(tfidf_entry, dict):
                 metrics["tfidf_score"] = tfidf_entry.get("tfidf_score", 0.0)
-                metrics["f1_score"] = tfidf_entry.get("f1_score", 0.0)
             else:
                 metrics["tfidf_score"] = float(tfidf_entry)
         routing, justification = compute_routing(metrics, thresholds)
@@ -143,7 +139,6 @@ else:
                 "R",
                 "Feas",
                 "tfidf_score",
-                "f1_score",
                 "Routing",
                 "Justification",
             ]
@@ -208,13 +203,9 @@ else:
         display_cols = ["Entity", "Te", "He", "R", "Feas"]
         if "tfidf_score" in df.columns:
             display_cols.append("tfidf_score")
-        if "f1_score" in df.columns:
-            display_cols.append("f1_score")
         display_cols += ["Routing", "Justification"]
         display_df = df[[c for c in display_cols if c in df.columns]].copy()
-        display_df = display_df.rename(
-            columns={"tfidf_score": "TFIDF_recall", "f1_score": "TFIDF_F1"}
-        )
+        display_df = display_df.rename(columns={"tfidf_score": "TFIDF_recall"})
         st.dataframe(
             display_df.style.map(color_routing, subset=["Routing"]),
             use_container_width=True,

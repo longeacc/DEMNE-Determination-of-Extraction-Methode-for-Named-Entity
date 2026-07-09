@@ -83,9 +83,7 @@ def coverage_f1_by_x(
             pat = re.compile(r"\b(" + "|".join(re.escape(w) for w in top) + r")\b")
             hit_e = sum(1 for m in ment_e if pat.search(m))
             recall = hit_e / len(ment_e)
-            hit_all = sum(
-                1 for ee in ents for m in entity_mentions[ee] if pat.search(m.lower())
-            )
+            hit_all = sum(1 for ee in ents for m in entity_mentions[ee] if pat.search(m.lower()))
             precision = hit_e / hit_all if hit_all else 0.0
             per_x[x] = (
                 round(2 * recall * precision / (recall + precision), 4)
@@ -96,10 +94,8 @@ def coverage_f1_by_x(
     return out
 
 
-def compute_coverage_for_all_entities(
-    corpus_dir, top_x: int | None = None
-) -> dict[str, dict]:
-    """API corpus (dashboard/CLI) : {etype: {"f1_score", "tfidf_score"}}.
+def compute_coverage_for_all_entities(corpus_dir, top_x: int | None = None) -> dict[str, dict]:
+    """API corpus (dashboard/CLI) : {etype: {"tfidf_score"}}.
 
     Lit les mentions du corpus BRAT, calcule la coverage-F1 au top-X courant
     (TFIDF_X de demne_params.json si non fourni). `tfidf_score` = même valeur
@@ -110,11 +106,7 @@ def compute_coverage_for_all_entities(
     x = int(top_x if top_x is not None else load_params()["decision_thresholds"].get("TFIDF_X", 5))
     mentions = collect_mentions(corpus_dir)
     by_x = coverage_f1_by_x(mentions, max_x=max(x, 1))
-    return {
-        et: {"f1_score": by_x.get(et, {}).get(x, 0.0),
-             "tfidf_score": by_x.get(et, {}).get(x, 0.0)}
-        for et in mentions
-    }
+    return {et: {"tfidf_score": by_x.get(et, {}).get(x, 0.0)} for et in mentions}
 
 
 def collect_mentions(corpus_dir) -> dict[str, list[str]]:
@@ -167,10 +159,14 @@ def run(gs_dir, results_dir, top_x=None, y=None, **_kw) -> None:
         w.writeheader()
         for et in sorted(mentions):
             f1 = by_x.get(et, {}).get(x, 0.0)
-            w.writerow({
-                "Entity": et, "TFIDF_Score": round(f1, 4),
-                "Routes_To_Rules": f1 >= y, "Mentions_Count": len(mentions[et]),
-            })
+            w.writerow(
+                {
+                    "Entity": et,
+                    "TFIDF_Score": round(f1, 4),
+                    "Routes_To_Rules": f1 >= y,
+                    "Mentions_Count": len(mentions[et]),
+                }
+            )
     print(f"coverage-F1 → {out_csv} (X={x}, Y={y})")
 
 

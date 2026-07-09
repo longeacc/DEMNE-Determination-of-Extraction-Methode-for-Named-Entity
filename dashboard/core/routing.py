@@ -43,15 +43,8 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     t_r: float = thresholds.get("R", _DT["R_HIGH"])
     t_feas: float = thresholds.get("Feas", _DT["FEAS_NER"])
     t_y: float = thresholds.get("Y", _DT.get("TFIDF_Y", 0.70))
-    use_f1: bool = bool(_DT.get("TFIDF_USE_F1", True))
-
-    # Routing metric: f1_score preferred when TFIDF_USE_F1=True, else recall
-    if use_f1 and metrics.get("f1_score") is not None:
-        tfidf_routing = metrics.get("f1_score")
-        tfidf_label = "F1"
-    else:
-        tfidf_routing = metrics.get("tfidf_score")
-        tfidf_label = "recall"
+    tfidf_routing = metrics.get("tfidf_score")
+    tfidf_label = "recall"
 
     def _noeud_feas() -> tuple[str, str]:
         if feas >= t_feas:

@@ -156,6 +156,5 @@ def synthetic_metrics():
             "R": 0.05,
             "Feas": 0.8,
             "tfidf_score": 0.92,
-            "f1_score": 0.92,
         },
     }

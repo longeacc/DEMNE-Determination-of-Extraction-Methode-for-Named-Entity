@@ -55,7 +55,7 @@ def test_generic_word_lowers_precision():
 
 
 def test_keys_and_range(tmp_path=None):
-    ment = {"E": ["a b", "a c", "a d"], "F": ["x y", "x z"]}
+    ment = {"E": ["ab bc", "ab cd", "ab de"], "F": ["xy yz", "xy zw"]}
     out = coverage_f1_by_x(ment, max_x=5)
     assert set(out["E"].keys()) == set(range(1, 6))
     assert all(0.0 <= v <= 1.0 for v in out["E"].values())
@@ -71,7 +71,8 @@ def _write_brat(d, name, lines):
 
 def test_collect_mentions_reads_ann(tmp_path):
     _write_brat(
-        tmp_path, "doc1",
+        tmp_path,
+        "doc1",
         ["T1\tHER2 10 14\tHER2 positif", "T2\tKi67 20 24\tKi 67 10%", "A1\tattr T1 x"],
     )
     ment = collect_mentions(tmp_path)
@@ -84,12 +85,17 @@ def test_compute_and_run_write_csv(tmp_path):
     corpus = tmp_path / "corpus"
     corpus.mkdir()
     _write_brat(
-        corpus, "d",
-        ["T1\tHER2 0 4\ther2 a", "T2\tHER2 5 9\ther2 b", "T3\tKi 10 12\tki 1", "T4\tKi 13 15\tki 2"],
+        corpus,
+        "d",
+        [
+            "T1\tHER2 0 4\ther2 a",
+            "T2\tHER2 5 9\ther2 b",
+            "T3\tKi 10 12\tki 1",
+            "T4\tKi 13 15\tki 2",
+        ],
     )
     res = compute_coverage_for_all_entities(corpus, top_x=2)
-    assert "HER2" in res and "f1_score" in res["HER2"]
-    assert res["HER2"]["f1_score"] == res["HER2"]["tfidf_score"]
+    assert "HER2" in res and "tfidf_score" in res["HER2"]
 
     out = tmp_path / "out"
     run(corpus, out, top_x=2, y=0.5)

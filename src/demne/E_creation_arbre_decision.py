@@ -71,8 +71,6 @@ class DecisionTreeBuilder:
         self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
         # Hyperparameters for TFIDF_Extractability (lazy computation)
         self.TFIDF_X = _dt.get("TFIDF_X", 5)
-        # When True, routing uses f1_score (recall × compactness); False → recall only
-        self.TFIDF_USE_F1: bool = bool(_dt.get("TFIDF_USE_F1", True))
         self.TFIDF_SIM = _dt.get("TFIDF_SIM", 0.50)
 
     def validate_thresholds_kfold(
@@ -240,18 +238,11 @@ class DecisionTreeBuilder:
     def _noeud_tfidf(self, metrics, r_score, path_trace):
         """TF-IDF graph node (He → TFIDF → R → RULES/Feas).
 
-        Routing metric: f1_score when TFIDF_USE_F1=True (default), tfidf_score otherwise.
-        f1_score = mean over top-X clusters of 2·recall·precision/(recall+precision)
-          where precision = compactness = n_unique_forms / k_forms_in_cluster.
+        Routing metric: tfidf_score (recall cumulatif top-X).
         Returns result dict if RULES, None otherwise (fall-through to Feas).
         """
-        # Pick routing metric: f1_score preferred, fallback to tfidf_score
-        if self.TFIDF_USE_F1 and metrics.get("f1_score") is not None:
-            routing_raw = metrics.get("f1_score")
-            metric_label = "F1"
-        else:
-            routing_raw = metrics.get("tfidf_score")
-            metric_label = "recall"
+        routing_raw = metrics.get("tfidf_score")
+        metric_label = "recall"
 
         if routing_raw is None:
             path_trace.append("TF-IDF absent → Feas++ ?")
