@@ -1,0 +1,165 @@
+name: GPU Tests
+
+# This workflow is triggered manually (workflow_dispatch) or on push/PR to main.
+# It runs ONLY on self-hosted runners labelled [self-hosted, gpu] — GitHub Actions
+# will leave this job pending (not fail) if no matching runner is registered,
+# which is the intended behaviour while waiting for a runner.
+#
+# How to register a GPU runner:
+#   1. GitHub repo → Settings → Actions → Runners → New self-hosted runner
+#   2. Follow the installation instructions (Linux recommended for CUDA/ROCm)
+#   3. Add the labels "gpu" and "cuda" or "rocm" during configuration
+#   4. Make sure CUDA Toolkit (≥11.8) or ROCm (≥5.4) is installed on the machine
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  # Manual trigger from the repo's Actions tab (useful for one-off tests
+  # without pushing a commit)
+  workflow_dispatch:
+    inputs:
+      gpu_type:
+        description: "GPU type to target"
+        required: false
+        default: "any"
+        type: choice
+        options: [any, cuda, rocm]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # CUDA job — self-hosted runner with NVIDIA GPU
+  # labels: [self-hosted, gpu, cuda]
+  # ---------------------------------------------------------------------------
+  test-cuda:
+    name: "Tests CUDA (NVIDIA self-hosted)"
+    # runs-on accepts a list of labels: the runner must have ALL of them
+    runs-on: [self-hosted, gpu, cuda]
+    # If no runner matches, the job waits — timeout added to avoid
+    # blocking a PR indefinitely.
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The self-hosted runner may already have a warm pip cache.
+      # Sharing it anyway benefits successive runs.
+      - name: Cache pip (CUDA runner)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-cuda-3.12-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-cuda-3.12-
+
+      # Install [gpu] + [dev] + [ner] extras.
+      # [gpu] installs torch with the right CUDA index via the
+      # PIP_EXTRA_INDEX_URL env var set on the self-hosted runner
+      # (e.g. https://download.pytorch.org/whl/cu121).
+      # If the variable is not set, pip falls back to PyPI (CPU wheel).
+      - name: Install dependencies (CUDA)
+        run: pip install -e ".[dev,ner,gpu]"
+
+      # Quick check that torch sees the GPU before running the tests
+      - name: Smoke check — torch sees CUDA
+        run: |
+          python -c "
+          import torch
+          assert torch.cuda.is_available(), 'CUDA not available on this runner'
+          print(f'GPU: {torch.cuda.get_device_name(0)}, CUDA {torch.version.cuda}')
+          "
+
+      # -m "cuda": runs only tests marked @pytest.mark.cuda
+      # --no-header: more compact output for CI logs
+      - name: Run CUDA tests
+        run: >
+          pytest tests/test_gpu.py
+          -m "cuda"
+          -v
+          --tb=short
+          --no-header
+
+      # Unit and integration tests also run on the GPU runner to detect
+      # CPU-side regressions in the same environment.
+      - name: Run unit + integration tests (on GPU runner)
+        run: >
+          pytest
+          -m "not rocm"
+          --cov=demne
+          --cov-report=xml
+          --cov-fail-under=70
+          --tb=short
+          -q
+
+      - name: Upload coverage (CUDA)
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: cuda
+
+  # ---------------------------------------------------------------------------
+  # ROCm job — self-hosted runner with AMD GPU
+  # labels: [self-hosted, gpu, rocm]
+  # ---------------------------------------------------------------------------
+  test-rocm:
+    name: "Tests ROCm (AMD self-hosted)"
+    runs-on: [self-hosted, gpu, rocm]
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip (ROCm runner)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-rocm-3.12-${{ hashFiles('pyproject.toml') }}
+          restore-keys: pip-rocm-3.12-
+
+      # For ROCm, the self-hosted runner must have PIP_EXTRA_INDEX_URL pointing
+      # to https://download.pytorch.org/whl/rocm5.7 (or the installed version).
+      - name: Install dependencies (ROCm)
+        run: pip install -e ".[dev,ner,gpu]"
+
+      - name: Smoke check — torch sees ROCm
+        run: |
+          python -c "
+          import torch
+          assert torch.cuda.is_available(), 'ROCm/CUDA API not available'
+          assert torch.version.hip is not None, 'This torch build is not ROCm'
+          print(f'GPU: {torch.cuda.get_device_name(0)}, ROCm {torch.version.hip}')
+          "
+
+      - name: Run ROCm tests
+        run: >
+          pytest tests/test_gpu.py
+          -m "rocm"
+          -v
+          --tb=short
+          --no-header
+
+      - name: Run unit + integration tests (on ROCm runner)
+        run: >
+          pytest
+          -m "not cuda"
+          --cov=demne
+          --cov-report=xml
+          --cov-fail-under=70
+          --tb=short
+          -q
+
+      - name: Upload coverage (ROCm)
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: rocm

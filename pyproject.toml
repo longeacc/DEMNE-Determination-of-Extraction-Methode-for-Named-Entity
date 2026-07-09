@@ -81,6 +81,11 @@ dev = [
     "isort>=5.13",
     "ruff>=0.2",
 ]
+# Extra for GPU tests (torch is already in [ner], listed here for clarity)
+gpu = [
+    "torch>=2.0",
+    "transformers>=4.36",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -100,6 +105,19 @@ demne = [
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short"
+# Custom markers: declared here to avoid PytestUnknownMarkWarning.
+# Usage:
+#   pytest -m unit            → isolated unit tests only
+#   pytest -m integration     → pipeline integration tests only
+#   pytest -m "cuda or rocm"  → GPU tests (auto-skipped if no GPU present)
+#   pytest -m "not cuda and not rocm"  → everything except GPU (standard CI behaviour)
+markers = [
+    "unit: isolated unit tests, no disk I/O or GPU",
+    "integration: pipeline integration tests (disk I/O, multi-scorers)",
+    "cuda: tests requiring an NVIDIA GPU with CUDA (skipped if absent)",
+    "rocm: tests requiring an AMD GPU with ROCm (skipped if absent)",
+    "slow: long-running tests (fine-tuning, full model loading)",
+]
 
 [tool.black]
 line-length = 100

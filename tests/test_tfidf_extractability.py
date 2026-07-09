@@ -2,8 +2,8 @@
 DEMNE decision tree (E_creation_arbre_decision).
 
 Two blocks:
-  A. Unit tests of demne.tfidf_extractability (compute, routing, grid search,
-     BRAT context extraction).
+  A. Unit tests of demne.E_tfidf (compute, routing, BRAT context extraction,
+     corpus API).
   B. Integration tests of DecisionTreeBuilder.analyze_entity:
      - strict backward-compatibility when no TFIDF data is supplied;
      - conceptual-synonymy rescue (low He but high tfidf_score -> RULES);
@@ -22,17 +22,16 @@ from demne.E_creation_arbre_decision import DecisionTreeBuilder
 from demne.E_tfidf import (
     build_corpus_contexts,
     compute_tfidf_extractability,
-    grid_search_tfidf,
     updated_demne_routing,
 )
 
 
 # --------------------------------------------------------------------------- #
-# Fixtures : jeux de données synthétiques réutilisés                          #
+# Fixtures: synthetic datasets reused across tests                            #
 # --------------------------------------------------------------------------- #
 @pytest.fixture
 def synonyms_case():
-    """évolution_tumorale : synonymes conceptuels, contextes identiques."""
+    """évolution_tumorale: conceptual synonyms, identical contexts."""
     mentions = ["majoration", "progression", "augmentation", "croissance"] * 10
     contexts = {
         "majoration": ["lésion tumorale majoration diamètre mm mesure"] * 10,
@@ -45,7 +44,7 @@ def synonyms_case():
 
 @pytest.fixture
 def heterogeneous_case():
-    """pays_origine : formes variées, contextes cliniques non partagés."""
+    """pays_origine: varied forms, non-shared clinical contexts."""
     mentions = ["France", "Maroc", "Algérie", "Tunisie", "Mali",
                 "Sénégal", "Cameroun", "Côte d'Ivoire"] * 5
     contexts = {
@@ -85,7 +84,7 @@ def test_conceptual_synonyms_high_score(synonyms_case):
                                        X=5, sim_threshold=0.50)
     assert out["tfidf_score"] >= 0.70
     assert out["routes_to_rules"] is True
-    # les 4 formes doivent fusionner en un seul cluster couvrant tout
+    # all 4 forms must merge into a single cluster covering everything
     assert len(out["clusters"]) == 1
     assert out["top_X_recalls"] == [1.0]
 
@@ -99,7 +98,7 @@ def test_heterogeneous_low_score(heterogeneous_case):
 
 
 def test_no_r_modulation_factor_in_output(synonyms_case, heterogeneous_case):
-    """R_modulation_factor supprimé : plus de modulation du risque dans TFIDF."""
+    """R_modulation_factor removed: no more risk modulation inside TFIDF."""
     for mentions, contexts in (synonyms_case, heterogeneous_case):
         out = compute_tfidf_extractability("x", mentions, contexts)
         assert "R_modulation_factor" not in out
@@ -113,16 +112,16 @@ def test_score_is_rounded_and_in_unit_interval(synonyms_case):
 
 
 def test_missing_contexts_do_not_crash():
-    # mentions présentes mais aucun contexte -> docs vides -> score défini
+    # mentions present but no context -> empty docs -> score is still defined
     mentions = ["alpha", "beta", "gamma"]
     out = compute_tfidf_extractability("x", mentions, {})
     assert 0.0 <= out["tfidf_score"] <= 1.0
 
 
 # =========================================================================== #
-# BLOC A — updated_demne_routing (graphe figure de référence)                 #
-# Nœud R- PARTAGÉ entre branche Te/He et branche TF-IDF.                     #
-# TF-IDF Oui → R- → RULES ou Feas (pas directement RULES).                   #
+# BLOC A — updated_demne_routing (reference figure graph)                     #
+# R- node SHARED between Te/He branch and TF-IDF branch.                      #
+# TF-IDF Yes → R- → RULES or Feas (not directly RULES).                      #
 # =========================================================================== #
 _TH = {"Te_HIGH": 0.10, "He_HIGH": 0.85, "R_HIGH": 0.25, "Feas_NER": 0.50, "Y": 0.70}
 
@@ -134,40 +133,40 @@ def _m(**kw):
 
 
 def test_routing_te_he_r_low_returns_rules():
-    # Te+He élevés + R faible → RULES (branche classique)
+    # High Te+He + low R → RULES (classic branch)
     assert updated_demne_routing(_m(Te=0.5, He=0.9, R=0.1), _TH) == "RULES"
 
 
 def test_routing_te_he_r_high_falls_to_feas():
-    # Te+He élevés + R élevé (risk of conflict) → Feas décide
+    # High Te+He + high R (risk of conflict) → Feas decides
     assert updated_demne_routing(_m(Te=0.5, He=0.9, R=0.9, Feas=0.9), _TH) == "TBM"
     assert updated_demne_routing(_m(Te=0.5, He=0.9, R=0.9, Feas=0.1), _TH) == "LLM"
 
 
 def test_routing_te_only_no_rules_without_he():
-    # Te élevé mais He faible → branche TF-IDF, pas RULES direct
+    # High Te but low He → TF-IDF branch, not direct RULES
     assert updated_demne_routing(_m(Te=0.5, He=0.1, R=0.1, Feas=0.9), _TH) == "TBM"
 
 
 def test_routing_tfidf_high_r_low_returns_rules():
-    # TF-IDF élevé + R faible → nœud R- → RULES
+    # High TF-IDF + low R → R- node → RULES
     assert updated_demne_routing(_m(tfidf_score=0.8, R=0.1, Feas=0.9), _TH) == "RULES"
 
 
 def test_routing_tfidf_high_r_high_falls_to_feas():
-    # TF-IDF élevé mais R élevé (risk of conflict) → Feas, pas RULES
+    # High TF-IDF but high R (risk of conflict) → Feas, not RULES
     assert updated_demne_routing(_m(tfidf_score=0.8, R=0.9, Feas=0.9), _TH) == "TBM"
     assert updated_demne_routing(_m(tfidf_score=0.8, R=0.9, Feas=0.1), _TH) == "LLM"
 
 
 def test_routing_tfidf_below_y_falls_to_feas():
-    # TF-IDF < Y → Feas directement (pas de nœud R-)
+    # TF-IDF < Y → Feas directly (no R- node)
     assert updated_demne_routing(_m(tfidf_score=0.50, R=0.1, Feas=0.9), _TH) == "TBM"
     assert updated_demne_routing(_m(tfidf_score=0.50, R=0.1, Feas=0.1), _TH) == "LLM"
 
 
 def test_routing_tfidf_absent_falls_to_feas():
-    # Sans tfidf_score : nœud TF-IDF ignoré → Feas directement
+    # No tfidf_score: TF-IDF node skipped → Feas directly
     assert updated_demne_routing(_m(R=0.30, Feas=0.9), _TH) == "TBM"
     assert updated_demne_routing(_m(R=0.30, Feas=0.1), _TH) == "LLM"
 
@@ -178,7 +177,7 @@ def test_routing_feas_gate_tbm_vs_llm():
 
 
 # =========================================================================== #
-# BLOC A — build_corpus_contexts (parsing BRAT)                               #
+# BLOC A — build_corpus_contexts (BRAT parsing)                               #
 # =========================================================================== #
 def test_build_corpus_contexts_from_brat(tmp_path):
     txt = "Le patient presente une progression tumorale nette au scanner de controle."
@@ -191,7 +190,7 @@ def test_build_corpus_contexts_from_brat(tmp_path):
     ctx = build_corpus_contexts(ann_p, txt_p, window_tokens=3)
     assert "progression" in ctx
     window = ctx["progression"][0].lower()
-    # la fenêtre contient des mots voisins du span
+    # the window contains neighbouring words of the span
     assert "tumorale" in window
     assert "progression" in window
 
@@ -207,72 +206,35 @@ def test_build_corpus_contexts_ignores_non_term_lines(tmp_path):
     assert ctx == {}
 
 
-# =========================================================================== #
-# BLOC A — grid_search_tfidf                                                  #
-# =========================================================================== #
-def test_grid_search_space_and_best(synonyms_case, heterogeneous_case):
-    syn_m, syn_c = synonyms_case
-    het_m, het_c = heterogeneous_case
-    entities = [
-        {"entity_name": "evo", "Te": 0.02, "He": 0.30,
-         "mentions": syn_m, "corpus_contexts": syn_c},
-        {"entity_name": "pays", "Te": 0.01, "He": 0.10,
-         "mentions": het_m, "corpus_contexts": het_c},
-        # entité NON éligible (Te >= Te_HIGH) : doit être exclue du F1
-        {"entity_name": "skip", "Te": 0.50, "He": 0.10,
-         "mentions": ["a", "b", "c"], "corpus_contexts": {}},
-    ]
-    refs = ["RULES", "LLM", "RULES"]
-    res = grid_search_tfidf(entities, refs, te_high=0.10, he_high=0.85)
-
-    assert len(res["all_results"]) == 650  # 10 X × 13 Y × 5 sim
-    assert res["best_X"] in range(1, 11)
-    assert res["best_sim_threshold"] in {0.30, 0.40, 0.50, 0.60, 0.70}
-    assert 0.40 <= res["best_Y"] <= 1.00
-    # synonyme=RULES / hétérogène=LLM sont parfaitement séparables -> F1=1.0
-    assert res["best_f1"] == 1.0
-
-
-def test_grid_search_eligibility_filter():
-    # toutes les entités inéligibles -> aucun TP/FP/FN -> F1 = 0
-    entities = [{"entity_name": "x", "Te": 0.9, "He": 0.9,
-                 "mentions": ["a", "b", "c"], "corpus_contexts": {}}]
-    res = grid_search_tfidf(entities, ["RULES"], te_high=0.10, he_high=0.85)
-    assert res["best_f1"] == 0.0
-
-
-# =========================================================================== #
-# BLOC B — Intégration dans DecisionTreeBuilder                               #
-# =========================================================================== #
 @pytest.fixture
 def builder():
     return DecisionTreeBuilder(config_path="dummy.json")
 
 
 def test_backward_compat_baseline_unchanged(builder):
-    """Sans TFIDF, l'arbre doit être identique au baseline (test_decision_tree.py).
-    Le nœud R- est maintenant PARTAGÉ : Te+He élevés + R élevé → Feas (TBM), pas LLM.
+    """Without TFIDF the tree must match the baseline (test_decision_tree.py).
+    The R- node is now SHARED: high Te+He + high R → Feas (TBM), not LLM.
     """
-    # Te+He élevés, R faible → RULES
+    # High Te+He, low R → RULES
     assert builder.analyze_entity(
         "StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1}
     )["method"] == "RULES"
-    # Te élevé, He faible, R faible, Feas élevé → TBM (branche TF-IDF, absent → Feas)
+    # High Te, low He, low R, high Feas → TBM (TF-IDF branch, absent → Feas)
     assert builder.analyze_entity(
         "GoodRules", {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
     )["method"] == "TBM"
-    # Te faible, pas de TF-IDF, Feas faible → LLM
+    # Low Te, no TF-IDF, low Feas → LLM
     assert builder.analyze_entity(
         "CommonEntity", {"Te": 10.0, "Te_count": 20, "He": 10.0, "R": 0.2, "Feas": 0.1}
     )["method"] == "LLM"
-    # Te+He élevés, R élevé (risk of conflict) → Feas élevé → TBM (comportement préservé)
+    # High Te+He, high R (risk of conflict) → high Feas → TBM (preserved behaviour)
     assert builder.analyze_entity(
         "RiskyEntity", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.8, "Feas": 0.8}
     )["method"] == "TBM"
 
 
 def test_tfidf_node_bypassed_when_te_and_he_high(builder):
-    """Te+He élevés + R faible → RULES via branche classique, TFIDF jamais consulté."""
+    """High Te+He + low R → RULES via classic branch, TFIDF never consulted."""
     res = builder.analyze_entity(
         "x", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1, "tfidf_score": 0.95}
     )
@@ -281,7 +243,7 @@ def test_tfidf_node_bypassed_when_te_and_he_high(builder):
 
 
 def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
-    """He faible → TF-IDF élevé + R faible → nœud R- → RULES."""
+    """Low He → high TF-IDF + low R → R- node → RULES."""
     metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8,
                "tfidf_score": 0.95}
     res = builder.analyze_entity("évolution_tumorale", metrics)
@@ -290,22 +252,22 @@ def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
 
 
 def test_tfidf_rescue_low_he_r_high_falls_to_feas(builder):
-    """He faible → TF-IDF élevé MAIS R élevé (risk of conflict) → Feas, pas RULES."""
+    """Low He → high TF-IDF BUT high R (risk of conflict) → Feas, not RULES."""
     metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8,
                "tfidf_score": 0.95}
     assert builder.analyze_entity("x", metrics)["method"] == "TBM"
 
 
 def test_tfidf_below_y_falls_to_feas(builder):
-    """TF-IDF < Y → Feas directement (pas de nœud R-)."""
+    """TF-IDF < Y → Feas directly (no R- node)."""
     metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8,
                "tfidf_score": 0.30}
-    # R élevé mais ignoré (TF-IDF < Y → Feas direct)
+    # High R but ignored (TF-IDF < Y → direct Feas)
     assert builder.analyze_entity("x", metrics)["method"] == "TBM"
 
 
 def test_tfidf_absent_falls_to_feas_directly(builder):
-    """Sans tfidf_score : nœud TF-IDF ignoré → Feas directement."""
+    """No tfidf_score: TF-IDF node skipped → Feas directly."""
     assert builder.analyze_entity(
         "x", {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.9, "Feas": 0.8}
     )["method"] == "TBM"
