@@ -97,13 +97,11 @@ def main() -> None:
         if st.session_state.api_process.poll() is not None:
             del st.session_state["api_process"]
 
-    st.markdown(
-        """
+    st.markdown("""
     This interface lets you run the REST API project (DuraXell Pipeline) locally
     and launch the **Jupyter Notebook `REST.ipynb`** to inspect and test the API
     directly from the dashboard.
-    """
-    )
+    """)
 
     col1, col2 = st.columns(2)
 
