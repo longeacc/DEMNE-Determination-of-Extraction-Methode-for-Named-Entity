@@ -24,9 +24,10 @@ DEFAULTS = {
         "FEAS_NER": 0.20,
         "MIN_TE_SAMPLES": 2,
         # --- TFIDF_Extractability (contextual conceptual synonymy) ---
-        "TFIDF_Y": 0.70,  # threshold on tfidf_score -> RULES
-        "TFIDF_X": 5,  # number of top clusters evaluated for recall
+        "TFIDF_Y": 0.70,  # threshold on routing metric (recall or F1) -> RULES
+        "TFIDF_X": 5,  # top-X clusters evaluated (1–10)
         "TFIDF_SIM": 0.50,  # cosine similarity threshold for greedy clustering
+        "TFIDF_USE_F1": True,  # True → route on f1_score; False → route on recall
     },
     "risk_weights": {"negation": 0.1, "uncertainty": 0.3, "contradiction": 0.6},
     "risk_window_size": 50,

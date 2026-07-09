@@ -145,23 +145,58 @@ def collect_entity_data(corpus_dir: Path | str, window_tokens: int = 30) -> dict
 # Score TFIDF
 # ---------------------------------------------------------------------------
 def compute_tfidf_extractability(
-    entity_name, mentions, corpus_contexts, X=5, sim_threshold=0.50, Y=None  # noqa: N803
+    entity_name,
+    mentions,
+    corpus_contexts,
+    X=5,  # noqa: N803
+    sim_threshold=0.50,
+    Y=None,  # noqa: N803
+    use_f1=None,
 ):
-    """Contextual TF-IDF extractability score for an entity."""
+    """Contextual TF-IDF extractability score for an entity.
+
+    For each of the top-X clusters (groups of semantically related surface forms):
+      - recall    = fraction of all entity mentions captured by the cluster regex
+      - precision = compactness of the cluster = 1 / (nb_forms_in_cluster /
+                    nb_unique_forms_total), capped at 1.0.
+                    A cluster with few forms relative to the total form space is
+                    "precise" (tight, easy regex); one that uses many forms is broad.
+      - f1        = 2·recall·precision / (recall + precision)
+
+    tfidf_score = mean recall over top-X  (backward compat)
+    f1_score    = mean F1 over top-X      (routing metric when TFIDF_USE_F1=True)
+    Y           = threshold applied to the active metric → routes_to_rules
+    """
     if Y is None:
         Y = _dt.get("TFIDF_Y", 0.70)  # noqa: N806
+    if use_f1 is None:
+        use_f1 = _dt.get("TFIDF_USE_F1", True)
+
     mentions_lower = [m.lower().strip() for m in mentions]
     unique_forms = set(mentions_lower)
+    n_unique = len(unique_forms)
+
+    _empty = {
+        "tfidf_score": 0.0,
+        "f1_score": 0.0,
+        "routes_to_rules": False,
+        "clusters": [],
+        "top_X_recalls": [],
+        "top_X_f1s": [],
+    }
 
     if len(mentions) < 3:
-        return {"tfidf_score": 0.0, "routes_to_rules": False, "clusters": [], "top_X_recalls": []}
-    if len(unique_forms) == 1:
+        return _empty
+    if n_unique == 1:
         only = sorted(unique_forms)[0]
+        routing_score = 1.0
         return {
             "tfidf_score": 1.0,
-            "routes_to_rules": 1.0 >= Y,
+            "f1_score": 1.0,
+            "routes_to_rules": routing_score >= Y,
             "clusters": [{"forms": [only], "total_count": len(mentions)}],
             "top_X_recalls": [1.0],
+            "top_X_f1s": [1.0],
         }
 
     forms_list = sorted(unique_forms)
@@ -178,7 +213,7 @@ def compute_tfidf_extractability(
     try:
         m_tfidf = vectorizer.fit_transform(docs)
     except ValueError:
-        return {"tfidf_score": 0.0, "routes_to_rules": False, "clusters": [], "top_X_recalls": []}
+        return _empty
 
     sim_matrix = cosine_similarity(m_tfidf)
     form_counts = Counter(mentions_lower)
@@ -201,18 +236,39 @@ def compute_tfidf_extractability(
     clusters.sort(key=lambda c: c["total_count"], reverse=True)
 
     total_mentions = len(mentions)
-    top_x_recalls = []
+    top_x_recalls: list[float] = []
+    top_x_f1s: list[float] = []
+
     for cluster in clusters[: min(X, len(clusters))]:
         pattern = re.compile(r"(?i)\b(" + "|".join(re.escape(f) for f in cluster["forms"]) + r")\b")
         matched = sum(1 for m in mentions_lower if pattern.search(m))
-        top_x_recalls.append(matched / total_mentions)
+        recall = matched / total_mentions
+
+        # Precision: compactness of the cluster.
+        # A cluster using k forms out of n_unique total is "precise" if k << n_unique.
+        # precision = 1 / (k / n_unique) = n_unique / k, capped at 1.0.
+        k = len(cluster["forms"])
+        precision = min(1.0, n_unique / k) if k > 0 else 0.0
+
+        if recall + precision > 0:
+            f1 = 2 * recall * precision / (recall + precision)
+        else:
+            f1 = 0.0
+
+        top_x_recalls.append(recall)
+        top_x_f1s.append(f1)
+
     tfidf_score = float(np.mean(top_x_recalls)) if top_x_recalls else 0.0
+    f1_score = float(np.mean(top_x_f1s)) if top_x_f1s else 0.0
+    routing_score = f1_score if use_f1 else tfidf_score
 
     return {
         "tfidf_score": round(tfidf_score, 4),
-        "routes_to_rules": tfidf_score >= Y,
+        "f1_score": round(f1_score, 4),
+        "routes_to_rules": routing_score >= Y,
         "clusters": clusters,
         "top_X_recalls": [round(r, 4) for r in top_x_recalls],
+        "top_X_f1s": [round(f, 4) for f in top_x_f1s],
     }
 
 

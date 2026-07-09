@@ -71,6 +71,8 @@ class DecisionTreeBuilder:
         self.MIN_TE_SAMPLES = _dt["MIN_TE_SAMPLES"]
         # Hyperparameters for TFIDF_Extractability (lazy computation)
         self.TFIDF_X = _dt.get("TFIDF_X", 5)
+        # When True, routing uses f1_score (recall × compactness); False → recall only
+        self.TFIDF_USE_F1: bool = bool(_dt.get("TFIDF_USE_F1", True))
         self.TFIDF_SIM = _dt.get("TFIDF_SIM", 0.50)
 
     def validate_thresholds_kfold(
@@ -236,33 +238,47 @@ class DecisionTreeBuilder:
         }
 
     def _noeud_tfidf(self, metrics, r_score, path_trace):
-        """TF-IDF graph node: uses pre-computed score only (no internal computation).
+        """TF-IDF graph node (He → TFIDF → R → RULES/Feas).
 
-        Returns a result dict if RULES, None otherwise (fall-through to Feas).
+        Routing metric: f1_score when TFIDF_USE_F1=True (default), tfidf_score otherwise.
+        f1_score = mean over top-X clusters of 2·recall·precision/(recall+precision)
+          where precision = compactness = n_unique_forms / k_forms_in_cluster.
+        Returns result dict if RULES, None otherwise (fall-through to Feas).
         """
-        tfidf_raw = metrics.get("tfidf_score")
-        if tfidf_raw is None:
+        # Pick routing metric: f1_score preferred, fallback to tfidf_score
+        if self.TFIDF_USE_F1 and metrics.get("f1_score") is not None:
+            routing_raw = metrics.get("f1_score")
+            metric_label = "F1"
+        else:
+            routing_raw = metrics.get("tfidf_score")
+            metric_label = "recall"
+
+        if routing_raw is None:
             path_trace.append("TF-IDF absent → Feas++ ?")
             return None
-        tfidf_score = float(tfidf_raw)
-        path_trace.append(f"TF-IDF ? (score={tfidf_score:.3f}, Y={self.THRESHOLDS['Y']})")
-        if tfidf_score >= self.THRESHOLDS["Y"]:
-            # TF-IDF Yes → same shared R− node as the Te/He branch
+
+        routing_score = float(routing_raw)
+        path_trace.append(
+            f"TF-IDF ? ({metric_label}={routing_score:.3f}, Y={self.THRESHOLDS['Y']})"
+        )
+        if routing_score >= self.THRESHOLDS["Y"]:
             path_trace.append("Yes → R− ? (shared node)")
             if r_score <= self.THRESHOLDS["R_HIGH"]:
                 path_trace.append("Yes → [RULES] (conceptual synonymy + acceptable R)")
                 return {
                     "method": "RULES",
                     "justification": (
-                        f"TFIDF={tfidf_score:.3f}≥Y={self.THRESHOLDS['Y']} and "
+                        f"TFIDF {metric_label}={routing_score:.3f}≥Y={self.THRESHOLDS['Y']} and "
                         f"R={r_score:.3f}≤{self.THRESHOLDS['R_HIGH']} — "
                         "conceptual synonyms extractable by rule."
                     ),
                     "trace": path_trace,
                 }
             path_trace.append(f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?")
-            return None  # High R despite TF-IDF → Feas
-        path_trace.append(f"Non (score={tfidf_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?")
+            return None
+        path_trace.append(
+            f"Non ({metric_label}={routing_score:.3f} < Y={self.THRESHOLDS['Y']}) → Feas++ ?"
+        )
         return None
 
     def build_full_config(self, metrics_data: dict[str, dict]):
