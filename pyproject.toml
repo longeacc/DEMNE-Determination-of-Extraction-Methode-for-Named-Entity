@@ -80,6 +80,7 @@ dev = [
     "black>=24.0",
     "isort>=5.13",
     "ruff>=0.2",
+    "pre-commit>=3.7",
 ]
 # Extra for GPU tests (torch is already in [ner], listed here for clarity)
 gpu = [
