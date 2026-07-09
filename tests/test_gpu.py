@@ -25,8 +25,6 @@ test_pipeline_integration.py).  They verify that:
   4. CPU→GPU→CPU transfers are coherent (no data corruption).
 """
 
-import sys
-from unittest.mock import MagicMock
 
 import pytest
 

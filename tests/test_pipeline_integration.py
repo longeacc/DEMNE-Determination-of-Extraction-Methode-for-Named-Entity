@@ -30,7 +30,6 @@ from demne.E_homogeneity import HomogeneityScorer
 from demne.E_risk_context import RiskContextScorer
 from demne.E_templatability import TemplatabilityScorer
 
-
 # ===========================================================================
 # BLOC 1 — Individual scorers on the shared corpus
 # ===========================================================================
