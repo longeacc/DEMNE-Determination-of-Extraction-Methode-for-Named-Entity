@@ -37,13 +37,21 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     he: float = metrics.get("He", metrics.get("he", 0.0))
     r: float = metrics.get("R", metrics.get("r", 0.0))
     feas: float = metrics.get("Feas", metrics.get("feas", 0.0))
-    tfidf = metrics.get("tfidf_score")
 
     t_te: float = thresholds.get("Te", _DT["TE_HIGH"])
     t_he: float = thresholds.get("He", _DT["HE_HIGH"])
     t_r: float = thresholds.get("R", _DT["R_HIGH"])
     t_feas: float = thresholds.get("Feas", _DT["FEAS_NER"])
     t_y: float = thresholds.get("Y", _DT.get("TFIDF_Y", 0.70))
+    use_f1: bool = bool(_DT.get("TFIDF_USE_F1", True))
+
+    # Routing metric: f1_score preferred when TFIDF_USE_F1=True, else recall
+    if use_f1 and metrics.get("f1_score") is not None:
+        tfidf_routing = metrics.get("f1_score")
+        tfidf_label = "F1"
+    else:
+        tfidf_routing = metrics.get("tfidf_score")
+        tfidf_label = "recall"
 
     def _noeud_feas() -> tuple[str, str]:
         if feas >= t_feas:
@@ -59,9 +67,9 @@ def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> 
     if te >= t_te and he >= t_he:
         return _noeud_r(f"Te={te:.2f}≥{t_te}, He={he:.2f}≥{t_he}")
 
-    # TF-IDF branch (conceptual synonymy)
-    if tfidf is not None and tfidf >= t_y:
-        return _noeud_r(f"TFIDF={tfidf:.3f}≥Y={t_y}")
+    # TF-IDF branch (conceptual synonymy) — He → TFIDF → R → RULES/Feas
+    if tfidf_routing is not None and tfidf_routing >= t_y:
+        return _noeud_r(f"TFIDF {tfidf_label}={tfidf_routing:.3f}≥Y={t_y}")
 
     # Feas++ convergence point
     return _noeud_feas()

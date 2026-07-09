@@ -27,7 +27,11 @@ if "tfidf_scores" not in st.session_state:
         try:
             tfidf_results = _compute_tfidf_for_all(local_path)
             st.session_state["tfidf_scores"] = {
-                etype: res["tfidf_score"] for etype, res in tfidf_results.items()
+                etype: {
+                    "tfidf_score": res["tfidf_score"],
+                    "f1_score": res.get("f1_score", 0.0),
+                }
+                for etype, res in tfidf_results.items()
             }
         except Exception as _e:
             st.session_state["tfidf_scores"] = {}

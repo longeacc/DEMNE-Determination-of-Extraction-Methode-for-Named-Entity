@@ -346,6 +346,7 @@ def _export_decision_csv() -> None:
         if he > 1.0:
             he /= 100.0
         tfidf = m.get("tfidf_score")
+        f1 = m.get("f1_score")
         rows.append(
             [
                 ent,
@@ -355,12 +356,24 @@ def _export_decision_csv() -> None:
                 f"{m.get('Freq', 0.0):.4f}",
                 f"{m.get('Feas', 0.0):.4f}",
                 f"{tfidf:.4f}" if tfidf is not None else "",
+                f"{f1:.4f}" if f1 is not None else "",
                 d.get("method", ""),
                 d.get("justification", ""),
             ]
         )
 
-    header = ["Entity", "Te", "He", "R", "Freq", "Feas", "TFIDF", "Method", "Justification"]
+    header = [
+        "Entity",
+        "Te",
+        "He",
+        "R",
+        "Freq",
+        "Feas",
+        "TFIDF_recall",
+        "TFIDF_F1",
+        "Method",
+        "Justification",
+    ]
     with open(DECISION_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter="\t")
         w.writerow(header)
@@ -382,7 +395,8 @@ def _export_decision_csv() -> None:
         "R": 6,
         "Freq": 8,
         "Feas": 6,
-        "TFIDF": 6,
+        "TFIDF_recall": 8,
+        "TFIDF_F1": 8,
         "Method": 8,
         "Justification": 55,
     }  # noqa: N806
@@ -449,9 +463,9 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     }
 
     print(
-        f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Freq':>8} | {'Feas':>6} | {'TFIDF':>6} | {'Method':<8} | Justification"
+        f"\n{'Entity':<25} | {'Te':>6} | {'He':>6} | {'R':>6} | {'Freq':>8} | {'Feas':>6} | {'Recall':>7} | {'F1':>7} | {'Method':<8} | Justification"
     )
-    print("-" * 144)
+    print("-" * 158)
     for ent, data in cfg.get("entities", {}).items():
         m = data.get("metrics", {})
         decision = builder.analyze_entity(ent, m)
@@ -462,10 +476,12 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
         if he > 1.0:
             he /= 100.0
         tfidf = m.get("tfidf_score")
-        tfidf_str = f"{tfidf:6.3f}" if tfidf is not None else "   n/a"
+        f1 = m.get("f1_score")
+        tfidf_str = f"{tfidf:7.3f}" if tfidf is not None else "    n/a"
+        f1_str = f"{f1:7.3f}" if f1 is not None else "    n/a"
         print(
             f"{ent:<25} | {te:6.3f} | {he:6.3f} | {m.get('R',0):6.3f} | "
-            f"{m.get('Freq',0):8.4f} | {m.get('Feas',0):6.3f} | {tfidf_str} | {decision['method']:<8} | {decision['justification']}"
+            f"{m.get('Freq',0):8.4f} | {m.get('Feas',0):6.3f} | {tfidf_str} | {f1_str} | {decision['method']:<8} | {decision['justification']}"
         )
 
 

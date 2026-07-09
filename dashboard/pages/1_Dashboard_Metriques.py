@@ -59,7 +59,11 @@ with st.sidebar:
             try:
                 tfidf_results = _compute_tfidf_for_all(local_path)
                 st.session_state["tfidf_scores"] = {
-                    etype: res["tfidf_score"] for etype, res in tfidf_results.items()
+                    etype: {
+                        "tfidf_score": res["tfidf_score"],
+                        "f1_score": res.get("f1_score", 0.0),
+                    }
+                    for etype, res in tfidf_results.items()
                 }
             except Exception as _e:
                 st.session_state["tfidf_scores"] = {}
@@ -108,9 +112,13 @@ else:
 
     for entity_type in st.session_state["entity_stats"].keys():
         metrics = calculator.compute_all_metrics(st.session_state["corpus"], entity_type)
-        tfidf = tfidf_scores.get(entity_type)
-        if tfidf is not None:
-            metrics["tfidf_score"] = tfidf
+        tfidf_entry = tfidf_scores.get(entity_type)
+        if tfidf_entry is not None:
+            if isinstance(tfidf_entry, dict):
+                metrics["tfidf_score"] = tfidf_entry.get("tfidf_score", 0.0)
+                metrics["f1_score"] = tfidf_entry.get("f1_score", 0.0)
+            else:
+                metrics["tfidf_score"] = float(tfidf_entry)
         routing, justification = compute_routing(metrics, thresholds)
 
         entity_metrics[entity_type] = {
@@ -126,7 +134,17 @@ else:
         df.rename(columns={"index": "Entity"}, inplace=True)
     else:
         df = pd.DataFrame(
-            columns=["Entity", "Te", "He", "R", "Feas", "tfidf_score", "Routing", "Justification"]
+            columns=[
+                "Entity",
+                "Te",
+                "He",
+                "R",
+                "Feas",
+                "tfidf_score",
+                "f1_score",
+                "Routing",
+                "Justification",
+            ]
         )
 
     col1, col2 = st.columns(2)
@@ -188,10 +206,13 @@ else:
         display_cols = ["Entity", "Te", "He", "R", "Feas"]
         if "tfidf_score" in df.columns:
             display_cols.append("tfidf_score")
+        if "f1_score" in df.columns:
+            display_cols.append("f1_score")
         display_cols += ["Routing", "Justification"]
         display_df = df[[c for c in display_cols if c in df.columns]].copy()
-        if "tfidf_score" in display_df.columns:
-            display_df = display_df.rename(columns={"tfidf_score": "TFIDF"})
+        display_df = display_df.rename(
+            columns={"tfidf_score": "TFIDF_recall", "f1_score": "TFIDF_F1"}
+        )
         st.dataframe(
             display_df.style.map(color_routing, subset=["Routing"]),
             use_container_width=True,
