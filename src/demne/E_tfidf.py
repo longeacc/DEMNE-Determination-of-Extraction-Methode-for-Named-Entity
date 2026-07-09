@@ -249,54 +249,6 @@ def updated_demne_routing(metrics, thresholds):
 
 
 # ---------------------------------------------------------------------------
-# Grid search
-# ---------------------------------------------------------------------------
-def grid_search_tfidf(entities_with_metrics, reference_labels,
-                      te_high=0.10, he_high=0.85):
-    """Optimise (X, Y, sim_threshold) on the F1 of the TFIDF-eligible subset."""
-    x_grid = list(range(1, 11))
-    y_grid = [round(0.40 + 0.05 * k, 2) for k in range(13)]
-    sim_grid = [0.30, 0.40, 0.50, 0.60, 0.70]
-
-    eligible = [(e, ref) for e, ref in zip(entities_with_metrics, reference_labels, strict=False)
-                if e["Te"] < te_high and e["He"] < he_high]
-
-    all_results = []
-    best = {"best_X": None, "best_Y": None, "best_sim_threshold": None, "best_f1": -1.0}
-
-    for x in x_grid:
-        for sim in sim_grid:
-            scores = [
-                compute_tfidf_extractability(
-                    e.get("entity_name", "?"), e["mentions"],
-                    e["corpus_contexts"], X=x, sim_threshold=sim)["tfidf_score"]
-                for e, _ in eligible]
-            for y in y_grid:
-                tp = fp = fn = 0
-                for (_, ref), score in zip(eligible, scores, strict=False):
-                    predicts_rules = score >= y
-                    if predicts_rules and ref == "RULES":
-                        tp += 1
-                    elif predicts_rules and ref != "RULES":
-                        fp += 1
-                    elif not predicts_rules and ref == "RULES":
-                        fn += 1
-                precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-                recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-                f1 = (2 * precision * recall / (precision + recall)
-                      if (precision + recall) > 0 else 0.0)
-                all_results.append({"X": x, "Y": y, "sim_threshold": sim,
-                                    "f1": round(f1, 4)})
-                if f1 > best["best_f1"] or (
-                        f1 == best["best_f1"] and best["best_Y"] is not None
-                        and y > best["best_Y"]):
-                    best = {"best_X": x, "best_Y": y, "best_sim_threshold": sim,
-                            "best_f1": round(f1, 4)}
-    best["all_results"] = all_results
-    return best
-
-
-# ---------------------------------------------------------------------------
 # API corpus
 # ---------------------------------------------------------------------------
 def compute_tfidf_for_all_entities(
