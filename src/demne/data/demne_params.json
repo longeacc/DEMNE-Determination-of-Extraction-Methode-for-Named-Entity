@@ -1,13 +1,12 @@
 {
     "decision_thresholds": {
-        "TE_HIGH": 0.4,
+        "TE_HIGH": 0.25,
         "HE_HIGH": 0.61,
         "R_HIGH": 0.41000000000000003,
-        "FEAS_NER": 0.34,
+        "FEAS_NER": 0.65,
         "MIN_TE_SAMPLES": 2,
         "TFIDF_Y": 0.53,
         "TFIDF_X": 7,
-        "TFIDF_SIM": 0.5,
         "TFIDF_USE_F1": true,
         "TFIDF_WINDOW_TOKENS": 30
     },
@@ -41,10 +40,10 @@
     },
     "presets": {
         "FRUGAL": {
-            "Te": 0.16,
-            "He": 0.63,
-            "R": 0.2,
-            "Feas": 0.26
+            "Te": 0.4,
+            "He": 0.61,
+            "R": 0.41,
+            "Feas": 0.65
         },
         "QUALITY": {
             "Te": 0.25,
