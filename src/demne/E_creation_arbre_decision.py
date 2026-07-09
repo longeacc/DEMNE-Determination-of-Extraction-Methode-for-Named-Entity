@@ -434,15 +434,14 @@ def main():
     tfidf_csv = results_dir / "tfidf_analysis.csv"
     gs_dir = Path(args.gs_dir) if args.gs_dir else None
     if gs_dir and gs_dir.exists() and (not tfidf_csv.exists() or tfidf_csv.stat().st_size == 0):
-        from demne.E_tfidf import run as _run_tfidf
+        from demne.E_tfidf_coverage import run as _run_tfidf
 
         _dt_params = PARAMS["decision_thresholds"]
-        print("Computing TF-IDF scores...")
+        print("Computing coverage-F1 (extractability) scores...")
         _run_tfidf(
             gs_dir,
             results_dir,
             top_x=_dt_params.get("TFIDF_X", 10),
-            sim_threshold=_dt_params.get("TFIDF_SIM", 0.50),
             y=_dt_params.get("TFIDF_Y", 0.70),
         )
 

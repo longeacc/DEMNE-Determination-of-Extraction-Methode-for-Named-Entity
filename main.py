@@ -256,7 +256,7 @@ def cmd_metrics(args: argparse.Namespace) -> None:
         "src/demne/E_feasibility_NER.py",
     ]
     scripts_gs_only = [
-        "src/demne/E_tfidf.py",
+        "src/demne/E_tfidf_coverage.py",
     ]
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)

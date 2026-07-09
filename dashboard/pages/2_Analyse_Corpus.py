@@ -5,11 +5,12 @@ from pathlib import Path
 
 import streamlit as st
 
-_tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "E_tfidf.py"
-_tfidf_spec = _il.spec_from_file_location("_tfidf", _tfidf_path)
+# Extractabilité par couverture de mots-clés (coverage-F1) — voir E_tfidf_coverage.
+_tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "E_tfidf_coverage.py"
+_tfidf_spec = _il.spec_from_file_location("_tfidf_cov", _tfidf_path)
 _tfidf_mod = _il.module_from_spec(_tfidf_spec)
 _tfidf_spec.loader.exec_module(_tfidf_mod)
-_compute_tfidf_for_all = _tfidf_mod.compute_tfidf_for_all_entities
+_compute_tfidf_for_all = _tfidf_mod.compute_coverage_for_all_entities
 
 st.set_page_config(page_title="Corpus Analysis", page_icon="🎯", layout="wide")
 
