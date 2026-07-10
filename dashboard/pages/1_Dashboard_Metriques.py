@@ -21,10 +21,23 @@ _tfidf_mod = _il.module_from_spec(_tfidf_spec)
 _tfidf_spec.loader.exec_module(_tfidf_mod)
 _compute_tfidf_for_all = _tfidf_mod.compute_coverage_for_all_entities
 
-if "thresholds" not in st.session_state:
-    st.session_state["thresholds"] = PRESET_FRUGAL.copy()
-    for m, v in PRESET_FRUGAL.items():
-        st.session_state[f"slider_{m}"] = float(v)
+_DT = PARAMS["decision_thresholds"]
+_TFIDF_Y_DEFAULT = float(_DT.get("TFIDF_Y", 0.53))
+_OPTIMIZED = {
+    "Te": float(_DT.get("TE_HIGH", 0.25)),
+    "He": float(_DT.get("HE_HIGH", 0.61)),
+    "R": float(_DT.get("R_HIGH", 0.41)),
+    "Feas": float(_DT.get("FEAS_NER", 0.65)),
+}
+
+_THRESHOLDS_VERSION = "v2-optimized"
+if st.session_state.get("_thresholds_version") != _THRESHOLDS_VERSION:
+    st.session_state["thresholds"] = _OPTIMIZED.copy()
+    for m, v in _OPTIMIZED.items():
+        st.session_state[f"slider_{m}"] = v
+    st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
+    st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
+    st.session_state["_thresholds_version"] = _THRESHOLDS_VERSION
 
 with st.sidebar:
     st.subheader("📂 Load a BRAT corpus")
@@ -77,18 +90,28 @@ with st.sidebar:
             for k, v in PRESET_FRUGAL.items():
                 st.session_state[f"slider_{k}"] = float(v)
             st.session_state["thresholds"] = PRESET_FRUGAL.copy()
+            st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
+            st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
     with col2:
         if st.button("⭐ Quality preset"):
             for k, v in PRESET_QUALITY.items():
                 st.session_state[f"slider_{k}"] = float(v)
             st.session_state["thresholds"] = PRESET_QUALITY.copy()
+            st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
+            st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
 
-    for metric in PRESET_FRUGAL.keys():
+    for metric in _OPTIMIZED.keys():
         if f"slider_{metric}" not in st.session_state:
-            st.session_state[f"slider_{metric}"] = float(PRESET_FRUGAL[metric])
+            st.session_state[f"slider_{metric}"] = _OPTIMIZED[metric]
 
         val = st.slider(metric, 0.0, 1.0, step=0.05, key=f"slider_{metric}")
         st.session_state["thresholds"][metric] = val
+
+    st.markdown("**TFIDF recall (θ_Y)**")
+    if "slider_Y" not in st.session_state:
+        st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
+    y_val = st.slider("Y", 0.0, 1.0, step=0.05, key="slider_Y")
+    st.session_state["thresholds"]["Y"] = y_val
 
     st.markdown("---")
     st.subheader("📊 CORPUS STATISTICS")
