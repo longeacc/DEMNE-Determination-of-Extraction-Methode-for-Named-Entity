@@ -31,6 +31,9 @@ ENTITIES = [
 
 
 class MetricsCalculator:
+    # Défaut si absent de la config (portée de la négation, en tokens).
+    NEG_SCOPE_TOKENS = 6
+
     def __init__(self, params: dict | None = None):
         # params defaults to the shared config; the optimizer passes trial-specific
         # weights/thresholds here so the SAME formulas are reused (no drift).
@@ -60,7 +63,43 @@ class MetricsCalculator:
         ]
 
     def has_negation(self, text: str) -> bool:
+        """Marqueur de négation présent dans `text` (sans analyse de portée).
+
+        Ne pas utiliser pour le calcul de R : voir `is_negation_risky`.
+        """
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
+
+    def neg_scope_tokens(self) -> int:
+        """Portée de la négation (tokens avant la mention) — calibrée, cf. params."""
+        return int(self.params["risk_weights"].get("scope_tokens", self.NEG_SCOPE_TOKENS))
+
+    def is_negation_risky(self, value: str, context: str) -> bool:
+        """La négation constitue-t-elle un RISQUE pour l'extraction par règles ?
+
+        Une négation n'est risquée que si une règle extrairait la mauvaise valeur,
+        c'est-à-dire si le marqueur porte sur l'entité SANS figurer dans la mention :
+
+        - marqueur DANS la mention ("Absence d'emboles tumoraux") → la règle le
+          capture aussi : la négation fait partie du motif, ce n'est pas un risque ;
+        - marqueur HORS PORTÉE (au-delà de NEG_SCOPE_TOKENS avant la mention, ou
+          situé après elle) → il ne nie pas l'entité : "ménopausée depuis 48 ans,
+          pas de THM" — le « pas » porte sur THM ;
+        - marqueur EN PORTÉE et hors mention ("pas de récidive" pour l'entité
+          « récidive ») → la règle extrait « récidive » et rate la négation : risque.
+
+        Une simple recherche de mot-clé sur toute la fenêtre de contexte produit
+        jusqu'à 100 % de faux positifs sur du texte clinique dense.
+        """
+        val = (value or "").lower().strip()
+        ctx = (context or val).lower()
+        if not val:
+            return False
+        if any(re.search(pat, val) for pat in self.NEGATION_PATTERNS):
+            return False  # négation dans la mention → capturée par la règle
+        idx = ctx.find(val)
+        before = ctx[:idx] if idx >= 0 else ctx
+        window = " ".join(before.split()[-self.neg_scope_tokens() :])
+        return any(re.search(pat, window) for pat in self.NEGATION_PATTERNS)
 
     def has_uncertainty(self, text: str) -> bool:
         return any(re.search(pat, text) for pat in self.UNCERTAINTY_PATTERNS)
@@ -165,12 +204,19 @@ class MetricsCalculator:
         # f_cont (contradiction) needs document-level analysis the dashboard does not
         # run on this short-text view → its rate is 0 here, identical to the CLI's
         # per-call default (compute_score_from_stats(..., contradicted_rate=0.0)).
+        # La négation est comptée AVEC analyse de portée (is_negation_risky) : un
+        # simple mot-clé sur toute la fenêtre donne jusqu'à 100 % de faux positifs
+        # (« ménopausée depuis 48 ans, pas de THM » → le « pas » porte sur THM).
         _rw = self.params["risk_weights"]
         alpha_r, beta_r, gamma_r = _rw["negation"], _rw["uncertainty"], _rw["contradiction"]
         contradicted_rate = 0.0
         total_texts = len(contexts) if contexts else len(values)
         text_to_search = contexts if contexts else [v.lower() for v in values]
-        negated = sum(1 for t in text_to_search if self.has_negation(t))
+        negated = sum(
+            1
+            for a in annotations
+            if self.is_negation_risky(a.value, getattr(a, "context", "") or "")
+        )
         uncertain = sum(1 for t in text_to_search if self.has_uncertainty(t))
 
         r_raw = (
