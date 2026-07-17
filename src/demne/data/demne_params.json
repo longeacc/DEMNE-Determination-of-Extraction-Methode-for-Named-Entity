@@ -2,36 +2,36 @@
     "decision_thresholds": {
         "TE_HIGH": 0.1,
         "HE_HIGH": 0.54,
-        "R_HIGH": 0.18,
-        "FEAS_NER": 0.49,
+        "R_HIGH": 0.8300000000000001,
+        "FEAS_NER": 0.2,
         "MIN_TE_SAMPLES": 2,
-        "TFIDF_Y": 0.6799999999999999,
-        "TFIDF_X": 9,
+        "TFIDF_Y": 0.98,
+        "TFIDF_X": 1,
         "TFIDF_SIM": 0.5,
         "TFIDF_USE_F1": true,
         "TFIDF_WINDOW_TOKENS": 30
     },
     "risk_weights": {
-        "negation": 0.92,
-        "uncertainty": 0.1,
+        "negation": 0.54,
+        "uncertainty": 0.31,
         "contradiction": 0.6,
-        "scope_tokens": 11
+        "scope_tokens": 9
     },
     "risk_window_size": 50,
     "feasibility_weights": {
-        "alpha_freq": 0.76,
-        "beta_he": 0.34,
+        "alpha_freq": 0.63,
+        "beta_he": 0.08,
         "he_default": 0.5,
-        "sat_count": 130.0
+        "sat_count": 220.0
     },
     "homogeneity_sigmoid": {
-        "k": 13.21,
-        "x0": 0.6399999999999999
+        "k": 6.82,
+        "x0": 0.63
     },
     "templatability_bonus": {
-        "symbol_bonus": 0.13,
-        "digit_bonus": 0.41000000000000003,
-        "digit_gate": 0.68
+        "symbol_bonus": 0.34,
+        "digit_bonus": 0.31,
+        "digit_gate": 0.41000000000000003
     },
     "frequency": {
         "rare_threshold_count": 10
