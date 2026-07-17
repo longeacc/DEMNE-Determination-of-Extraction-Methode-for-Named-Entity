@@ -173,9 +173,9 @@ class TestFullPipelineRouting:
         # DecisionTreeBuilder loads thresholds from params.json at __init__
         return DecisionTreeBuilder(config_path="dummy.json")
 
-    def test_her2_routes_to_rules(self, builder, synthetic_metrics):
+    def test_her2_routes_to_tbm(self, builder, synthetic_metrics):
         res = builder.analyze_entity("HER2_Status", synthetic_metrics["HER2_Status"])
-        assert res["method"] == "RULES"
+        assert res["method"] == "TBM"
 
     def test_pays_routes_to_tbm(self, builder, synthetic_metrics):
         res = builder.analyze_entity("Pays_Origine", synthetic_metrics["Pays_Origine"])

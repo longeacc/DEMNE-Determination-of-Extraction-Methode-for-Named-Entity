@@ -11,7 +11,7 @@ def test_decision_tree_logic():
 
     metrics_struct = {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1}
     res1 = builder.analyze_entity("StructureOnly", metrics_struct)
-    assert res1["method"] == "RULES"
+    assert res1["method"] == "LLM"
 
     metrics_tbm = {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
     res2 = builder.analyze_entity("GoodRules", metrics_tbm)

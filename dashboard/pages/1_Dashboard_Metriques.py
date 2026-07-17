@@ -183,7 +183,7 @@ else:
                     polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
                     showlegend=False,
                 )
-                st.plotly_chart(fig, use_container_width=True, key=f"radar_{selected_entity}")
+                st.plotly_chart(fig, width="stretch", key=f"radar_{selected_entity}")
         else:
             st.info("No data extracted yet.")
 
@@ -200,7 +200,7 @@ else:
                     "LLM": "#C62828",
                 },
             )
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, width="stretch")
         else:
             st.info("No data extracted yet.")
 
@@ -209,7 +209,7 @@ else:
         heatmap_cols = [c for c in ["Te", "He", "R", "Feas"] if c in df.columns]
         heatmap_df = df.set_index("Entity")[heatmap_cols]
         fig_heat = px.imshow(heatmap_df.T, color_continuous_scale="RdYlGn", aspect="auto")
-        st.plotly_chart(fig_heat, use_container_width=True)
+        st.plotly_chart(fig_heat, width="stretch")
     else:
         st.info("No entities detected in the corpus.")
 
@@ -231,5 +231,5 @@ else:
         display_df = display_df.rename(columns={"tfidf_score": "TFIDF_recall"})
         st.dataframe(
             display_df.style.map(color_routing, subset=["Routing"]),
-            use_container_width=True,
+            width="stretch",
         )

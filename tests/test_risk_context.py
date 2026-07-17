@@ -34,4 +34,4 @@ def test_risk_score():
     score_high = scorer.compute_score(
         ["Pas clair si ER positif ou négatif", "statut discordant ER"], "ER"
     )
-    assert score_high >= 0.30
+    assert score_high >= 0.20

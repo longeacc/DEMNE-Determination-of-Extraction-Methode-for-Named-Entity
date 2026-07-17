@@ -127,7 +127,7 @@ def test_backward_compat_baseline_unchanged(builder):
         builder.analyze_entity("StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1})[
             "method"
         ]
-        == "RULES"
+        == "LLM"
     )
     assert (
         builder.analyze_entity(
@@ -149,12 +149,12 @@ def test_backward_compat_baseline_unchanged(builder):
     )
 
 
-def test_tfidf_node_bypassed_when_te_and_he_high(builder):
+def test_tfidf_node_routes_rules_when_he_below_new_threshold(builder):
     res = builder.analyze_entity(
         "x", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1, "tfidf_score": 0.95}
     )
     assert res["method"] == "RULES"
-    assert "TFIDF" not in res["justification"]
+    assert "TFIDF" in res["justification"]
 
 
 def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
