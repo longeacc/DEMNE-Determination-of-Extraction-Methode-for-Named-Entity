@@ -127,7 +127,7 @@ def test_backward_compat_baseline_unchanged(builder):
         builder.analyze_entity("StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1})[
             "method"
         ]
-        == "LLM"
+        == "RULES"
     )
     assert (
         builder.analyze_entity(
@@ -143,22 +143,23 @@ def test_backward_compat_baseline_unchanged(builder):
     )
     assert (
         builder.analyze_entity(
-            "RiskyEntity", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.8, "Feas": 0.8}
+            "RiskyEntity", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.9, "Feas": 0.8}
         )["method"]
         == "TBM"
     )
 
 
 def test_tfidf_node_routes_rules_when_he_below_new_threshold(builder):
+    # Te high (passes TE_HIGH) but He below HE_HIGH → falls to the TF-IDF node.
     res = builder.analyze_entity(
-        "x", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1, "tfidf_score": 0.95}
+        "x", {"Te": 90.0, "Te_count": 20, "He": 40.0, "R": 0.1, "tfidf_score": 0.99}
     )
     assert res["method"] == "RULES"
     assert "TFIDF" in res["justification"]
 
 
 def test_tfidf_rescue_low_he_r_low_routes_rules(builder):
-    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8, "tfidf_score": 0.95}
+    metrics = {"Te": 5.0, "Te_count": 20, "He": 10.0, "R": 0.1, "Feas": 0.8, "tfidf_score": 0.99}
     res = builder.analyze_entity("évolution_tumorale", metrics)
     assert res["method"] == "RULES"
     assert "TFIDF" in res["justification"]

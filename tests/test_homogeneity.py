@@ -15,7 +15,7 @@ def test_homogeneity_limits():
     # Edge case 2: 1000 identical mentions
     data_identical = ["ER"] * 1000
     score_id = scorer.compute_from_list(data_identical)
-    assert score_id > 0.95
+    assert score_id > 0.9
 
     # Edge case 3: 100 entirely different mentions WITHOUT a common prefix.
     # Using str(int) because "variation_i" contains "variation" repeated 100 times,

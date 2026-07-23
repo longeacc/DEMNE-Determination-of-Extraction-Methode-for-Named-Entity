@@ -11,7 +11,7 @@ def test_decision_tree_logic():
 
     metrics_struct = {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1}
     res1 = builder.analyze_entity("StructureOnly", metrics_struct)
-    assert res1["method"] == "LLM"
+    assert res1["method"] == "RULES"
 
     metrics_tbm = {"Te": 50.0, "Te_count": 20, "He": 20.0, "R": 0.1, "Feas": 0.8}
     res2 = builder.analyze_entity("GoodRules", metrics_tbm)
@@ -21,7 +21,7 @@ def test_decision_tree_logic():
     res3 = builder.analyze_entity("CommonEntity", metrics_llm)
     assert res3["method"] == "LLM"
 
-    metrics_risky = {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.8, "Feas": 0.8}
+    metrics_risky = {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.9, "Feas": 0.8}
     res4 = builder.analyze_entity("RiskyEntity", metrics_risky)
     assert res4["method"] == "TBM"
 

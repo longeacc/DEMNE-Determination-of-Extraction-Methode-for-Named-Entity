@@ -32,6 +32,6 @@ def test_risk_score():
 
     # Context with negation and uncertainty -> High risk
     score_high = scorer.compute_score(
-        ["Pas clair si ER positif ou négatif", "statut discordant ER"], "ER"
+        ["Absence de recepteurs estrogeniques ER", "Statut ER à confirmer"], "ER"
     )
     assert score_high >= 0.20
