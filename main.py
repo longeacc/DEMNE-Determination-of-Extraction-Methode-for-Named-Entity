@@ -225,6 +225,9 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     env["PYTHONUTF8"] = "1"
     env["PYTHONUNBUFFERED"] = "1"
     env["DISABLE_ECO2AI"] = "1"
+    # Les scorers importent `demne.*` : sans src/ sur le PYTHONPATH, le
+    # sous-processus échoue en ModuleNotFoundError si le paquet n'est pas installé.
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(SRC), env.get("PYTHONPATH", "")]))
     proc = subprocess.Popen(
         cmd,
         cwd=str(ROOT),

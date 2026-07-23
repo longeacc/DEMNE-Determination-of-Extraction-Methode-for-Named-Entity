@@ -6,7 +6,7 @@
         "FEAS_NER": 0.2,
         "MIN_TE_SAMPLES": 2,
         "TFIDF_Y": 0.98,
-        "TFIDF_X": 1,
+        "TFIDF_X": 3,
         "TFIDF_SIM": 0.5,
         "TFIDF_USE_F1": true,
         "TFIDF_WINDOW_TOKENS": 30

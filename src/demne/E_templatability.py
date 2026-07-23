@@ -104,29 +104,26 @@ class TemplatabilityScorer:
         return self.compute("TEMP_LIST")
 
     def normalize_pattern(self, text: str) -> str:
+        """Normalise une chaîne d'entité en motif abstrait.
+
+        La templatabilité mesure une forme CONSTANTE : elle doit être indépendante
+        de la casse et de la longueur.
+        Ex: "HER2 3+" / "her2 3+"  -> "LD+"  (même motif)
+        Ex: "SEIN   DROIT" / "sein droit" -> "L L"
+
+        Sans cela, la casse et la longueur exacte multiplient le nombre de motifs
+        distincts → entropie élevée → Te artificiellement bas.
+
+        DOIT rester identique à MetricsCalculator (dashboard/core/metrics.py) :
+        le drift-guard compare les deux implémentations.
         """
-        Normalize an entity string into an abstract template.
-        Ex: "HER2 3+" -> "XXX D+"
-        Ex: "ER >80%" -> "XX >DD%"
-        Ex: "Ki67 15-20%" -> "XXDD DD-DD%"
-        """
-        # 1. Strip whitespace
         pattern = text.strip()
-
-        # 2. Abstract Digits -> 'D'
+        # 1. Chiffres -> 'D'
         pattern = re.sub(r"[0-9]", "D", pattern)
-
-        # 3. Abstract Uppercase -> 'X'
-        pattern = re.sub(r"[A-ZÀ-ÖØ-Þ]", "X", pattern)
-
-        # 4. Abstract Lowercase -> 'x'
-        pattern = re.sub(r"[a-zà-öø-ÿ]", "x", pattern)
-
-        # 5. Simplify repeated types (DD -> D+, XX -> X+) - OPTIONAL, let's keep exact count for now
-        # pattern = re.sub(r'D+', 'D+', pattern)
-        # pattern = re.sub(r'X+', 'X+', pattern)
-        # pattern = re.sub(r'x+', 'x+', pattern)
-
+        # 2. Lettres -> 'L' (casse-insensible)
+        pattern = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", pattern)
+        # 3. Collapse des répétitions (LLD == LLLD, "L   L" == "L L")
+        pattern = re.sub(r"(.)\1+", r"\1", pattern)
         return pattern
 
     def _calculate_entropy(self, patterns: list[str]) -> float:

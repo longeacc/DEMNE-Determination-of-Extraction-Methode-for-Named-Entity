@@ -95,8 +95,13 @@ class HomogeneityScorer:
         return res
 
     def _tokenize(self, text: str) -> list[str]:
-        """Split text into tokens, lowercase, preserve medical symbols (+, -)."""
-        return [w.lower() for w in re.split(r"[^a-zA-Z0-9%+\-]+", text) if w.strip()]
+        """Découpe en tokens minuscules.
+
+        Séparateurs identiques à MetricsCalculator (drift-guard) : '+' et '-' sont
+        traités comme des séparateurs. Toute divergence ici fait diverger He entre
+        main.py (CSV) et le dashboard.
+        """
+        return [w.lower() for w in re.split(r"[^a-zA-Z0-9%]+", text) if w.strip()]
 
     def _sigmoid(self, x: float) -> float:
         """

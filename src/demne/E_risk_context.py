@@ -73,12 +73,15 @@ class RiskContextScorer:
         # (e.g. "non surexprimé" is an expected clinical state).
         # "négatif" / "negatif" excluded intentionally: expected clinical state
         # (PR-, HER2-), not a contextual risk signal.
+        # DOIT rester identique à MetricsCalculator (dashboard/core/metrics.py) :
+        # les seuils sont calibrés sur ce lexique, et main.py doit router comme le
+        # dashboard. Toute divergence ici fait diverger les deux chemins.
         self.NEGATION_PATTERNS = [
-            r"\bne\s+pas\b",
-            r"\babsent\b",
-            r"\babsence\b",
             r"\baucun\b",
             r"\bsans\b",
+            r"\bni\b",
+            r"\bpas\b",
+            r"\babsence\b",
         ]
 
         # 2. Uncertainty patterns (strong R increase)
@@ -147,8 +150,38 @@ class RiskContextScorer:
         except Exception as e:
             print(f"Error during weight learning: {e}")
 
+    def is_negation_risky(self, value: str, context: str) -> bool:
+        """La négation constitue-t-elle un RISQUE pour l'extraction par règles ?
+
+        Elle ne l'est que si le marqueur porte sur l'entité SANS figurer dans la
+        mention :
+        - marqueur DANS la mention ("Absence d'emboles") → la règle le capture
+          aussi : la négation fait partie du motif, ce n'est pas un risque ;
+        - marqueur HORS PORTÉE (au-delà de scope_tokens avant la mention, ou situé
+          après elle) → il ne nie pas l'entité : "ménopausée depuis 48 ans, pas de
+          THM" — le « pas » porte sur THM ;
+        - marqueur EN PORTÉE et hors mention ("pas de récidive") → la règle extrait
+          l'entité et rate la négation : risque.
+
+        DOIT rester identique à MetricsCalculator (drift-guard).
+        """
+        val = (value or "").lower().strip()
+        ctx = (context or val).lower()
+        if not val:
+            return False
+        if any(re.search(pat, val) for pat in self.NEGATION_PATTERNS):
+            return False  # négation dans la mention → capturée par la règle
+        idx = ctx.find(val)
+        before = ctx[:idx] if idx >= 0 else ctx
+        scope = int(PARAMS["risk_weights"].get("scope_tokens", 6))
+        window = " ".join(before.split()[-scope:])
+        return any(re.search(pat, window) for pat in self.NEGATION_PATTERNS)
+
     def has_negation(self, text: str, entity_type: str = "") -> bool:
-        """Return True if the text contains a negation pattern."""
+        """Marqueur de négation présent dans `text` (sans analyse de portée).
+
+        Ne pas utiliser pour le calcul de R : voir `is_negation_risky`.
+        """
         text = text.lower()
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
 
@@ -279,8 +312,9 @@ class RiskContextScorer:
                 entity_stats[etype]["total"] += 1
                 entity_docs[etype][filename].append(entry)
 
-                # Check negation
-                if any(re.search(pat, ctx) for pat in self.NEGATION_PATTERNS):
+                # Négation AVEC analyse de portée : un simple mot-clé sur toute la
+                # fenêtre donne jusqu'à 100 % de faux positifs en texte clinique.
+                if self.is_negation_risky(entry.get("value_text", ""), ctx):
                     entity_stats[etype]["negated"] += 1
 
                 # Check uncertainty

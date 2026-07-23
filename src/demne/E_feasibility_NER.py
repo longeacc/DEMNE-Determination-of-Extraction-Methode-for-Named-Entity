@@ -51,6 +51,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
     freq_file = _resolve("frequency_analysis", "csv")
     frequencies = {}
 
+    counts = {}
     if freq_file.exists():
         with open(freq_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
@@ -58,6 +59,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
                 ent = row.get("Entity") or row.get("Entity_Type") or row.get("Entity_Label")
                 if ent:
                     frequencies[ent] = float(row.get("Frequency", 0.0))
+                    counts[ent] = float(row.get("Count", 0.0))
 
     # 2. Load Homogeneity (He)
     he_file = _resolve("homogeneity_analysis", "csv")
@@ -73,17 +75,23 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
                     else:
                         homogeneity[ent] = float(row.get("He_Score_Percent", 0.0)) / 100.0
 
-    # Feas(E) = α_Feas · min(1, Freq) + β_Feas · He
+    # Feas(E) = α_Feas · min(1, count/C) + β_Feas · He
+    # On sature le COMPTE absolu (assez d'exemples pour énumérer un template), pas
+    # la densité count/tokens : une entité fréquente dans un gros corpus a une
+    # densité faible mais plein d'exemples — la densité la pénalisait à tort.
+    # DOIT rester identique à MetricsCalculator (drift-guard).
     _fw = PARAMS["feasibility_weights"]
     alpha_feas = _fw["alpha_freq"]
     beta_feas = _fw["beta_he"]
     he_default = _fw["he_default"]
+    sat_count = _fw.get("sat_count", 300)
 
     results = []
     feas_rows = []
     for ent, freq in frequencies.items():
         he = homogeneity.get(ent, he_default)
-        feas = round(alpha_feas * min(1.0, freq) + beta_feas * he, 3)
+        feas_freq = min(1.0, counts.get(ent, 0.0) / sat_count) if sat_count > 0 else 0.0
+        feas = round(alpha_feas * feas_freq + beta_feas * he, 3)
         results.append({"Entity": ent, "Feas_Score": feas})
         feas_rows.append([ent, f"{feas:.3f}"])
     print_table(["Entity", "Feas"], feas_rows, [60, 8])
