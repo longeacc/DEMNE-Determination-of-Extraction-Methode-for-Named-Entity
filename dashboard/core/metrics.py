@@ -149,8 +149,11 @@ class MetricsCalculator:
         # conservés pour le bonus_semantic.
         normalized_patterns = []
         for v in values:
-            v_norm = re.sub(r"[0-9]", "D", v)
-            v_norm = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", v_norm)
+            # Lettres AVANT chiffres : sinon [A-Za-z]→L écraserait le marqueur 'D'
+            # (D est une lettre) et digits/lettres deviendraient indiscernables
+            # (has_digit toujours faux, digit_bonus inerte).
+            v_norm = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", v)
+            v_norm = re.sub(r"[0-9]", "D", v_norm)
             v_norm = re.sub(r"(.)\1+", r"\1", v_norm)
             normalized_patterns.append(v_norm)
 

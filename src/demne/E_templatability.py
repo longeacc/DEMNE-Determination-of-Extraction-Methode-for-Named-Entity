@@ -118,10 +118,12 @@ class TemplatabilityScorer:
         le drift-guard compare les deux implémentations.
         """
         pattern = text.strip()
-        # 1. Chiffres -> 'D'
-        pattern = re.sub(r"[0-9]", "D", pattern)
-        # 2. Lettres -> 'L' (casse-insensible)
+        # 1. Lettres -> 'L' (casse-insensible). AVANT les chiffres : sinon la règle
+        #    lettres écraserait le marqueur 'D' (qui est une lettre), rendant
+        #    digits et lettres indiscernables et le digit_bonus inerte.
         pattern = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", pattern)
+        # 2. Chiffres -> 'D'
+        pattern = re.sub(r"[0-9]", "D", pattern)
         # 3. Collapse des répétitions (LLD == LLLD, "L   L" == "L L")
         pattern = re.sub(r"(.)\1+", r"\1", pattern)
         return pattern
