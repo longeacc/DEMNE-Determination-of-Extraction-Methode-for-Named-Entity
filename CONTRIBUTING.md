@@ -1,6 +1,6 @@
-# Contributing to DuraXELL
+# Contributing to DEMNE
 
-We welcome contributions to DuraXELL! 
+We welcome contributions to DEMNE! 
 
 ## Getting Started
 
