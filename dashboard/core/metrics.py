@@ -1,18 +1,13 @@
-import importlib.util as _il
 import math
 import re
 from collections import Counter
-from pathlib import Path
 from typing import Any
+
+from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth).
 # Same file the CLI scorers read → dashboard and command line can never drift. ---
-_pspec = _il.spec_from_file_location(
-    "demne_params", Path(__file__).resolve().parents[2] / "src" / "demne" / "params.py"
-)
-_pmod = _il.module_from_spec(_pspec)
-_pspec.loader.exec_module(_pmod)
-PARAMS = _pmod.load_params()
+PARAMS = load_params()
 
 ENTITIES = [
     "Histologie_tumorale",

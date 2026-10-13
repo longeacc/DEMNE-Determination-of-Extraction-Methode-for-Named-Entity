@@ -4,16 +4,10 @@ The R− node is SHARED between the Te/He branch and the TF-IDF branch.
 TF-IDF 'Yes' does NOT route directly to RULES: it first passes through R−.
 """
 
-import importlib.util as _il
-from pathlib import Path
+from demne.params import load_params
 
 # Default thresholds = data/demne_params.json (single source shared by CLI/scorers/dashboard)
-_pspec = _il.spec_from_file_location(
-    "demne_params", Path(__file__).resolve().parents[2] / "src" / "demne" / "params.py"
-)
-_pmod = _il.module_from_spec(_pspec)
-_pspec.loader.exec_module(_pmod)
-_DT = _pmod.load_params()["decision_thresholds"]
+_DT = load_params()["decision_thresholds"]
 
 
 def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> tuple[str, str]:

@@ -21,7 +21,7 @@
 
 - Broken README image (Graph_decision_biss.png → Graph_decision.png)
 - Renamed lunch.py → launch.py (typo)
-- README/CITATION.cff URLs (DuraXell → DEMNE-...)
+- README/CITATION.cff URLs
 
 ## [0.3.0] - 2026-04-19
 ### Changed

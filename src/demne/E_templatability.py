@@ -8,7 +8,6 @@ Example: TNM staging always follows the pattern T[0-4]N[0-3]M[0-1].
 """
 
 # pylint: disable=broad-exception-caught
-import importlib.util as _il
 import json
 import math
 import os
@@ -19,13 +18,10 @@ from pathlib import Path
 from typing import Any
 
 from demne._table import print_table
+from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
-_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
-assert _pspec is not None and _pspec.loader is not None
-_pmod = _il.module_from_spec(_pspec)
-_pspec.loader.exec_module(_pmod)
-PARAMS = _pmod.load_params()
+PARAMS = load_params()
 
 # eco2ai dependencies
 try:

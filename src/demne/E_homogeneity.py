@@ -12,7 +12,6 @@ Normalization: Sigmoid transform to spread values between 0 and 1 (returned as %
 # pylint: disable=broad-exception-caught
 
 import csv
-import importlib.util as _il
 import math
 import os
 import re
@@ -21,13 +20,10 @@ from pathlib import Path
 from typing import Any
 
 from demne._table import print_table
+from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
-_pspec = _il.spec_from_file_location("demne_params", Path(__file__).resolve().parent / "params.py")
-assert _pspec is not None and _pspec.loader is not None
-_pmod = _il.module_from_spec(_pspec)
-_pspec.loader.exec_module(_pmod)
-PARAMS = _pmod.load_params()
+PARAMS = load_params()
 
 # Eco2AI for energy tracking
 try:

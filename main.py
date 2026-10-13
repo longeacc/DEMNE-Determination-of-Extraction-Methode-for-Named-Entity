@@ -116,10 +116,9 @@ def discover_entities_from_config() -> list[str]:
 # of truth shared with the scorers, the decision tree and the dashboard.
 import importlib.util as _il
 
-_pspec = _il.spec_from_file_location("demne_params", SRC / "demne" / "params.py")
-_pmod = _il.module_from_spec(_pspec)
-_pspec.loader.exec_module(_pmod)
-PARAMS = _pmod.load_params()
+from demne.params import load_params
+
+PARAMS = load_params()
 
 PRESETS = PARAMS["presets"]
 
@@ -133,6 +132,8 @@ DECISION_CSV = RESULTS_DIR / "decision_summary.csv"
 # ===========================================================================
 # Noise lines to filter out in sub-processes (eco2ai, pandas, apscheduler)
 _NOISE_KEYS = (
+    # Third-party library noise only. Real tracebacks and exceptions are NOT
+    # filtered here on purpose — hiding them would mask genuine pipeline failures.
     "pynvml",
     "FutureWarning",
     "DeprecationWarning",
@@ -141,42 +142,15 @@ _NOISE_KEYS = (
     "site-packages",
     "warnings.warn",
     "incompatible dtype",
-    "apscheduler",
-    "Tracker._func_for_sched",
-    "_write_to_csv",
-    "get_loc",
-    "PyObjectHashTable",
-    "hashtable_class_helper",
-    "index.pyx",
-    "raise KeyError",
-    "KeyError: 'id'",
-    "Traceback (most recent call last)",
     "Generalized error in Eco2AI",
     "carbon emission tracking data",
     "Carbon emission tracking",
-    'Job "',
-    '  File "',
-    "  return ",
-    "       ^^^^",
-    "    indexer = self.columns.get_loc",
-    "        retval = job.func",
-    "    return self._engine.get_loc",
-    "    return self._write_to_csv",
-    "    if attributes_dataframe",
-    "                            ~~~",
-    "                            ^^",
-    "The above exception was the direct cause",
     "If you use a VPN",
     "It is recommended to disable VPN",
     "manually set up the ISO-Alpha-2 code",
     "You can find the ISO-Alpha-2 code",
     "It's impossible to determine cpu number",
     "For now, number of cpu devices",
-    "attributes_dataframe",
-    "attributes_array",
-    "loc[row_index]",
-    "retval = job.func",
-    "(*job.args, **job.kwargs)",
 )
 
 
