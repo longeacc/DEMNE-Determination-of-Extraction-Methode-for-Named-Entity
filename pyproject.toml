@@ -134,8 +134,6 @@ source = ["demne"]
 omit = [
     "src/demne/REST_interface/*",
     "src/demne/visualize_decision_tree.py",
-    "src/demne/params.py",
-    "src/demne/E_feasibility_NER.py",
 ]
 
 [tool.coverage.report]
@@ -143,7 +141,7 @@ exclude_lines = [
     "if __name__ == .__main__.",
     "pragma: no cover",
 ]
-fail_under = 45
+fail_under = 50
 
 [tool.ruff]
 line-length = 100

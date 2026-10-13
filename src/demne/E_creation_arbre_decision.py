@@ -14,6 +14,7 @@ Outputs:
 
 # pylint: disable=broad-exception-caught,unused-argument
 
+import argparse
 import csv
 import json
 import os
@@ -304,9 +305,6 @@ def load_metrics_from_csv(results_dir: Path, corpus_name: str | None = None):
     _read_csv("tfidf_analysis.csv", "TFIDF_Score", "tfidf_score")
 
     return aggregated
-
-
-import argparse
 
 
 def main():

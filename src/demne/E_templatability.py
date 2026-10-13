@@ -100,18 +100,13 @@ class TemplatabilityScorer:
         return self.compute("TEMP_LIST")
 
     def normalize_pattern(self, text: str) -> str:
-        """Normalise une chaîne d'entité en motif abstrait.
+        """Normalise an entity string into an abstract pattern.
 
-        La templatabilité mesure une forme CONSTANTE : elle doit être indépendante
-        de la casse et de la longueur.
-        Ex: "HER2 3+" / "her2 3+"  -> "LD+"  (même motif)
-        Ex: "SEIN   DROIT" / "sein droit" -> "L L"
-
-        Sans cela, la casse et la longueur exacte multiplient le nombre de motifs
-        distincts → entropie élevée → Te artificiellement bas.
-
-        DOIT rester identique à MetricsCalculator (dashboard/core/metrics.py) :
-        le drift-guard compare les deux implémentations.
+        Templatability measures a CONSTANT shape: independent of case and length.
+        e.g. "HER2 3+" / "her2 3+" -> "LD+"; "SEIN   DROIT" / "sein droit" -> "L L".
+        Without it, case and exact length inflate the number of distinct patterns
+        -> higher entropy -> artificially low Te. Must stay consistent with the
+        dashboard MetricsCalculator (see the routing-equivalence intent).
         """
         pattern = text.strip()
         # 1. Lettres -> 'L' (casse-insensible). AVANT les chiffres : sinon la règle

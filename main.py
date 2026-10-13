@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import importlib.util as _il
 import json
 import os
 import re
@@ -114,9 +115,7 @@ def discover_entities_from_config() -> list[str]:
 
 # Tunable values (presets + thresholds) from data/demne_params.json — single source
 # of truth shared with the scorers, the decision tree and the dashboard.
-import importlib.util as _il
-
-from demne.params import load_params
+from demne.params import load_params  # noqa: E402  (imported after the sys.path bootstrap above)
 
 PARAMS = load_params()
 
@@ -172,7 +171,7 @@ _STRIP_RE = re.compile(
 
 
 def _filter_noise(line: str) -> str | None:
-    """Retourne la ligne nettoyée (ou None pour la supprimer)."""
+    """Return the cleaned line (or None to drop it)."""
     line = line.rstrip()
     if not line.strip():
         return None
@@ -357,7 +356,7 @@ def _export_decision_csv() -> None:
         rel_csv = os.path.relpath(str(DECISION_CSV))
     except ValueError:
         rel_csv = str(DECISION_CSV)
-    print(f"\n=== CSV synthèse écrit : {rel_csv} ===")
+    print(f"\n=== Decision summary CSV written: {rel_csv} ===")
 
     # Pretty-print as a fixed-width table with wrapping for long cells
     import textwrap as _tw
@@ -502,13 +501,13 @@ def cmd_rest_config(args: argparse.Namespace) -> None:
         }
         out = Path(args.export)
         out.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"Config exportée : {out}")
+        print(f"Config exported: {out}")
     elif args.import_:
         data = json.loads(Path(args.import_).read_text(encoding="utf-8"))
-        print("Config importée :")
+        print("Config imported:")
         print(json.dumps(data, indent=2, ensure_ascii=False))
     else:
-        print("Utilise --export <fichier.json> ou --import <fichier.json>")
+        print("Use --export <file.json> or --import <file.json>")
 
 
 def cmd_notebook(args: argparse.Namespace) -> None:
@@ -517,9 +516,9 @@ def cmd_notebook(args: argparse.Namespace) -> None:
     if not args.api_only:
         notebook = ROOT / "src" / "demne" / "REST_interface" / "REST.ipynb"
         if not notebook.exists():
-            print(f"Notebook introuvable : {notebook}")
+            print(f"Notebook not found: {notebook}")
         else:
-            print(f"Démarrage Voila sur {notebook} (port {args.port})...")
+            print(f"Starting Voila on {notebook} (port {args.port})...")
             voila_cmd = [
                 sys.executable,
                 "-m",
@@ -534,19 +533,19 @@ def cmd_notebook(args: argparse.Namespace) -> None:
 
     if not args.notebook_only:
         api = ROOT / "src" / "demne" / "REST_interface" / "demo_rest.py"
-        print(f"Démarrage API REST : {api}")
+        print(f"Starting REST API: {api}")
         procs.append(subprocess.Popen([sys.executable, str(api)], cwd=api.parent))
 
     if not procs:
         return
-    print("\nCtrl-C pour arrêter.")
+    print("\nPress Ctrl-C to stop.")
     try:
         for p in procs:
             p.wait()
     except KeyboardInterrupt:
         for p in procs:
             p.terminate()
-        print("Arrêt demandé.")
+        print("Stop requested.")
 
 
 def cmd_rest(args: argparse.Namespace) -> None:
@@ -571,11 +570,11 @@ def cmd_info(args: argparse.Namespace) -> None:
     discovered = discover_entities(DEFAULT_GS) or discover_entities_from_config()
     if discovered:
         src = "annotation.conf/.ann" if discover_entities(DEFAULT_GS) else "decision_config.json"
-        print(f"Entities  : {len(discovered)} découvertes ({src})")
+        print(f"Entities  : {len(discovered)} discovered ({src})")
         for e in discovered:
             print(f"            - {e}")
     else:
-        print("Entities  : aucune (lance d'abord `evaluate --gs_dir <corpus>`)")
+        print("Entities  : none (run `evaluate --gs_dir <corpus>` first)")
     print(f"Config    : {_rel(CONFIG_PATH)} ({'OK' if CONFIG_PATH.exists() else 'absent'})")
 
 
@@ -624,7 +623,9 @@ def main() -> None:
     _add_corpus_args(p)
     p.set_defaults(func=cmd_metrics)
 
-    p = sub.add_parser("tree", help="Build decision tree + export CSV summary")
+    p = sub.add_parser(
+        "tree", help="Open the static decision-tree diagram (PNG); use `evaluate` to build + export"
+    )
     _add_corpus_args(p)
     p.add_argument("--no-visualize", action="store_true")
     p.set_defaults(func=cmd_tree)

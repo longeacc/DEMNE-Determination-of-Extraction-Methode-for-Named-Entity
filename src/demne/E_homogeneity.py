@@ -91,11 +91,11 @@ class HomogeneityScorer:
         return res
 
     def _tokenize(self, text: str) -> list[str]:
-        """Découpe en tokens minuscules.
+        """Tokenise into lowercase tokens.
 
-        Séparateurs identiques à MetricsCalculator (drift-guard) : '+' et '-' sont
-        traités comme des séparateurs. Toute divergence ici fait diverger He entre
-        main.py (CSV) et le dashboard.
+        Separators match the dashboard MetricsCalculator: '+' and '-' are treated as
+        separators. Any divergence here would make He differ between the CLI (CSV)
+        and the dashboard.
         """
         return [w.lower() for w in re.split(r"[^a-zA-Z0-9%]+", text) if w.strip()]
 

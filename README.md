@@ -26,7 +26,7 @@ Not every entity in a French clinical report needs a transformer or an LLM. DEMN
 
 1. **Characterize.** Five metrics are computed per entity type from BRAT annotations: templateability, lexical homogeneity, TF-IDF extractability, contextual risk (negation, uncertainty, contradiction), and a derived NER feasibility score.
 2. **Route.** A deterministic decision graph with four nodes and calibrated thresholds assigns a tier. Rules are chosen only on positive evidence and a safe context; otherwise the entity escalates to a transformer when enough labelled examples exist, and to an LLM as a last resort.
-3. **Calibrate.** The 17 free parameters are optimized with Optuna (NSGA-II) on routing concordance and an asymmetric cost that penalizes under-escalation twice as much as over-escalation.
+3. **Calibrate.** The 17 free parameters are optimized with Optuna (NSGA-II) on routing concordance and an asymmetric cost that penalizes under-escalation twice as much as over-escalation. This optimization was run locally by Akram Redjal; the resulting values ship in `data/demne_params.json`, but the optimization script is not part of this repository, so the published thresholds are not reproducible from the code here.
 
 Every decision traces back to explicit metric values and thresholds, which makes the routing auditable (EU AI Act, Art. 12 and 14).
 

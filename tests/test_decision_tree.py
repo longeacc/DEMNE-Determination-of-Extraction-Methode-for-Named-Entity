@@ -1,8 +1,3 @@
-import sys
-from unittest.mock import MagicMock
-
-sys.modules["eco2ai"] = MagicMock()
-
 from demne.E_creation_arbre_decision import DecisionTreeBuilder
 
 

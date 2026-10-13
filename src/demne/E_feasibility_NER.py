@@ -30,10 +30,12 @@ if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"
     tracker.start()
 
 
-def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
+def compute_feasibility(gs_dir_str=None, pred_dir_str=None, results_dir=None):
     print("Computing NER Feasibility per entity...")
-    script_dir = Path(__file__).parent
-    results_dir = script_dir.parent.parent / "Results"
+    if results_dir is None:
+        results_dir = Path(__file__).parent.parent.parent / "Results"
+    else:
+        results_dir = Path(results_dir)
 
     corpus_name = Path(gs_dir_str).parent.name if gs_dir_str else "Breast"
 

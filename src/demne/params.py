@@ -14,6 +14,7 @@ Standalone-safe: load it without importing the demne package, e.g.
 """
 
 import json
+import warnings
 from pathlib import Path
 
 DEFAULTS = {
@@ -74,7 +75,15 @@ def load_params(start=None) -> dict:
         return _deepcopy_defaults()
     try:
         user = json.loads(f.read_text(encoding="utf-8"))
-    except Exception:  # pylint: disable=broad-exception-caught
+    except (OSError, ValueError) as exc:
+        # Corrupt/unreadable params file: warn loudly (a reproducibility hazard)
+        # instead of silently falling back to the built-in defaults.
+        warnings.warn(
+            f"Could not read params file {f} ({exc}); using built-in DEFAULTS. "
+            "Calibrated thresholds will NOT be applied.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
         return _deepcopy_defaults()
     user = {k: v for k, v in user.items() if not k.startswith("_")}
     return _merge(_deepcopy_defaults(), user)

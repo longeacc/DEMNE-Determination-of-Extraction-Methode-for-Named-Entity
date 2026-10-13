@@ -31,7 +31,7 @@ def _node_tfidf(tfidf_score, r_score, r_high, tfidf_y, trace):
             }
         trace.append(f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?")
         return None
-    trace.append(f"Non (recall={routing_score:.3f} < Y={tfidf_y}) → Feas++ ?")
+    trace.append(f"No (recall={routing_score:.3f} < Y={tfidf_y}) → Feas++ ?")
     return None
 
 
@@ -55,24 +55,24 @@ def route(*, te, he, r, feas, tfidf_score, te_high, he_high, r_high, feas_ner, t
                 ),
                 "trace": trace,
             }
-        trace.append(f"Non (risk of conflict, R={r_score:.3f}) → Feas++ ?")
+        trace.append(f"No (risk of conflict, R={r_score:.3f}) → Feas++ ?")
         return None
 
     trace.append(f"Te++ ? (Te={te:.3f}, TE_HIGH={te_high})")
     if te >= te_high:
-        trace.append(f"Oui → He++ ? (He={he:.3f}, HE_HIGH={he_high})")
+        trace.append(f"Yes → He++ ? (He={he:.3f}, HE_HIGH={he_high})")
         if he >= he_high:
             trace.append("Yes → R− ?")
             result = _node_r(f"Te={te:.2f}≥{te_high}, He={he:.2f}≥{he_high}")
             if result:
                 return result
         else:
-            trace.append(f"Non (He={he:.3f} < {he_high}) → TF-IDF ?")
+            trace.append(f"No (He={he:.3f} < {he_high}) → TF-IDF ?")
             result = _node_tfidf(tfidf_score, r_score, r_high, tfidf_y, trace)
             if result:
                 return result
     else:
-        trace.append(f"Non (Te={te:.3f} < {te_high}) → TF-IDF ?")
+        trace.append(f"No (Te={te:.3f} < {te_high}) → TF-IDF ?")
         result = _node_tfidf(tfidf_score, r_score, r_high, tfidf_y, trace)
         if result:
             return result
