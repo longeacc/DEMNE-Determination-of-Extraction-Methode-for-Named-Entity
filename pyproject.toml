@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "DEMNE"
-version = "0.3.0"
+version = "0.4.0"
 description = "Cascade NLP pipeline for oncological biomarker extraction — optimizing the Performance-Explainability-Frugality trilemma"
 readme = "README.md"
 license = {text = "MIT"}

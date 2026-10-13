@@ -1,4 +1,4 @@
-"""DuraXELL CLI — Central hub for DEMNE.
+"""DEMNE CLI — central hub for the metric & routing pipeline.
 
 Provides:
   - Metric pipeline:     metrics, tree, evaluate
@@ -591,7 +591,7 @@ def cmd_info(args: argparse.Namespace) -> None:
         except ValueError:
             return str(p)
 
-    print("DuraXELL version: 2.0")
+    print("DEMNE version: 0.4.0")
     print(f"GS path   : {_rel(DEFAULT_GS)}")
     print(f"Pred path : {_rel(DEFAULT_PRED)}")
     discovered = discover_entities(DEFAULT_GS) or discover_entities_from_config()
@@ -631,7 +631,7 @@ def _add_corpus_args(p: argparse.ArgumentParser) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="DuraXELL CLI — DEMNE pipeline & dashboard parity",
+        description="DEMNE CLI — pipeline & dashboard parity",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""Examples:
   python main.py info

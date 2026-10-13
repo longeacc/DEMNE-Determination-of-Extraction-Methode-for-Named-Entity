@@ -51,16 +51,19 @@ Every decision traces back to explicit metric values and thresholds, which makes
 ## Quick start
 
 ```bash
-git clone https://github.com/longeacc/DEMNE.git
-cd DEMNE
+git clone https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity.git
+cd DEMNE-Determination-of-Extraction-Methode-for-Named-Entity
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev,ner]"
 
-# full pipeline report
-python scripts/run_full_pipeline_report.py
+# sanity check: environment + entities discovered
+python main.py info
+
+# run metrics + decision tree on a BRAT corpus (clinical data not distributed — supply your own)
+python main.py evaluate --gs_dir <path-to-BRAT-corpus>
 ```
 
-The same pipeline is available as a notebook: `Reports/DuraXELL_Pipeline.ipynb`.
+The REST annotation interface is available as a notebook via `python main.py notebook` (serves `src/demne/REST_interface/REST.ipynb`).
 
 ## Repository layout
 

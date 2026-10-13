@@ -46,9 +46,9 @@ except ImportError:
 
 if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
-        project_name="Consumtion_of_E_frequency.py",
+        project_name="DEMNE-E_frequency",
         experiment_description="Calculating Entity Frequency",
-        file_name="data/Consumtion_of_Duraxell.csv",
+        file_name="data/energy_consumption_DEMNE.csv",
     )
     tracker = Tracker()
     tracker.start()

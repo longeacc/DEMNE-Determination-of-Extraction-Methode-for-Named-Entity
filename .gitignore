@@ -46,8 +46,8 @@ Results/*
 Results/figures/*
 !Results/figures/front_pareto_exemple.png
 !Results/figures/Graph_decision.png
-src/duraxell/Rules/Results/
-src/duraxell/Rules/src/Results/
+src/demne/Rules/Results/
+src/demne/Rules/src/Results/
 NER/sweep_results*.csv
 
 # === Artefacts runtime ===
@@ -55,14 +55,17 @@ NER/sweep_results*.csv
 *.tmp
 out_errs.json
 jupyter_server_config.json
-Consumtion_of_Duraxell.csv
+energy_consumption_DEMNE.csv
 decision_config.json
 output_decision.txt
 modifications.ps1
-src/duraxell/REST_interface/Results/
+src/demne/REST_interface/Results/
 
 # === Tests / Coverage ===
 .pytest_cache/
 htmlcov/
 .coverage
 coverage.xml
+
+# === Annotations BRAT : jamais diffusées (local-only, Zenodo/PyPI) ===
+*.ann

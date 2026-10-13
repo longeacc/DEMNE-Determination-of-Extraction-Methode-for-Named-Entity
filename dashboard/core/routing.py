@@ -1,4 +1,4 @@
-"""DuraXell routing — exact graph matching the DEMNE reference figure.
+"""DEMNE routing — exact graph matching the reference figure.
 
 The R− node is SHARED between the Te/He branch and the TF-IDF branch.
 TF-IDF 'Yes' does NOT route directly to RULES: it first passes through R−.

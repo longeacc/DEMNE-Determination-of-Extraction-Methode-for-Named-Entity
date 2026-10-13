@@ -305,7 +305,7 @@ class TestPipelineEndToEnd:
         builder.export_text_report(report)
 
         content = report.read_text(encoding="utf-8")
-        assert "DuraXELL Decision Tree Report" in content
+        assert "DEMNE Decision Tree Report" in content
         assert "Global Thresholds" in content
         # At least one entity section must appear
         assert any(ent in content for ent in metrics_db)

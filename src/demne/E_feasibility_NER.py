@@ -26,9 +26,9 @@ except ImportError:
 
 if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
     set_params(
-        project_name="Consumtion_of_E_feasibility_NER.py",
+        project_name="DEMNE-E_feasibility_NER",
         experiment_description="NER Feasibility Computation",
-        file_name="Consumtion_of_Duraxell.csv",
+        file_name="data/energy_consumption_DEMNE.csv",
     )
     tracker = Tracker()
     tracker.start()
@@ -88,7 +88,7 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None):
 
     results = []
     feas_rows = []
-    for ent, freq in frequencies.items():
+    for ent in frequencies:
         he = homogeneity.get(ent, he_default)
         feas_freq = min(1.0, counts.get(ent, 0.0) / sat_count) if sat_count > 0 else 0.0
         feas = round(alpha_feas * feas_freq + beta_feas * he, 3)

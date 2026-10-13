@@ -30,7 +30,7 @@ def visualize_decision_tree(
     g_graph = nx.DiGraph()
 
     # Root node
-    root = "DuraXELL\nDecision Node"
+    root = "DEMNE\nDecision Node"
     g_graph.add_node(root, color="#2196F3", shape="box")
 
     # Colors by method

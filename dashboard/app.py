@@ -3,7 +3,7 @@ import streamlit as st
 
 def main() -> None:
     st.set_page_config(
-        page_title="DuraXell Dashboard",
+        page_title="DEMNE Dashboard",
         page_icon="🧬",
         layout="wide",
         initial_sidebar_state="expanded",
@@ -30,9 +30,9 @@ def main() -> None:
     if "routings" not in st.session_state:
         st.session_state.routings = {}
 
-    st.title("🧬 DuraXell: NLP onco-biomarker extraction dashboard")
+    st.title("🧬 DEMNE: NLP onco-biomarker extraction dashboard")
     st.markdown("""
-    Welcome to the **DuraXell** analysis interface.
+    Welcome to the **DEMNE** analysis interface.
     Select a page from the left navigation bar:
     - 📊 **Metrics Dashboard**: L2 supervision, comparative charts, cost/benefit, AI routing
     - 🖥️ **CLI Console**: Command launcher and monitoring
