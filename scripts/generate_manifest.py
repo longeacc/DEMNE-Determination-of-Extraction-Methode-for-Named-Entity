@@ -140,12 +140,12 @@ story += [
         "â”‚   â”œâ”€â”€ decision_config.json      # Routage entitÃ© â†’ mÃ©thode (gÃ©nÃ©rÃ©)\n"
         "â”‚   â””â”€â”€ ESMO2025/                 # Corpus BRAT (CHIR, RCP, sein, prostate)\n"
         "â”œâ”€â”€ src/demne/\n"
-        "â”‚   â”œâ”€â”€ E_templatability.py       # Score Te (templatabilitÃ©, JSON)\n"
-        "â”‚   â”œâ”€â”€ E_homogeneity.py          # Score He (homogÃ©nÃ©itÃ©, CSV)\n"
-        "â”‚   â”œâ”€â”€ E_frequency.py            # Score Freq (frÃ©quence, CSV)\n"
-        "â”‚   â”œâ”€â”€ E_risk_context.py         # Score R (risque contextuel, CSV)\n"
-        "â”‚   â”œâ”€â”€ E_feasibility_NER.py      # Score Feas (CSV)\n"
-        "â”‚   â”œâ”€â”€ E_creation_arbre_decision.py  # Arbre de dÃ©cision, Ã©crit\n"
+        "â”‚   â”œâ”€â”€ templatability.py       # Score Te (templatabilitÃ©, JSON)\n"
+        "â”‚   â”œâ”€â”€ homogeneity.py          # Score He (homogÃ©nÃ©itÃ©, CSV)\n"
+        "â”‚   â”œâ”€â”€ frequency.py            # Score Freq (frÃ©quence, CSV)\n"
+        "â”‚   â”œâ”€â”€ risk_context.py         # Score R (risque contextuel, CSV)\n"
+        "â”‚   â”œâ”€â”€ ner_feasibility.py      # Score Feas (CSV)\n"
+        "â”‚   â”œâ”€â”€ decision_tree_builder.py  # Arbre de dÃ©cision, Ã©crit\n"
         "â”‚   â”‚                              decision_config.json\n"
         "â”‚   â”œâ”€â”€ visualize_decision_tree.py\n"
         "â”‚   â””â”€â”€ REST_interface/\n"
@@ -202,7 +202,7 @@ story += [Paragraph("3. Carte des sous-commandes", H2)]
 sub_rows = [
     ["Sous-commande", "RÃ´le", "DÃ©pendances clÃ©s"],
     ["info", "Diagnostic environnement (version, chemins, config)", "stdlib"],
-    ["metrics", "Lance E_templatability/Homogeneity/Frequency/Risk/Feasibility", "stdlib"],
+    ["metrics", "Lance templatability/Homogeneity/Frequency/Risk/Feasibility", "stdlib"],
     ["tree", "Construit l'arbre de dÃ©cision + export decision_summary.csv", "stdlib"],
     ["evaluate", "Pipeline complet : metrics â†’ tree â†’ CSV", "stdlib"],
     ["dashboard", "Mirror page Streamlit 1 : preset FRUGAL/QUALITY + routage", "stdlib"],
@@ -302,36 +302,36 @@ metric_rows = [
     [
         "Te (Templatability)",
         "Fraction d'occurrences capturables par une regex template",
-        "E_templatability.py",
+        "templatability.py",
         "matches_template / total",
     ],
     [
         "He (Homogeneity)",
         "CohÃ©rence syntaxique du contexte gauche/droit d'une entitÃ©",
-        "E_homogeneity.py",
+        "homogeneity.py",
         "1 âˆ’ entropy(n-grams)",
     ],
     [
         "Freq (Frequency)",
         "DensitÃ© de l'entitÃ© dans le corpus (occurrences / tokens)",
-        "E_frequency.py",
+        "frequency.py",
         "count / corpus_tokens",
     ],
     [
         "R (Risk Context)",
         "PrÃ©sence de nÃ©gations, incertitudes, contradictions autour de l'entitÃ©",
-        "E_risk_context.py",
+        "risk_context.py",
         "0.1Â·f_neg + 0.3Â·f_unc + 0.6Â·f_cont",
     ],
     [
         "Feas (NER Feasibility)",
         "FaisabilitÃ© d'un modÃ¨le NER (volume + homogÃ©nÃ©itÃ©)",
-        "E_feasibility_NER.py",
+        "ner_feasibility.py",
         "0.2Â·min(1,Freq) + 0.2Â·He",
     ],
 ]
 story += [make_table(metric_rows, col_widths=[3.5 * cm, 6.5 * cm, 4 * cm, 4 * cm])]
-story += [Spacer(1, 6), paragraph("<b>Arbre de dÃ©cision (E_creation_arbre_decision.py)</b> :")]
+story += [Spacer(1, 6), paragraph("<b>Arbre de dÃ©cision (decision_tree_builder.py)</b> :")]
 story += [
     code(
         "Te â‰¥ 0.10  ?\n"
@@ -377,24 +377,24 @@ out_rows = [
     ["Fichier", "Producteur", "SchÃ©ma / contenu"],
     [
         "Results/templatability_analysis.json",
-        "E_templatability.py",
+        "templatability.py",
         "{entitÃ©: {templatability_score, count}}",
     ],
-    ["Results/homogeneity_analysis.csv", "E_homogeneity.py", "Entity, He_Score_Percent, â€¦"],
+    ["Results/homogeneity_analysis.csv", "homogeneity.py", "Entity, He_Score_Percent, â€¦"],
     [
         "Results/frequency_analysis.csv",
-        "E_frequency.py",
+        "frequency.py",
         "Entity, Frequency, Count, Per_1k_tokens, Strategy_Hint",
     ],
     [
         "Results/risk_context_analysis.csv",
-        "E_risk_context.py",
+        "risk_context.py",
         "Entity, R_Score, Negation_Rate, Uncertainty_Rate, " "Contradiction_Rate, Count",
     ],
-    ["Results/ner_feasibility_analysis.csv", "E_feasibility_NER.py", "Entity, Feas_Score"],
+    ["Results/ner_feasibility_analysis.csv", "ner_feasibility.py", "Entity, Feas_Score"],
     [
         "data/decision_config.json",
-        "E_creation_arbre_decision.py",
+        "decision_tree_builder.py",
         "{version, global_thresholds, entities: {â€¦, method, justification, trace}}",
     ],
     [
@@ -404,7 +404,7 @@ out_rows = [
     ],
     [
         "logs/output_decision.txt",
-        "E_creation_arbre_decision.py",
+        "decision_tree_builder.py",
         "Rapport humain : seuils + mÃ©thode + trace par entitÃ©",
     ],
     ["Consumtion_of_Duraxell.csv", "eco2ai", "Empreinte COâ‚‚ / Ã©nergie cumulÃ©e"],
@@ -454,7 +454,7 @@ notes = [
     "rest-config (les imports lourds sont contournÃ©s par importlib).",
     "main.py force PYTHONIOENCODING=utf-8 et PYTHONUTF8=1 dans les sous-process â†’ "
     "fin du UnicodeEncodeError cp1252 sous Windows.",
-    "E_feasibility_NER.py calcule le score Feas Ã  partir de Freq et He.",
+    "ner_feasibility.py calcule le score Feas Ã  partir de Freq et He.",
     "L'arbre est calibrÃ© sur le corpus Breast/RCP. Pour valider la stabilitÃ© sur un autre "
     "corpus, lancer `evaluate` avec --gs_dir/--pred_dir adaptÃ©s.",
     "decision_config.json est rÃ©-Ã©crit Ã  chaque `tree`/`evaluate`. Un export figÃ© doit "

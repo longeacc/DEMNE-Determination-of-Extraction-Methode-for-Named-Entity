@@ -1,7 +1,7 @@
 """Tests de l'extractabilité par COUVERTURE de mots-clés + intégration à l'arbre.
 
 Deux blocs :
-  A. Unitaires de demne.E_tfidf_coverage (coverage-F1, lecture BRAT, API corpus).
+  A. Unitaires de demne.tfidf_coverage (coverage-F1, lecture BRAT, API corpus).
      La coverage-F1 remplace la synonymie contextuelle (ancien E_tfidf) : elle
      sépare mieux les classes de routage (cf. optimisation).
   B. Intégration DecisionTreeBuilder.analyze_entity :
@@ -18,11 +18,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-# eco2ai is an optional heavy dep pulled in by E_creation_arbre_decision.
+# eco2ai is an optional heavy dep pulled in by decision_tree_builder.
 sys.modules.setdefault("eco2ai", MagicMock())
 
-from demne.E_creation_arbre_decision import DecisionTreeBuilder
-from demne.E_tfidf_coverage import (
+from demne.decision_tree_builder import DecisionTreeBuilder
+from demne.tfidf_coverage import (
     collect_mentions,
     compute_coverage_for_all_entities,
     coverage_f1_by_x,

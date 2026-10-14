@@ -1,4 +1,4 @@
-"""Unit test for the NER feasibility scorer (demne.E_feasibility_NER).
+"""Unit test for the NER feasibility scorer (demne.ner_feasibility).
 
 Exercises the real file-based pipeline against a temporary Results directory,
 so the Feas = alpha*min(1, count/sat) + beta*He formula (and the He-default
@@ -7,7 +7,7 @@ branch) are actually covered.
 
 import csv
 
-from demne.E_feasibility_NER import compute_feasibility
+from demne.ner_feasibility import compute_feasibility
 from demne.params import load_params
 
 

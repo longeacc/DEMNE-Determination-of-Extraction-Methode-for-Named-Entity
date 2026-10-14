@@ -1,6 +1,6 @@
 """Canonical DEMNE routing graph — the single source of truth for tier selection.
 
-Both the CLI decision-tree builder (:mod:`demne.E_creation_arbre_decision`) and the
+Both the CLI decision-tree builder (:mod:`demne.decision_tree_builder`) and the
 Streamlit dashboard (``dashboard/core/routing.py``) call :func:`route`, so the graph
 is implemented exactly once. Callers normalise their metrics first; ``route`` expects
 metrics already on the [0, 1] scale.

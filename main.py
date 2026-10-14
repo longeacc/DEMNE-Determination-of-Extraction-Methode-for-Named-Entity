@@ -225,14 +225,14 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
 def cmd_metrics(args: argparse.Namespace) -> None:
     """Run all E_*.py metric scripts on the corpus."""
     scripts_gs_pred = [
-        "src/demne/E_templatability.py",
-        "src/demne/E_homogeneity.py",
-        "src/demne/E_frequency.py",
-        "src/demne/E_risk_context.py",
-        "src/demne/E_feasibility_NER.py",
+        "src/demne/templatability.py",
+        "src/demne/homogeneity.py",
+        "src/demne/frequency.py",
+        "src/demne/risk_context.py",
+        "src/demne/ner_feasibility.py",
     ]
     scripts_gs_only = [
-        "src/demne/E_tfidf_coverage.py",
+        "src/demne/tfidf_coverage.py",
     ]
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
@@ -256,7 +256,7 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
     """Decision tree build pipeline (called by `evaluate`)."""
     gs = args.gs_dir or str(DEFAULT_GS)
     pred = args.pred_dir or str(DEFAULT_PRED)
-    _run_script("src/demne/E_creation_arbre_decision.py", gs, pred)
+    _run_script("src/demne/decision_tree_builder.py", gs, pred)
     if not args.no_visualize:
         print("\nVisualizing the tree...")
         subprocess.run(
@@ -422,7 +422,7 @@ def cmd_dashboard(args: argparse.Namespace) -> None:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         cfg = json.load(f)
 
-    spec = _il.spec_from_file_location("_e_tree", SRC / "demne" / "E_creation_arbre_decision.py")
+    spec = _il.spec_from_file_location("_e_tree", SRC / "demne" / "decision_tree_builder.py")
     mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     builder = mod.DecisionTreeBuilder(CONFIG_PATH)

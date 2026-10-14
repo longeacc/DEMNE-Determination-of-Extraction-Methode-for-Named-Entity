@@ -198,7 +198,7 @@ class MetricsCalculator:
             he = min(1.0, max(0.0, he_raw))
 
         # 3. R [0.0 - 1.0] - R(E) = min(1, α_R·f_neg + β_R·f_unc + γ_R·f_cont)
-        # Same weights as the CLI scorer (E_risk_context.py) via shared config.
+        # Same weights as the CLI scorer (risk_context.py) via shared config.
         # f_cont (contradiction) needs document-level analysis the dashboard does not
         # run on this short-text view → its rate is 0 here, identical to the CLI's
         # per-call default (compute_score_from_stats(..., contradicted_rate=0.0)).

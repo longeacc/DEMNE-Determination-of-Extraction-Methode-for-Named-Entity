@@ -13,47 +13,19 @@ import math
 import os
 import re
 from collections import Counter, defaultdict
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# Re-export for backward compatibility
+__all__ = ["BratAnnotation", "TemplatabilityScorer", "load_brat_corpus"]
+
+from demne._brat import BratAnnotation, load_brat_corpus
 from demne._table import print_table
+from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
-
-# eco2ai dependencies
-try:
-    import warnings
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        from eco2ai import Tracker, set_params
-
-    HAS_ECO2AI = True
-except ImportError:
-    HAS_ECO2AI = False
-
-if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-    set_params(
-        project_name="DEMNE-E_templatability",
-        experiment_description="We Calculate...",
-        file_name="data/energy_consumption_DEMNE.csv",
-    )
-    tracker = Tracker()
-    tracker.start()
-
-
-@dataclass
-class BratAnnotation:
-    """Represents a BRAT annotation."""
-
-    start: int
-    end: int
-    text: str
-    entity_type: str
-    file_id: str | None = None
 
 
 class TemplatabilityScorer:
@@ -242,78 +214,10 @@ class TemplatabilityScorer:
 # ==================================================================================
 
 
-def load_brat_corpus(data_dirs: list[str]) -> list[dict[str, Any]]:
-    """
-    Load annotations from BRAT files (.ann + .txt) into a corpus list.
-    """
-    corpus = []
-    processed_files = set()
-
-    for d in data_dirs:
-        path = Path(d)
-        if not path.exists():
-            print(f"Warning: {path} does not exist.")
-            continue
-
-        for ann_file in path.glob("*.ann"):
-            if ann_file.name in processed_files:
-                continue
-            processed_files.add(ann_file.name)
-
-            # Read annotations
-            annotations = []
-            with open(ann_file, encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line.startswith("T"):
-                        continue
-                    try:
-                        # T1  Entity 10 20  text
-                        parts = line.split("\t")
-                        info = parts[1].split()
-                        entity_type = info[0]
-                        start = int(info[1])
-                        # Handle discontinuous spans "10 20;30 40" -> take end of first span for simplicity or map properly
-                        end_str = info[-1]
-                        if ";" in parts[1]:
-                            # Simplification: take the last offset as end
-                            end_str = parts[1].replace(";", " ").split()[2]
-                        end = int(end_str)
-                        text = parts[2]
-
-                        annotations.append(
-                            BratAnnotation(
-                                start=start,
-                                end=end,
-                                text=text,
-                                entity_type=entity_type,
-                                file_id=ann_file.name,
-                            )
-                        )
-                    except Exception:
-                        continue
-
-            # Read text (optional, not strictly needed for Te but good for corpus object)
-            txt_file = ann_file.with_suffix(".txt")
-            text_content = ""
-            if txt_file.exists():
-                with open(txt_file, encoding="utf-8") as f:
-                    text_content = f.read()
-
-            corpus.append(
-                {
-                    "file_id": ann_file.name,
-                    "text": text_content,
-                    "annotations": annotations,
-                }
-            )
-
-    print(f"Loaded {len(corpus)} documents.")
-    return corpus
-
-
 def main():
     import argparse
+
+    _tracker = start_tracker("DEMNE-templatability", "We Calculate...")
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
@@ -358,8 +262,7 @@ def main():
     top5 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
     print_table(["Entity", "Te [0-1]"], [[e, f"{s / 100:.4f}"] for e, s in top5], [45, 10])
 
-    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-        tracker.stop()
+    stop_tracker(_tracker)
 
 
 if __name__ == "__main__":

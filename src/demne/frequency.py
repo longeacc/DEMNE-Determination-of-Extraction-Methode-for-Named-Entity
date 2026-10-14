@@ -23,31 +23,11 @@ from collections import defaultdict
 from pathlib import Path
 
 from demne._table import print_table
+from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
 
 # --- Tunable thresholds loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
-
-# Eco2AI for energy tracking
-try:
-    import warnings
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        from eco2ai import Tracker, set_params
-
-    HAS_ECO2AI = True
-except ImportError:
-    HAS_ECO2AI = False
-
-if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-    set_params(
-        project_name="DEMNE-E_frequency",
-        experiment_description="Calculating Entity Frequency",
-        file_name="data/energy_consumption_DEMNE.csv",
-    )
-    tracker = Tracker()
-    tracker.start()
 
 
 class FrequencyScorer:
@@ -185,6 +165,8 @@ class FrequencyScorer:
 def main():
     import argparse
 
+    _tracker = start_tracker("DEMNE-frequency", "Calculating Entity Frequency")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
@@ -214,8 +196,7 @@ def main():
     scorer.draw_histogram(stats)
     scorer.to_csv(output_file)
 
-    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-        tracker.stop()
+    stop_tracker(_tracker)
 
 
 if __name__ == "__main__":

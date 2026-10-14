@@ -19,32 +19,13 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from demne._brat import load_brat_corpus
 from demne._table import print_table
+from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
-
-# Eco2AI for energy tracking
-try:
-    import warnings
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        from eco2ai import Tracker, set_params
-
-    HAS_ECO2AI = True
-except ImportError:
-    HAS_ECO2AI = False
-
-if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-    set_params(
-        project_name="DEMNE-E_homogeneity",
-        experiment_description="Calculating Linguistic Homogeneity",
-        file_name="data/energy_consumption_DEMNE.csv",
-    )
-    tracker = Tracker()
-    tracker.start()
 
 
 class HomogeneityScorer:
@@ -195,39 +176,10 @@ class HomogeneityScorer:
 # ==================================================================================
 # MAIN EXECUTION
 # ==================================================================================
-def load_brat_corpus_simple(data_dirs):
-    """Simple loader reusing logic from templatability."""
-    corpus = []
-    processed_files = set()
-    for d in data_dirs:
-        path = Path(d)
-        if not path.exists():
-            continue
-        for ann in path.glob("*.ann"):
-            if ann.name in processed_files:
-                continue
-            processed_files.add(ann.name)
-
-            # Simplified parsing
-            anns = []
-            try:
-                with open(ann, encoding="utf-8") as f:
-                    for line in f:
-                        if line.startswith("T"):
-                            parts = line.strip().split("\t")
-                            if len(parts) >= 3:
-                                etype = parts[1].split()[0]
-                                text = parts[2]
-                                anns.append({"entity_type": etype, "text": text})
-            except Exception:
-                pass
-
-            corpus.append({"file_id": ann.name, "annotations": anns})
-    return corpus
-
-
 def main():
     import argparse
+
+    _tracker = start_tracker("DEMNE-homogeneity", "Calculating Linguistic Homogeneity")
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
@@ -254,7 +206,7 @@ def main():
 
     # 1. Load context
     print("Loading corpus...")
-    corpus = load_brat_corpus_simple(abs_data_dirs)
+    corpus = load_brat_corpus(abs_data_dirs)
 
     # 2. Compute
     scorer = HomogeneityScorer(corpus)
@@ -281,8 +233,7 @@ def main():
     score_canon = test_scorer.compute("TEST_CANONIQUE")
     print(f"Test 'ER positif 80%' x 100 -> Score: {score_canon:.4f} (Attendu: proche de 1.0)")
 
-    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-        tracker.stop()
+    stop_tracker(_tracker)
 
 
 if __name__ == "__main__":

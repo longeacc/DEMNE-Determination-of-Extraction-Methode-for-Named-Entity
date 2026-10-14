@@ -17,32 +17,13 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
+from demne._brat import load_brat_corpus
 from demne._table import print_table
+from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
-
-# Eco2AI for energy tracking
-try:
-    import warnings
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        from eco2ai import Tracker, set_params
-
-    HAS_ECO2AI = True
-except ImportError:
-    HAS_ECO2AI = False
-
-if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-    set_params(
-        project_name="DEMNE-E_risk_context",
-        experiment_description="Calculating Contextual Risk",
-        file_name="data/energy_consumption_DEMNE.csv",
-    )
-    tracker = Tracker()
-    tracker.start()
 
 
 class RiskContextScorer:
@@ -224,52 +205,21 @@ class RiskContextScorer:
         return self.compute_score_from_stats(negated, uncertain, total, contradicted_rate=0.0)
 
     def _load_data(self):
-        """Load .ann and .txt files to build annotation context."""
+        """Load .ann and .txt files to build annotation context via unified parser."""
         print("Loading data (Annotations + Text)...")
-        for d in self.data_dirs:
-            if not d.exists():
-                continue
-
-            # For each .ann file, look up the matching .txt
-            for ann_file in d.glob("*.ann"):
-                txt_file = ann_file.with_suffix(".txt")
-                if not txt_file.exists():
-                    continue
-
-                try:
-                    # Read full document text
-                    with open(txt_file, encoding="utf-8") as f:
-                        full_text = f.read()
-
-                    # Read annotations
-                    with open(ann_file, encoding="utf-8") as f:
-                        for line in f:
-                            if line.startswith("T"):
-                                parts = line.strip().split("\t")
-                                if len(parts) >= 3:
-                                    # Parse: T1  Status 10 15  Her2+
-                                    meta = parts[1].split()
-                                    etype = meta[0]
-                                    start = int(meta[1])
-                                    end = int(meta[-1])  # "10 15;20 25" → take outermost offsets
-
-                                    # Extract context window
-                                    ctx_start = max(0, start - self.WINDOW_SIZE)
-                                    ctx_end = min(len(full_text), end + self.WINDOW_SIZE)
-                                    context = full_text[
-                                        ctx_start:ctx_end
-                                    ].lower()  # Normalised context
-
-                                    self.document_data[ann_file.name].append(
-                                        {
-                                            "type": etype,
-                                            "value_text": parts[2].lower(),
-                                            "context": context,
-                                        }
-                                    )
-                except Exception:
-                    # print(f"Erreur lecture {ann_file}: {e}")
-                    pass
+        corpus = load_brat_corpus(
+            self.data_dirs, include_text=False, context_window=self.WINDOW_SIZE
+        )
+        for doc in corpus:
+            file_id = doc["file_id"]
+            for ann in doc["annotations"]:
+                self.document_data[file_id].append(
+                    {
+                        "type": ann.entity_type,
+                        "value_text": ann.text.lower(),
+                        "context": ann.context.lower(),
+                    }
+                )
 
     def _check_contradiction(self, entries: list[dict]) -> bool:
         """Detect whether an entity has contradictory values within the SAME document."""
@@ -391,6 +341,8 @@ class RiskContextScorer:
 def main(learn_weights=False):
     import argparse
 
+    _tracker = start_tracker("DEMNE-risk_context", "Calculating Contextual Risk")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
@@ -493,8 +445,7 @@ def main(learn_weights=False):
         [25, 8, 6, 6, 8],
     )
 
-    if HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-        tracker.stop()
+    stop_tracker(_tracker)
 
 
 if __name__ == "__main__":

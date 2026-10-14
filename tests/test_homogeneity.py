@@ -1,4 +1,4 @@
-from demne.E_homogeneity import HomogeneityScorer
+from demne.homogeneity import HomogeneityScorer
 
 
 def test_homogeneity_limits():

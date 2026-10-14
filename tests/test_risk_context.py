@@ -1,10 +1,10 @@
-from demne.E_risk_context import RiskContextScorer
+from demne.risk_context import RiskContextScorer
 
 
 def test_negation_detection():
     scorer = RiskContextScorer()
 
-    # Patterns actually detected (see NEGATION_PATTERNS in E_risk_context.py)
+    # Patterns actually detected (see NEGATION_PATTERNS in risk_context.py)
     # "non" alone is intentionally excluded to avoid clinical false positives
     assert scorer.has_negation("Absence de recepteurs estrogeniques", "recepteurs")
     assert scorer.has_negation("Sans expression HER2 detectee", "HER2")

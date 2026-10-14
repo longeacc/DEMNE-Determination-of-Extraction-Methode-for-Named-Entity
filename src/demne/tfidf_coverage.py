@@ -1,4 +1,4 @@
-"""E_tfidf_coverage — Extractabilité par COUVERTURE de mots-clés (TF-IDF).
+"""tfidf_coverage — Extractabilité par COUVERTURE de mots-clés (TF-IDF).
 
 Intuition : une entité peut être extraite par règles même si ses observations ne
 sont pas homogènes, DÈS LORS qu'un petit ensemble de mots-clés (les top-X mots
@@ -132,7 +132,7 @@ def collect_mentions(corpus_dir) -> dict[str, list[str]]:
 def run(gs_dir, results_dir, top_x=None, y=None, **_kw) -> None:
     """CLI/pipeline : écrit ``Results/tfidf_analysis.csv`` avec la coverage-F1.
 
-    Schéma compatible avec E_creation_arbre_decision (`_read_csv` lit TFIDF_Score).
+    Schéma compatible avec decision_tree_builder (`_read_csv` lit TFIDF_Score).
     `**_kw` absorbe d'anciens arguments (ex. sim_threshold) désormais inutiles.
     """
     import csv

@@ -24,11 +24,11 @@ import csv
 
 import pytest
 
-from demne.E_creation_arbre_decision import DecisionTreeBuilder
-from demne.E_frequency import FrequencyScorer
-from demne.E_homogeneity import HomogeneityScorer
-from demne.E_risk_context import RiskContextScorer
-from demne.E_templatability import TemplatabilityScorer
+from demne.decision_tree_builder import DecisionTreeBuilder
+from demne.frequency import FrequencyScorer
+from demne.homogeneity import HomogeneityScorer
+from demne.risk_context import RiskContextScorer
+from demne.templatability import TemplatabilityScorer
 
 # ===========================================================================
 # BLOC 1 — Individual scorers on the shared corpus

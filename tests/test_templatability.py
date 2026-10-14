@@ -1,4 +1,4 @@
-from demne.E_templatability import TemplatabilityScorer
+from demne.templatability import TemplatabilityScorer
 
 
 def test_templatability_scores():

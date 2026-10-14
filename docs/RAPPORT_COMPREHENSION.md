@@ -70,7 +70,7 @@ avec par dÃ©faut Î± = 0.4, Î² = 0.3, Î³ = 0.3.
 
 ### 3.1 Visualisation de l'arbre
 
-L'arbre ci-dessous est le rÃ©sultat de l'exÃ©cution de `E_creation_arbre_decision.py`. Il route chaque biomarqueur vers la feuille appropriÃ©e en fonction de 7 mÃ©triques calculÃ©es sur le corpus :
+L'arbre ci-dessous est le rÃ©sultat de l'exÃ©cution de `decision_tree_builder.py`. Il route chaque biomarqueur vers la feuille appropriÃ©e en fonction de 7 mÃ©triques calculÃ©es sur le corpus :
 
 ![Arbre de DÃ©cision DuraXELL](Results/figures/decision_tree.png)
 
@@ -152,7 +152,7 @@ DuraXELL/
 â”œâ”€â”€ fix_demo.py                              # Patch : correction des labels mock dans demo_rest.py
 â”œâ”€â”€ fix_orch.py                              # Patch : alignement des listes use_rules/use_ml dans cascade_orchestrator.py
 â”œâ”€â”€ fix_scorer.py                            # Patch : ajout des labels FEUILLE dans EXPLAINABILITY_SCORES
-â”œâ”€â”€ fix_tree.py                              # Patch : correction labels de feuilles dans E_creation_arbre_decision.py
+â”œâ”€â”€ fix_tree.py                              # Patch : correction labels de feuilles dans decision_tree_builder.py
 â”œâ”€â”€ debug_freq.py                            # Script de dÃ©bogage pour le calcul de frÃ©quence
 â”œâ”€â”€ create_notebook.py                       # GÃ©nÃ©rateur programmatique du notebook DuraXELL_Pipeline.ipynb
 â”œâ”€â”€ test_psutil.py                           # VÃ©rification disponibilitÃ© psutil (monitoring systÃ¨me)
@@ -171,7 +171,7 @@ DuraXELL/
 â”œâ”€â”€ out_demo_rest.txt                        # Sortie de demo_rest.py
 â”œâ”€â”€ out_eval.txt                             # Sortie de run_full_pipeline_report.py
 â”œâ”€â”€ out_eval_venv.txt                        # Sortie alternative (exÃ©cution via .venv)
-â”œâ”€â”€ output_decision.txt                      # Rapport textuel gÃ©nÃ©rÃ© par E_creation_arbre_decision.py
+â”œâ”€â”€ output_decision.txt                      # Rapport textuel gÃ©nÃ©rÃ© par decision_tree_builder.py
 â”œâ”€â”€ test_out.txt                             # Sortie de tests
 â”œâ”€â”€ test_out2.txt                            # Sortie de tests (bis)
 â”œâ”€â”€ test_result_decision.txt                 # RÃ©sultat du test de l'arbre de dÃ©cision
@@ -203,14 +203,14 @@ DuraXELL/
 â”‚   â”œâ”€â”€ visualize_decision_tree.py           # GÃ©nÃ¨re les PNG de l'arbre via NetworkX + Matplotlib
 â”‚   â”œâ”€â”€ sensitivity_analysis.py              # Analyse de sensibilitÃ© : perturbation des seuils +/-10-20%
 â”‚   â”‚
-â”‚   â”œâ”€â”€ E_creation_arbre_decision.py         # CONSTRUCTEUR DE L'ARBRE : gÃ©nÃ¨re decision_config.json
+â”‚   â”œâ”€â”€ decision_tree_builder.py         # CONSTRUCTEUR DE L'ARBRE : gÃ©nÃ¨re decision_config.json
 â”‚   â”œâ”€â”€ E_composite_scorer.py                # Score composite C = aF1 + bExpl + g(1-Enorm)
 â”‚   â”œâ”€â”€ E_annotation_yield.py               # MÃ©trique : rendement d'annotation (F1 Rules vs Gold Standard)
-â”‚   â”œâ”€â”€ E_feasibility_NER.py                  # MÃ©trique : faisabilitÃ© NER (capacitÃ© des modÃ¨les ML)
-â”‚   â”œâ”€â”€ E_frequency.py                       # MÃ©trique : frÃ©quence d'apparition des entitÃ©s dans le corpus
-â”‚   â”œâ”€â”€ E_homogeneity.py                     # MÃ©trique : homogÃ©nÃ©itÃ© lexicale (variabilitÃ© du vocabulaire)
-â”‚   â”œâ”€â”€ E_risk_context.py                    # MÃ©trique : risque contextuel (nÃ©gations, ambiguÃ¯tÃ©s)
-â”‚   â”œâ”€â”€ E_templatability.py                   # MÃ©trique : templatabilitÃ© (stabilitÃ© structurelle)
+â”‚   â”œâ”€â”€ ner_feasibility.py                  # MÃ©trique : faisabilitÃ© NER (capacitÃ© des modÃ¨les ML)
+â”‚   â”œâ”€â”€ frequency.py                       # MÃ©trique : frÃ©quence d'apparition des entitÃ©s dans le corpus
+â”‚   â”œâ”€â”€ homogeneity.py                     # MÃ©trique : homogÃ©nÃ©itÃ© lexicale (variabilitÃ© du vocabulaire)
+â”‚   â”œâ”€â”€ risk_context.py                    # MÃ©trique : risque contextuel (nÃ©gations, ambiguÃ¯tÃ©s)
+â”‚   â”œâ”€â”€ templatability.py                   # MÃ©trique : templatabilitÃ© (stabilitÃ© structurelle)
 â”‚   â”‚
 â”‚   â”œâ”€â”€ generate_homogeneity_report.py       # GÃ©nÃ¨re le rapport HTML d'homogÃ©nÃ©itÃ©
 â”‚   â”œâ”€â”€ generate_risk_context_report.py      # GÃ©nÃ¨re le rapport HTML de risque contextuel
@@ -278,11 +278,11 @@ DuraXELL/
 â”‚   â”‚   â”‚       â”œâ”€â”€ lunch.py                      # Lanceur du module Breast
 â”‚   â”‚   â”‚       â””â”€â”€ breast_cancer_biomarker_eval_summary.csv
 â”‚   â”‚   â””â”€â”€ Results/                         # RÃ©sultats intermÃ©diaires du module RÃ¨gles
-â”‚   â”‚       â”œâ”€â”€ frequency_analysis.csv       # FrÃ©quences calculÃ©es par E_frequency.py
-â”‚   â”‚       â”œâ”€â”€ homogeneity_analysis.csv     # Scores He par E_homogeneity.py
-â”‚   â”‚       â”œâ”€â”€ ner_feasibility_analysis.csv # FaisabilitÃ© par E_feasibility_NER.py
-â”‚   â”‚       â”œâ”€â”€ risk_context_analysis.csv    # Scores R par E_risk_context.py
-â”‚   â”‚       â”œâ”€â”€ templatability_analysis.csv   # Scores Te (CSV) par E_templatability.py
+â”‚   â”‚       â”œâ”€â”€ frequency_analysis.csv       # FrÃ©quences calculÃ©es par frequency.py
+â”‚   â”‚       â”œâ”€â”€ homogeneity_analysis.csv     # Scores He par homogeneity.py
+â”‚   â”‚       â”œâ”€â”€ ner_feasibility_analysis.csv # FaisabilitÃ© par ner_feasibility.py
+â”‚   â”‚       â”œâ”€â”€ risk_context_analysis.csv    # Scores R par risk_context.py
+â”‚   â”‚       â”œâ”€â”€ templatability_analysis.csv   # Scores Te (CSV) par templatability.py
 â”‚   â”‚       â””â”€â”€ templatability_analysis.json  # Scores Te (JSON dÃ©taillÃ©)
 â”‚   â”‚
 â”‚   â””â”€â”€ tests/                               # â•â• TESTS UNITAIRES & INTÃ‰GRATION (Pytest) â•â•
@@ -406,7 +406,7 @@ graph TD
     subgraph "POINTS D ENTRÃ‰E"
         MAIN["main.py"]
         REPORT["run_full_pipeline_report.py"]
-        TREE_SCRIPT["E_creation_arbre_decision.py"]
+        TREE_SCRIPT["decision_tree_builder.py"]
     end
 
     subgraph "ORCHESTRATION"
@@ -422,12 +422,12 @@ graph TD
     end
 
     subgraph "MÃ‰TRIQUES"
-        TE["E_templatability.py"]
-        HE["E_homogeneity.py"]
-        RC["E_risk_context.py"]
-        FR["E_frequency.py"]
+        TE["templatability.py"]
+        HE["homogeneity.py"]
+        RC["risk_context.py"]
+        FR["frequency.py"]
         AY["E_annotation_yield.py"]
-        FE["E_feasibility_NER.py"]
+        FE["ner_feasibility.py"]
     end
 
     subgraph "Ã‰VALUATION"
@@ -481,10 +481,10 @@ graph TD
 |---|---|---|
 | `structs.py` | *(aucun)* | `cascade_orchestrator`, `rules_cascade_connector`, `ner_cascade_connector`, tests |
 | `cascade_orchestrator.py` | `structs`, `rules_cascade_connector`, `ner_cascade_connector` | `main`, `run_full_pipeline_report`, tests |
-| `E_creation_arbre_decision.py` | `E_annotation_yield` | `main` (subprocess), `sensitivity_analysis` |
+| `decision_tree_builder.py` | `E_annotation_yield` | `main` (subprocess), `sensitivity_analysis` |
 | `E_composite_scorer.py` | *(aucun)* | `run_full_pipeline_report`, tests |
 | `energy_tracker.py` | *(aucun)* | `run_full_pipeline_report`, tests |
-| `sensitivity_analysis.py` | `E_creation_arbre_decision` | `run_full_pipeline_report` |
+| `sensitivity_analysis.py` | `decision_tree_builder` | `run_full_pipeline_report` |
 | `visualize_decision_tree.py` | *(aucun â€” lit le JSON)* | `main` (subprocess), `run_full_pipeline_report` |
 | `rest_decision_bridge.py` | *(aucun)* | `run_full_pipeline_report` |
 | `rest_evaluator.py` | *(aucun)* | `run_full_pipeline_report` |
@@ -507,12 +507,12 @@ graph LR
     end
 
     subgraph "CALCUL DES MÃ‰TRIQUES"
-        TE["E_templatability.py â€” Te score"]
-        HE["E_homogeneity.py â€” He score"]
-        RC["E_risk_context.py â€” R score"]
-        FR["E_frequency.py â€” Freq"]
+        TE["templatability.py â€” Te score"]
+        HE["homogeneity.py â€” He score"]
+        RC["risk_context.py â€” R score"]
+        FR["frequency.py â€” Freq"]
         AY["E_annotation_yield.py â€” Yield"]
-        FE["E_feasibility_NER.py â€” Feas, DomainShift"]
+        FE["ner_feasibility.py â€” Feas, DomainShift"]
     end
 
     subgraph "RÃ‰SULTATS INTERMÃ‰DIAIRES"
@@ -520,7 +520,7 @@ graph LR
     end
 
     subgraph "CONSTRUCTION"
-        BUILDER["E_creation_arbre_decision.py â€” DecisionTreeBuilder"]
+        BUILDER["decision_tree_builder.py â€” DecisionTreeBuilder"]
         JSON["decision_config.json"]
         TXT["output_decision.txt"]
     end
@@ -641,7 +641,7 @@ use_llm = recommended_method in [
 ]
 ```
 
-### 7.3 `E_creation_arbre_decision.py` â€” Le constructeur de l'arbre
+### 7.3 `decision_tree_builder.py` â€” Le constructeur de l'arbre
 
 **Classe `DecisionTreeBuilder`** â€” ResponsabilitÃ©s :
 - Charger les mÃ©triques depuis `Rules/Results/*.csv` et `*.json`
@@ -730,13 +730,13 @@ Les scripts sont numÃ©rotÃ©s sÃ©quentiellement dans l'ordre d'exÃ©cution
 
 | Script | Ce qu'il corrige | Fichier cible |
 |---|---|---|
-| `fix_trackers.py` | Encapsule `tracker.stop()` dans try/except | `energy_tracker.py`, `E_creation_arbre_decision.py` |
+| `fix_trackers.py` | Encapsule `tracker.stop()` dans try/except | `energy_tracker.py`, `decision_tree_builder.py` |
 | `fix_trackers2.py` | Extension de fix_trackers avec plus de fichiers | Idem + autres |
 | `fix_orch.py` | Ajoute labels FEUILLE dans les listes de matching | `cascade_orchestrator.py` |
 | `fix_bridge.py` | Met Ã  jour `_normalize_method()` pour labels FR | `rest_decision_bridge.py` |
 | `fix_demo.py` | Corrige les donnÃ©es mock pour la dÃ©mo | `demo_rest.py` |
 | `fix_scorer.py` | Ajoute labels FEUILLE dans EXPLAINABILITY_SCORES | `E_composite_scorer.py` |
-| `fix_tree.py` | Renomme les feuilles en labels franÃ§ais | `E_creation_arbre_decision.py` |
+| `fix_tree.py` | Renomme les feuilles en labels franÃ§ais | `decision_tree_builder.py` |
 
 ### 7.10 Modules REST auxiliaires
 
@@ -995,7 +995,7 @@ C = 0.4 * F1 + 0.3 * ExplicabilitÃ© + 0.3 * (1 - E_norm)
 
 ## 10. Seuils de l'arbre et justification scientifique
 
-Les seuils suivants sont dÃ©finis dans `E_creation_arbre_decision.py` et justifiÃ©s dans `THRESHOLDS_JUSTIFICATION.md` :
+Les seuils suivants sont dÃ©finis dans `decision_tree_builder.py` et justifiÃ©s dans `THRESHOLDS_JUSTIFICATION.md` :
 
 | Seuil | Valeur | RÃ´le dans l'arbre | Justification |
 |---|---|---|---|

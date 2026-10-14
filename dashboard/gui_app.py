@@ -54,7 +54,7 @@ ROUTING_COLORS = {
 # heavy package side-effects (pandas / streamlit).
 # ---------------------------------------------------------------------------
 def _load_tree_builder():
-    spec = _il.spec_from_file_location("_e_tree", SRC / "demne" / "E_creation_arbre_decision.py")
+    spec = _il.spec_from_file_location("_e_tree", SRC / "demne" / "decision_tree_builder.py")
     mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod.DecisionTreeBuilder

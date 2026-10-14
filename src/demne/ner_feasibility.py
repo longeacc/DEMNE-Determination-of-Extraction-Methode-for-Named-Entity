@@ -4,30 +4,11 @@ import os
 from pathlib import Path
 
 from demne._table import print_table
+from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
-
-try:
-    import warnings
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        from eco2ai import Tracker, set_params
-
-    HAS_ECO2AI = True
-except ImportError:
-    HAS_ECO2AI = False
-
-if __name__ == "__main__" and HAS_ECO2AI and not os.environ.get("DISABLE_ECO2AI"):
-    set_params(
-        project_name="DEMNE-E_feasibility_NER",
-        experiment_description="NER Feasibility Computation",
-        file_name="data/energy_consumption_DEMNE.csv",
-    )
-    tracker = Tracker()
-    tracker.start()
 
 
 def compute_feasibility(gs_dir_str=None, pred_dir_str=None, results_dir=None):
@@ -111,6 +92,8 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None, results_dir=None):
 if __name__ == "__main__":
     import argparse
 
+    _tracker = start_tracker("DEMNE-ner_feasibility", "NER Feasibility Computation")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
@@ -118,11 +101,4 @@ if __name__ == "__main__":
 
     compute_feasibility(args.gs_dir, args.pred_dir)
 
-    try:
-        if HAS_ECO2AI:
-            tracker.stop()
-    except Exception as e:
-        print(
-            f"\nWarning: Generalized error in Eco2AI tracking: {e}\n"
-            "Carbon emission tracking data could not be saved, but analysis results are preserved."
-        )
+    stop_tracker(_tracker)

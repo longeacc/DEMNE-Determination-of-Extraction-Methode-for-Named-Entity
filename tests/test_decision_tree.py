@@ -1,4 +1,4 @@
-from demne.E_creation_arbre_decision import DecisionTreeBuilder
+from demne.decision_tree_builder import DecisionTreeBuilder
 
 
 def test_decision_tree_logic():
