@@ -1,7 +1,8 @@
-﻿"""Generate the DEMNE feature manifest as a PDF (docs/DEMNE_Manifest.pdf)."""
+"""Generate the DEMNE feature manifest as a PDF (docs/DEMNE_Manifest.pdf)."""
 
 from __future__ import annotations
 
+import csv
 from datetime import date
 from pathlib import Path
 
@@ -21,10 +22,17 @@ try:
     )
 except ImportError as e:
     raise ImportError(
-        "reportlab est requis pour gÃ©nÃ©rer le PDF : pip install DEMNE[reports]"
+        "reportlab est requis pour générer le PDF : pip install DEMNE[reports]"
     ) from e
 
 ROOT = Path(__file__).resolve().parent.parent
+from demne.params import load_params  # noqa: E402 (needs `pip install -e .`)
+
+PARAMS = load_params()
+DT = PARAMS["decision_thresholds"]
+RW = PARAMS["risk_weights"]
+FW = PARAMS["feasibility_weights"]
+PRESETS = PARAMS["presets"]
 OUT = ROOT / "docs" / "DEMNE_Manifest.pdf"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
@@ -81,7 +89,7 @@ def paragraph(text: str) -> Paragraph:
 
 
 def code(text: str) -> Paragraph:
-    # ReportLab Paragraph treats <br/> and uses XML â€” escape & and <
+    # ReportLab Paragraph treats <br/> and uses XML — escape & and <
     safe = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
     safe = safe.replace("\n", "<br/>")
     return Paragraph(f"<font face='Courier'>{safe}</font>", CODE)
@@ -116,70 +124,77 @@ story = []
 
 # Cover
 story += [
-    Paragraph("DEMNE â€” Manifeste des fonctionnalitÃ©s", H1),
+    Paragraph("DEMNE — Manifeste des fonctionnalités", H1),
     paragraph(
-        "<b>Determination of Extraction Method for Named Entity</b> â€” pipeline "
-        "NLP cascadÃ© RÃ¨gles â†’ ML â†’ LLM pour l'extraction de biomarqueurs "
+        "<b>Determination of Extraction Method for Named Entity</b> — pipeline "
+        "NLP cascadé Règles → ML → LLM pour l'extraction de biomarqueurs "
         "oncologiques sur comptes-rendus cliniques."
     ),
     Spacer(1, 6),
     paragraph(
         f"<b>Version</b> : DuraXELL 2.0   |   <b>Date</b> : {date.today().isoformat()}   "
-        f"|   <b>Auteur</b> : ClÃ©ment Longeac (ESIEE Paris)"
+        f"|   <b>Auteur</b> : Clément Longeac (ESIEE Paris)"
     ),
     Spacer(1, 12),
 ]
 
-# Section 1 â€” Architecture
-story += [Paragraph("1. Architecture du dÃ©pÃ´t", H2)]
+# Section 1 — Architecture
+story += [Paragraph("1. Architecture du dépôt", H2)]
 story += [
     code(
         "DEMNE-.../\n"
-        "â”œâ”€â”€ main.py                       # Point d'entrÃ©e CLI unifiÃ©\n"
-        "â”œâ”€â”€ data/\n"
-        "â”‚   â”œâ”€â”€ decision_config.json      # Routage entitÃ© â†’ mÃ©thode (gÃ©nÃ©rÃ©)\n"
-        "â”‚   â””â”€â”€ ESMO2025/                 # Corpus BRAT (CHIR, RCP, sein, prostate)\n"
-        "â”œâ”€â”€ src/demne/\n"
-        "â”‚   â”œâ”€â”€ templatability.py       # Score Te (templatabilitÃ©, JSON)\n"
-        "â”‚   â”œâ”€â”€ homogeneity.py          # Score He (homogÃ©nÃ©itÃ©, CSV)\n"
-        "â”‚   â”œâ”€â”€ frequency.py            # Score Freq (frÃ©quence, CSV)\n"
-        "â”‚   â”œâ”€â”€ risk_context.py         # Score R (risque contextuel, CSV)\n"
-        "â”‚   â”œâ”€â”€ ner_feasibility.py      # Score Feas (CSV)\n"
-        "â”‚   â”œâ”€â”€ decision_tree_builder.py  # Arbre de dÃ©cision, Ã©crit\n"
-        "â”‚   â”‚                              decision_config.json\n"
-        "â”‚   â”œâ”€â”€ visualize_decision_tree.py\n"
-        "â”‚   â””â”€â”€ REST_interface/\n"
-        "â”‚        â”œâ”€â”€ REST.ipynb           # Notebook dÃ©mo Voila\n"
-        "â”‚        â””â”€â”€ demo_rest.py         # Serveur FastAPI dÃ©mo\n"
-        "â”œâ”€â”€ dashboard/                    # Application Streamlit (4 pages)\n"
-        "â”‚   â”œâ”€â”€ app.py\n"
-        "â”‚   â”œâ”€â”€ pages/1_Dashboard_Metriques.py\n"
-        "â”‚   â”œâ”€â”€ pages/2_Analyse_Corpus.py\n"
-        "â”‚   â”œâ”€â”€ pages/3_REST_Integration.py\n"
-        "â”‚   â”œâ”€â”€ pages/4_Notebook_REST.py\n"
-        "â”‚   â””â”€â”€ core/                     # Brat parser, metrics, routing\n"
-        "â”œâ”€â”€ scripts/\n"
-        "â”‚   â””â”€â”€ generate_manifest.py\n"
-        "â”œâ”€â”€ tests/                        # Tests unitaires\n"
-        "â”œâ”€â”€ notebooks/commandes.ipynb     # Notebook d'exploration\n"
-        "â”œâ”€â”€ Results/                      # Sorties : *.csv, *.json\n"
-        "â”‚   â”œâ”€â”€ templatability_analysis.json\n"
-        "â”‚   â”œâ”€â”€ homogeneity_analysis.csv\n"
-        "â”‚   â”œâ”€â”€ frequency_analysis.csv\n"
-        "â”‚   â”œâ”€â”€ risk_context_analysis.csv\n"
-        "â”‚   â”œâ”€â”€ ner_feasibility_analysis.csv\n"
-        "â”‚   â””â”€â”€ decision_summary.csv      # RÃ©sumÃ© final (TSV)\n"
-        "â”œâ”€â”€ logs/output_decision.txt      # Trace humaine arbre\n"
-        "â”œâ”€â”€ .venv/                        # Python 3.12 + pandas, torch, voilaâ€¦\n"
-        "â””â”€â”€ pyproject.toml"
+        "├── main.py                       # Point d'entrée CLI unifié\n"
+        "├── data/\n"
+        "│   ├── decision_config.json      # Routage entité → méthode (généré)\n"
+        "│   └── *_CORPORA/                # Corpus de recalibrage (optimize_params)\n"
+        "├── src/demne/\n"
+        "│   ├── params.py               # Seuils/poids (demne_params.json) + presets dérivés\n"
+        "│   ├── routing.py              # Graphe de routage unique (CLI + dashboard)\n"
+        "│   ├── templatability.py       # Score Te (templatabilité, JSON)\n"
+        "│   ├── homogeneity.py          # Score He (homogénéité, CSV)\n"
+        "│   ├── frequency.py            # Score Freq (fréquence, CSV)\n"
+        "│   ├── risk_context.py         # Score R (risque contextuel, CSV)\n"
+        "│   ├── ner_feasibility.py      # Score Feas (CSV)\n"
+        "│   ├── tfidf_coverage.py       # Extractabilité TF-IDF (coverage-F1, CSV)\n"
+        "│   ├── decision_tree_builder.py  # Arbre de décision, écrit\n"
+        "│   │                              decision_config.json\n"
+        "│   ├── optimize_params.py      # Recalibrage Optuna de demne_params.json\n"
+        "│   ├── _brat.py                # Parseur BRAT unique\n"
+        "│   ├── _tracking.py            # Suivi énergie eco2ai (optionnel)\n"
+        "│   ├── _table.py               # Tableaux terminal\n"
+        "│   ├── visualize_decision_tree.py\n"
+        "│   └── REST_interface/\n"
+        "│        ├── REST.ipynb           # Notebook démo Voila\n"
+        "│        └── demo_rest.py         # Serveur FastAPI démo\n"
+        "├── dashboard/                    # Application Streamlit (4 pages)\n"
+        "│   ├── app.py\n"
+        "│   ├── pages/1_Dashboard_Metriques.py\n"
+        "│   ├── pages/2_Analyse_Corpus.py\n"
+        "│   ├── pages/3_REST_Integration.py\n"
+        "│   ├── pages/4_Notebook_REST.py\n"
+        "│   └── core/                     # Brat parser, metrics, routing\n"
+        "├── scripts/\n"
+        "│   └── generate_manifest.py\n"
+        "├── tests/                        # Tests unitaires\n"
+        "├── notebooks/commandes.ipynb     # Notebook d'exploration\n"
+        "├── Results/                      # Sorties : *.csv, *.json\n"
+        "│   ├── templatability_analysis.json\n"
+        "│   ├── homogeneity_analysis.csv\n"
+        "│   ├── frequency_analysis.csv\n"
+        "│   ├── risk_context_analysis.csv\n"
+        "│   ├── ner_feasibility_analysis.csv\n"
+        "│   └── decision_summary.csv      # Résumé final (TSV)\n"
+        "├── logs/output_decision.txt      # Trace humaine arbre\n"
+        "├── .venv/                        # Python 3.12 + pandas, torch, voila…\n"
+        "└── pyproject.toml"
     )
 ]
 
-# Section 2 â€” Quickstart
+# Section 2 — Quickstart
 story += [PageBreak(), Paragraph("2. Quickstart", H2)]
 story += [
     paragraph(
-        "<b>Environnement recommandÃ©</b> : Python 3.12 via le venv embarquÃ© "
+        "<b>Environnement recommandé</b> : Python 3.12 via le venv embarqué "
         "(<font face='Courier'>.venv/Scripts/python.exe</font>) qui contient "
         "<font face='Courier'>pandas</font>, <font face='Courier'>torch</font>, "
         "<font face='Courier'>voila</font>, <font face='Courier'>eco2ai</font>, "
@@ -188,65 +203,61 @@ story += [
 ]
 story += [
     code(
-        "# Aide gÃ©nÃ©rale\n"
+        "# Aide générale\n"
         "python main.py --help\n\n"
-        "# Pipeline complet (mÃ©triques + arbre + CSV rÃ©sumÃ©)\n"
+        "# Pipeline complet (métriques + arbre + CSV résumé)\n"
         "python main.py evaluate\n\n"
-        "# Pour les commandes nÃ©cessitant pandas/torch/voila :\n"
+        "# Pour les commandes nécessitant pandas/torch/voila :\n"
         "./.venv/Scripts/python.exe main.py notebook --port 8888"
     )
 ]
 
-# Section 3 â€” Subcommands table
+# Section 3 — Subcommands table
 story += [Paragraph("3. Carte des sous-commandes", H2)]
 sub_rows = [
-    ["Sous-commande", "RÃ´le", "DÃ©pendances clÃ©s"],
+    ["Sous-commande", "Rôle", "Dépendances clés"],
     ["info", "Diagnostic environnement (version, chemins, config)", "stdlib"],
     ["metrics", "Lance templatability/Homogeneity/Frequency/Risk/Feasibility", "stdlib"],
-    ["tree", "Construit l'arbre de dÃ©cision + export decision_summary.csv", "stdlib"],
-    ["evaluate", "Pipeline complet : metrics â†’ tree â†’ CSV", "stdlib"],
+    ["evaluate", "Pipeline complet : metrics → tree → CSV", "stdlib"],
     ["dashboard", "Mirror page Streamlit 1 : preset FRUGAL/QUALITY + routage", "stdlib"],
     ["corpus", "Mirror page Streamlit 2 : stats corpus BRAT", "stdlib (st stub)"],
-    ["rest-config", "Mirror page Streamlit 3 : export/import config JSON", "stdlib"],
+    ["rest-config", "Mirror page Streamlit 3 : export config JSON", "stdlib"],
     ["notebook", "Mirror page Streamlit 4 : lance Voila sur REST.ipynb + API", "voila"],
-    ["rest", "Lance uniquement demo_rest.py (legacy)", "fastapi"],
-    ["export-csv", "RÃ©gÃ©nÃ¨re decision_summary.csv depuis decision_config.json", "stdlib"],
 ]
 story += [make_table(sub_rows, col_widths=[3.2 * cm, 9 * cm, 4.5 * cm])]
 
-# Section 4 â€” Detailed examples per command
-story += [PageBreak(), Paragraph("4. RÃ©fÃ©rence dÃ©taillÃ©e des commandes", H2)]
+# Section 4 — Detailed examples per command
+story += [PageBreak(), Paragraph("4. Référence détaillée des commandes", H2)]
 
 CMD_DOC = [
     (
         "info",
-        "Affiche la version, la racine du projet, les chemins GS/Pred par dÃ©faut, "
-        "la liste des entitÃ©s et l'Ã©tat du fichier de configuration.",
+        "Affiche la version, la racine du projet, les chemins GS/Pred par défaut, "
+        "la liste des entités et l'état du fichier de configuration.",
         "python main.py info",
     ),
     (
         "metrics",
-        "Lance en sÃ©quence les 5 scorers : Te, He, Freq, R, Feas. "
-        "Chaque script Ã©crit son CSV/JSON dans Results/. "
-        "--gs_dir / --pred_dir surchargent les chemins ESMO2025 par dÃ©faut.",
-        "python main.py metrics                            # corpus par dÃ©faut\n"
+        "Lance en séquence les 5 scorers : Te, He, Freq, R, Feas. "
+        "Chaque script écrit son CSV/JSON dans Results/. "
+        "--gs_dir / --pred_dir surchargent les chemins ESMO2025 par défaut.",
+        "python main.py metrics                            # corpus par défaut\n"
         "python main.py metrics \\\n"
         "  --gs_dir   data/ESMO2025/Breast/RCP/evaluation_set_breast_cancer_GS \\\n"
         "  --pred_dir data/ESMO2025/Breast/RCP/evaluation_set_breast_cancer_pred_rules",
     ),
     (
-        "tree",
-        "Lit les CSVs de Results/, lance la k-fold de stabilitÃ© (k=3) puis "
-        "Ã©crit data/decision_config.json + logs/output_decision.txt. "
-        "RÃ©gÃ©nÃ¨re Ã©galement Results/decision_summary.csv (TSV).",
-        "python main.py tree                  # avec visualisation matplotlib\n"
-        "python main.py tree --no-visualize   # batch / serveur sans X",
+        "evaluate",
+        "Pipeline complet : metrics, puis construction de l'arbre "
+        "(data/decision_config.json + logs/output_decision.txt) et export "
+        "de Results/decision_summary.csv (TSV).",
+        "python main.py evaluate --gs_dir <corpus>                 # avec visualisation\n"
+        "python main.py evaluate --gs_dir <corpus> --no-visualize  # serveur sans X",
     ),
-    ("evaluate", "Raccourci : metrics + tree.", "python main.py evaluate --no-visualize"),
     (
         "dashboard",
         "Applique un preset de seuils (FRUGAL ou QUALITY) ou des seuils "
-        "personnalisÃ©s et rÃ©-Ã©value l'arbre sur la config courante. "
+        "personnalisés et ré-évalue l'arbre sur la config courante. "
         "Mirror exact de la page Streamlit 1.",
         "python main.py dashboard --preset FRUGAL\n"
         "python main.py dashboard --preset QUALITY\n"
@@ -254,38 +265,26 @@ CMD_DOC = [
     ),
     (
         "corpus",
-        "Parse un dossier BRAT et affiche par entitÃ© : nombre d'occurrences "
+        "Parse un dossier BRAT et affiche par entité : nombre d'occurrences "
         "et top-3 valeurs uniques.",
         "python main.py corpus\n"
         "python main.py corpus --path data/ESMO2025/Breast/CHIR/training_set_chir_GS",
     ),
     (
         "rest-config",
-        "SÃ©rialise (ou recharge) la liste d'entitÃ©s sÃ©lectionnÃ©es, les "
-        "seuils globaux et le routage par entitÃ© â€” format JSON commun "
+        "Sérialise la liste d'entités sélectionnées, les "
+        "seuils globaux et le routage par entité — format JSON commun "
         "avec la page Streamlit 3.",
-        "python main.py rest-config --export Results/config_export.json\n"
-        "python main.py rest-config --import Results/config_export.json",
+        "python main.py rest-config --export Results/config_export.json",
     ),
     (
         "notebook",
         "Lance Voila sur src/demne/REST_interface/REST.ipynb (port 8888 "
-        "par dÃ©faut) et le serveur FastAPI demo_rest.py en parallÃ¨le. "
+        "par défaut) et le serveur FastAPI demo_rest.py en parallèle. "
         "Mirror exact de la page Streamlit 4.",
         "python main.py notebook                       # Voila + API\n"
         "python main.py notebook --notebook-only        # uniquement Voila\n"
         "python main.py notebook --api-only --port 9000",
-    ),
-    (
-        "rest",
-        "Lance uniquement demo_rest.py (compatibilitÃ© avec versions antÃ©rieures).",
-        "python main.py rest",
-    ),
-    (
-        "export-csv",
-        "RÃ©gÃ©nÃ¨re Results/decision_summary.csv sans relancer le pipeline. "
-        "Utile aprÃ¨s Ã©dition manuelle de decision_config.json.",
-        "python main.py export-csv",
     ),
 ]
 for name, desc, ex in CMD_DOC:
@@ -295,92 +294,82 @@ for name, desc, ex in CMD_DOC:
     story += [paragraph(desc)]
     story += [code(ex)]
 
-# Section 5 â€” Metrics
-story += [PageBreak(), Paragraph("5. Les 5 mÃ©triques de l'arbre", H2)]
+# Section 5 — Metrics
+story += [PageBreak(), Paragraph("5. Les 5 métriques de l'arbre", H2)]
 metric_rows = [
-    ["MÃ©trique", "Sens", "Fichier source", "Formule clÃ©"],
+    ["Métrique", "Sens", "Fichier source", "Formule clé"],
     [
         "Te (Templatability)",
-        "Fraction d'occurrences capturables par une regex template",
+        "Régularité de forme des mentions (1 − entropie de Shannon normalisée des motifs) + bonus",
         "templatability.py",
-        "matches_template / total",
+        "1 − H(motifs)/log(n) + bonus",
     ],
     [
         "He (Homogeneity)",
-        "CohÃ©rence syntaxique du contexte gauche/droit d'une entitÃ©",
+        "Redondance lexicale des mentions (tokens répétés)",
         "homogeneity.py",
-        "1 âˆ’ entropy(n-grams)",
+        "sigmoïde(redondance des tokens ; k, x0)",
     ],
     [
         "Freq (Frequency)",
-        "DensitÃ© de l'entitÃ© dans le corpus (occurrences / tokens)",
+        "Densité de l'entité dans le corpus (occurrences / tokens)",
         "frequency.py",
         "count / corpus_tokens",
     ],
     [
         "R (Risk Context)",
-        "PrÃ©sence de nÃ©gations, incertitudes, contradictions autour de l'entitÃ©",
+        "Présence de négations, incertitudes, contradictions autour de l'entité",
         "risk_context.py",
-        "0.1Â·f_neg + 0.3Â·f_unc + 0.6Â·f_cont",
+        f"{RW['negation']}·f_neg + {RW['uncertainty']}·f_unc + {RW['contradiction']}·f_cont",
     ],
     [
         "Feas (NER Feasibility)",
-        "FaisabilitÃ© d'un modÃ¨le NER (volume + homogÃ©nÃ©itÃ©)",
+        "Faisabilité d'un modèle NER (nombre d'exemples + homogénéité)",
         "ner_feasibility.py",
-        "0.2Â·min(1,Freq) + 0.2Â·He",
+        f"{FW['alpha_freq']}·min(1, count/{FW.get('sat_count', 300):g}) + {FW['beta_he']}·He",
     ],
 ]
 story += [make_table(metric_rows, col_widths=[3.5 * cm, 6.5 * cm, 4 * cm, 4 * cm])]
-story += [Spacer(1, 6), paragraph("<b>Arbre de dÃ©cision (decision_tree_builder.py)</b> :")]
+story += [Spacer(1, 6), paragraph("<b>Arbre de décision (decision_tree_builder.py)</b> :")]
 story += [
     code(
-        "Te â‰¥ 0.10  ?\n"
-        "  â”œâ”€ oui â†’  He â‰¥ 0.85  ?\n"
-        "  â”‚           â”œâ”€ oui â†’  R â‰¤ 0.25  ?\n"
-        "  â”‚           â”‚           â”œâ”€ oui â†’ RÃˆGLES\n"
-        "  â”‚           â”‚           â””â”€ non â†’ Feas â‰¥ 0.20  ?\n"
-        "  â”‚           â””â”€ non â†’  Feas â‰¥ 0.20  ?\n"
-        "  â””â”€ non â†’  Feas â‰¥ 0.20  ?\n"
-        "                            â”œâ”€ oui â†’ TBM (DrBERT)\n"
-        "                            â””â”€ non â†’ LLM\n"
+        f"Te ≥ {DT['TE_HIGH']}  ET  He ≥ {DT['HE_HIGH']}  ?\n"
+        f"  ├─ oui →  R ≤ {DT['R_HIGH']}  ?  ── oui → RÈGLES\n"
+        f"  │                              └─ non → Feas ≥ {DT['FEAS_NER']}  ?\n"
+        f"  └─ non →  TF-IDF ≥ {DT['TFIDF_Y']}  (top-{DT['TFIDF_X']} mots) ?\n"
+        f"              ├─ oui → R ≤ {DT['R_HIGH']}  ?  ── oui → RÈGLES\n"
+        f"              │                         └─ non → Feas ≥ {DT['FEAS_NER']}  ?\n"
+        f"              └─ non → Feas ≥ {DT['FEAS_NER']}  ?\n"
+        "                           ├─ oui → TBM (DrBERT)\n"
+        "                           └─ non → LLM\n"
     )
 ]
 
-# Section 6 â€” Presets dashboard
+# Section 6 — Presets dashboard
 story += [Paragraph("6. Presets de seuils (commande dashboard)", H2)]
-preset_rows = [
-    ["Preset", "Te", "He", "R", "Feas", "Objectif"],
-    [
-        "FRUGAL",
-        "0.10",
-        "0.85",
-        "0.25",
-        "0.20",
-        "Maximiser RÃˆGLES â†’ Ã©nergie minimale, explicabilitÃ© maximale",
-    ],
-    [
-        "QUALITY",
-        "0.25",
-        "0.55",
-        "0.15",
-        "0.70",
-        "Resserrer RÃˆGLES â†’ recours plus frÃ©quent Ã  TBM/LLM",
-    ],
-]
+story += [paragraph("Presets dérivés des seuils calibrés (clé preset_margin), jamais stockés.")]
+preset_rows = [["Preset", "Te", "He", "R", "Feas", "Objectif"]]
+for _name, _goal in (
+    ("CALIBRATED", "Seuils calibrés de demne_params.json (= evaluate)"),
+    ("FRUGAL", "Assouplit chaque seuil de preset_margin : plus de RÈGLES, moins de TBM/LLM"),
+    ("QUALITY", "Durcit chaque seuil de preset_margin : recours plus fréquent à TBM/LLM"),
+):
+    _p = PRESETS[_name]
+    preset_rows.append([_name, _p["Te"], _p["He"], _p["R"], _p["Feas"], _goal])
 story += [
     make_table(preset_rows, col_widths=[2 * cm, 1.3 * cm, 1.3 * cm, 1.3 * cm, 1.3 * cm, 7.7 * cm])
 ]
 
-# Section 7 â€” Sorties
+# Section 7 — Sorties
 story += [Paragraph("7. Sorties produites", H2)]
 out_rows = [
-    ["Fichier", "Producteur", "SchÃ©ma / contenu"],
+    ["Fichier", "Producteur", "Schéma / contenu"],
     [
         "Results/templatability_analysis.json",
         "templatability.py",
-        "{entitÃ©: {templatability_score, count}}",
+        "{entité: {templatability_score, count}}",
     ],
-    ["Results/homogeneity_analysis.csv", "homogeneity.py", "Entity, He_Score_Percent, â€¦"],
+    ["Results/homogeneity_analysis.csv", "homogeneity.py", "Entity, He_Score_Percent, …"],
     [
         "Results/frequency_analysis.csv",
         "frequency.py",
@@ -395,75 +384,71 @@ out_rows = [
     [
         "data/decision_config.json",
         "decision_tree_builder.py",
-        "{version, global_thresholds, entities: {â€¦, method, justification, trace}}",
+        "{version, global_thresholds, entities: {…, method, justification, trace}}",
     ],
     [
         "Results/decision_summary.csv",
-        "main.py export-csv",
+        "main.py evaluate",
         "TSV : entity, Te, He, R, Freq, Feas, Method, Justification",
     ],
     [
         "logs/output_decision.txt",
         "decision_tree_builder.py",
-        "Rapport humain : seuils + mÃ©thode + trace par entitÃ©",
+        "Rapport humain : seuils + méthode + trace par entité",
     ],
-    ["Consumtion_of_Duraxell.csv", "eco2ai", "Empreinte COâ‚‚ / Ã©nergie cumulÃ©e"],
+    ["data/energy_consumption_DEMNE.csv", "eco2ai (optionnel)", "Empreinte CO₂ / énergie cumulée"],
 ]
 story += [make_table(out_rows, col_widths=[6 * cm, 4.5 * cm, 7.5 * cm])]
 
-# Section 8 â€” Routage par dÃ©faut sur ESMO2025 / Breast / RCP
-story += [PageBreak(), Paragraph("8. Routage de rÃ©fÃ©rence â€” Breast/RCP/GS", H2)]
-story += [
-    paragraph(
-        "RÃ©sultat actuel du pipeline sur "
-        "<font face='Courier'>evaluation_set_breast_cancer_GS</font> (95 docs, 55 643 mots) :"
-    )
-]
-rout_rows = [
-    ["EntitÃ©", "Te", "He", "R", "Freq", "Feas", "MÃ©thode"],
-    ["Estrogen_receptor", "0.3040", "0.978", "0.059", "0.0028", "0.991", "RÃˆGLES"],
-    ["Progesterone_receptor", "0.2940", "0.964", "0.138", "0.0023", "0.986", "RÃˆGLES"],
-    ["HER2_status", "0.2410", "0.969", "0.076", "0.0015", "0.880", "RÃˆGLES"],
-    ["HER2_IHC", "0.1760", "0.958", "0.160", "0.0014", "0.839", "RÃˆGLES"],
-    ["Ki67", "0.2690", "0.971", "0.064", "0.0021", "0.988", "RÃˆGLES"],
-    ["HER2_FISH", "0.1000", "0.500", "0.274", "0.0003", "0.296", "LLM"],
-    ["Genetic_mutation", "0.0000", "0.014", "0.000", "0.0000", "0.018", "LLM"],
-]
-story += [
-    make_table(
-        rout_rows, col_widths=[3.6 * cm, 1.5 * cm, 1.5 * cm, 1.5 * cm, 1.6 * cm, 1.5 * cm, 2 * cm]
-    )
-]
+# Section 8 — Routage du dernier `evaluate`
+story += [PageBreak(), Paragraph("8. Routage du dernier run (Results/decision_summary.csv)", H2)]
+_summary = ROOT / "Results" / "decision_summary.csv"
+if _summary.exists():
+    with open(_summary, encoding="utf-8", newline="") as _f:
+        _rows = list(csv.DictReader(_f, delimiter="\t"))
+    rout_rows = [["Entité", "Te", "He", "R", "Freq", "Feas", "Méthode"]] + [
+        [r["Entity"][:28], r["Te"], r["He"], r["R"], r["Freq"], r["Feas"], r["Method"]]
+        for r in _rows
+    ]
+    story += [paragraph(f"{len(_rows)} entités, issues du dernier main.py evaluate :")]
+    story += [
+        make_table(
+            rout_rows,
+            col_widths=[5 * cm, 1.5 * cm, 1.5 * cm, 1.5 * cm, 1.6 * cm, 1.5 * cm, 2 * cm],
+        )
+    ]
+else:
+    story += [paragraph("Aucun run disponible : lancer main.py evaluate.")]
 
-# Section 9 â€” ParitÃ© dashboard â†” CLI
-story += [Paragraph("9. ParitÃ© Streamlit â†” CLI", H2)]
+# Section 9 — Streamlit ↔ CLI parity
+story += [Paragraph("9. Parité Streamlit ↔ CLI", H2)]
 par_rows = [
-    ["Page Streamlit", "Sous-commande CLI Ã©quivalente"],
-    ["1 â€” Dashboard MÃ©triques (sliders + presets)", "main.py dashboard --preset FRUGAL|QUALITY"],
-    ["2 â€” Analyse Corpus BRAT", "main.py corpus --path <dir>"],
-    ["3 â€” REST Integration (export/import JSON)", "main.py rest-config --export|--import"],
-    ["4 â€” Notebook & API REST (Voila)", "main.py notebook [--port 8888]"],
+    ["Page Streamlit", "Sous-commande CLI équivalente"],
+    ["1 — Dashboard Métriques (sliders + presets)", "main.py dashboard --preset FRUGAL|QUALITY"],
+    ["2 — Analyse Corpus BRAT", "main.py corpus --path <dir>"],
+    ["3 — REST Integration (export JSON)", "main.py rest-config --export"],
+    ["4 — Notebook & API REST (Voila)", "main.py notebook [--port 8888]"],
 ]
 story += [make_table(par_rows, col_widths=[8 * cm, 9 * cm])]
 
-# Section 10 â€” Notes opÃ©rationnelles
-story += [Paragraph("10. Notes opÃ©rationnelles", H2)]
+# Section 10 — Operational notes
+story += [Paragraph("10. Notes opérationnelles", H2)]
 notes = [
-    "Le venv embarquÃ© (Python 3.12) contient pandas, torch 2.6+cu124, voila, transformers, "
-    "eco2ai. Le Python systÃ¨me 3.14 suffit pour metrics/tree/evaluate/dashboard/corpus/"
-    "rest-config (les imports lourds sont contournÃ©s par importlib).",
-    "main.py force PYTHONIOENCODING=utf-8 et PYTHONUTF8=1 dans les sous-process â†’ "
+    "Le venv embarqué (Python 3.12) contient pandas, torch 2.6+cu124, voila, transformers, "
+    "eco2ai. Le Python système 3.14 suffit pour metrics/tree/evaluate/dashboard/corpus/"
+    "rest-config (les imports lourds sont contournés par importlib).",
+    "main.py force PYTHONIOENCODING=utf-8 et PYTHONUTF8=1 dans les sous-process → "
     "fin du UnicodeEncodeError cp1252 sous Windows.",
-    "ner_feasibility.py calcule le score Feas Ã  partir de Freq et He.",
-    "L'arbre est calibrÃ© sur le corpus Breast/RCP. Pour valider la stabilitÃ© sur un autre "
-    "corpus, lancer `evaluate` avec --gs_dir/--pred_dir adaptÃ©s.",
-    "decision_config.json est rÃ©-Ã©crit Ã  chaque `tree`/`evaluate`. Un export figÃ© doit "
+    "ner_feasibility.py calcule Feas = α·min(1, count/sat_count) + β·He (poids dans demne_params.json).",
+    "Pour recalibrer seuils et poids sur vos corpus : `main.py optimize_params --in_domain` "
+    "(voir docs/OPTIMIZE_PARAMS.md), puis relancer `evaluate`.",
+    "decision_config.json est ré-écrit à chaque `evaluate`. Un export figé doit "
     "passer par `rest-config --export`.",
-    "Suivi Ã©nergie : chaque script E_*.py dÃ©marre un Tracker eco2ai qui appondit dans "
-    "Consumtion_of_Duraxell.csv.",
+    "Suivi énergie (optionnel, extra [energy]) : chaque scorer démarre un Tracker eco2ai qui "
+    "appond dans data/energy_consumption_DEMNE.csv.",
 ]
 for n in notes:
-    story += [Paragraph(f"â€¢ {n}", BODY), Spacer(1, 3)]
+    story += [Paragraph(f"• {n}", BODY), Spacer(1, 3)]
 
 # Build
 doc = SimpleDocTemplate(
@@ -473,8 +458,8 @@ doc = SimpleDocTemplate(
     rightMargin=1.8 * cm,
     topMargin=1.8 * cm,
     bottomMargin=1.8 * cm,
-    title="DEMNE â€” Manifeste des fonctionnalitÃ©s",
-    author="ClÃ©ment Longeac",
+    title="DEMNE — Manifeste des fonctionnalités",
+    author="Clément Longeac",
 )
 doc.build(story)
-print(f"PDF gÃ©nÃ©rÃ© : {OUT}")
+print(f"PDF généré : {OUT}")

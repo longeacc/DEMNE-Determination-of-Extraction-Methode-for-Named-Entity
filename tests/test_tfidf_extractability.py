@@ -1,25 +1,20 @@
-"""Tests de l'extractabilité par COUVERTURE de mots-clés + intégration à l'arbre.
+"""Tests of the keyword-COVERAGE extractability + integration into the tree.
 
-Deux blocs :
-  A. Unitaires de demne.tfidf_coverage (coverage-F1, lecture BRAT, API corpus).
-     La coverage-F1 remplace la synonymie contextuelle (ancien E_tfidf) : elle
-     sépare mieux les classes de routage (cf. optimisation).
-  B. Intégration DecisionTreeBuilder.analyze_entity :
-     - rétro-compatibilité stricte sans TFIDF ;
-     - rescue par synonymie (He bas mais tfidf_score haut -> RULES) ;
-     - modulation par R.
+Two blocks:
+  A. Unit tests of demne.tfidf_coverage (coverage-F1, BRAT reading, corpus API).
+     Coverage-F1 replaces the contextual synonymy (former E_tfidf): it separates
+     the routing classes better (see the optimisation).
+  B. DecisionTreeBuilder.analyze_entity integration:
+     - strict backward compatibility without TFIDF;
+     - rescue by synonymy (low He but high tfidf_score -> RULES);
+     - modulation by R.
 """
 
 from __future__ import annotations
 
 import csv
-import sys
-from unittest.mock import MagicMock
 
 import pytest
-
-# eco2ai is an optional heavy dep pulled in by decision_tree_builder.
-sys.modules.setdefault("eco2ai", MagicMock())
 
 from demne.decision_tree_builder import DecisionTreeBuilder
 from demne.tfidf_coverage import (
@@ -38,7 +33,7 @@ def test_less_than_two_entities_returns_empty():
 
 
 def test_keyword_covers_all_mentions_high_f1():
-    # "her2" couvre toutes les mentions de E et n'apparaît pas ailleurs → f1 ~1
+    # "her2" covers every mention of E and appears nowhere else → f1 ~1
     ment = {
         "E": ["her2 positif", "her2 score 3", "her2 amplifie"],
         "Other": ["ki67 10%", "ki67 fort"],
@@ -48,7 +43,7 @@ def test_keyword_covers_all_mentions_high_f1():
 
 
 def test_generic_word_lowers_precision():
-    # "positif" présent chez E ET Other → recall ok mais précision basse → f1 < 1
+    # "positif" is present in E AND Other → recall ok but low precision → f1 < 1
     ment = {"E": ["positif", "positif", "positif"], "Other": ["positif", "positif"]}
     out = coverage_f1_by_x(ment, max_x=1)
     assert 0.0 < out["E"][1] < 1.0
@@ -78,7 +73,7 @@ def test_collect_mentions_reads_ann(tmp_path):
     ment = collect_mentions(tmp_path)
     assert ment["HER2"] == ["HER2 positif"]
     assert ment["Ki67"] == ["Ki 67 10%"]
-    assert "A1" not in ment  # lignes d'attribut ignorées
+    assert "A1" not in ment  # attribute lines are ignored
 
 
 def test_compute_and_run_write_csv(tmp_path):
@@ -107,12 +102,12 @@ def test_compute_and_run_write_csv(tmp_path):
 
 
 def test_run_empty_corpus_no_crash(tmp_path):
-    run(tmp_path, tmp_path / "out")  # aucun .ann → pas de crash, pas de CSV
+    run(tmp_path, tmp_path / "out")  # no .ann → no crash, no CSV
     assert not (tmp_path / "out" / "tfidf_analysis.csv").exists()
 
 
 # =========================================================================== #
-# BLOC B — intégration DecisionTreeBuilder.analyze_entity                      #
+# BLOC B — DecisionTreeBuilder.analyze_entity integration                      #
 # =========================================================================== #
 @pytest.fixture
 def builder():
@@ -120,8 +115,8 @@ def builder():
 
 
 def test_backward_compat_baseline_unchanged(builder):
-    """Sans TFIDF l'arbre doit matcher le baseline. Nœud R- partagé :
-    Te+He haut + R haut → Feas (TBM), pas LLM.
+    """Without TFIDF the tree must match the baseline. Shared R- node:
+    high Te+He + high R → Feas (TBM), not LLM.
     """
     assert (
         builder.analyze_entity("StructureOnly", {"Te": 90.0, "Te_count": 20, "He": 80.0, "R": 0.1})[

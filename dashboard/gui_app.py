@@ -27,8 +27,6 @@ from tkinter import filedialog, messagebox, ttk
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
 
 CONFIG_PATH = ROOT / "data" / "decision_config.json"
 RESULTS_DIR = ROOT / "Results"
@@ -85,12 +83,9 @@ class DuraXellGUI:
 
         self.corpus_path = tk.StringVar(value="")
         self.pred_path = tk.StringVar(value="")
-        self.preset_var = tk.StringVar(value="FRUGAL")
+        self.preset_var = tk.StringVar(value="CALIBRATED")
         self.threshold_vars = {
-            "Te": tk.DoubleVar(value=PRESETS["FRUGAL"]["Te"]),
-            "He": tk.DoubleVar(value=PRESETS["FRUGAL"]["He"]),
-            "R": tk.DoubleVar(value=PRESETS["FRUGAL"]["R"]),
-            "Feas": tk.DoubleVar(value=PRESETS["FRUGAL"]["Feas"]),
+            k: tk.DoubleVar(value=PRESETS["CALIBRATED"][k]) for k in ("Te", "He", "R", "Feas")
         }
         self.entity_check_vars: dict[str, tk.BooleanVar] = {}
 
@@ -159,7 +154,7 @@ class DuraXellGUI:
         right.pack(side="left", fill="both", expand=True)
 
         ttk.Label(left, text="Threshold presets", font=("Segoe UI", 10, "bold")).pack(anchor="w")
-        for name in ("FRUGAL", "QUALITY"):
+        for name in ("CALIBRATED", "FRUGAL", "QUALITY"):
             ttk.Radiobutton(
                 left, text=name, variable=self.preset_var, value=name, command=self._apply_preset
             ).pack(anchor="w")
@@ -188,12 +183,6 @@ class DuraXellGUI:
             ).pack(fill="x")
         ttk.Button(left, text="✅ Apply routing", command=self._refresh_routing_table).pack(
             fill="x", pady=8
-        )
-
-        ttk.Separator(left, orient="horizontal").pack(fill="x", pady=6)
-        ttk.Label(left, text="Export", font=("Segoe UI", 10, "bold")).pack(anchor="w")
-        ttk.Button(left, text="💾 Exporter decision_summary.csv", command=self._export_csv).pack(
-            fill="x", pady=2
         )
 
         # (the CLI Commands bar is now at the bottom of the right panel,
@@ -225,14 +214,11 @@ class DuraXellGUI:
         cli_buttons = [
             ("ℹ️  info", self._cli_info, "Environment diagnostics"),
             ("📐 metrics", self._cli_metrics, "Te / He / Freq / R / Feas"),
-            ("🌳 tree + image", self._cli_tree, "Decision tree + PNG"),
             ("🚀 evaluate", self._cli_evaluate, "Full pipeline"),
-            ("📊 dashboard", self._cli_dashboard, "FRUGAL/QUALITY preset routing"),
+            ("📊 dashboard", self._cli_dashboard, "CALIBRATED/FRUGAL/QUALITY routing"),
             ("🎯 corpus", self._cli_corpus, "BRAT stats"),
             ("🔧 rest-config", self._cli_rest_config, "Export JSON config"),
             ("📓 notebook", self._cli_notebook, "REST Notebook (Voila)"),
-            ("🌐 rest", self._cli_rest, "demo_rest.py (legacy)"),
-            ("💾 export-csv", self._export_csv, "Regenerate decision_summary"),
         ]
         cols = 4
         for i, (label, cb, tip) in enumerate(cli_buttons):
@@ -599,10 +585,6 @@ class DuraXellGUI:
         self._log("✅ Pipeline finished — reloading config.")
         self._refresh_routing_table()
 
-    def _export_csv(self) -> None:
-        cmd = [sys.executable, str(ROOT / "main.py"), "export-csv"]
-        self._spawn("export", cmd, cwd=str(ROOT))
-
     # ============================== CLI sub-command handlers ==================
     def _run_cli(self, args: list[str], on_exit=None) -> None:
         """Run `python main.py …` as a subprocess, logging output to the Logs area."""
@@ -719,60 +701,6 @@ class DuraXellGUI:
             side="right"
         )
 
-    def _cli_tree(self) -> None:
-        """Run `main.py tree` then display Results/figures/Graph_decision.png."""
-        d = filedialog.askdirectory(
-            title="tree — corpus folder (BRAT) — Cancel = use previous",
-            initialdir=self.corpus_path.get() or str(ROOT),
-        )
-        args = ["tree", "--no-visualize"]
-        if d:
-            self.corpus_path.set(d)
-        if self.corpus_path.get().strip():
-            args += ["--gs_dir", self.corpus_path.get().strip()]
-        if self.pred_path.get().strip():
-            args += ["--pred_dir", self.pred_path.get().strip()]
-        self._run_cli(args, on_exit=self._on_tree_done)
-
-    def _on_tree_done(self) -> None:
-        self._show_decision_tree_image()
-        self._show_decision_summary_table()
-
-    def _show_decision_tree_image(self) -> None:
-        img_path = ROOT / "Results" / "figures" / "Graph_decision.png"
-        if not img_path.exists():
-            # fallback: try other known filenames
-            for fname in ("decision_tree.png", "decision_tree_visualization.png"):
-                p = ROOT / "Results" / "figures" / fname
-                if p.exists():
-                    img_path = p
-                    break
-        if not img_path.exists():
-            messagebox.showinfo("Decision tree", "No image found in Results/figures/.")
-            return
-        self._log(f"🖼  Displaying {img_path.name}")
-        try:
-            from PIL import Image, ImageTk
-        except ImportError:
-            messagebox.showerror("Display", "PIL required (already in the venv).")
-            return
-        top = tk.Toplevel(self.root)
-        top.title(f"Decision tree — {img_path.name}")
-        img = Image.open(img_path)
-        # Fit to screen
-        max_w = min(self.root.winfo_screenwidth() - 80, img.width)
-        if img.width > max_w:
-            r = max_w / img.width
-            img = img.resize((max_w, int(img.height * r)))
-        ph = ImageTk.PhotoImage(img)
-        canvas = tk.Canvas(top, width=img.width, height=img.height, background="#FFFFFF")
-        canvas.pack(fill="both", expand=True)
-        canvas.create_image(0, 0, anchor="nw", image=ph)
-        canvas.image = ph  # ref to avoid GC
-        ttk.Label(top, text=str(img_path), foreground="#666", padding=4).pack(
-            side="bottom", fill="x"
-        )
-
     def _cli_evaluate(self) -> None:
         d = filedialog.askdirectory(
             title="evaluate — corpus folder (BRAT: .txt + .ann)",
@@ -831,7 +759,7 @@ class DuraXellGUI:
         )
 
     def _cli_dashboard(self) -> None:
-        preset = self.preset_var.get() if self.preset_var.get() in PRESETS else "FRUGAL"
+        preset = self.preset_var.get() if self.preset_var.get() in PRESETS else "CALIBRATED"
         self._run_cli(["dashboard", "--preset", preset])
 
     def _cli_corpus(self) -> None:
@@ -856,9 +784,6 @@ class DuraXellGUI:
 
     def _cli_notebook(self) -> None:
         self._run_cli(["notebook", "--port", "8888"])
-
-    def _cli_rest(self) -> None:
-        self._run_cli(["rest"])
 
     # ============================== Subprocess plumbing =======================
     def _spawn(self, name: str, cmd: list[str], cwd: str | None = None, on_exit=None) -> None:

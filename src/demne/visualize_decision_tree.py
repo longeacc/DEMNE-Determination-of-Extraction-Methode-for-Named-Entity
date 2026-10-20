@@ -1,4 +1,5 @@
 import json
+import os
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -31,7 +32,7 @@ def visualize_decision_tree(
 
     # Root node
     root = "DEMNE\nDecision Node"
-    g_graph.add_node(root, color="#2196F3", shape="box")
+    g_graph.add_node(root, color="#2196F3", shape="box", layer=0)
 
     # Colors by method
     colors = {
@@ -55,7 +56,7 @@ def visualize_decision_tree(
 
         # Entity node
         entity_node = entity
-        g_graph.add_node(entity_node, color="lightgrey", shape="ellipse")
+        g_graph.add_node(entity_node, color="lightgrey", shape="ellipse", layer=1)
         g_graph.add_edge(root, entity_node)
 
         # Method node (leaf)
@@ -68,15 +69,16 @@ def visualize_decision_tree(
 
         # Unique ID to avoid duplicate method nodes
         leaf_id = f"{entity}_{method}"
-        g_graph.add_node(leaf_id, label=leaf_label, color=color, shape="box", style="filled")
+        g_graph.add_node(
+            leaf_id, label=leaf_label, color=color, shape="box", style="filled", layer=2
+        )
         g_graph.add_edge(entity_node, leaf_id)
 
     # Draw
     plt.figure(figsize=(12, 8))
-    pos = nx.spring_layout(g_graph, seed=42)
-
-    # A hierarchical layout could be used for a cleaner view if needed
-    # (graphviz often required for hierarchical layout; using spring for portability)
+    # Hierarchical layout (root → entities → methods), left to right. multipartite_layout
+    # needs no graphviz, unlike nx.nx_agraph's dot layout.
+    pos = nx.multipartite_layout(g_graph, subset_key="layer", align="vertical")
 
     node_colors = [
         nx.get_node_attributes(g_graph, "color").get(n, "#FFFFFF") for n in g_graph.nodes()
@@ -98,9 +100,7 @@ def visualize_decision_tree(
     plt.title("DEMNE Decision Tree by Entity")
     plt.axis("off")
 
-    import os
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     plt.savefig(output_path, format=output_format, dpi=300)
     plt.close()
     print(f"Visualisation saved: {output_path}")

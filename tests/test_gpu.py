@@ -107,7 +107,7 @@ def test_device_name_not_empty():
 
 
 # ===========================================================================
-# BLOC 2 — Cohérence CPU ↔ GPU (pas de corruption de données)
+# BLOC 2 — CPU ↔ GPU consistency (no data corruption)
 # ===========================================================================
 
 
@@ -277,7 +277,7 @@ def test_amp_autocast_does_not_crash():
 
 
 # ===========================================================================
-# BLOC 5 — Rapport de configuration GPU (informatif, toujours exécuté)
+# BLOC 5 — GPU configuration report (informative, always executed)
 # ===========================================================================
 
 

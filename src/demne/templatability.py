@@ -81,13 +81,13 @@ class TemplatabilityScorer:
         dashboard MetricsCalculator (see the routing-equivalence intent).
         """
         pattern = text.strip()
-        # 1. Lettres -> 'L' (casse-insensible). AVANT les chiffres : sinon la règle
-        #    lettres écraserait le marqueur 'D' (qui est une lettre), rendant
-        #    digits et lettres indiscernables et le digit_bonus inerte.
+        # 1. Letters -> 'L' (case-insensitive). BEFORE the digits: otherwise the letter
+        #    rule would overwrite the marker 'D' (which is a letter), making digits
+        #    and letters indistinguishable and the digit_bonus inert.
         pattern = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", pattern)
         # 2. Chiffres -> 'D'
         pattern = re.sub(r"[0-9]", "D", pattern)
-        # 3. Collapse des répétitions (LLD == LLLD, "L   L" == "L L")
+        # 3. Collapse repeats (LLD == LLLD, "L   L" == "L L")
         pattern = re.sub(r"(.)\1+", r"\1", pattern)
         return pattern
 
@@ -186,7 +186,7 @@ class TemplatabilityScorer:
             scores[entity_type] = self.compute(entity_type)
         return scores
 
-    def to_json(self, output_path: str) -> None:
+    def to_json(self, output_path: str | Path) -> None:
         """Save results to templatability_analysis.json."""
         output = {}
         for entity_type, stats in self.results_cache.items():
@@ -214,7 +214,8 @@ class TemplatabilityScorer:
 # ==================================================================================
 
 
-def main():
+def main() -> None:
+    """CLI entry point: writes Results/templatability_analysis_<corpus>.json."""
     import argparse
 
     _tracker = start_tracker("DEMNE-templatability", "We Calculate...")

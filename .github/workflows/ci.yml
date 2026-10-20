@@ -68,8 +68,8 @@ jobs:
       # (-m "not cuda and not rocm") so the job never tries to load a model
       # on a non-existent GPU (which would raise a CUDA error instead of a
       # clean skip).
-      # Coverage gate: --cov-fail-under=50 fails the job if overall coverage
-      # drops below 50 %.
+      # Coverage gate: --cov-fail-under=75 fails the job if overall coverage
+      # drops below 75 %.
       # -----------------------------------------------------------------------
       - name: Run unit and integration tests (CPU only)
         run: >
@@ -77,7 +77,7 @@ jobs:
           -m "not cuda and not rocm"
           --cov=demne
           --cov-report=xml
-          --cov-fail-under=50
+          --cov-fail-under=75
           --tb=short
           -q
 

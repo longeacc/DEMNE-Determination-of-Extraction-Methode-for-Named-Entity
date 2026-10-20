@@ -1,40 +1,36 @@
-"""tfidf_coverage — Extractabilité par COUVERTURE de mots-clés (TF-IDF).
+"""tfidf_coverage — extractability by keyword COVERAGE (TF-IDF).
 
-Intuition : une entité peut être extraite par règles même si ses observations ne
-sont pas homogènes, DÈS LORS qu'un petit ensemble de mots-clés (les top-X mots
-TF-IDF de ses mentions) couvre une bonne partie de toutes ses mentions.
+Intuition: an entity can be extracted by rules even when its observations are not
+homogeneous, AS LONG AS a small set of keywords (the top-X TF-IDF words of its
+mentions) covers a good share of all its mentions.
 
-Diffère de E_tfidf (synonymie contextuelle) :
-  - unité   : MOTS (tokens) des mentions, pas les formes de surface entières
-  - base    : les mentions elles-mêmes, pas les contextes autour
-  - clustering : AUCUN → pas de sim_threshold, pas de fenêtre
-  - score   : F1 = recall (couverture) × précision (anti faux-positifs)
+Differs from the former E_tfidf (contextual synonymy):
+  - unit       : WORDS (tokens) of the mentions, not whole surface forms
+  - basis      : the mentions themselves, not the contexts around them
+  - clustering : NONE → no sim_threshold, no window
+  - score      : F1 = recall (coverage) × precision (anti false positives)
 
-Pour l'entité E :
-  ranking   = mots des mentions de E classés par poids TF-IDF (E vs autres entités)
-  top-X     = les X premiers mots
-  recall    = |mentions de E contenant ≥1 top-mot| / |mentions de E|
-  precision = |mentions de E touchées| / |mentions (toutes entités) touchées|
-              → un mot trop générique (présent chez d'autres entités) fait chuter
-                la précision = faux positifs pénalisés
+For entity E:
+  ranking   = words of E's mentions ranked by TF-IDF weight (E vs the other entities)
+  top-X     = the first X words
+  recall    = |mentions of E containing ≥1 top word| / |mentions of E|
+  precision = |mentions of E hit| / |mentions (all entities) hit|
+              → a too generic word (present in other entities) lowers the
+                precision = false positives are penalised
   f1        = 2·recall·precision / (recall + precision)
 """
 
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Chargé par file-spec (dashboard) → garantir que `src/` est sur le path pour
-# `from demne.E_tfidf import …` / `from demne.params import …`.
-_SRC = Path(__file__).resolve().parents[1]
-if str(_SRC) not in sys.path:
-    sys.path.insert(0, str(_SRC))
-_ROOT = _SRC.parent
+from demne._brat import load_brat_corpus
+
+_ROOT = Path(__file__).resolve().parents[2]
 _RESULTS_DIR = _ROOT / "Results"
 
 _TOKEN_RE = re.compile(r"[^a-zA-Z0-9%]+")
@@ -47,14 +43,14 @@ def _tokenize(text: str) -> list[str]:
 def coverage_f1_by_x(
     entity_mentions: dict[str, list[str]], max_x: int = 15
 ) -> dict[str, dict[int, float]]:
-    """Coverage-F1 par entité pour chaque X de 1..max_x.
+    """Coverage-F1 per entity for every X in 1..max_x.
 
     Args:
-        entity_mentions: {type_entité: [chaînes de mention]} pour UN corpus.
-        max_x: plus grand top-X à précalculer.
+        entity_mentions: {entity_type: [mention strings]} for ONE corpus.
+        max_x: largest top-X to precompute.
 
     Returns:
-        {type_entité: {x: f1}} — vide si < 2 entités (TF-IDF impossible).
+        {entity_type: {x: f1}} — empty if fewer than 2 entities (TF-IDF impossible).
     """
     ents = [e for e, m in entity_mentions.items() if m]
     if len(ents) < 2:
@@ -72,7 +68,7 @@ def coverage_f1_by_x(
     for i, e in enumerate(ents):
         row = matrix[i].toarray().ravel()
         order = np.argsort(row)[::-1]
-        ranked = [feats[j] for j in order if row[j] > 0]  # mots présents, par poids TF-IDF
+        ranked = [feats[j] for j in order if row[j] > 0]  # words present, by TF-IDF weight
         ment_e = [m.lower() for m in entity_mentions[e]]
         per_x: dict[int, float] = {}
         for x in range(1, max_x + 1):
@@ -94,12 +90,14 @@ def coverage_f1_by_x(
     return out
 
 
-def compute_coverage_for_all_entities(corpus_dir, top_x: int | None = None) -> dict[str, dict]:
-    """API corpus (dashboard/CLI) : {etype: {"tfidf_score"}}.
+def compute_coverage_for_all_entities(
+    corpus_dir: str | Path, top_x: int | None = None
+) -> dict[str, dict]:
+    """Corpus API (dashboard/CLI): {etype: {"tfidf_score"}}.
 
-    Lit les mentions du corpus BRAT, calcule la coverage-F1 au top-X courant
-    (TFIDF_X de demne_params.json si non fourni). `tfidf_score` = même valeur
-    (compat clé attendue par le dashboard/routing).
+    Reads the mentions of the BRAT corpus and computes the coverage-F1 at the current
+    top-X (TFIDF_X of demne_params.json if not given). `tfidf_score` holds that same
+    value (key expected by the dashboard/routing).
     """
     from demne.params import load_params
 
@@ -109,31 +107,31 @@ def compute_coverage_for_all_entities(corpus_dir, top_x: int | None = None) -> d
     return {et: {"tfidf_score": by_x.get(et, {}).get(x, 0.0)} for et in mentions}
 
 
-def collect_mentions(corpus_dir) -> dict[str, list[str]]:
-    """Lit les fichiers BRAT .ann → {type_entité: [textes de mention]}.
+def collect_mentions(corpus_dir: str | Path) -> dict[str, list[str]]:
+    """Read the BRAT .ann files → {entity_type: [mention texts]}.
 
-    Ligne d'entité BRAT : ``T<id>\\t<TYPE> <start> <end>\\t<texte>``.
+    BRAT entity line: ``T<id>\\t<TYPE> <start> <end>\\t<text>``.
     """
     ment: dict[str, list[str]] = {}
-    for ann in Path(corpus_dir).rglob("*.ann"):
-        for line in ann.read_text(encoding="utf-8").splitlines():
-            if not line.startswith("T"):
-                continue
-            parts = line.split("\t")
-            if len(parts) < 3:
-                continue
-            etype = parts[1].split(" ", 1)[0]
-            text = parts[2].strip()
+    for doc in load_brat_corpus([corpus_dir], recursive=True, quiet=True):
+        for ann in doc["annotations"]:
+            text = ann.text.strip()
             if text:
-                ment.setdefault(etype, []).append(text)
+                ment.setdefault(ann.entity_type, []).append(text)
     return ment
 
 
-def run(gs_dir, results_dir, top_x=None, y=None, **_kw) -> None:
-    """CLI/pipeline : écrit ``Results/tfidf_analysis.csv`` avec la coverage-F1.
+def run(
+    gs_dir: str | Path,
+    results_dir: str | Path,
+    top_x: int | None = None,
+    y: float | None = None,
+    **_kw: object,
+) -> None:
+    """CLI/pipeline: write ``Results/tfidf_analysis.csv`` with the coverage-F1.
 
-    Schéma compatible avec decision_tree_builder (`_read_csv` lit TFIDF_Score).
-    `**_kw` absorbe d'anciens arguments (ex. sim_threshold) désormais inutiles.
+    Schema compatible with decision_tree_builder (`_read_csv` reads TFIDF_Score).
+    `**_kw` swallows former arguments (e.g. sim_threshold) that are now useless.
     """
     import csv
 
@@ -171,7 +169,7 @@ def run(gs_dir, results_dir, top_x=None, y=None, **_kw) -> None:
 
 
 def main() -> None:
-    """CLI (compat pipeline main.py) : écrit Results/tfidf_analysis.csv."""
+    """CLI (main.py pipeline compatibility): write Results/tfidf_analysis.csv."""
     import argparse
 
     ap = argparse.ArgumentParser(description="Coverage-F1 extractability per entity")

@@ -11,7 +11,12 @@ from demne.params import load_params
 PARAMS = load_params()
 
 
-def compute_feasibility(gs_dir_str=None, pred_dir_str=None, results_dir=None):
+def compute_feasibility(
+    gs_dir_str: str | None = None,
+    pred_dir_str: str | None = None,
+    results_dir: str | Path | None = None,
+) -> None:
+    """Compute Feas per entity from the frequency/homogeneity CSVs and write the result CSV."""
     print("Computing NER Feasibility per entity...")
     if results_dir is None:
         results_dir = Path(__file__).parent.parent.parent / "Results"
@@ -55,10 +60,10 @@ def compute_feasibility(gs_dir_str=None, pred_dir_str=None, results_dir=None):
                         homogeneity[ent] = float(row.get("He_Score_Percent", 0.0)) / 100.0
 
     # Feas(E) = α_Feas · min(1, count/C) + β_Feas · He
-    # On sature le COMPTE absolu (assez d'exemples pour énumérer un template), pas
-    # la densité count/tokens : une entité fréquente dans un gros corpus a une
-    # densité faible mais plein d'exemples — la densité la pénalisait à tort.
-    # DOIT rester identique à MetricsCalculator (drift-guard).
+    # We saturate the absolute COUNT (enough examples to enumerate a template), not
+    # the count/tokens density: a frequent entity in a large corpus has a low density
+    # but plenty of examples — the density wrongly penalised it.
+    # MUST stay identical to MetricsCalculator (drift-guard).
     _fw = PARAMS["feasibility_weights"]
     alpha_feas = _fw["alpha_freq"]
     beta_feas = _fw["beta_he"]

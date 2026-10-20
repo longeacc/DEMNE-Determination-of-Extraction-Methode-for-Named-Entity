@@ -1,15 +1,18 @@
-import sys
-from pathlib import Path
-
-try:  # make the `demne` package importable when the dashboard runs from source
+try:
     import demne as _demne  # noqa: F401
-except ModuleNotFoundError:  # pragma: no cover
-    _src = Path(__file__).resolve().parents[2] / "src"
-    if _src.exists() and str(_src) not in sys.path:
-        sys.path.insert(0, str(_src))
+except ModuleNotFoundError as exc:  # pragma: no cover
+    raise ImportError(
+        "The dashboard needs the demne package. From the repository root run:  pip install -e ."
+    ) from exc
 
 from .brat_parser import BratCorpusParser
 from .metrics import DEMO_METRICS, MetricsCalculator
-from .routing import compute_routing
+from .routing import compute_routing, compute_routing_detail
 
-__all__ = ["BratCorpusParser", "DEMO_METRICS", "MetricsCalculator", "compute_routing"]
+__all__ = [
+    "BratCorpusParser",
+    "DEMO_METRICS",
+    "MetricsCalculator",
+    "compute_routing",
+    "compute_routing_detail",
+]

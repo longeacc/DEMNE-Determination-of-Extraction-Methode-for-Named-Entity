@@ -8,6 +8,8 @@ recursive-include scripts *
 recursive-include src/demne *
 recursive-include tests *
 
+# Clinical annotation data must never ship in an sdist (PyPI / Zenodo).
+global-exclude *.ann
 global-exclude __pycache__
 global-exclude *.py[cod]
 global-exclude *.egg-info

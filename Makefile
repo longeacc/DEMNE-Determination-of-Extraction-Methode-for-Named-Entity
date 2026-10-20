@@ -11,8 +11,7 @@ lint:
 	black --check .
 
 evaluate:
-	python main.py metrics
-	python main.py tree --no-visualize
+	python main.py evaluate --no-visualize
 
 dashboard:
 	streamlit run dashboard/app.py

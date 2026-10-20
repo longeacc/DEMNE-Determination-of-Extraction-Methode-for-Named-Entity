@@ -3,7 +3,10 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
-import streamlit as st
+from demne._brat import parse_ann_content
+
+# Characters of text kept on each side of a mention (= risk_window_size default).
+CONTEXT_WINDOW = 50
 
 
 @dataclass
@@ -27,45 +30,32 @@ class BratCorpusParser:
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
 
-    def _extract_context(self, text: str, start: int, end: int, window: int = 50) -> str:
-        ctx_start = max(0, start - window)
-        ctx_end = min(len(text), end + window)
-        return text[ctx_start:ctx_end]
+    def _report_error(self, message: str) -> None:
+        """Show `message` in the Streamlit UI when running under it, else just log it.
+
+        Streamlit is imported lazily so this module (and the parser) work and can be
+        tested without the UI stack installed.
+        """
+        self.logger.error(message)
+        try:
+            import streamlit as st
+        except ImportError:
+            return
+        st.error(message)
 
     def _parse_ann_content(self, ann_content: str, text_content: str) -> list[BratAnnotation]:
-        annotations = []
-        for line in ann_content.splitlines():
-            line = line.strip()
-            if not line or not line.startswith("T"):
-                continue
-
-            parts = line.split("\t")
-            if len(parts) >= 2:
-                ann_id = parts[0]
-                middle = parts[1].split()
-                if len(middle) >= 3:
-                    entity_type = middle[0]
-                    try:
-                        start = int(middle[1])
-                        end = int(middle[-1])
-                    except ValueError:
-                        self.logger.warning("Offset invalide : %s", line)
-                        continue
-
-                    value = parts[2] if len(parts) > 2 else ""
-                    context = self._extract_context(text_content, start, end)
-
-                    annotations.append(
-                        BratAnnotation(
-                            id=ann_id,
-                            entity_type=entity_type,
-                            start=start,
-                            end=end,
-                            value=value,
-                            context=context,
-                        )
-                    )
-        return annotations
+        # Line parsing and context window live in demne._brat (single parser).
+        return [
+            BratAnnotation(
+                id=a.ann_id,
+                entity_type=a.entity_type,
+                start=a.start,
+                end=a.end,
+                value=a.text,
+                context=a.context,
+            )
+            for a in parse_ann_content(ann_content, text_content, CONTEXT_WINDOW)
+        ]
 
     def parse_uploaded_files(self, uploaded_files: list[Any]) -> list[BratDocument]:
         documents = []
@@ -96,7 +86,7 @@ class BratCorpusParser:
     def parse_directory(self, path: str) -> list[BratDocument]:
         documents = []
         if not os.path.isdir(path):
-            st.error(f"Le dossier spécifié n'existe pas : {path}")
+            self._report_error(f"Le dossier spécifié n'existe pas : {path}")
             return documents
 
         files_by_base = {}

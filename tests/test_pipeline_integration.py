@@ -309,3 +309,106 @@ class TestPipelineEndToEnd:
         assert "Global Thresholds" in content
         # At least one entity section must appear
         assert any(ent in content for ent in metrics_db)
+
+
+# ===========================================================================
+# BLOC 4 — main.py command line (sub-commands, removed commands, error paths)
+# ===========================================================================
+def _load_main():
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "main.py"
+    spec = importlib.util.spec_from_file_location("demne_cli_main", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.fixture
+def cli(monkeypatch, tmp_path):
+    """main.py with its config/results paths redirected to a temp folder."""
+    main_mod = _load_main()
+    monkeypatch.setattr(main_mod, "CONFIG_PATH", tmp_path / "decision_config.json")
+    monkeypatch.setattr(main_mod, "RESULTS_DIR", tmp_path / "Results")
+
+    def run(*argv):
+        monkeypatch.setattr("sys.argv", ["main.py", *argv])
+        main_mod.main()
+
+    return run
+
+
+@pytest.fixture
+def decision_config(tmp_path):
+    builder = DecisionTreeBuilder(config_path=tmp_path / "decision_config.json")
+    builder.build_full_config(
+        {
+            "Ki67": {"Te": 0.9, "He": 0.9, "R": 0.1, "Feas": 0.8, "Te_count": 20},
+            "Histologie": {"Te": 0.1, "He": 0.1, "R": 0.1, "Feas": 0.1, "Te_count": 20},
+        }
+    )
+    builder.save_config()
+    return tmp_path / "decision_config.json"
+
+
+def test_cli_info_prints_the_package_version(cli, capsys):
+    import demne
+
+    cli("info")
+    assert f"DEMNE version: {demne.__version__}" in capsys.readouterr().out
+
+
+def test_cli_corpus_lists_entities(cli, capsys, brat_corpus_dir):
+    cli("corpus", "--path", str(brat_corpus_dir))
+    out = capsys.readouterr().out
+    assert "3 documents loaded" in out and "HER2_Status" in out
+
+
+def test_cli_removed_commands_are_rejected(cli):
+    for cmd in ("tree", "export-csv", "rest"):
+        with pytest.raises(SystemExit):
+            cli(cmd)
+    with pytest.raises(SystemExit):
+        cli("rest-config", "--import", "x.json")
+
+
+def test_cli_rest_config_export(cli, decision_config, tmp_path):
+    import json
+
+    out = tmp_path / "exported.json"
+    cli("rest-config", "--export", str(out))
+    payload = json.loads(out.read_text(encoding="utf-8"))
+    assert payload["routings"] == {"Ki67": "RULES", "Histologie": "LLM"}
+
+
+def test_cli_dashboard_presets_are_ordered(cli, decision_config, capsys):
+    """FRUGAL never routes to a costlier tier than CALIBRATED, QUALITY never to a cheaper one."""
+    rank = {"RULES": 0, "TBM": 1, "LLM": 2}
+    methods = {}
+    for preset in ("CALIBRATED", "FRUGAL", "QUALITY"):
+        cli("dashboard", "--preset", preset)
+        lines = [ln for ln in capsys.readouterr().out.splitlines() if "|" in ln][1:]
+        methods[preset] = [rank[ln.split("|")[7].strip()] for ln in lines]
+    assert all(f <= c for f, c in zip(methods["FRUGAL"], methods["CALIBRATED"], strict=True))
+    assert all(q >= c for q, c in zip(methods["QUALITY"], methods["CALIBRATED"], strict=True))
+
+
+def test_cli_dashboard_without_config_explains_what_to_do(cli, capsys):
+    cli("dashboard")
+    assert "evaluate" in capsys.readouterr().out
+
+
+def test_cli_optimize_params_requires_a_mode(cli):
+    with pytest.raises(SystemExit):
+        cli("optimize_params")
+    with pytest.raises(SystemExit):
+        cli("optimize_params", "--in_domain", "--all_corpora")
+
+
+def test_cli_optimize_params_explains_missing_corpora(cli, monkeypatch, tmp_path, capsys):
+    monkeypatch.chdir(tmp_path)  # no data/*_CORPORA here
+    with pytest.raises(SystemExit) as exc:
+        cli("optimize_params", "--in_domain")
+    assert exc.value.code == 2
+    assert "OPT_CORPORA" in capsys.readouterr().err

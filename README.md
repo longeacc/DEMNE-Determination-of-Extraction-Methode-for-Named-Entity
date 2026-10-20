@@ -26,7 +26,7 @@ Not every entity in a French clinical report needs a transformer or an LLM. DEMN
 
 1. **Characterize.** Five metrics are computed per entity type from BRAT annotations: templateability, lexical homogeneity, TF-IDF extractability, contextual risk (negation, uncertainty, contradiction), and a derived NER feasibility score.
 2. **Route.** A deterministic decision graph with four nodes and calibrated thresholds assigns a tier. Rules are chosen only on positive evidence and a safe context; otherwise the entity escalates to a transformer when enough labelled examples exist, and to an LLM as a last resort.
-3. **Calibrate.** The 17 free parameters are optimized with Optuna (NSGA-II) on routing concordance and an asymmetric cost that penalizes under-escalation twice as much as over-escalation. This optimization was run locally by Akram Redjal; the resulting values ship in `data/demne_params.json`, but the optimization script is not part of this repository, so the published thresholds are not reproducible from the code here.
+3. **Calibrate.** The 17 free parameters are optimized with Optuna (NSGA-II) on routing concordance and an asymmetric cost that penalizes under-escalation twice as much as over-escalation. The calibration was first run by Akram Redjal; the resulting values ship in `src/demne/data/demne_params.json`, with a frozen copy in `Results/demne_params_published.json`. You can recalibrate on your own corpora with `python main.py optimize_params` (see [Recalibration](#recalibration)).
 
 Every decision traces back to explicit metric values and thresholds, which makes the routing auditable (EU AI Act, Art. 12 and 14).
 
@@ -65,15 +65,42 @@ python main.py evaluate --gs_dir <path-to-BRAT-corpus>
 
 The REST annotation interface is available as a notebook via `python main.py notebook` (serves `src/demne/REST_interface/REST.ipynb`).
 
+## Recalibration
+
+To retune the thresholds and weights on your own annotated corpora, place them under `data/` in the working directory and run:
+
+```bash
+pip install -e ".[optimize]"
+python main.py optimize_params --in_domain     # target-domain corpora only
+python main.py optimize_params --all_corpora   # also include data/OFF_DOMAIN_CORPORA
+```
+
+`data/OPT_CORPORA/` and `data/TEST_CORPORA/` each hold one folder per corpus: BRAT `.ann`/`.txt` pairs plus a `*_routing.csv` with the expected tier (`RULES`/`TBM`/`LLM`) per entity type. The run reports concordance and cost-score before and after, then updates `demne_params.json`, which the CLI and the dashboard read. The previous file is backed up in `Results/`. To reproduce the published figures, restore `Results/demne_params_published.json`. Folder layout, CSV format and outputs: [docs/OPTIMIZE_PARAMS.md](docs/OPTIMIZE_PARAMS.md).
+
 ## Repository layout
 
 | Path | Content |
 |---|---|
-| `src/demne/` | metrics, decision graph, calibration |
-| `scripts/` | command-line entry points |
+| `src/demne/` | the package, see the module table below |
+| `main.py` | command line (`metrics`, `evaluate`, `dashboard`, `optimize_params`, …) |
+| `scripts/` | maintenance scripts (manifest PDF) |
 | `dashboard/` | Streamlit dashboard |
 | `tests/` | unit tests (run by CI) |
 | `docs/` | documentation |
+
+### Modules of `src/demne/`
+
+| Module | Role |
+|---|---|
+| `templatability.py`, `homogeneity.py`, `frequency.py`, `risk_context.py`, `ner_feasibility.py` | the five per-entity scorers (Te, He, Freq, R, Feas), each a standalone class with `compute_all()` |
+| `tfidf_coverage.py` | TF-IDF extractability: coverage-F1 of the top-X keywords of an entity |
+| `routing.py` | the decision graph, implemented once (`route()`) and used by the CLI and the dashboard |
+| `decision_tree_builder.py` | applies the graph to the metrics, writes `decision_config.json` and the report |
+| `params.py` | thresholds and weights from `demne_params.json`, risk lexicons, derived presets |
+| `optimize_params.py` | Optuna recalibration of `demne_params.json` on your corpora |
+| `_brat.py` | the single BRAT `.ann` parser used everywhere |
+| `_tracking.py` | optional energy tracking with eco2ai (`pip install "demne[energy]"`); a no-op without it |
+| `_table.py`, `visualize_decision_tree.py` | terminal tables and the decision figure |
 
 ## Data and ethics
 
@@ -84,7 +111,7 @@ The AP-HP data used for external validation are pseudonymized, were processed un
 ```bibtex
 @misc{demne2026,
   title  = {DEMNE: Adaptive Selection of Named Entity Extraction Method for Frugal Clinical NLP in Oncology},
-  author = {Longeac, Clément et .al},
+  author = {Longeac, Clément and others},
   year   = {2026},
   note   = {Manuscript in preparation},
   url    = {https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity}

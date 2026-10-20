@@ -162,3 +162,45 @@ class TestLoadBratCorpus:
         corpus = load_brat_corpus([d])
         assert len(corpus) == 1
         assert len(corpus[0]["annotations"]) == 1
+
+
+# ---------------------------------------------------------------------------
+# parse_ann_content / recursive loading
+# ---------------------------------------------------------------------------
+def test_parse_ann_content_keeps_id_and_context():
+    from demne._brat import parse_ann_content
+
+    text = "pas de récidive locale"
+    anns = parse_ann_content("T1\tEvol 7 15\trécidive\nA1\tattr T1 x", text, context_window=4)
+    assert [(a.ann_id, a.entity_type, a.text) for a in anns] == [("T1", "Evol", "récidive")]
+    assert anns[0].context == text[3:19]
+
+
+def test_load_brat_corpus_recursive_and_quiet(tmp_path, capsys):
+    sub = tmp_path / "sub"
+    sub.mkdir()
+    (sub / "d.ann").write_text("T1\tA 0 3\tfoo\n", encoding="utf-8")
+    assert load_brat_corpus([tmp_path], quiet=True) == []  # flat scan ignores sub-folders
+    corpus = load_brat_corpus([tmp_path], recursive=True, quiet=True)
+    assert len(corpus) == 1 and corpus[0]["annotations"][0].text == "foo"
+    assert capsys.readouterr().out == ""
+
+
+def test_dashboard_parser_works_without_streamlit(tmp_path, monkeypatch):
+    """dashboard BratCorpusParser no longer needs Streamlit to import or run."""
+    import importlib.util
+    import sys
+
+    monkeypatch.setitem(sys.modules, "streamlit", None)  # make `import streamlit` fail
+    path = Path(__file__).resolve().parents[1] / "dashboard" / "core" / "brat_parser.py"
+    spec = importlib.util.spec_from_file_location("dash_brat_parser", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    parser = mod.BratCorpusParser()
+    assert parser.parse_directory(str(tmp_path / "missing")) == []  # logs, no crash
+    (tmp_path / "d.txt").write_text("pas de récidive", encoding="utf-8")
+    (tmp_path / "d.ann").write_text("T1\tEvol 7 15\trécidive\n", encoding="utf-8")
+    docs = parser.parse_directory(str(tmp_path))
+    assert docs[0].annotations[0].value == "récidive"
+    assert docs[0].annotations[0].id == "T1"

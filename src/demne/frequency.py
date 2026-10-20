@@ -20,8 +20,10 @@ import csv
 import math
 import os
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 
+from demne._brat import parse_ann_line
 from demne._table import print_table
 from demne._tracking import start_tracker, stop_tracker
 from demne.params import load_params
@@ -36,9 +38,9 @@ class FrequencyScorer:
     Decide whether the data volume is sufficient for statistical NER training.
     """
 
-    def __init__(self, data_dirs):
+    def __init__(self, data_dirs: Sequence[str | Path]) -> None:
         self.data_dirs = [Path(d) for d in data_dirs]
-        self.entity_counts = defaultdict(int)
+        self.entity_counts: defaultdict[str, int] = defaultdict(int)
         self.total_tokens = 0
         self.total_docs = 0
 
@@ -53,7 +55,7 @@ class FrequencyScorer:
 
         return len(re.findall(r"\S+", text))
 
-    def ingest_document(self, text: str, annotation_lines: list[str]):
+    def ingest_document(self, text: str, annotation_lines: list[str]) -> None:
         """
         Update counters for a given document.
         Allows testing the logic without depending on the filesystem.
@@ -64,18 +66,11 @@ class FrequencyScorer:
 
         # 2. Update entity count (frequency numerator)
         for line in annotation_lines:
-            line = line.strip()
-            if line.startswith("T"):
-                parts = line.split("\t")
-                # Format brat: T1  Entity_Type Start End  Text
-                # Sometimes: T1  Entity_Type Start End;Start End Text (discontinuous)
-                if len(parts) >= 2:
-                    # parts[1] contains "Entity_Type Start End"; first token is the type
-                    type_info = parts[1]
-                    etype = type_info.split(" ")[0]
-                    self.entity_counts[etype] += 1
+            ann = parse_ann_line(line)  # handles discontinuous spans, skips A-/R-lines
+            if ann is not None:
+                self.entity_counts[ann.entity_type] += 1
 
-    def compute_all(self):
+    def compute_all(self) -> None:
         """Scan the corpus to count tokens and entities via ingest_document."""
         print("Scanning corpus for frequencies...")
 
@@ -101,7 +96,7 @@ class FrequencyScorer:
 
         print(f"Total Corpus: {self.total_docs} docs, {self.total_tokens} words.")
 
-    def get_stats(self):
+    def get_stats(self) -> list[dict]:
         """Generate computed statistics."""
         results = []
         for etype, count in self.entity_counts.items():
@@ -125,7 +120,7 @@ class FrequencyScorer:
 
         return sorted(results, key=lambda x: x["Frequency"], reverse=True)
 
-    def draw_histogram(self, results):
+    def draw_histogram(self, results: list[dict]) -> None:
         """Draw a logarithmic ASCII histogram."""
         print("\n=== FREQUENCY DISTRIBUTION (Log Scale) ===")
         rows = []
@@ -137,7 +132,8 @@ class FrequencyScorer:
             rows.append([r["Entity"], str(count), "█" * bar_len])
         print_table(["Entity", "Count", "Hist (Log Scale)"], rows, [45, 6, 16])
 
-    def to_csv(self, output_path):
+    def to_csv(self, output_path: str | Path) -> None:
+        """Write the per-entity frequency table to `output_path` (CSV)."""
         data = self.get_stats()
         with open(output_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
@@ -162,7 +158,8 @@ class FrequencyScorer:
 # ==================================================================================
 # MAIN EXECUTION
 # ==================================================================================
-def main():
+def main() -> None:
+    """CLI entry point: writes Results/frequency_analysis_<corpus>.csv."""
     import argparse
 
     _tracker = start_tracker("DEMNE-frequency", "Calculating Entity Frequency")

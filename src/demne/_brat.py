@@ -1,16 +1,14 @@
 """Unified BRAT corpus parser -- single source of truth.
 
-Replaces the four divergent BRAT loaders that were scattered across
-E_templatability, E_homogeneity, E_frequency, and E_risk_context.
-Each scorer now calls ``load_brat_corpus`` with the options it needs.
-
-The dashboard ``BratCorpusParser`` (dashboard/core/brat_parser.py) keeps
-its own class because it handles Streamlit uploads, but it could delegate
-line parsing to ``parse_ann_line`` in the future.
+Every consumer parses T-lines with :func:`parse_ann_line` /
+:func:`parse_ann_content`: the scorers (via ``load_brat_corpus``), the TF-IDF
+coverage metric, the frequency scorer, the optimizer and the dashboard
+``BratCorpusParser`` (which only adds Streamlit upload handling on top).
 """
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -26,6 +24,7 @@ class BratAnnotation:
     entity_type: str
     file_id: str | None = None
     context: str = ""
+    ann_id: str = ""
 
 
 def parse_ann_line(line: str) -> BratAnnotation | None:
@@ -51,16 +50,49 @@ def parse_ann_line(line: str) -> BratAnnotation | None:
             end_str = info[-1]
         end = int(end_str)
         text = parts[2]
-        return BratAnnotation(start=start, end=end, text=text, entity_type=entity_type)
+        return BratAnnotation(
+            start=start, end=end, text=text, entity_type=entity_type, ann_id=parts[0]
+        )
     except (IndexError, ValueError):
         return None
 
 
+def parse_ann_content(
+    ann_content: str, text: str = "", context_window: int = 0
+) -> list[BratAnnotation]:
+    """Parse the whole content of one ``.ann`` file.
+
+    If ``context_window`` > 0 and ``text`` is given, each annotation gets
+    ``context_window`` characters of ``text`` on both sides in ``.context``.
+    """
+    out: list[BratAnnotation] = []
+    for raw_line in ann_content.splitlines():
+        ann = parse_ann_line(raw_line)
+        if ann is None:
+            continue
+        if context_window > 0 and text:
+            ann.context = text[
+                max(0, ann.start - context_window) : min(len(text), ann.end + context_window)
+            ]
+        out.append(ann)
+    return out
+
+
+def read_text(path: Path) -> str:
+    """Read a UTF-8 file, falling back to latin-1 on decoding errors."""
+    try:
+        return path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return path.read_text(encoding="latin-1", errors="replace")
+
+
 def load_brat_corpus(
-    data_dirs: list[str | Path],
+    data_dirs: Sequence[str | Path],
     *,
     include_text: bool = False,
     context_window: int = 0,
+    recursive: bool = False,
+    quiet: bool = False,
 ) -> list[dict[str, Any]]:
     """Load BRAT ``.ann`` + ``.txt`` files into a corpus list.
 
@@ -73,6 +105,10 @@ def load_brat_corpus(
     context_window:
         If > 0, extract *context_window* characters around each annotation
         and store it in ``annotation.context``.
+    recursive:
+        If ``True``, also scan sub-folders.
+    quiet:
+        If ``True``, print neither the missing-folder warning nor the summary.
 
     Returns
     -------
@@ -85,31 +121,25 @@ def load_brat_corpus(
     for d in data_dirs:
         path = Path(d)
         if not path.exists():
-            print(f"Warning: {path} does not exist.")
+            if not quiet:
+                print(f"Warning: {path} does not exist.")
             continue
 
-        for ann_file in sorted(path.glob("*.ann")):
-            if ann_file.name in processed:
+        ann_files = path.rglob("*.ann") if recursive else path.glob("*.ann")
+        for ann_file in sorted(ann_files):
+            key = str(ann_file.relative_to(path)) if recursive else ann_file.name
+            if key in processed:
                 continue
-            processed.add(ann_file.name)
+            processed.add(key)
 
             text_content = ""
             txt_file = ann_file.with_suffix(".txt")
             if (include_text or context_window > 0) and txt_file.exists():
-                with open(txt_file, encoding="utf-8") as fh:
-                    text_content = fh.read()
+                text_content = read_text(txt_file)
 
-            annotations: list[BratAnnotation] = []
-            with open(ann_file, encoding="utf-8") as fh:
-                for raw_line in fh:
-                    ann = parse_ann_line(raw_line)
-                    if ann is not None:
-                        ann.file_id = ann_file.name
-                        if context_window > 0 and text_content:
-                            ctx_start = max(0, ann.start - context_window)
-                            ctx_end = min(len(text_content), ann.end + context_window)
-                            ann.context = text_content[ctx_start:ctx_end]
-                        annotations.append(ann)
+            annotations = parse_ann_content(read_text(ann_file), text_content, context_window)
+            for ann in annotations:
+                ann.file_id = ann_file.name
 
             doc: dict[str, Any] = {
                 "file_id": ann_file.name,
@@ -119,5 +149,6 @@ def load_brat_corpus(
                 doc["text"] = text_content
             corpus.append(doc)
 
-    print(f"Loaded {len(corpus)} documents.")
+    if not quiet:
+        print(f"Loaded {len(corpus)} documents.")
     return corpus

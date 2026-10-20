@@ -130,7 +130,7 @@ class HomogeneityScorer:
             scores[entity] = self.compute(entity)
         return scores
 
-    def to_csv(self, output_path: str):
+    def to_csv(self, output_path: str | Path) -> None:
         """Save analysis to CSV."""
         scores = self.compute_all()
         rows: list[dict[str, float | str | int]] = []
@@ -176,7 +176,8 @@ class HomogeneityScorer:
 # ==================================================================================
 # MAIN EXECUTION
 # ==================================================================================
-def main():
+def main() -> None:
+    """CLI entry point: writes Results/homogeneity_analysis_<corpus>.csv."""
     import argparse
 
     _tracker = start_tracker("DEMNE-homogeneity", "Calculating Linguistic Homogeneity")

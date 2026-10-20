@@ -21,22 +21,17 @@ from unittest.mock import MagicMock
 import pytest
 
 # ---------------------------------------------------------------------------
-# eco2ai mock — must be installed BEFORE any demne import so that the
-# module-level `from eco2ai import Tracker` inside each E_*.py never fails.
-# session scope = installed once, shared across all tests in the run.
+# eco2ai mock — must be installed BEFORE any demne import: test modules import
+# demne at COLLECTION time, i.e. before any fixture runs, so this has to execute
+# when conftest.py itself is imported (a session fixture would come too late).
 # ---------------------------------------------------------------------------
+_ECO2AI_MOCK = sys.modules.setdefault("eco2ai", MagicMock())
 
 
 @pytest.fixture(scope="session", autouse=True)
 def eco2ai_mock():
-    """
-    Intercept eco2ai at import time for the whole test session.
-
-    autouse=True means every test gets this automatically — no need to
-    request it explicitly. This replaces the per-file `sys.modules["eco2ai"]
-    = MagicMock()` lines that were scattered across test files.
-    """
-    sys.modules.setdefault("eco2ai", MagicMock())
+    """The session-wide eco2ai mock (installed at import time, see above)."""
+    return _ECO2AI_MOCK
 
 
 # ---------------------------------------------------------------------------

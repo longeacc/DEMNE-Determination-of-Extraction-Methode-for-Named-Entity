@@ -20,7 +20,14 @@ from pathlib import Path
 from demne._brat import load_brat_corpus
 from demne._table import print_table
 from demne._tracking import start_tracker, stop_tracker
-from demne.params import load_params
+from demne.params import (
+    NEGATION_PATTERNS,
+    UNCERTAINTY_PATTERNS,
+    VAL_NEG,
+    VAL_POS,
+    has_contradiction,
+    load_params,
+)
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth) ---
 PARAMS = load_params()
@@ -45,50 +52,12 @@ class RiskContextScorer:
         # Analysis window: number of characters to read around the entity
         self.WINDOW_SIZE = PARAMS["risk_window_size"]
 
-        # 1. Negation patterns (slight R increase)
-        # Deliberately restrictive: "pas", "ni", "non" alone over-detect
-        # (e.g. "non surexprimé" is an expected clinical state).
-        # "négatif" / "negatif" excluded intentionally: expected clinical state
-        # (PR-, HER2-), not a contextual risk signal.
-        # DOIT rester identique à MetricsCalculator (dashboard/core/metrics.py) :
-        # les seuils sont calibrés sur ce lexique, et main.py doit router comme le
-        # dashboard. Toute divergence ici fait diverger les deux chemins.
-        self.NEGATION_PATTERNS = [
-            r"\baucun\b",
-            r"\bsans\b",
-            r"\bni\b",
-            r"\bpas\b",
-            r"\babsence\b",
-        ]
-
-        # 2. Uncertainty patterns (strong R increase)
-        self.UNCERTAINTY_PATTERNS = [
-            r"\bprobable\b",
-            r"\bpossible\b",
-            r"\bà confirmer\b",
-            r"\ba confirmer\b",
-            r"\bsuspecté\b",
-            r"\bsuspecte\b",
-            r"\béquivoque\b",
-            r"\bequivoque\b",
-            r"\bdiscuté\b",
-            r"\bincertain\b",
-            r"\bhypothèse\b",
-            r"\?",
-            r"\bdiscordant\b",
-            r"\bdiscordance\b",
-        ]
-
-        # 3. Terms for contradiction detection (Positive vs Negative)
-        self.VAL_POS = {r"positif", r"positive", r"\+", r"pos", r"exprimé", r"present"}
-        self.VAL_NEG = {
-            r"négatif",
-            r"negative",
-            r"\-",
-            r"neg",
-            r"absent",
-            r"non exprimé",
-        }
+        # Lexicons shared with the dashboard and the optimizer (demne.params): the
+        # thresholds are calibrated on them, so there is exactly one copy.
+        self.NEGATION_PATTERNS = list(NEGATION_PATTERNS)
+        self.UNCERTAINTY_PATTERNS = list(UNCERTAINTY_PATTERNS)
+        self.VAL_POS = set(VAL_POS)
+        self.VAL_NEG = set(VAL_NEG)
 
         # R(E) = min(1, α_R · f_neg + β_R · f_unc + γ_R · f_fam)
         _rw = PARAMS["risk_weights"]
@@ -101,8 +70,12 @@ class RiskContextScorer:
             "contradiction": self.GAMMA_R,
         }
 
-    def _learn_weights(self, annotated_data: list[tuple[int, int, int, int]]):
+    def _learn_weights(self, annotated_data: list[tuple[int, int, int, int]]) -> None:
         """
+        EXPERIMENTAL, not wired to any command: needs REAL ground-truth labels.
+        (A former `--learn_weights` flag fed it random labels, so it was removed;
+        use `main.py optimize_params` to calibrate the R weights.)
+
         Learn R weights via Logistic Regression on a validation set
         (Chapman et al., 2001 - weighted NegEx-style approach).
         annotated_data: list of tuples (has_neg, has_uncert, has_contradiction, is_risky_ground_truth)
@@ -128,26 +101,26 @@ class RiskContextScorer:
             print(f"Error during weight learning: {e}")
 
     def is_negation_risky(self, value: str, context: str) -> bool:
-        """La négation constitue-t-elle un RISQUE pour l'extraction par règles ?
+        """Is the negation a RISK for rule-based extraction?
 
-        Elle ne l'est que si le marqueur porte sur l'entité SANS figurer dans la
-        mention :
-        - marqueur DANS la mention ("Absence d'emboles") → la règle le capture
-          aussi : la négation fait partie du motif, ce n'est pas un risque ;
-        - marqueur HORS PORTÉE (au-delà de scope_tokens avant la mention, ou situé
-          après elle) → il ne nie pas l'entité : "ménopausée depuis 48 ans, pas de
-          THM" — le « pas » porte sur THM ;
-        - marqueur EN PORTÉE et hors mention ("pas de récidive") → la règle extrait
-          l'entité et rate la négation : risque.
+        It is only if the marker bears on the entity WITHOUT being part of the
+        mention:
+        - marker INSIDE the mention ("Absence d'emboles") → the rule captures it too:
+          the negation is part of the pattern, not a risk;
+        - marker OUT OF SCOPE (further than scope_tokens before the mention, or after
+          it) → it does not negate the entity: "ménopausée depuis 48 ans, pas de
+          THM" — the « pas » bears on THM;
+        - marker IN SCOPE and outside the mention ("pas de récidive") → the rule
+          extracts the entity and misses the negation: risk.
 
-        DOIT rester identique à MetricsCalculator (drift-guard).
+        MUST stay identical to MetricsCalculator (drift-guard).
         """
         val = (value or "").lower().strip()
         ctx = (context or val).lower()
         if not val:
             return False
         if any(re.search(pat, val) for pat in self.NEGATION_PATTERNS):
-            return False  # négation dans la mention → capturée par la règle
+            return False  # negation inside the mention → captured by the rule
         idx = ctx.find(val)
         before = ctx[:idx] if idx >= 0 else ctx
         scope = int(PARAMS["risk_weights"].get("scope_tokens", 6))
@@ -155,9 +128,9 @@ class RiskContextScorer:
         return any(re.search(pat, window) for pat in self.NEGATION_PATTERNS)
 
     def has_negation(self, text: str, entity_type: str = "") -> bool:
-        """Marqueur de négation présent dans `text` (sans analyse de portée).
+        """Negation marker present in `text` (no scope analysis).
 
-        Ne pas utiliser pour le calcul de R : voir `is_negation_risky`.
+        Do not use it to compute R: see `is_negation_risky`.
         """
         text = text.lower()
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
@@ -204,7 +177,7 @@ class RiskContextScorer:
 
         return self.compute_score_from_stats(negated, uncertain, total, contradicted_rate=0.0)
 
-    def _load_data(self):
+    def _load_data(self) -> None:
         """Load .ann and .txt files to build annotation context via unified parser."""
         print("Loading data (Annotations + Text)...")
         corpus = load_brat_corpus(
@@ -223,19 +196,7 @@ class RiskContextScorer:
 
     def _check_contradiction(self, entries: list[dict]) -> bool:
         """Detect whether an entity has contradictory values within the SAME document."""
-        has_pos = False
-        has_neg = False
-
-        for e in entries:
-            txt = e["value_text"]
-            # Check POS
-            if any(re.search(p, txt) for p in self.VAL_POS):
-                has_pos = True
-            # Check NEG
-            if any(re.search(p, txt) for p in self.VAL_NEG):
-                has_neg = True
-
-        return has_pos and has_neg
+        return has_contradiction([e["value_text"] for e in entries])
 
     def compute_all(self) -> list[dict]:
         """Compute the aggregated R score per entity type."""
@@ -258,8 +219,8 @@ class RiskContextScorer:
                 entity_stats[etype]["total"] += 1
                 entity_docs[etype][filename].append(entry)
 
-                # Négation AVEC analyse de portée : un simple mot-clé sur toute la
-                # fenêtre donne jusqu'à 100 % de faux positifs en texte clinique.
+                # Negation WITH scope analysis: a plain keyword over the whole window
+                # gives up to 100 % false positives on clinical text.
                 if self.is_negation_risky(entry.get("value_text", ""), ctx):
                     entity_stats[etype]["negated"] += 1
 
@@ -312,7 +273,8 @@ class RiskContextScorer:
 
         return sorted(results, key=lambda x: x["R_Score"], reverse=True)
 
-    def to_csv(self, output_path: Path):
+    def to_csv(self, output_path: Path) -> None:
+        """Write the per-entity R table to `output_path` (CSV)."""
         data = self.compute_all()
         with open(output_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
@@ -338,7 +300,8 @@ class RiskContextScorer:
 # ==================================================================================
 # MAIN EXECUTION
 # ==================================================================================
-def main(learn_weights=False):
+def main() -> None:
+    """CLI entry point: writes Results/risk_context_analysis_<corpus>.csv."""
     import argparse
 
     _tracker = start_tracker("DEMNE-risk_context", "Calculating Contextual Risk")
@@ -346,10 +309,7 @@ def main(learn_weights=False):
     parser = argparse.ArgumentParser()
     parser.add_argument("--gs_dir", type=str, default=None)
     parser.add_argument("--pred_dir", type=str, default=None)
-    parser.add_argument("--learn_weights", action="store_true")
     args, _ = parser.parse_known_args()
-
-    learn_weights = args.learn_weights or learn_weights
 
     # RELATIVE PATHS
     script_dir = Path(__file__).parent
@@ -370,24 +330,6 @@ def main(learn_weights=False):
 
     print("=== Starting Risk Context (R) analysis ===")
     scorer = RiskContextScorer(data_dirs)
-
-    if learn_weights:
-        print("--- Weight learning mode (LR Calibration) ---")
-        import numpy as np
-
-        scorer.compute_all()  # populate entities_stats
-        entities = list(scorer.entities_stats.keys())
-        if entities:
-            x = []
-            for ent in entities:
-                stats = scorer.entities_stats[ent]
-                x.append([stats["f_neg"], stats["f_unc"], stats["f_cont"]])
-            y = np.random.randint(0, 2, size=len(x)).tolist()  # mockup labels
-            annotated = [
-                (row[0], row[1], row[2], int(label)) for row, label in zip(x, y, strict=False)
-            ]
-            scorer._learn_weights(annotated)  # pylint: disable=protected-access
-            print(f"Newly learned weights: {scorer.weights}")
 
     scorer.to_csv(output_file)
 

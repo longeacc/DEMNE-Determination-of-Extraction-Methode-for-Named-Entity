@@ -1,62 +1,48 @@
-"""DEMNE routing — exact graph matching the reference figure.
+"""DEMNE routing for the dashboard — thin adapter over the canonical graph.
 
-The R− node is SHARED between the Te/He branch and the TF-IDF branch.
-TF-IDF 'Yes' does NOT route directly to RULES: it first passes through R−.
+The graph itself lives once, in :func:`demne.routing.route` (shared R− node between
+the Te/He branch and the TF-IDF branch). This module only maps the dashboard's
+metric/threshold dicts onto it, in two flavours:
+
+* :func:`compute_routing_detail` — the full result, exactly as the CLI sees it
+  (``{"method", "justification", "trace"}``);
+* :func:`compute_routing` — the ``(method, justification)`` tuple the dashboard
+  pages unpack.
 """
 
 from demne.params import load_params
+from demne.routing import route
 
 # Default thresholds = data/demne_params.json (single source shared by CLI/scorers/dashboard)
 _DT = load_params()["decision_thresholds"]
 
 
-def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> tuple[str, str]:
-    """DEMNE decision graph — shared R− node.
-
-    Graph (reference figure):
-      Te++ AND He++ → R− → R≤R_HIGH: RULES / R>R_HIGH: Feas++
-      otherwise     → TF-IDF ?
-                         score≥Y → R− (same node!) → RULES / Feas++
-                         score<Y or absent → Feas++
-      Feas++ → Feas≥FEAS_NER: TBM / otherwise: LLM
+def compute_routing_detail(
+    metrics: dict[str, float], thresholds: dict[str, float]
+) -> dict[str, object]:
+    """Route one entity and return ``{"method", "justification", "trace"}``.
 
     Args:
-        metrics: {Te, He, R, Feas, tfidf_score (optional)} on scale [0-1].
-        thresholds: {Te, He, R, Feas, Y (optional)} on scale [0-1].
-
-    Returns:
-        Tuple (method, justification).
+        metrics: {Te, He, R, Feas, tfidf_score (optional)} on scale [0-1]
+            (lower-case keys are accepted too).
+        thresholds: {Te, He, R, Feas, Y (optional)} on scale [0-1]; missing keys fall
+            back to demne_params.json.
     """
-    te: float = metrics.get("Te", metrics.get("te", 0.0))
-    he: float = metrics.get("He", metrics.get("he", 0.0))
-    r: float = metrics.get("R", metrics.get("r", 0.0))
-    feas: float = metrics.get("Feas", metrics.get("feas", 0.0))
+    return route(
+        te=metrics.get("Te", metrics.get("te", 0.0)),
+        he=metrics.get("He", metrics.get("he", 0.0)),
+        r=metrics.get("R", metrics.get("r", 0.0)),
+        feas=metrics.get("Feas", metrics.get("feas", 0.0)),
+        tfidf_score=metrics.get("tfidf_score"),
+        te_high=thresholds.get("Te", _DT["TE_HIGH"]),
+        he_high=thresholds.get("He", _DT["HE_HIGH"]),
+        r_high=thresholds.get("R", _DT["R_HIGH"]),
+        feas_ner=thresholds.get("Feas", _DT["FEAS_NER"]),
+        tfidf_y=thresholds.get("Y", _DT.get("TFIDF_Y", 0.70)),
+    )
 
-    t_te: float = thresholds.get("Te", _DT["TE_HIGH"])
-    t_he: float = thresholds.get("He", _DT["HE_HIGH"])
-    t_r: float = thresholds.get("R", _DT["R_HIGH"])
-    t_feas: float = thresholds.get("Feas", _DT["FEAS_NER"])
-    t_y: float = thresholds.get("Y", _DT.get("TFIDF_Y", 0.70))
-    tfidf_routing = metrics.get("tfidf_score")
-    tfidf_label = "recall"
 
-    def _noeud_feas() -> tuple[str, str]:
-        if feas >= t_feas:
-            return "TBM", f"Feas={feas:.3f}≥{t_feas}"
-        return "LLM", "RULES and TBM conditions not met"
-
-    def _noeud_r(label: str) -> tuple[str, str]:
-        if r <= t_r:
-            return "RULES", f"{label} — R={r:.3f}≤{t_r}"
-        return _noeud_feas()
-
-    # Te++ AND He++ branch
-    if te >= t_te and he >= t_he:
-        return _noeud_r(f"Te={te:.2f}≥{t_te}, He={he:.2f}≥{t_he}")
-
-    # TF-IDF branch (conceptual synonymy) — He → TFIDF → R → RULES/Feas
-    if tfidf_routing is not None and tfidf_routing >= t_y:
-        return _noeud_r(f"TFIDF {tfidf_label}={tfidf_routing:.3f}≥Y={t_y}")
-
-    # Feas++ convergence point
-    return _noeud_feas()
+def compute_routing(metrics: dict[str, float], thresholds: dict[str, float]) -> tuple[str, str]:
+    """Same routing as :func:`compute_routing_detail`, as ``(method, justification)``."""
+    result = compute_routing_detail(metrics, thresholds)
+    return str(result["method"]), str(result["justification"])

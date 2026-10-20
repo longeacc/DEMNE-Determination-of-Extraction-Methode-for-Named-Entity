@@ -1,5 +1,28 @@
 # Changelog
 
+## [Unreleased]
+### Added
+
+- `python main.py optimize_params --in_domain | --all_corpora`: Optuna recalibration of `demne_params.json` on user corpora (`data/*_CORPORA/`, extra `[optimize]`), see `docs/OPTIMIZE_PARAMS.md`
+- Presets `CALIBRATED` / `FRUGAL` / `QUALITY` derived from the calibrated thresholds (`preset_margin`) instead of stored absolute values
+- Extra `[energy]` for eco2ai
+- Tests for the `main.py` sub-commands, the dashboard metrics/parser and the scorers' output files; coverage 70 % → 83 %, floor 75 %
+- mypy `disallow_untyped_defs` on the package (all functions annotated) and public docstrings
+
+### Changed
+
+- Removed commands `tree`, `export-csv`, `rest` and `rest-config --import`
+- `eco2ai` is now an optional dependency (`demne._tracking` is a no-op without it)
+- One BRAT parser (`demne._brat`) for the scorers, frequency, TF-IDF coverage, optimizer and the dashboard parser
+- One copy of the risk lexicons (`demne.params`) for the CLI scorer, the dashboard and the optimizer
+- Dashboard R now includes the contradiction term, as the CLI scorer does (it was fixed to 0)
+- Dashboard entity preselection comes from `data/decision_config.json` instead of a hardcoded list
+- `main.py info` reads `demne.__version__`
+
+### Fixed
+
+- Annotation files (`*.ann`) could ship in the wheel/sdist: removed from `package-data`, excluded in `MANIFEST.in`
+
 ## [0.4.0] - 2026-05-29
 ### Changed
 

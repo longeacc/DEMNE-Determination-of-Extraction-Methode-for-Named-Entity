@@ -37,11 +37,16 @@ desktop.ini
 *.tar.gz
 data/*
 !data/README.md
+# Recalibration layout (python main.py optimize_params): folders versioned, corpora not
+!data/*_CORPORA/
+data/*_CORPORA/*
+!data/*_CORPORA/.gitkeep
 models/
 NER/models/
 
 # === Résultats générés ===
 Results/*
+!Results/demne_params_published.json
 !Results/figures/
 Results/figures/*
 !Results/figures/front_pareto_exemple.png

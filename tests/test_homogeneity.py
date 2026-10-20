@@ -45,3 +45,13 @@ def test_homogeneity_mixed():
 
     score_mixed = scorer.compute_from_list(data_mixed)
     assert score_mixed > 0.9
+
+
+def test_to_csv_writes_one_row_per_entity(tmp_path, brat_corpus):
+    import csv
+
+    scorer = HomogeneityScorer(brat_corpus)
+    out = tmp_path / "he.csv"
+    scorer.to_csv(out)
+    rows = list(csv.DictReader(out.open(encoding="utf-8")))
+    assert {r["Entity"] for r in rows} == {"HER2_Status", "ER_Status", "PR_Status"}

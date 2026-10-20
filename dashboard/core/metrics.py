@@ -1,96 +1,81 @@
+import json
 import math
 import re
 from collections import Counter
+from pathlib import Path
 from typing import Any
 
-from demne.params import load_params
+from demne.params import (
+    NEGATION_PATTERNS,
+    UNCERTAINTY_PATTERNS,
+    has_contradiction,
+    load_params,
+)
 
 # --- Tunable weights loaded from data/demne_params.json (single source of truth).
 # Same file the CLI scorers read → dashboard and command line can never drift. ---
 PARAMS = load_params()
 
-ENTITIES = [
-    "Histologie_tumorale",
-    "Traitement_specifique_du_cancer",
-    "Signes_physiques",
-    "Evolutivite_en_lien_avec_le_cancer",
-    "Reponse_a_la_chimiotherapie",
-    "Stade_metastatique_avec_localisations",
-    "Statut_tabagique",
-    "ATCD_geriatriques_et_medicaux_significatifs_pour_la_prise_en_charge",
-    "Stade_OMS_ECOG_Karnofsky",
-    "Biomarqueurs_therapeutiques",
-    "Topographie_du_primitif",
-    "Symptomes",
-]
+_DECISION_CONFIG = Path(__file__).resolve().parents[2] / "data" / "decision_config.json"
+
+
+def default_entities() -> list[str]:
+    """Entities to preselect: those of the last pipeline run (data/decision_config.json),
+    else the demo entities. Never a hardcoded list that goes stale."""
+    try:
+        cfg = json.loads(_DECISION_CONFIG.read_text(encoding="utf-8"))
+        found = list(cfg.get("entities", {}))
+    except (OSError, ValueError):
+        found = []
+    return found or list(DEMO_METRICS)
 
 
 class MetricsCalculator:
-    # Défaut si absent de la config (portée de la négation, en tokens).
+    # Default if absent from the config (negation scope, in tokens).
     NEG_SCOPE_TOKENS = 6
 
     def __init__(self, params: dict | None = None):
         # params defaults to the shared config; the optimizer passes trial-specific
         # weights/thresholds here so the SAME formulas are reused (no drift).
         self.params = params if params is not None else PARAMS
-        self.NEGATION_PATTERNS = [
-            r"\baucun\b",
-            r"\bsans\b",
-            r"\bni\b",
-            r"\bpas\b",
-            r"\babsence\b",
-        ]
-        self.UNCERTAINTY_PATTERNS = [
-            r"\bprobable\b",
-            r"\bpossible\b",
-            r"\bà confirmer\b",
-            r"\ba confirmer\b",
-            r"\bsuspecté\b",
-            r"\bsuspecte\b",
-            r"\béquivoque\b",
-            r"\bequivoque\b",
-            r"\bdiscuté\b",
-            r"\bincertain\b",
-            r"\bhypothèse\b",
-            r"\?",
-            r"\bdiscordant\b",
-            r"\bdiscordance\b",
-        ]
+        # Lexicons shared with the CLI scorer and the optimizer (demne.params).
+        self.NEGATION_PATTERNS = list(NEGATION_PATTERNS)
+        self.UNCERTAINTY_PATTERNS = list(UNCERTAINTY_PATTERNS)
 
     def has_negation(self, text: str) -> bool:
-        """Marqueur de négation présent dans `text` (sans analyse de portée).
+        """Negation marker present in `text` (no scope analysis).
 
-        Ne pas utiliser pour le calcul de R : voir `is_negation_risky`.
+        Do not use it to compute R: see `is_negation_risky`.
         """
         return any(re.search(pat, text) for pat in self.NEGATION_PATTERNS)
 
     def neg_scope_tokens(self) -> int:
-        """Portée de la négation (tokens avant la mention) — calibrée, cf. params."""
+        """Negation scope (tokens before the mention) — calibrated, see params."""
         return int(self.params["risk_weights"].get("scope_tokens", self.NEG_SCOPE_TOKENS))
 
     def is_negation_risky(self, value: str, context: str) -> bool:
-        """La négation constitue-t-elle un RISQUE pour l'extraction par règles ?
+        """Is the negation a RISK for rule-based extraction?
 
-        Une négation n'est risquée que si une règle extrairait la mauvaise valeur,
-        c'est-à-dire si le marqueur porte sur l'entité SANS figurer dans la mention :
+        A negation is risky only if a rule would extract the wrong value, i.e. if the
+        marker bears on the entity WITHOUT being part of the mention:
 
-        - marqueur DANS la mention ("Absence d'emboles tumoraux") → la règle le
-          capture aussi : la négation fait partie du motif, ce n'est pas un risque ;
-        - marqueur HORS PORTÉE (au-delà de NEG_SCOPE_TOKENS avant la mention, ou
-          situé après elle) → il ne nie pas l'entité : "ménopausée depuis 48 ans,
-          pas de THM" — le « pas » porte sur THM ;
-        - marqueur EN PORTÉE et hors mention ("pas de récidive" pour l'entité
-          « récidive ») → la règle extrait « récidive » et rate la négation : risque.
+        - marker INSIDE the mention ("Absence d'emboles tumoraux") → the rule captures
+          it too: the negation is part of the pattern, not a risk;
+        - marker OUT OF SCOPE (further than NEG_SCOPE_TOKENS before the mention, or
+          after it) → it does not negate the entity: "ménopausée depuis 48 ans,
+          pas de THM" — the « pas » bears on THM;
+        - marker IN SCOPE and outside the mention ("pas de récidive" for the entity
+          « récidive ») → the rule extracts « récidive » and misses the negation: risk.
 
-        Une simple recherche de mot-clé sur toute la fenêtre de contexte produit
-        jusqu'à 100 % de faux positifs sur du texte clinique dense.
+        A plain keyword search over the whole context window yields up to 100 % false
+        positives on dense clinical text.
         """
         val = (value or "").lower().strip()
         ctx = (context or val).lower()
         if not val:
             return False
         if any(re.search(pat, val) for pat in self.NEGATION_PATTERNS):
-            return False  # négation dans la mention → capturée par la règle
+            return False  # negation inside the mention → captured by the rule
         idx = ctx.find(val)
         before = ctx[:idx] if idx >= 0 else ctx
         window = " ".join(before.split()[-self.neg_scope_tokens() :])
@@ -102,11 +87,16 @@ class MetricsCalculator:
     def compute_all_metrics(self, documents: list[Any], entity_type: str) -> dict[str, float]:
         annotations = []
         doc_count = 0
+        contradicted_docs = 0
         for doc in documents:
             doc_anns = [a for a in doc.annotations if a.entity_type == entity_type]
             if doc_anns:
                 doc_count += 1
                 annotations.extend(doc_anns)
+                # Contradiction = both a positive and a negative value for this
+                # entity inside the SAME document (same rule as the CLI scorer).
+                if has_contradiction([a.value.lower() for a in doc_anns]):
+                    contradicted_docs += 1
 
         if not annotations:
             return {
@@ -137,16 +127,16 @@ class MetricsCalculator:
             }
 
         # 1. Te [0.0 - 1.0] - Abstraction and Entropy
-        # Templatabilité = forme CONSTANTE, indépendante de la casse et de la longueur.
-        # Lettre→L (casse-insensible) puis collapse des répétitions (LLD == LLLD,
-        # "SEIN   DROIT" == "SEIN DROIT") : sinon la casse/longueur gonflent le nombre
-        # de patterns → entropie haute → Te artificiellement bas. Symboles (%,+,-…)
-        # conservés pour le bonus_semantic.
+        # Templatability = CONSTANT form, independent of case and length.
+        # Letter→L (case-insensitive) then collapse repeats (LLD == LLLD,
+        # "SEIN   DROIT" == "SEIN DROIT"): otherwise case/length inflate the number
+        # of patterns → high entropy → artificially low Te. Symbols (%,+,-…) are
+        # kept for the semantic bonus.
         normalized_patterns = []
         for v in values:
-            # Lettres AVANT chiffres : sinon [A-Za-z]→L écraserait le marqueur 'D'
-            # (D est une lettre) et digits/lettres deviendraient indiscernables
-            # (has_digit toujours faux, digit_bonus inerte).
+            # Letters BEFORE digits: otherwise [A-Za-z]→L would overwrite the marker 'D'
+            # (D is a letter) and digits/letters would become indistinguishable
+            # (has_digit always false, digit_bonus inert).
             v_norm = re.sub(r"[A-Za-zÀ-ÖØ-Þß-ÿ]", "L", v)
             v_norm = re.sub(r"[0-9]", "D", v_norm)
             v_norm = re.sub(r"(.)\1+", r"\1", v_norm)
@@ -198,16 +188,14 @@ class MetricsCalculator:
             he = min(1.0, max(0.0, he_raw))
 
         # 3. R [0.0 - 1.0] - R(E) = min(1, α_R·f_neg + β_R·f_unc + γ_R·f_cont)
-        # Same weights as the CLI scorer (risk_context.py) via shared config.
-        # f_cont (contradiction) needs document-level analysis the dashboard does not
-        # run on this short-text view → its rate is 0 here, identical to the CLI's
-        # per-call default (compute_score_from_stats(..., contradicted_rate=0.0)).
-        # La négation est comptée AVEC analyse de portée (is_negation_risky) : un
-        # simple mot-clé sur toute la fenêtre donne jusqu'à 100 % de faux positifs
-        # (« ménopausée depuis 48 ans, pas de THM » → le « pas » porte sur THM).
+        # Same weights and lexicons as the CLI scorer (risk_context.py).
+        # f_cont = share of documents holding contradictory values for the entity.
+        # Negation is counted WITH scope analysis (is_negation_risky): a plain keyword
+        # over the whole window gives up to 100 % false positives
+        # («ménopausée depuis 48 ans, pas de THM» → the «pas» bears on THM).
         _rw = self.params["risk_weights"]
         alpha_r, beta_r, gamma_r = _rw["negation"], _rw["uncertainty"], _rw["contradiction"]
-        contradicted_rate = 0.0
+        contradicted_rate = contradicted_docs / doc_count if doc_count else 0.0
         total_texts = len(contexts) if contexts else len(values)
         text_to_search = contexts if contexts else [v.lower() for v in values]
         negated = sum(
@@ -231,11 +219,11 @@ class MetricsCalculator:
         count = len(annotations)
         freq = count / max(total_tokens, 1)
 
-        # 5. Feas — disponibilité de données pour un template :
+        # 5. Feas — data availability for a template:
         # Feas(E) = α_Feas · min(1, count/C) + β_Feas · He
-        # On sature le COMPTE absolu (assez d'exemples pour énumérer un template),
-        # pas la densité count/tokens : une entité fréquente dans un gros corpus a
-        # une densité faible mais plein d'exemples — la densité la pénalisait à tort.
+        # We saturate the absolute COUNT (enough examples to enumerate a template),
+        # not the count/tokens density: a frequent entity in a large corpus has a low
+        # density but plenty of examples — the density wrongly penalised it.
         _fw = self.params["feasibility_weights"]
         alpha_feas = _fw["alpha_freq"]
         beta_feas = _fw["beta_he"]
@@ -252,9 +240,9 @@ class MetricsCalculator:
         }
 
 
-# Valeurs de référence issues du pipeline DEMNE réel (Results/decision_summary.csv,
-# Train=Cantemist-35 / Test=Redjdal+RCP). Mises à jour pour rester cohérentes avec
-# la ligne de commande (formules Feas α=β=0.2 et R α=0.1/β=0.3/γ=0.6).
+# Reference values from the real DEMNE pipeline (Results/decision_summary.csv,
+# Train=Cantemist-35 / Test=Redjdal+RCP). Kept consistent with the command line
+# (Feas α=β=0.2 and R α=0.1/β=0.3/γ=0.6 formulas).
 DEMO_METRICS = {
     "Histologie_tumorale": {"Te": 0.132, "He": 0.8537, "R": 0.0242, "Freq": 0.0034, "Feas": 0.171},
     "Traitement_specifique_du_cancer": {

@@ -1,9 +1,3 @@
-import sys
-from unittest.mock import MagicMock
-
-# Mock eco2ai BEFORE importing frequency to avoid any import-time side effects or delays
-sys.modules["eco2ai"] = MagicMock()
-
 from demne.frequency import FrequencyScorer
 
 
@@ -72,3 +66,22 @@ def test_empty_corpus():
     scorer = FrequencyScorer([])
     stats = scorer.get_stats()
     assert stats == []
+
+
+def test_to_csv_and_histogram(tmp_path, capsys):
+    import csv
+
+    scorer = FrequencyScorer([])
+    scorer.ingest_document("one two three four", ["T1\tGene 0 3\tone", "T2\tGene 4 7\ttwo"])
+    out = tmp_path / "freq.csv"
+    scorer.to_csv(out)
+    rows = list(csv.DictReader(out.open(encoding="utf-8")))
+    assert rows[0]["Entity"] == "Gene" and rows[0]["Count"] == "2"
+    scorer.draw_histogram(scorer.get_stats())
+    assert "FREQUENCY DISTRIBUTION" in capsys.readouterr().out
+
+
+def test_rare_entities_get_the_rare_hint():
+    scorer = FrequencyScorer([])
+    scorer.ingest_document("a b c", ["T1\tRareOne 0 1\ta"])
+    assert scorer.get_stats()[0]["Strategy_Hint"].startswith("RARE")

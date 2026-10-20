@@ -83,7 +83,7 @@ class NotebookViewer(ttk.Frame):
         if nb_dir not in sys.path:
             sys.path.insert(0, nb_dir)
         self._cell_widgets: list[dict] = []
-        # Pour garder une référence aux PhotoImage (sinon GC)
+        # Keep a reference to the PhotoImage objects (otherwise they are garbage-collected)
         self._img_refs: list = []
 
         self._build_toolbar()

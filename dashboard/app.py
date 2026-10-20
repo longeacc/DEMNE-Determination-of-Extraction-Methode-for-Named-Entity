@@ -10,9 +10,9 @@ def main() -> None:
     )
 
     if "selected_entities" not in st.session_state:
-        from core.metrics import ENTITIES
+        from core.metrics import default_entities
 
-        st.session_state.selected_entities = list(ENTITIES)
+        st.session_state.selected_entities = default_entities()
 
     # Initialize DEMO_METRICS in session setup
     if "custom_metrics" not in st.session_state:
@@ -21,11 +21,11 @@ def main() -> None:
         st.session_state.custom_metrics = {k: v.copy() for k, v in DEMO_METRICS.items()}
 
     if "thresholds" not in st.session_state:
-        # Default thresholds = FRUGAL preset from data/demne_params.json
+        # Default thresholds = calibrated thresholds of data/demne_params.json
         # (single source shared with CLI and scorers — no drift possible).
         from core.metrics import PARAMS
 
-        st.session_state.thresholds = dict(PARAMS["presets"]["FRUGAL"])
+        st.session_state.thresholds = dict(PARAMS["presets"]["CALIBRATED"])
 
     if "routings" not in st.session_state:
         st.session_state.routings = {}

@@ -8,8 +8,16 @@ metrics already on the [0, 1] scale.
 
 from __future__ import annotations
 
+from typing import Any
 
-def _node_tfidf(tfidf_score, r_score, r_high, tfidf_y, trace):
+
+def _node_tfidf(
+    tfidf_score: float | None,
+    r_score: float,
+    r_high: float,
+    tfidf_y: float,
+    trace: list[str],
+) -> dict[str, Any] | None:
     """TF-IDF node -> shared R- node -> RULES, else fall through to Feas."""
     if tfidf_score is None:
         trace.append("TF-IDF absent → Feas++ ?")
@@ -35,16 +43,28 @@ def _node_tfidf(tfidf_score, r_score, r_high, tfidf_y, trace):
     return None
 
 
-def route(*, te, he, r, feas, tfidf_score, te_high, he_high, r_high, feas_ner, tfidf_y):
+def route(
+    *,
+    te: float,
+    he: float,
+    r: float,
+    feas: float,
+    tfidf_score: float | None,
+    te_high: float,
+    he_high: float,
+    r_high: float,
+    feas_ner: float,
+    tfidf_y: float,
+) -> dict[str, Any]:
     """Route one entity to ``RULES`` / ``TBM`` / ``LLM`` (shared R- node).
 
     Metrics and thresholds on the [0, 1] scale. Returns a dict with ``method``,
     ``justification`` and ``trace`` (the audit path).
     """
     r_score = r
-    trace = []
+    trace: list[str] = []
 
-    def _node_r(context_label):
+    def _node_r(context_label: str) -> dict[str, Any] | None:
         trace.append(f"R− ? (R={r_score:.3f} ≤ R_HIGH={r_high}) [{context_label}]")
         if r_score <= r_high:
             trace.append("Yes → [RULES]")

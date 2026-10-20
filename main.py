@@ -1,9 +1,10 @@
 """DEMNE CLI — central hub for the metric & routing pipeline.
 
 Provides:
-  - Metric pipeline:     metrics, tree, evaluate
-  - Dashboard parity:    dashboard, corpus, rest-config, notebook
-  - Misc:                rest, info, export-csv
+  - Metric pipeline:     metrics, evaluate
+  - Dashboard parity:    dashboard, corpus, rest-config, notebook, gui
+  - Calibration:         optimize_params (--in_domain | --all_corpora)
+  - Misc:                info
 
 Mirrors the Streamlit pages so the full workflow can be driven from the terminal.
 """
@@ -22,12 +23,14 @@ import sys
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Bootstrap: make `demne.*` importable + force UTF-8 stdout on Windows
+# Bootstrap: check `demne.*` is installed + force UTF-8 stdout on Windows
 # ---------------------------------------------------------------------------
 ROOT = Path(__file__).parent.resolve()
 SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
+try:
+    import demne  # noqa: F401
+except ModuleNotFoundError:
+    sys.exit("DEMNE is not installed. From the repository root run:  pip install -e .")
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
@@ -198,8 +201,8 @@ def _run_script(script: str, gs_dir: str | None, pred_dir: str | None) -> int:
     env["PYTHONUTF8"] = "1"
     env["PYTHONUNBUFFERED"] = "1"
     env["DISABLE_ECO2AI"] = "1"
-    # Les scorers importent `demne.*` : sans src/ sur le PYTHONPATH, le
-    # sous-processus échoue en ModuleNotFoundError si le paquet n'est pas installé.
+    # The scorers import `demne.*`: without src/ on PYTHONPATH the subprocess fails
+    # with ModuleNotFoundError when the package is not installed.
     env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(SRC), env.get("PYTHONPATH", "")]))
     proc = subprocess.Popen(
         cmd,
@@ -243,15 +246,6 @@ def cmd_metrics(args: argparse.Namespace) -> None:
         _run_script(s, gs, None)
 
 
-def cmd_tree(args: argparse.Namespace) -> None:
-    """Display the static DEMNE decision tree diagram.
-
-    Does not run the pipeline or CSV export — use `evaluate` for that.
-    """
-    del args  # required by argparse signature, content unused
-    _open_decision_tree_image()
-
-
 def _run_tree_pipeline(args: argparse.Namespace) -> None:
     """Decision tree build pipeline (called by `evaluate`)."""
     gs = args.gs_dir or str(DEFAULT_GS)
@@ -265,32 +259,6 @@ def _run_tree_pipeline(args: argparse.Namespace) -> None:
             check=False,
         )
     _export_decision_csv()
-
-
-def _open_decision_tree_image() -> None:
-    """Open Results/figures/Graph_decision.png in the default viewer.
-
-    Fallback: decision_tree.png, decision_tree_visualization.png.
-    """
-    candidates = [
-        ROOT / "Results" / "figures" / "Graph_decision.png",
-        ROOT / "Results" / "figures" / "decision_tree.png",
-        ROOT / "Results" / "figures" / "decision_tree_visualization.png",
-    ]
-    img = next((p for p in candidates if p.exists()), None)
-    if not img:
-        print("⚠️  No tree image found in Results/figures/.")
-        return
-    print(f"\n🖼  Opening tree: {img}")
-    try:
-        if sys.platform == "win32":
-            os.startfile(str(img))  # type: ignore[attr-defined]
-        elif sys.platform == "darwin":
-            subprocess.Popen(["open", str(img)])
-        else:
-            subprocess.Popen(["xdg-open", str(img)])
-    except Exception as e:
-        print(f"   Could not open viewer: {e}")
 
 
 def cmd_evaluate(args: argparse.Namespace) -> None:
@@ -403,15 +371,15 @@ def _export_decision_csv() -> None:
 def cmd_dashboard(args: argparse.Namespace) -> None:
     """Mirror Page 1 — Metrics Dashboard.
 
-    Apply a threshold preset (FRUGAL / QUALITY / custom) and re-run the
-    decision tree on the current metrics, printing the routing table.
+    Apply a threshold preset (CALIBRATED / FRUGAL / QUALITY / custom) and re-run
+    the decision tree on the current metrics, printing the routing table.
     """
     if not CONFIG_PATH.exists():
-        print("⚠️  No decision_config.json — run 'metrics' then 'tree' first.")
+        print("⚠️  No decision_config.json — run 'evaluate' first.")
         return
 
-    preset_name = (args.preset or "FRUGAL").upper()
-    thresholds = PRESETS.get(preset_name, PRESETS["FRUGAL"]).copy()
+    preset_name = (args.preset or "CALIBRATED").upper()
+    thresholds = PRESETS.get(preset_name, PRESETS["CALIBRATED"]).copy()
     for k in ("Te", "He", "R", "Feas"):
         v = getattr(args, k.lower(), None)
         if v is not None:
@@ -487,27 +455,20 @@ def cmd_corpus(args: argparse.Namespace) -> None:
 
 
 def cmd_rest_config(args: argparse.Namespace) -> None:
-    """Mirror Page 3 — REST Integration (export/import config JSON)."""
-    if args.export:
-        if not CONFIG_PATH.exists():
-            print("No decision_config.json to export.")
-            return
-        with open(CONFIG_PATH, encoding="utf-8") as f:
-            cfg = json.load(f)
-        payload = {
-            "selected_entities": list(cfg.get("entities", {}).keys()),
-            "thresholds": cfg.get("global_thresholds", {}),
-            "routings": {k: v.get("method") for k, v in cfg.get("entities", {}).items()},
-        }
-        out = Path(args.export)
-        out.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"Config exported: {out}")
-    elif args.import_:
-        data = json.loads(Path(args.import_).read_text(encoding="utf-8"))
-        print("Config imported:")
-        print(json.dumps(data, indent=2, ensure_ascii=False))
-    else:
-        print("Use --export <file.json> or --import <file.json>")
+    """Mirror Page 3 — REST Integration (export the config JSON)."""
+    if not CONFIG_PATH.exists():
+        print("No decision_config.json to export.")
+        return
+    with open(CONFIG_PATH, encoding="utf-8") as f:
+        cfg = json.load(f)
+    payload = {
+        "selected_entities": list(cfg.get("entities", {}).keys()),
+        "thresholds": cfg.get("global_thresholds", {}),
+        "routings": {k: v.get("method") for k, v in cfg.get("entities", {}).items()},
+    }
+    out = Path(args.export)
+    out.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Config exported: {out}")
 
 
 def cmd_notebook(args: argparse.Namespace) -> None:
@@ -548,15 +509,6 @@ def cmd_notebook(args: argparse.Namespace) -> None:
         print("Stop requested.")
 
 
-def cmd_rest(args: argparse.Namespace) -> None:
-    """Legacy: launches demo_rest.py only."""
-    subprocess.run(
-        [sys.executable, str(ROOT / "src/demne/REST_interface/demo_rest.py")],
-        cwd=str(ROOT / "src/demne/REST_interface"),
-        check=False,
-    )
-
-
 def cmd_info(args: argparse.Namespace) -> None:
     def _rel(p: Path) -> str:
         try:
@@ -564,34 +516,33 @@ def cmd_info(args: argparse.Namespace) -> None:
         except ValueError:
             return str(p)
 
-    print("DEMNE version: 0.4.0")
-    print(f"GS path   : {_rel(DEFAULT_GS)}")
-    print(f"Pred path : {_rel(DEFAULT_PRED)}")
-    discovered = discover_entities(DEFAULT_GS) or discover_entities_from_config()
-    if discovered:
-        src = "annotation.conf/.ann" if discover_entities(DEFAULT_GS) else "decision_config.json"
-        print(f"Entities  : {len(discovered)} discovered ({src})")
-        for e in discovered:
-            print(f"            - {e}")
-    else:
-        print("Entities  : none (run `evaluate --gs_dir <corpus>` first)")
+    from demne import __version__
+
+    print(f"DEMNE version: {__version__}")
     print(f"Config    : {_rel(CONFIG_PATH)} ({'OK' if CONFIG_PATH.exists() else 'absent'})")
 
 
-def cmd_export_csv(args: argparse.Namespace) -> None:
-    _export_decision_csv()
-
-
 def cmd_gui(args: argparse.Namespace) -> None:
-    """Lance la GUI native Tkinter (parité avec le dashboard Streamlit).
+    """Launch the native Tkinter GUI (parity with the Streamlit dashboard).
 
-    Utile pour les environnements sans navigateur (EDS / Citrix / RDP).
-    Aucune dépendance externe : uniquement stdlib.
+    Useful on machines without a browser (EDS / Citrix / RDP).
+    No external dependency: standard library only.
     """
     spec = _il.spec_from_file_location("_gui_app", ROOT / "dashboard" / "gui_app.py")
     mod = _il.module_from_spec(spec)
     spec.loader.exec_module(mod)
     mod.launch()
+
+
+def cmd_optimize_params(args: argparse.Namespace) -> None:
+    """Recalibrate demne_params.json (Optuna) on the corpora placed under ./data/*_CORPORA."""
+    from demne.optimize_params import OptimizeParamsError, run
+
+    try:
+        run(all_corpora=args.all_corpora)
+    except OptimizeParamsError as exc:
+        print(f" {exc}", file=sys.stderr)
+        sys.exit(2)
 
 
 # ===========================================================================
@@ -609,12 +560,12 @@ def main() -> None:
         epilog="""Examples:
   python main.py info
   python main.py metrics --gs_dir <path>
-  python main.py tree --gs_dir <path>
-  python main.py evaluate                  # full pipeline + CSV export
-  python main.py dashboard --preset FRUGAL
+  python main.py evaluate --gs_dir <path>  # full pipeline: metrics → tree → CSV
+  python main.py dashboard --preset FRUGAL     # CALIBRATED (default) | FRUGAL | QUALITY
   python main.py corpus --path <BRAT-dir>
   python main.py rest-config --export config.json
   python main.py notebook --port 8888
+  python main.py optimize_params --in_domain   # recalibrate on ./data/*_CORPORA
 """,
     )
     sub = parser.add_subparsers(dest="command")
@@ -623,20 +574,18 @@ def main() -> None:
     _add_corpus_args(p)
     p.set_defaults(func=cmd_metrics)
 
-    p = sub.add_parser(
-        "tree", help="Open the static decision-tree diagram (PNG); use `evaluate` to build + export"
-    )
-    _add_corpus_args(p)
-    p.add_argument("--no-visualize", action="store_true")
-    p.set_defaults(func=cmd_tree)
-
     p = sub.add_parser("evaluate", help="Full pipeline: metrics → tree → CSV")
     _add_corpus_args(p)
     p.add_argument("--no-visualize", action="store_true")
     p.set_defaults(func=cmd_evaluate)
 
     p = sub.add_parser("dashboard", help="Mirror Streamlit Page 1 — apply preset & show routing")
-    p.add_argument("--preset", choices=["FRUGAL", "QUALITY"], default="FRUGAL")
+    p.add_argument(
+        "--preset",
+        choices=["CALIBRATED", "FRUGAL", "QUALITY"],
+        default="CALIBRATED",
+        help="CALIBRATED = thresholds of demne_params.json; FRUGAL/QUALITY = ± preset_margin",
+    )
     p.add_argument("--te", type=float)
     p.add_argument("--he", type=float)
     p.add_argument("--r", type=float)
@@ -647,9 +596,8 @@ def main() -> None:
     p.add_argument("--path", type=str, default=None)
     p.set_defaults(func=cmd_corpus)
 
-    p = sub.add_parser("rest-config", help="Mirror Streamlit Page 3 — export/import JSON config")
-    p.add_argument("--export", type=str, default=None)
-    p.add_argument("--import", dest="import_", type=str, default=None)
+    p = sub.add_parser("rest-config", help="Mirror Streamlit Page 3 — export the REST JSON config")
+    p.add_argument("--export", type=str, required=True, metavar="FILE.json")
     p.set_defaults(func=cmd_rest_config)
 
     p = sub.add_parser(
@@ -660,19 +608,28 @@ def main() -> None:
     p.add_argument("--api-only", action="store_true")
     p.set_defaults(func=cmd_notebook)
 
-    p = sub.add_parser("rest", help="Launch demo_rest.py only (legacy)")
-    p.set_defaults(func=cmd_rest)
-
-    p = sub.add_parser(
-        "export-csv", help="Re-export the decision_summary.csv from decision_config.json"
-    )
-    p.set_defaults(func=cmd_export_csv)
-
     p = sub.add_parser("gui", help="GUI Tkinter native (parité Streamlit, sans navigateur)")
     p.set_defaults(func=cmd_gui)
 
     p = sub.add_parser("info", help="Print environment info")
     p.set_defaults(func=cmd_info)
+
+    p = sub.add_parser(
+        "optimize_params",
+        help="Recalibrate demne_params.json with Optuna on ./data/*_CORPORA (needs [optimize])",
+    )
+    g = p.add_mutually_exclusive_group(required=True)
+    g.add_argument(
+        "--in_domain",
+        action="store_true",
+        help="optimise on OPT_CORPORA, held-out TEST_CORPORA, final fit on ALL_CORPORA",
+    )
+    g.add_argument(
+        "--all_corpora",
+        action="store_true",
+        help="same, final fit also includes OFF_DOMAIN_CORPORA",
+    )
+    p.set_defaults(func=cmd_optimize_params)
 
     args = parser.parse_args()
     if not args.command:

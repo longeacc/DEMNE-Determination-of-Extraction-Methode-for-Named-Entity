@@ -1,6 +1,3 @@
-import importlib.util as _il
-from pathlib import Path
-
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -8,19 +5,22 @@ import streamlit as st
 from core import BratCorpusParser, MetricsCalculator, compute_routing
 from core.metrics import PARAMS
 
+from demne.tfidf_coverage import compute_coverage_for_all_entities as _compute_tfidf_for_all
+
+try:  # tkinter is missing on headless servers / minimal Python builds
+    import tkinter as tk
+    from tkinter import filedialog
+except ImportError:  # the folder picker is then hidden; the path can still be typed
+    tk = None
+    filedialog = None
+
 st.set_page_config(page_title="Metrics Dashboard", page_icon="📊", layout="wide")
 
-PRESET_FRUGAL = dict(PARAMS["presets"]["FRUGAL"])
-PRESET_QUALITY = dict(PARAMS["presets"]["QUALITY"])
+# Presets derived from the calibrated thresholds (demne.params.derive_presets).
+PRESETS = {name: dict(PARAMS["presets"][name]) for name in ("CALIBRATED", "FRUGAL", "QUALITY")}
 
-# Extractabilité par COUVERTURE de mots-clés (coverage-F1) — remplace la synonymie
-# contextuelle : sépare mieux les classes (cf. optimisation). tfidf_score = recall cumulatif.
-_tfidf_path = Path(__file__).resolve().parents[2] / "src" / "demne" / "tfidf_coverage.py"
-_tfidf_spec = _il.spec_from_file_location("_tfidf_cov", _tfidf_path)
-_tfidf_mod = _il.module_from_spec(_tfidf_spec)
-_tfidf_spec.loader.exec_module(_tfidf_mod)
-_compute_tfidf_for_all = _tfidf_mod.compute_coverage_for_all_entities
-
+# Keyword-COVERAGE extractability (coverage-F1) replaces the former contextual-synonymy
+# metric: it separates the routing classes better (see the optimisation).
 _DT = PARAMS["decision_thresholds"]
 _TFIDF_Y_DEFAULT = float(_DT.get("TFIDF_Y", 0.53))
 _OPTIMIZED = {
@@ -42,18 +42,19 @@ if st.session_state.get("_thresholds_version") != _THRESHOLDS_VERSION:
 with st.sidebar:
     st.subheader("📂 Load a BRAT corpus")
 
-    import tkinter as tk
-    from tkinter import filedialog
-
-    def select_folder():
-        root = tk.Tk()
+    def select_folder() -> str:
+        """Native folder picker; empty string if there is no display to show it on."""
+        try:
+            root = tk.Tk()
+        except tk.TclError:  # headless: no display available
+            return ""
         root.withdraw()
         root.wm_attributes("-topmost", 1)
         folder = filedialog.askdirectory(master=root)
         root.destroy()
         return folder
 
-    if st.button("🔍 Browse... (Select a folder)"):
+    if tk is not None and st.button("🔍 Browse... (Select a folder)"):
         folder_path = select_folder()
         if folder_path:
             st.session_state["local_path"] = folder_path
@@ -84,21 +85,19 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("🎚️ ROUTING THRESHOLDS")
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🌿 Frugal preset"):
-            for k, v in PRESET_FRUGAL.items():
-                st.session_state[f"slider_{k}"] = float(v)
-            st.session_state["thresholds"] = PRESET_FRUGAL.copy()
-            st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
-            st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
-    with col2:
-        if st.button("⭐ Quality preset"):
-            for k, v in PRESET_QUALITY.items():
-                st.session_state[f"slider_{k}"] = float(v)
-            st.session_state["thresholds"] = PRESET_QUALITY.copy()
-            st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
-            st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
+    preset_buttons = (
+        ("🎯 Calibrated", "CALIBRATED"),
+        ("🌿 Frugal", "FRUGAL"),
+        ("⭐ Quality", "QUALITY"),
+    )
+    for col, (label, name) in zip(st.columns(3), preset_buttons, strict=True):
+        with col:
+            if st.button(label):
+                for k, v in PRESETS[name].items():
+                    st.session_state[f"slider_{k}"] = float(v)
+                st.session_state["thresholds"] = PRESETS[name].copy()
+                st.session_state["slider_Y"] = _TFIDF_Y_DEFAULT
+                st.session_state["thresholds"]["Y"] = _TFIDF_Y_DEFAULT
 
     for metric in _OPTIMIZED.keys():
         if f"slider_{metric}" not in st.session_state:
