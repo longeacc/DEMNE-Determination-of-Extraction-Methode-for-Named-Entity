@@ -978,9 +978,9 @@ def _print_layout(layout: dict, all_corpora: bool) -> None:
 
 def run(all_corpora: bool) -> dict:
     """Full recalibration; writes demne_params.json. Returns the run summary."""
-    optuna = _require_optuna()
     mode = "all_corpora" if all_corpora else "in_domain"
-    layout = resolve_layout(all_corpora)
+    layout = resolve_layout(all_corpora)  # data errors first: independent of optuna
+    optuna = _require_optuna()
     _print_layout(layout, all_corpora)
 
     pfile = params_file()
