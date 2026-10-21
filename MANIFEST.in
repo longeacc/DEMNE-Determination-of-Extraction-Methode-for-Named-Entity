@@ -2,7 +2,10 @@ include LICENSE README.md CHANGELOG.md CONTRIBUTING.md CITATION.cff Makefile
 include main.py pyproject.toml
 
 recursive-include dashboard *
-include data/README.md
+recursive-include .github *
+include .gitattributes .gitignore .pre-commit-config.yaml
+include Results/demne_params_published.json
+recursive-include data *
 recursive-include docs *
 recursive-include scripts *
 recursive-include src/demne *
