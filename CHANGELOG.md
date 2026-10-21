@@ -1,7 +1,18 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.3.0] - 2026-10-21
 ### Added
+
+- `demne` console command (source checkout only: delegates to `main.py`) and `py.typed` marker
+
+### Changed
+
+- Core dependencies reduced to numpy, pandas, scikit-learn, scipy, Unidecode; matplotlib, plotly and seaborn moved to the `[viz]` and `[rest]` extras
+- numpy 2.x allowed (removed the `<2.0` cap); development status Beta; author contact email
+
+### Added (since 0.4.0)
 
 - `python main.py optimize_params --in_domain | --all_corpora`: Optuna recalibration of `demne_params.json` on user corpora (`data/*_CORPORA/`, extra `[optimize]`), see `docs/OPTIMIZE_PARAMS.md`
 - Presets `CALIBRATED` / `FRUGAL` / `QUALITY` derived from the calibrated thresholds (`preset_margin`) instead of stored absolute values

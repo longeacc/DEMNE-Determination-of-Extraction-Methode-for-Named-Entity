@@ -19,7 +19,7 @@ from .templatability import TemplatabilityScorer
 
 DecisionTree = DecisionTreeBuilder
 
-__version__ = "0.4.0"
+__version__ = "1.3.0"
 __all__ = [
     "TemplatabilityScorer",
     "HomogeneityScorer",

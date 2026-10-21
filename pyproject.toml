@@ -4,17 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "DEMNE"
-version = "0.4.0"
+version = "1.3.0"
 description = "Cascade NLP pipeline for oncological biomarker extraction — optimizing the Performance-Explainability-Frugality trilemma"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "Clément Longeac", email = "clement.longeac@edu.esiee.fr"},
+    {name = "Clément Longeac", email = "clement.longeac@gmail.com"},
 ]
 keywords = ["NLP", "NER", "oncology", "biomarkers", "frugal-AI", "cascade"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "License :: OSI Approved :: MIT License",
@@ -25,15 +25,15 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "numpy>=1.24,<2.0",
+    "numpy>=1.24",
     "pandas>=2.0,<3.0",
-    "matplotlib>=3.7",
-    "plotly>=5.18,<6.0",
     "scikit-learn>=1.3",
     "scipy>=1.11",
-    "seaborn>=0.13",
     "Unidecode>=1.3",
 ]
+
+[project.scripts]
+demne = "demne.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/longeacc/DEMNE-Determination-of-Extraction-Methode-for-Named-Entity"
@@ -49,6 +49,9 @@ ner = [
     "seqeval>=1.2",
 ]
 rest = [
+    "matplotlib>=3.7",
+    "plotly>=5.18,<6.0",
+    "seaborn>=0.13",
     "spacy>=3.7",
     "python-Levenshtein>=0.25",
     "nltk>=3.8",
@@ -59,6 +62,9 @@ rest = [
     "ipyfilechooser>=0.6",
 ]
 viz = [
+    "matplotlib>=3.7",
+    "plotly>=5.18,<6.0",
+    "seaborn>=0.13",
     "networkx>=3.2",
 ]
 notebook = [
@@ -82,6 +88,7 @@ optimize = [
     "optuna>=3.0",
 ]
 dev = [
+    "matplotlib>=3.7",  # tests/test_decision_tree.py renders a figure
     "pytest>=8.0",
     "pytest-cov>=4.1",
     "black>=24.0",
@@ -101,6 +108,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 demne = [
+    "py.typed",
     "data/*.json",
     "REST_interface/templates/*.html",
     "REST_interface/*.ipynb",
